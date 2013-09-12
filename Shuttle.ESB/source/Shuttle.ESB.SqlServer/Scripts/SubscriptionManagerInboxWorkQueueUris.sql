@@ -1,0 +1,1 @@
+select InboxWorkQueueUri from [dbo].[SubscriberMessageType] where MessageType = @MessageType

@@ -1,0 +1,9 @@
+2012/04/20
+----------
+- fixed compression algorithms
+- added testes for compression algorithms
+- changed ordering of send pipeline events: encrypt then compress
+- changed ordering of receive pipeline events: decompress then decrypt
+- added compression and encryption algorithm configuration to serviceBus section
+- updated request / response sample to use compression and encryption
+- updated version numbers to 1.5.2.1

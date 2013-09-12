@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{21C24B2E-078B-4100-85A9-8C0ABFBFD514}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Shuttle.Management.Subscriptions</RootNamespace>
+    <AssemblyName>Shuttle.Management.Subscriptions</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Framework Condition=" '$(Framework)' == '' ">net35-full</Framework>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Framework)' == 'net35-full'">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <DefineConstants>$(DefineConstants);NET35FULL</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Framework)' == 'net40-full'">
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <DefineConstants>$(DefineConstants);NET40FULL</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Framework)' == 'net45-full'">
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <DefineConstants>$(DefineConstants);NET45FULL</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Castle.Core">
+      <HintPath>..\..\..\external-bin\castle\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Windsor">
+      <HintPath>..\..\..\external-bin\castle\Castle.Windsor.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\external-bin\log4net\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Shuttle.Core.Data">
+      <HintPath>..\..\..\external-bin\shuttle.core\$(Framework)\Shuttle.Core.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Shuttle.Core.Data.Castle">
+      <HintPath>..\..\..\external-bin\shuttle.core\$(Framework)\Shuttle.Core.Data.Castle.dll</HintPath>
+    </Reference>
+    <Reference Include="Shuttle.Core.Domain">
+      <HintPath>..\..\..\external-bin\shuttle.core\$(Framework)\Shuttle.Core.Domain.dll</HintPath>
+    </Reference>
+    <Reference Include="Shuttle.Core.Infrastructure">
+      <HintPath>..\..\..\external-bin\shuttle.core\$(Framework)\Shuttle.Core.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Shuttle.Core.Infrastructure.Castle">
+      <HintPath>..\..\..\external-bin\shuttle.core\$(Framework)\Shuttle.Core.Infrastructure.Castle.dll</HintPath>
+    </Reference>
+    <Reference Include="Shuttle.Core.Infrastructure.Log4Net">
+      <HintPath>..\..\..\external-bin\shuttle.core\$(Framework)\Shuttle.Core.Infrastructure.Log4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Shuttle.Core.SqlServer">
+      <HintPath>..\..\..\external-bin\shuttle.core\$(Framework)\Shuttle.Core.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Shuttle.ESB.Core">
+      <HintPath>..\..\..\Shuttle.ESB\build\Debug\$(Framework)\Shuttle.ESB.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="DataAccess\MappedColumns\SubscriptionColumns.cs" />
+    <Compile Include="DataAccess\MappedColumns\SubscriptionRequestColumns.cs" />
+    <Compile Include="DataAccess\Queries\Definitions\SubscriptionQueries.cs" />
+    <Compile Include="DataAccess\Queries\Definitions\SubscriptionRequestQueries.cs" />
+    <Compile Include="DataAccess\Queries\ISubscriptionQuery.cs" />
+    <Compile Include="DataAccess\Queries\ISubscriptionRequestQuery.cs" />
+    <Compile Include="DataAccess\Queries\SubscriptionQuery.cs" />
+    <Compile Include="DataAccess\Queries\SubscriptionRequestQuery.cs" />
+    <Compile Include="DataAccess\TableAccess\SubscriptionRequestTableAccess.cs" />
+    <Compile Include="DataAccess\TableAccess\SubscriptionTableAccess.cs" />
+    <Compile Include="SubscriptionsManagementModule.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SubscriptionRequests\ISubscriptionRequestManagementPresenter.cs" />
+    <Compile Include="SubscriptionRequests\ISubscriptionRequestManagementView.cs" />
+    <Compile Include="SubscriptionRequests\SubscriptionRequestManagementPresenter.cs" />
+    <Compile Include="SubscriptionRequests\SubscriptionRequestManagementView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SubscriptionRequests\SubscriptionRequestManagementView.Designer.cs">
+      <DependentUpon>SubscriptionRequestManagementView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SubscriptionResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SubscriptionResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Subscriptions\ISubscriptionManagementPresenter.cs" />
+    <Compile Include="Subscriptions\ISubscriptionManagementView.cs" />
+    <Compile Include="Subscriptions\SubscriptionManagementPresenter.cs" />
+    <Compile Include="Subscriptions\SubscriptionManagementView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Subscriptions\SubscriptionManagementView.Designer.cs">
+      <DependentUpon>SubscriptionManagementView.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SubscriptionRequests\SubscriptionRequestManagementView.resx">
+      <DependentUpon>SubscriptionRequestManagementView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubscriptionResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SubscriptionResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Subscriptions\SubscriptionManagementView.resx">
+      <DependentUpon>SubscriptionManagementView.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Shuttle.Management.Shell\Shuttle.Management.Shell.csproj">
+      <Project>{5DEA3CE8-5B7A-426D-A2EA-3F13CB3CB402}</Project>
+      <Name>Shuttle.Management.Shell</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Shuttle.Management\Shuttle.Management.csproj">
+      <Project>{F0408EED-8E48-4256-9073-5BFAAE19A7A1}</Project>
+      <Name>Shuttle.Management</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Resources\transmit_blue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\transmit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\accept.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\stop.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>md "..\..\..\..\build\$(ConfigurationName)\$(Framework)"
+copy "$(TargetPath)" "..\..\..\..\build\$(ConfigurationName)\$(Framework)"
+del $(TargetDir)Shuttle.Management.exe.config
+copy $(ProjectDir)app.config $(TargetDir)Shuttle.Management.exe.config</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

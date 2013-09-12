@@ -1,0 +1,8 @@
+2013-03-18
+----------
+- changed version numbers to 2.0.1
+- updated change-log-2.0.1.txt
+
+2013-03-15
+----------
+- added diagrams for endpoint

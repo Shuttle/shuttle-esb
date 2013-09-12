@@ -1,0 +1,39 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="InitializeEnvironment" ToolsVersion="4.0">
+   <UsingTask AssemblyFile="MSBuildCommunityTasks\MSBuild.Community.Tasks.dll" TaskName="MSBuild.Community.Tasks.FileUpdate" />
+   <UsingTask AssemblyFile="MSBuildCommunityTasks\MSBuild.Community.Tasks.dll" TaskName="MSBuild.Community.Tasks.Prompt" />
+
+   <PropertyGroup>
+      <RootFolder>$(MSBuildProjectDirectory)\..\..</RootFolder>
+   </PropertyGroup>
+
+   <ItemGroup>
+      <SharedProject Include="shared.msbuild" />
+      <SampleEndpointUserFile Include="..\..\Shuttle.ESB\samples\**\*.csproj.user" />
+      <ManagementUserFile Include="..\..\Shuttle.Management\source\**\*.csproj.user" />
+      <ConfigFile Include="..\..\**\*.config" />
+   </ItemGroup>
+
+   <Target Name="InitializeEnvironment">
+      <CallTarget Targets="ApplicationConfigurationSetup" />
+      <CallTarget Targets="ProjectConfiguration" />
+      <MSBuild Projects="deployment.msbuild"></MSBuild>
+   </Target>
+
+   <Target Name="ApplicationConfigurationSetup">
+      <Prompt Text="Change data source to (just press enter to keep '.\sqlexpress'):">
+         <Output TaskParameter="UserInput" PropertyName="NewDataSource" />
+      </Prompt>
+
+      <MSBuild Projects="$(MSBuildProjectFile)" Targets="ApplicationConfiguration" Properties="NewDataSource=$(NewDataSource)" /> 
+   </Target>
+
+   <Target Name="ApplicationConfiguration" Condition="'$(NewDataSource)'!=''">
+      <FileUpdate Files="@(ConfigFile)" Regex="&quot;\s?Data\s?Source\s?=\s?[^;]*" ReplacementText="&quot;Data Source=$(NewDataSource)" />
+   </Target>
+
+   <Target Name="ProjectConfiguration">
+      <FileUpdate Files="@(SharedProject)" Regex="&lt;RootFolder&gt;.+&lt;/RootFolder&gt;" ReplacementText="&lt;RootFolder&gt;$(RootFolder)&lt;/RootFolder&gt;" />
+      <FileUpdate Files="@(SampleEndpointUserFile)" Regex="&lt;StartProgram&gt;.+\\[Dd]ebug\\.+&lt;/StartProgram&gt;" ReplacementText="&lt;StartProgram&gt;%(SampleEndpointUserFile.rootdir)%(SampleEndpointUserFile.directory)bin\debug\Shuttle.Core.Host.exe&lt;/StartProgram&gt;" />
+      <FileUpdate Files="@(SampleEndpointUserFile)" Regex="&lt;StartProgram&gt;.+\\[Rr]elease\\.+&lt;/StartProgram&gt;" ReplacementText="&lt;StartProgram&gt;%(SampleEndpointUserFile.rootdir)%(SampleEndpointUserFile.directory)bin\release\Shuttle.Core.Host.exe&lt;/StartProgram&gt;" />
+   </Target>
+</Project>

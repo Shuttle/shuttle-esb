@@ -1,0 +1,8 @@
+2012/04/23
+----------
+- changed defaultDurationToSleepWhenIdle in RegistrationTask to "250ms*4,500ms*2,1s"
+- changed active time range in RequestRespons sample (Server)
+- added ThreadAvailableNotificationIntervalSecondsDefault to worker configuration
+- added integration test to test worker configuration
+- changes to distributor sample configuration
+- updated version number to 1.6.0.0

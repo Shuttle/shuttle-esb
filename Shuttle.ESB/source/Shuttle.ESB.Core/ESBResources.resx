@@ -1,0 +1,466 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CannotPurgeQueue" xml:space="preserve">
+    <value>Attempted to purge queue '{0}' but the queue does not implement the IPurge interface.  The queue cannot be purged.</value>
+    <comment>{0} = uri of the queue to purge</comment>
+  </data>
+  <data name="CouldNotResolveKeyException" xml:space="preserve">
+    <value>Could not resolve instance (or default instance) of type '{0}' with key '{0}'.</value>
+    <comment>{0} = full type name, {1} = key</comment>
+  </data>
+  <data name="CouldNotResolveTypeException" xml:space="preserve">
+    <value>Could not resolve instance (or default instance) of type '{0}'.</value>
+    <comment>{0} = full type name</comment>
+  </data>
+  <data name="DuplicateDefaultServiceType" xml:space="preserve">
+    <value>A default service has already been registered for type '{0}'.</value>
+    <comment>{0} = full service type</comment>
+  </data>
+  <data name="DuplicateQueueFactoryException" xml:space="preserve">
+    <value>A queue factory for scheme '{0}' already exists.  Cannot register queue factory type '{1}'.</value>
+    <comment>{0} = scheme, {1} = full factory type name</comment>
+  </data>
+  <data name="DuplicateServiceTypeException" xml:space="preserve">
+    <value>A service has already been registered for type '{0}'.</value>
+    <comment>{0} = full service type</comment>
+  </data>
+  <data name="InvalidSchemeException" xml:space="preserve">
+    <value>Only scheme '{0}' is supported.  The given uri '{1}' is not supported.</value>
+    <comment>{0} = the supported scheme, {1} = the given uri</comment>
+  </data>
+  <data name="JournalQueueException" xml:space="preserve">
+    <value>A journal queue is required but no journal queue has been set.  This means that the queue for uri '{0}' requires journaling.</value>
+    <comment>{0} = uri of queue that requires journaling</comment>
+  </data>
+  <data name="MessageHandlerExceptionFailure" xml:space="preserve">
+    <value>Message handler type '{0}' raised exception '{1}'.  Message type '{2}' with id '{3}' has reached the maximum number of retries ({4}).  The message has been moved to error queue '{5}'</value>
+    <comment>{0} = full type name of handler, {1} = exception message, {2} = full type name of message, {3} = message id, {4} = maximum retry count, {5} = error queue uri</comment>
+  </data>
+  <data name="MessageHandlerExceptionWillRetry" xml:space="preserve">
+    <value>Message handler type '{0}' raised exception '{1}'.  Handling of message type '{2}' with id '{3}' will be retried.  It is retry number: {4} / {5}</value>
+    <comment>{0} = full type name of handler, {1} = exception message, {2} = full type name of message, {3} = message id, {4} = current retry count, {5} = maximum retry count</comment>
+  </data>
+  <data name="MessageNotHandledFailure" xml:space="preserve">
+    <value>No handler has been registered for message type '{0}'.  The message (id '{1}') has been moved to error queue '{2}'.</value>
+    <comment>{0} = full type name of the discarded message, {1}= message id, {2} = error queue uri</comment>
+  </data>
+  <data name="MessageRouteNotFound" xml:space="preserve">
+    <value>No route could be found for message of type '{0}'.</value>
+    <comment>{0} = full type name of message</comment>
+  </data>
+  <data name="MessageTransferExceptionWillRetry" xml:space="preserve">
+    <value>While transferring message from queue with uri '{0}' to queue with uri '{1}' an exception '{2}' occurred.  Transfer of message type '{3}' with id '{4}' will be retried.  It is retry number: {5}</value>
+    <comment>{0} = from uri, {1} = to uri, {2} = exception message, {3} = full type name of message, {4} = message id, {5} = current retry count</comment>
+  </data>
+  <data name="MessageTransferExceptionFailure" xml:space="preserve">
+    <value>While transferring message from queue with uri '{0}' to queue with uri '{1}' an exception '{2}' occurred.  Message type '{3}' with id '{4}' has reached the maximum number of retries ({5}).  The message has been moved to error queue '{6}'</value>
+    <comment>{0} = from uri, {1} = to uri, {2} = exception message, {3} = full type name of message, {4} = message id, {5} = maximum retry count, {6} = error queue uri</comment>
+  </data>
+  <data name="QueueConfigurationException" xml:space="preserve">
+    <value>Queue '{0}' has not been specified in the configuration.</value>
+    <comment>{0} = queue type name</comment>
+  </data>
+  <data name="QueueDoesNotExistException" xml:space="preserve">
+    <value>Queue with uri '{0}' does not exist.</value>
+    <comment>{0} = uri</comment>
+  </data>
+  <data name="QueueFactoryNotFoundException" xml:space="preserve">
+    <value>No queue factory has been registered for scheme '{0}'.</value>
+    <comment>{0} = scheme (key)</comment>
+  </data>
+  <data name="SerializerUnknownTypeExcption" xml:space="preserve">
+    <value>Type type '{0}' is not registered with the serializer so it cannot be serialized.  Please use [SerialierInstance].AddKnownType to add the type before attempting to serialize or deserialize a TransportMessage containing this type in the object graph of the message property.</value>
+    <comment>{0} = type name that is unknown.</comment>
+  </data>
+  <data name="StringCannotBeEmpty" xml:space="preserve">
+    <value>The provided string argument {0} must not be empty.</value>
+    <comment>{0} = argument name</comment>
+  </data>
+  <data name="MessageDeserializationException" xml:space="preserve">
+    <value>The provided xml is not of type Shuttle.ESB.Core.TransportMessage.</value>
+  </data>
+  <data name="UriFormatException" xml:space="preserve">
+    <value>Expected uri format '{0}' but received '{1}'.</value>
+    <comment>{0} = valid uri format, {1} = invalid uri format</comment>
+  </data>
+  <data name="NotImplementedOnQueue" xml:space="preserve">
+    <value>Queue '{0}' does not implement interface '{1}'.</value>
+    <comment>{0} = full type name of queue, {1} = interface not implemented</comment>
+  </data>
+  <data name="NoQueuesConfigurationException" xml:space="preserve">
+    <value>No queues have been specified for the bus; it cannot start.  Please specify either an inbox / distributor configuration (to process messages) or an outbox configuration (to send/publish messages) or both.</value>
+  </data>
+  <data name="TypeListMessageRouteSpecificationUnknownType" xml:space="preserve">
+    <value>Cannot get type '{0}' for TypeListMessageRouteSpecification.</value>
+    <comment>{0} = the given type name</comment>
+  </data>
+  <data name="TypeIsNotAMessageType" xml:space="preserve">
+    <value>Type '{0}' is does not derive from a Message type.</value>
+    <comment>{0} = invalid type name</comment>
+  </data>
+  <data name="AssemblyNotFound" xml:space="preserve">
+    <value>Could not find assembly '{0}' during operation '{1}'.</value>
+    <comment>{0} = assembly name, {1} = operation name</comment>
+  </data>
+  <data name="ServiceBusSectionException" xml:space="preserve">
+    <value>Could not get section 'serviceBus' from the application configuration file.</value>
+  </data>
+  <data name="QueueFactoryTypeNotFoundException" xml:space="preserve">
+    <value>Queue factory type '{0}' not found.  Cannot create queue factory for scheme '{1}'.</value>
+    <comment>{0} = requested type</comment>
+  </data>
+  <data name="CannotRegisterKnownTypes" xml:space="preserve">
+    <value>IMessageSerializer implementation '{0}' does not implement IKnownTypes.  There are {1} known type assemblies specified in the application configuration that cannot be registered.</value>
+    <comment>{0} = full type name of the message serializer, {1} = number of known type assemblies</comment>
+  </data>
+  <data name="RequeueWithNoInbox" xml:space="preserve">
+    <value>You have tried to requeue a message but no inbox has been configured.</value>
+  </data>
+  <data name="DurationToIgnoreOnFailureFormatError" xml:space="preserve">
+    <value>The application configuration contains a 'durationToIgnoreOnFailure' with invalid items '{0}'.</value>
+    <comment>{0} = string containing invalid format</comment>
+  </data>
+  <data name="NoSubscriptionManager" xml:space="preserve">
+    <value>No subscription manager has been specified.</value>
+  </data>
+  <data name="SubscriptionManagerTypeNotFound" xml:space="preserve">
+    <value>Could not find subscription manager type specified in the application configuration file: {0}</value>
+    <comment>{0} = subscription manager type</comment>
+  </data>
+  <data name="DefaultConstructorRequired" xml:space="preserve">
+    <value>{0} '{1}' has no default constructor.</value>
+    <comment>{0} = name of required instance, {1} = full type name</comment>
+  </data>
+  <data name="DequeueStream" xml:space="preserve">
+    <value>Stream dequeued from queue '{0}'.</value>
+    <comment>{0} = queue uri</comment>
+  </data>
+  <data name="EnqueueMessage" xml:space="preserve">
+    <value>Message type '{0}' with id '{1}' equeuing on queue '{2}'.</value>
+    <comment>{0} = full type name of message, {1} = message id, {2} = queue uri</comment>
+  </data>
+  <data name="MessageHandlerInvoke" xml:space="preserve">
+    <value>Message type '{0}' with id '{1}' invoking on handler '{2}'.</value>
+    <comment>{0} = full type name of message, {1} = message id, {2} = full type name of message handler</comment>
+  </data>
+  <data name="RemoveMessageFromQueue" xml:space="preserve">
+    <value>Removing message type '{0}' with id '{1}' from queue '{2}'.</value>
+    <comment>{0} = full type name of message, {1} = message id, {2} = queue uri</comment>
+  </data>
+  <data name="RequiredQueueMissing" xml:space="preserve">
+    <value>Required queue '{0}' has not been configured.  Please check your  application configuration or your code if you implemented it explicitly.</value>
+    <comment>{0} = name of the required queue</comment>
+  </data>
+  <data name="DistributorRequiresControlInbox" xml:space="preserve">
+    <value>When using the distributor a control inbox is required to receive notifications of worker availability.  No control inbox has been configured.</value>
+  </data>
+  <data name="ReplyWithoutCurrentMessage" xml:space="preserve">
+    <value>There is no current message.  Cannot reply.</value>
+  </data>
+  <data name="QueueConfigurationSchemeMismatch" xml:space="preserve">
+    <value>Queues for configuration '{0}' do not all have the same scheme.</value>
+    <comment>{0} = configuration name e.g. Inbox, Outbox</comment>
+  </data>
+  <data name="EnqueueMessageDataTypeMismatchException" xml:space="preserve">
+    <value>Cannot enqueue data of type '{0}' on queue '{1}' since expected type is '{2}'.</value>
+    <comment>{0} = given type full name (incorrect), {1} = uri, {2} = expected type full name</comment>
+  </data>
+  <data name="SerializerTypeNotFound" xml:space="preserve">
+    <value>Could not find serializer type specified in the application configuration file: {0}</value>
+    <comment>{0} = serializer type</comment>
+  </data>
+  <data name="WorkerRequiresInbox" xml:space="preserve">
+    <value>No inbox has been configured.  A worker requires an inbox.</value>
+  </data>
+  <data name="TripleDESSectionMissing" xml:space="preserve">
+    <value>In order to use TripleDES cryptography you need to add the 'tripleDES' section to the application configuration file.  Remember to add the section handler.</value>
+  </data>
+  <data name="TripleDESKeyMissing" xml:space="preserve">
+    <value>The TripleDES section in the application configuration file may not have an empty value for the 'key' attribute.</value>
+  </data>
+  <data name="MessageRoutedToMoreThanOneEndpoint" xml:space="preserve">
+    <value>Message of type '{0}' has been routed to more than one endpoint: {1}</value>
+    <comment>{0} = full type name of message, {1} = comma-delimited string containing all endpoint queue uris</comment>
+  </data>
+  <data name="StartEndpointException" xml:space="preserve">
+    <value>In order to start the endpoint exactly 1 type has to exist that implements IStartEndpoint but {0} were found.  The service bus for this endpoint cannot be started.</value>
+    <comment>{0} = the number of types implementing IStartEndpoint</comment>
+  </data>
+  <data name="StartEndpointRequiresDefaultConstructor" xml:space="preserve">
+    <value>Start endpoint type '{0}' implementing IStartEndpoint must have a default constructor.</value>
+    <comment>{0} = full type name implementing IStartEndpoint</comment>
+  </data>
+  <data name="UnknownMessageRouteSpecification" xml:space="preserve">
+    <value>Unknown message route specification '{0}'.  Cannot create the specification.</value>
+    <comment>{0} = specification name</comment>
+  </data>
+  <data name="RegisteredIncompatiblePipelineEvent" xml:space="preserve">
+    <value>Attempt to register event type '{0}' on pipeline type '{1}'.  The vent type is not compatible with the supported pipeline event type '{2}'.</value>
+    <comment>{0} = incompatible event type, {1} = pipeline type, {2} = pipeline event type</comment>
+  </data>
+  <data name="TransactionRequired" xml:space="preserve">
+    <value>Call to '{0}.{1}' requires an active TransactionScope.</value>
+    <comment>{0} = full type name, {1} = method name</comment>
+  </data>
+  <data name="ProcessMessageMethodMissingException" xml:space="preserve">
+    <value>Handler type '{0}' does not have the requires ProcessMessage method that handles message type '{1}'.</value>
+    <comment>{0} = handler full type name, {1} = message full type name</comment>
+  </data>
+  <data name="PipelineFactoryNotFound" xml:space="preserve">
+    <value>No pipeline factory has been registered for context type '{0}'.</value>
+    <comment>{0} = context type full name</comment>
+  </data>
+  <data name="PipelineFactoryHasNoCreateMethod" xml:space="preserve">
+    <value>Factory that creates pipelines for context type '{0}' has no create method.</value>
+    <comment>{0} = context type full name</comment>
+  </data>
+  <data name="TransactionAlreadyStarted" xml:space="preserve">
+    <value>Call to '{0}.{1}' already contains an active TransactionScope.</value>
+    <comment>{0} = full type name, {1} = method name</comment>
+  </data>
+  <data name="PurgingInboxWorkQueue" xml:space="preserve">
+    <value>Purging inbox work queue '{0}'.</value>
+  </data>
+  <data name="PurgingInboxWorkQueueComplete" xml:space="preserve">
+    <value>Purging inbox work queue '{0}' complete.</value>
+  </data>
+  <data name="JournalRecoverCount" xml:space="preserve">
+    <value>A total of {0} messages have been recovered and returned to uri '{1}'.</value>
+    <comment>{0} = the number of messages recovered, {1} = inbox work queue uri</comment>
+  </data>
+  <data name="MessageDeserialized" xml:space="preserve">
+    <value>Message type '{0}' with id '{1}' has been deserialized.</value>
+    <comment>{0} = full type name of message, {1} = message id</comment>
+  </data>
+  <data name="TransportMessageDeserialized" xml:space="preserve">
+    <value>TransportMessage with message type '{0}' and id '{1}' has been deserialized.</value>
+    <comment>{0} = full type name of message, {1} = message id</comment>
+  </data>
+  <data name="CompressionAlgorithmException" xml:space="preserve">
+    <value>Compression algorithm '{0}' has not been registered.</value>
+    <comment>{0} = algorithm name</comment>
+  </data>
+  <data name="EncryptionAlgorithmException" xml:space="preserve">
+    <value>Encryption algorithm '{0}' has not been registered.</value>
+    <comment>{0} = algorithm name</comment>
+  </data>
+  <data name="ReplyWithoutSenderInboxWorkQueueUri" xml:space="preserve">
+    <value>The current message has no SenderIndexWorkQueueUri.  Cannot reply.</value>
+  </data>
+  <data name="FormatDateFull" xml:space="preserve">
+    <value>dd MMM yyyy HH:mm:ss</value>
+  </data>
+  <data name="TransportMessageIgnored" xml:space="preserve">
+    <value>Transport message with id '{0}' will be ignored until '{1}'.</value>
+    <comment>{0} = transport message id, {1} = ignore till date</comment>
+  </data>
+  <data name="SerializerDoesNotImplementKnownTypes" xml:space="preserve">
+    <value>Serializer type '{0}' does not implement IKnownTypes.  Types implementing '{1}' cannot be added from folder '{2}'.</value>
+    <comment>{0} = serializer type name, {1} = implemented type to add, {2} = folder to scan</comment>
+  </data>
+  <data name="DoNotRegisterSubscriptions" xml:space="preserve">
+    <value>A subscription manager is being used but, as per configuration, no subscriptions will be automatically registered.</value>
+  </data>
+  <data name="NoInboxForSubscriptions" xml:space="preserve">
+    <value>No inbox has been specified so no subscriptions can be registered since event message types subscribed to are sent to the inbox of the subscriber.</value>
+  </data>
+  <data name="QueueTransactionScopeAmbient" xml:space="preserve">
+    <value>QueueTransactionScope ('{0}') using ambient transaction.</value>
+    <comment>{0} = transaction scope name</comment>
+  </data>
+  <data name="QueueTransactionScopeAmbientCompleted" xml:space="preserve">
+    <value>QueueTransactionScope ('{0}') using ambient transaction has completed.</value>
+    <comment>{0} = transaction scope name</comment>
+  </data>
+  <data name="QueueTransactionScopeCompleted" xml:space="preserve">
+    <value>QueueTransactionScope ('{0}') has completed.</value>
+    <comment>{0} = transaction scope name</comment>
+  </data>
+  <data name="QueueTransactionScopeCreated" xml:space="preserve">
+    <value>QueueTransactionScope ('{0}') created with isolation level '{1}' and timeout of '{2}'.</value>
+    <comment>{0} = transaction scope name, {1} = isolation level, {2} = timeout</comment>
+  </data>
+  <data name="ServiceBusInstanceAlreadyStarted" xml:space="preserve">
+    <value>A service bus instance has already been started.</value>
+  </data>
+  <data name="MessageNotHandledIgnored" xml:space="preserve">
+    <value>No handler has been registered for message type '{0}'.  The message (id '{1}') has been ignored.</value>
+    <comment>{0} = full type name of the discarded message, {1}= message id</comment>
+  </data>
+  <data name="TraceCorrelationIdOutgoing" xml:space="preserve">
+    <value>[outgoing correlation id] : '{0}'</value>
+    <comment>{0} = correlation id</comment>
+  </data>
+  <data name="TraceCorrelationIdReceived" xml:space="preserve">
+    <value>[received correlation id] : '{0}'</value>
+    <comment>{0} = correlation id</comment>
+  </data>
+  <data name="TraceForwarding" xml:space="preserve">
+    <value>Forwarding transport message type '{0}' with id '{1}' to '{2}'.</value>
+    <comment>{0} = message type, {1} = message id, {2} =destination uri</comment>
+  </data>
+  <data name="TracePublishing" xml:space="preserve">
+    <value>Publishing transport message type '{0}' with id '{1}' to '{2}'.</value>
+    <comment>{0} = message type, {1} = message id, {2} =destination uri</comment>
+  </data>
+  <data name="TraceTransportHeaderOutgoing" xml:space="preserve">
+    <value>[transport message header (outgoing)] : {0} = {1}</value>
+    <comment>{0} = key, {1} = value</comment>
+  </data>
+  <data name="TraceTransportHeaderReceived" xml:space="preserve">
+    <value>[transport message header (received)] : {0} = {1}</value>
+    <comment>{0} = key, {1} = value</comment>
+  </data>
+  <data name="TraceSend" xml:space="preserve">
+    <value>[sending] : message type = '{0}' / queue uri = '{1}'</value>
+    <comment>{0} = full type name of message</comment>
+  </data>
+  <data name="WarningPublishWithoutSubscribers" xml:space="preserve">
+    <value>[publishing] : no subscribers / event message type = '{0}'</value>
+    <comment>{0} = full type name of event message</comment>
+  </data>
+  <data name="WarningPublishWithoutSubscriptionManager" xml:space="preserve">
+    <value>[publishing] : no subscription manager registered / event message type = '{0}'</value>
+    <comment>{0} = full type name of event message</comment>
+  </data>
+  <data name="DebugWorkerAvailable" xml:space="preserve">
+    <value>[worker available ({0})] worker inbox = {1} / distributor control inbox = {2}</value>
+    <comment>{0} = worker thread identifier, {1} = worker available on queue uri, {2} = distributor control inbox uri</comment>
+  </data>
+  <data name="TransportMessageDeserializationException" xml:space="preserve">
+    <value>Could not deserialize the transport message from queue '{0}'.  Exception reported: {1}</value>
+    <comment>{0} = queue uri, {1} = exception</comment>
+  </data>
+  <data name="TraceIdempotenceTrackerAdd" xml:space="preserve">
+    <value>[idempotence tracker - add] : transport message type '{0}' with id '{1}' has been added.</value>
+    <comment>{0} = message type, {1} = message id</comment>
+  </data>
+  <data name="TraceIdempotenceTrackerContains" xml:space="preserve">
+    <value>[idempotence tracker - contains] : transport message type '{0}' with id '{1}' has been handled.</value>
+    <comment>{0} = message type, {1} = message id</comment>
+  </data>
+  <data name="TraceIdempotenceTrackerRemove" xml:space="preserve">
+    <value>[idempotence tracker - remove] : transport message type '{0}' with id '{1}' has been removed.</value>
+    <comment>{0} = message type, {1} = message id</comment>
+  </data>
+  <data name="NoIdempotenceTracker" xml:space="preserve">
+    <value>No idempotence tracker has been specified.</value>
+  </data>
+</root>

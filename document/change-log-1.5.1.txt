@@ -1,0 +1,31 @@
+2012/03/23
+----------
+- MsmqQueue doesn't kill process on AccessDenied when UserInteractive
+- added default display name
+- for XmlObjectSerializer wrapped MemoryStream in Deserialize<T> in using statement
+- service installation changes
+- update version to 1.5.1
+
+2012/03/17
+----------
+- changed SqlQueue locking to only lock on dequeue 
+
+2012/03/14
+----------
+- changed default behaviour of subscriptions
+	** subscription manager is secure by default
+	** automatic subscriptions are disabled by default 
+
+2012/03/13
+----------
+- merged SecureSubscriptionManager and SubscriptionManager
+- refactored ScriptConfiguration to SubscriptionManagerConfiguration 
+
+2012/03/11
+----------
+- removed [] around table names to allow hints such as (nolock) 
+- renamed PipelineTransactionScope to ServiceBusTransactionScope
+- renamed IPipelineTransactionScopeFactory to IServiceBusTransactionScopeFactory
+- added configuration settings to default isolation level and timeout for new transaction scopes 
+- added IPipelineTransactionScopeFactory
+- changed name of QueueTransactionScope to PipelineTransactionScope 

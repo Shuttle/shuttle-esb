@@ -1,0 +1,40 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <RootFolder>..\..</RootFolder>
+    <Framework Condition="'$(Framework)' == ''">net35-full</Framework>
+    <TargetFolder>..\$(Configuration)\</TargetFolder>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shuttle.ESB\source\**\*.csproj" Exclude="..\..\Shuttle.ESB\source\**\Shuttle.ESB.Test.*.csproj" />
+    <ProjectReference Include="..\..\Shuttle.ESB\samples\**\*.csproj" />
+    <ProjectReference Include="..\..\Shuttle.Scheduling\source\**\*.csproj" />
+    <ProjectReference Include="..\..\Shuttle.Management\source\**\*.csproj" />
+    <OutputFiles Include="..\$(Configuration)\$(Framework)\*.dll" />
+
+    <CastleFiles Include="$(RootFolder)\external-bin\castle\*.dll" />
+    <Log4NetFiles Include="$(RootFolder)\external-bin\log4net\log4net.dll" />
+
+    <CoreFiles Include="$(RootFolder)\Shuttle.Core\build\$(Configuration)\$(Framework)\Shuttle.Core.Data.dll;$(RootFolder)\Shuttle.Core\build\$(Configuration)\$(Framework)\Shuttle.Core.Infrastructure.Castle.dll;$(RootFolder)\Shuttle.Core\build\$(Configuration)\$(Framework)\Shuttle.Core.Infrastructure.dll;$(RootFolder)\Shuttle.Core\build\$(Configuration)\$(Framework)\Shuttle.Core.Infrastructure.Log4Net.dll;$(RootFolder)\Shuttle.Core\build\$(Configuration)\$(Framework)\Shuttle.Core.SqlServer.dll" />
+    <ESBFiles Include="$(RootFolder)\Shuttle.ESB\build\$(Configuration)\$(Framework)\*.*" Exclude="$(RootFolder)\Shuttle.ESB\build\$(Configuration)\$(Framework)\Shuttle.ESB.SqlServer.dll;$(RootFolder)\Shuttle.ESB\build\$(Configuration)\$(Framework)\Shuttle.ESB.Msmq.dll" />
+    <ESBSqlFiles Include="$(RootFolder)\Shuttle.ESB\build\$(Configuration)\$(Framework)\Shuttle.ESB.SqlServer.dll" />
+    <ESBSqlScripts Include="$(RootFolder)\Shuttle.ESB\source\Shuttle.ESB.SqlServer\Scripts\2000\*.sql" />
+    <ESBMsmqFiles Include="$(RootFolder)\Shuttle.ESB\build\$(Configuration)\$(Framework)\Shuttle.ESB.Msmq.dll" />
+
+	<Framework Include="net35-full;net40-full;net45-full" />
+  </ItemGroup>
+
+  <Target Name="PerformBuild">
+    <MSBuild Projects="@(ProjectReference)" Targets="Rebuild" Properties="Framework=%(Framework.Identity);Configuration=$(Configuration)"></MSBuild>
+  </Target>
+
+  <Target Name="BuildEnvironment">
+    <Error Text="The 'EnvironmentName' property must be set." Condition="'$(EnvironmentName)' == ''" />
+    <CallTarget Targets="PerformBuild"></CallTarget>
+  </Target>
+
+  <!-- shared targets -->
+  <ItemGroup>
+    <OutputFilesToClean Include="$(Configuration)\*.*" />
+  </ItemGroup>
+</Project>

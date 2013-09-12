@@ -1,0 +1,37 @@
+2012/04/18
+----------
+- fixed QueueManager to return QueueFactories() from GetQueueFactories and not queueFactories variable
+- fixed MemoryQueue to make a copy of the stream on Enqueue
+- diagram changes / added Pipeline-Startup diagram
+- test fixture changes / added ThreadCount to in-memory configuration and sleep duration for idle
+- all unit tests pass 
+- added change log change-log-1.5.2
+- renamed Resources to ESBResources
+- refactored some ServiceBusStartupObserver code to use AttemptInitialization
+- fixed OnInitializeSubscriptionManager handling
+
+2012/04/16
+----------
+- diagrams added (pub/sub & message distribution) 
+
+2012/04/13
+----------
+- updated architecture request/response diagram 
+
+2012/04/10
+----------
+- QueueSelected raised when pressing enter in QueueHierarchy input 
+
+2012/04/05
+----------
+- updated management shell project to copy build to relevant folder for inclusion in deployment 
+
+2012/04/04
+----------
+- refactored out some of the code from the management shell
+- added a tree view for queue selection in the messages view 
+- added queue hierarchy to all management components 
+
+2012/03/30
+----------
+- changed publishing sample to use SubscribtionManager unsecured 

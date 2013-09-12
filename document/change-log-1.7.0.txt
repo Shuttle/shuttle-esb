@@ -1,0 +1,48 @@
+2012/10/22
+----------
+- updated version to 1.7.0
+- all samples using same error queue
+- removed redundant distributor sample projects
+- added change-log-1.7.0.txt
+
+2012/10/19
+----------
+- implemented integrated message distribution
+- fixed exception handling for ReceiveMessagePipeline in Read stage
+- fixed logging in MessageView
+- refactoring distributor sample to act as worker for RequestResponse.Server
+
+2012/10/18
+----------
+- fixed step in ThreadSleep
+
+2012/09/23
+----------
+- implemented IQueueReader on SqlQueue
+- removed AbstractResult
+- refactored IResult / IAbstractResult to not return an interface on calls to add messages
+
+2012/09/04
+----------
+- added Contains to Arguments.cs
+- added Get<T> without default to Arguments.cs
+
+2012/08/31
+----------
+- refactored DomainEvents
+
+2012/08/29
+----------
+- removed IResolver / Resolver
+- refactored IManagementModule to return a collection of presenters
+- renamed DomainEvents to DomainEventBus with corresponding interface
+- renamed IHandleDomainEvent to IDomainEventHandler
+
+2012/08/21
+----------
+- added build files to solution
+
+2012/08/20
+----------
+- some minor refactoring on shuttle.core
+

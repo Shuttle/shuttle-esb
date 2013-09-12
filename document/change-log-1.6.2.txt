@@ -1,0 +1,10 @@
+2012/07/23
+----------
+- removed HealthMonitor wiring / deployment
+- some small configuration changes
+- added change-log-1.6.2.txt
+- updated assembly versions to 1.6.2
+
+2012/06/13
+----------
+- fixed management shell references to use auditing (not health monitor

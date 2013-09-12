@@ -1,0 +1,5 @@
+2013-03-19
+----------
+- fixed management shell module/presenter handling
+- changed version numbers to 2.0.2
+- added change-log-2.0.2.txt

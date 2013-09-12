@@ -1,0 +1,1 @@
+truncate table [dbo].[{0}]

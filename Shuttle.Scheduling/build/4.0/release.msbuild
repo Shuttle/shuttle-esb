@@ -1,0 +1,7 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="PerformBuild" ToolsVersion="4.0">
+   <Import Project="..\..\..\build\4.0\shared.msbuild"/>
+
+   <PropertyGroup>
+      <Configuration>Release</Configuration>
+   </PropertyGroup>
+</Project>

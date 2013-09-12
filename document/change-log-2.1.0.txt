@@ -1,0 +1,45 @@
+2013-05-05
+----------
+- fixed InboxFixture TestInboxThroughput warmup processing
+
+2013-04-30
+----------
+- implemented idempotence tracker / tests
+
+2013-04-23
+----------
+- changed all VS2010 projects to VS2012 and removed the VS2010 suffix
+- added net45-full framework version along with 4.5 shuttle.core assemblies
+- started idempotence tracker and added OnMessageHandled pipeline event / updated receive pipeline to use tracker
+
+2013-04-01
+----------
+- refactored solution sample structure to include work in Request/Response
+- included latest 1.8 shuttle core build
+- refactored DefaultSerializer ro remove ensuredTypes
+- refactored inbox testing
+- added inbox test for concurrent processing
+- added memory inbox tests
+
+2013-03-31
+----------
+- refactored verbose and trace logging to be performed conditionally
+- fixed DefaultSerializer error on .net 4.0
+- refactored ProcessInboxTaskTest to test with & without journals
+
+2013-03-29
+----------
+- changed assembly versions to 2.1.0
+
+2013-03-27
+----------
+- added transactionScope element to serviceBus section
+
+2013-03-26
+----------
+- made journal queues optional
+- refactored build to target .net 3.5 as well as .net 4.0
+
+2013-03-24
+----------
+- added 'distribute' option to inbox configuration in order to indicate that the endpoint should only distribute

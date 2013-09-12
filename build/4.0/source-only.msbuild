@@ -1,0 +1,17 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="RemoveFiles" ToolsVersion="4.0">
+   <ItemGroup>
+      <DeleteFiles Include="..\..\**\*.resharper.user" />
+      <DeleteFiles Include="..\..\**\build\debug\*.*" />
+      <DeleteFiles Include="..\..\**\build\release\*.*" />
+      <DeleteFiles Include="..\..\**\logs\*.log" />
+      <DeleteFiles Include="..\..\**\deployment\**\*.*" />
+      <DeleteFolders Include="..\..\**\bin\*\*" />
+      <DeleteFolders Include="..\..\**\obj\*\*" />
+      <DeleteFolders Include="..\..\**\deployment\*\*" />
+   </ItemGroup>
+
+   <Target Name="RemoveFiles">
+      <Delete Files="%(DeleteFiles.FullPath)" />
+      <RemoveDir Directories="@(DeleteFolders->'%(RootDir)%(Directory)')" />
+   </Target>
+</Project>

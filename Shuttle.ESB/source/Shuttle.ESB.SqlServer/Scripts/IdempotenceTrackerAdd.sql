@@ -1,0 +1,1 @@
+insert into [dbo].[IdempotenceTracker] (MessageId) values (@MessageId)

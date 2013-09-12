@@ -1,0 +1,37 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="DeployBinaries" ToolsVersion="4.0">
+   <UsingTask AssemblyFile="MSBuildCommunityTasks\MSBuild.Community.Tasks.dll" TaskName="MSBuild.Community.Tasks.FileUpdate" />
+
+   <PropertyGroup>
+      <Framework Condition="'$(Framework)' == ''">net35-full</Framework>
+      <ReleaseFolder>..\deployment\Shuttle.Management\$(Framework)\</ReleaseFolder>
+   </PropertyGroup>
+
+   <ItemGroup>
+      <BuildReference Include="release.msbuild" />
+      <BinaryFiles Include="..\release\$(Framework)\*.*;..\..\source\Shuttle.Management\release.config" />
+      <CoreFiles Include="..\..\..\external-bin\shuttle.core\$(Framework)\*.*" Exclude="..\..\..\external-bin\shuttle.core\$(Framework)\Shuttle.Core.Host.exe"/>
+      <ESBFiles Include="..\..\..\Shuttle.ESB\build\release\$(Framework)\*.*" />
+      <SchedulingFiles Include="..\..\..\Shuttle.Scheduling\build\release\$(Framework)\*.*" Exclude="..\..\..\Shuttle.Scheduling\build\release\$(Framework)\*.server.*" />
+      <ScriptFiles Include="..\..\database\*.sql" />
+      <CastleFiles Include="..\..\..\external-bin\castle\*.*" />
+      <Log4NetFiles Include="..\..\..\external-bin\log4net\*.*" />
+   </ItemGroup>
+
+   <Target Name="DeployBinaries">
+      <MSBuild Projects="@(BuildReference)"></MSBuild>
+
+      <RemoveDir Directories="$(ReleaseFolder)"/>
+      <MakeDir Directories="$(ReleaseFolder)"/>
+
+      <Copy SourceFiles="%(BinaryFiles.FullPath)" DestinationFolder="$(ReleaseFolder)" SkipUnchangedFiles="false" />
+      <Copy SourceFiles="%(CoreFiles.FullPath)" DestinationFolder="$(ReleaseFolder)" SkipUnchangedFiles="false" />
+      <Copy SourceFiles="%(ESBFiles.FullPath)" DestinationFolder="$(ReleaseFolder)" SkipUnchangedFiles="false" />
+      <Copy SourceFiles="%(SchedulingFiles.FullPath)" DestinationFolder="$(ReleaseFolder)" SkipUnchangedFiles="false" />
+      <Copy SourceFiles="%(ScriptFiles.FullPath)" DestinationFolder="$(ReleaseFolder)\scripts\" SkipUnchangedFiles="false" />
+      <Copy SourceFiles="%(CastleFiles.FullPath)" DestinationFolder="$(ReleaseFolder)" SkipUnchangedFiles="false" />
+      <Copy SourceFiles="%(Log4NetFiles.FullPath)" DestinationFolder="$(ReleaseFolder)" SkipUnchangedFiles="false" />
+      <Copy SourceFiles="$(ReleaseFolder)\release.config" DestinationFiles="$(ReleaseFolder)\Shuttle.Management.exe.config" SkipUnchangedFiles="false" />
+      <Delete Files="$(ReleaseFolder)\release.config" />
+   </Target>
+
+</Project>

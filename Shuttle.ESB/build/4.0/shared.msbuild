@@ -1,0 +1,5 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="PerformBuild" ToolsVersion="4.0">
+   <ItemGroup>
+      <ProjectReference Include="..\..\samples\**\*.VS2010.csproj" />
+   </ItemGroup>
+</Project>

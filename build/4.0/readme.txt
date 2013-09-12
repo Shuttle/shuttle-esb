@@ -1,0 +1,1 @@
+To enable compiling the source please run msbuild on the 'initialize-environment.msbuild' file first.

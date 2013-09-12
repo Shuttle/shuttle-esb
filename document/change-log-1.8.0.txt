@@ -1,0 +1,23 @@
+2012/11/29
+----------
+- removed shuttle.core source (moved to https://shuttlecore.codeplex.com/)
+- added external-bin for shuttle.core
+- fixed target platform on Shuttle.Management
+- added user files to management projects
+- added ShowQueuesButton to QueueHierarchyView
+- refactored initialize-environment.msbuild to set the startup executable for the management projects
+
+2012/11/28
+----------
+- removed automatic drop-down of QueueHierarchyView when clicking on control
+- refactored string display in MessageView
+- added comparison in MessageManagementPresenter between the type of the message as registered in the TransportMessage and the type returned by .NET
+
+2012/11/27
+----------
+- added user file to distributor worker
+- minor refactoring to report a warning when a message has been encrypted or compressed since it cannot be displayed
+
+2012/11/11
+----------
+- added publish-subscribe readme.txt

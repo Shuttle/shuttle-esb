@@ -1,0 +1,27 @@
+2012/06/04
+----------
+- updated version to 1.6.1 and added change-log-1.6.1.txt
+- renamed HealthMonitor to more accurate Auditing
+
+2012/06/04
+----------
+- updated help text for Shuttle.Core.Host
+- added StreamExtensions.ToBytesOnly()
+- updated resource text
+- fixed spelling mistake
+- ResuableObjectPool returns null from Get if no createObject function is specified
+- refactored ReusableDictionaryPool to ReusableObjectPool
+- responsibility for calling of OnPipelineCreated moved to pipeline factory
+
+2012/06/01
+----------
+- added date to registered failure messages
+
+2012/05/19
+----------
+- fixed RequiredPropertiesComponentModelConstruction to set all relevant properties to mandatory
+- added readme.txt to build folder
+
+2012/05/14
+----------
+- added RequiredPropertiesComponentModelConstruction to specify whether property injection is mandatory on certain properties

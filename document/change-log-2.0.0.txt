@@ -1,0 +1,34 @@
+2013-02-05
+----------
+- fixed tests
+- updated change-log-2.0.0.txt
+
+2013-02-04
+----------
+- fixed shuttle.core references
+- fixed initialize-environment.msbuild
+
+2013-01-30
+----------
+- removed unused internal CreateTransportMessage from ServiceBus
+
+2013-01-28
+----------
+- implemented IThreadActivityFactory
+
+2013-01-25
+----------
+- updated management / scheduling components
+- - added to Shuttle.Core.Host.exe to scheduler deployment
+
+2013-01-23
+----------
+- updated version to 2.0
+
+2013-01-23
+----------
+- Removed IMessage and IEventMessage interfaces and replaced with 'object'
+- Added IServiceBusPolicy to allow how/when messages should be retried.
+- Implemented DefaultServiceBusPolicy that keeps the current retry functionality.
+- Removed automatic event subscription.
+- Removed Auditing/Capabilities

@@ -1,0 +1,97 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="PerformRelease" ToolsVersion="4.0">
+  <UsingTask AssemblyFile="MSBuildCommunityTasks\MSBuild.Community.Tasks.dll" TaskName="MSBuild.Community.Tasks.FileUpdate" />
+
+  <PropertyGroup>
+    <ReleaseFolder>..\shuttle-binary-$(Framework)</ReleaseFolder>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<Framework Include="net35-full;net40-full;net45-full" />
+  </ItemGroup>
+
+  <Target Name="PerformRelease">
+    <MSBuild Projects="debug.msbuild"></MSBuild>
+    <MSBuild Projects="release.msbuild"></MSBuild>
+
+	<MSBuild Projects="$(MSBuildProjectFile)" Targets="DeployBinaries" Properties="Framework=%(Framework.Identity)"></MSBuild>
+  </Target>
+
+  <Target Name="DeployBinaries">
+    <ItemGroup>
+      <DeleteFiles Include="$(ReleaseFolder)\**\*.*" />
+    </ItemGroup>
+
+    <Delete Files="@(DeleteFiles)" />
+    <RemoveDir Directories="$(ReleaseFolder)"/>
+
+    <ItemGroup>
+      <CoreFiles Include="..\..\external-bin\shuttle.core\$(Framework)\*.*" />
+      <CastleFiles Include="..\..\external-bin\castle\*.*" />
+      <Log4NetFiles Include="..\..\external-bin\log4net\*.*" />
+
+      <ESBFiles Include="..\..\Shuttle.ESB\build\release\$(Framework)\*.*" />
+      <ScriptFiles Include="..\..\Shuttle.ESB\source\Shuttle.ESB.SqlServer\Scripts\**\*.*" />
+
+      <SampleFiles Include="..\..\Shuttle.ESB\samples\**\*.csproj;..\..\Shuttle.ESB\samples\**\*.csproj.user;..\..\Shuttle.ESB\samples\**\*.cs;..\..\Shuttle.ESB\samples\**\*.sln;..\..\Shuttle.ESB\samples\**\*.suo;..\..\Shuttle.ESB\samples\**\app.config" />
+      <SampleBinaryFiles Include="..\..\Shuttle.ESB\samples\build\release\$(Framework)\RequestResponse.Client\*.*">
+        <Sample>RequestResponse</Sample>
+        <Project>Client</Project>
+      </SampleBinaryFiles>
+      <SampleBinaryFiles Include="..\..\Shuttle.ESB\samples\build\release\$(Framework)\RequestResponse.Server\*.*">
+        <Sample>RequestResponse</Sample>
+        <Project>Server</Project>
+      </SampleBinaryFiles>
+      <SampleBinaryFiles Include="..\..\Shuttle.ESB\samples\build\release\$(Framework)\PublishSubscribe.Subscriber1\*.*">
+        <Sample>PublishSubscribe</Sample>
+        <Project>Subscriber1</Project>
+      </SampleBinaryFiles>
+      <SampleBinaryFiles Include="..\..\Shuttle.ESB\samples\build\release\$(Framework)\PublishSubscribe.Subscriber2\*.*">
+        <Sample>PublishSubscribe</Sample>
+        <Project>Subscriber2</Project>
+      </SampleBinaryFiles>
+      <SampleBinaryFiles Include="..\..\Shuttle.ESB\samples\build\release\$(Framework)\PublishSubscribe.Client\*.*">
+        <Sample>PublishSubscribe</Sample>
+        <Project>Client</Project>
+      </SampleBinaryFiles>
+      <SampleBinaryFiles Include="..\..\Shuttle.ESB\samples\build\release\$(Framework)\RequestResponse.Worker\*.*">
+        <Sample>RequestResponse</Sample>
+        <Project>Worker</Project>
+      </SampleBinaryFiles>
+    </ItemGroup>
+
+    <Copy SourceFiles="%(CoreFiles.FullPath)" DestinationFolder="$(ReleaseFolder)\Shuttle\" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="%(ESBFiles.FullPath)" DestinationFolder="$(ReleaseFolder)\Shuttle\" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="%(ScriptFiles.FullPath)" DestinationFolder="$(ReleaseFolder)\Shuttle\scripts\%(RecursiveDir)" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="%(CastleFiles.FullPath)" DestinationFolder="$(ReleaseFolder)\castle\" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="%(Log4NetFiles.FullPath)" DestinationFolder="$(ReleaseFolder)\log4net\" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="%(SampleFiles.FullPath)" DestinationFolder="$(ReleaseFolder)\samples\source\%(RecursiveDir)" SkipUnchangedFiles="false" />
+
+    <Msbuild Projects="..\..\Shuttle.Scheduling\build\4.0\deployment.msbuild" />
+    <Msbuild Projects="..\..\Shuttle.Management\build\4.0\deployment.msbuild" />
+
+    <ItemGroup>
+      <SchedulingFiles Include="..\..\Shuttle.Scheduling\build\deployment\Shuttle.Scheduling.Server\$(Framework)\**\*.*" />
+      <ManagementFiles Include="..\..\Shuttle.Management\build\deployment\Shuttle.Management\$(Framework)\**\*.*" />
+      <SampleProjectFiles Include="$(ReleaseFolder)\samples\source\**\*.csproj" />
+    </ItemGroup>
+
+    <Copy SourceFiles="%(SampleProjectFiles.FullPath)" DestinationFolder="$(ReleaseFolder)\samples\source\%(RecursiveDir)" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="%(SchedulingFiles.FullPath)" DestinationFolder="$(ReleaseFolder)\Shuttle.Scheduling\%(RecursiveDir)" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="%(ManagementFiles.FullPath)" DestinationFolder="$(ReleaseFolder)\Shuttle.Management\%(RecursiveDir)" SkipUnchangedFiles="false" />
+
+    <Msbuild Targets="CopyDeploymentItem"
+       Projects="$(MSBuildProjectFile)"
+       Properties="ItemFullPath=%(SampleBinaryFiles.FullPath);Sample=%(SampleBinaryFiles.Sample);Project=%(SampleBinaryFiles.Project);" />
+	   
+    <FileUpdate Files="@(SampleProjectFiles)" Regex="&lt;HintPath&gt;.*(Shuttle.Core.*.dll|Shuttle.Core.Host.exe).*&lt;/HintPath&gt;" ReplacementText="&lt;HintPath&gt;..\..\..\..\shuttle\$1&lt;/HintPath&gt;" />
+    <FileUpdate Files="@(SampleProjectFiles)" Regex="&lt;HintPath&gt;.*(Shuttle.ESB.*.dll).*&lt;/HintPath&gt;" ReplacementText="&lt;HintPath&gt;..\..\..\..\shuttle\$1&lt;/HintPath&gt;" />
+    <FileUpdate Files="@(SampleProjectFiles)" Regex="&lt;HintPath&gt;.*external-bin\\(.*)\\(.*.dll).*&lt;/HintPath&gt;" ReplacementText="&lt;HintPath&gt;..\..\..\..\$1\$2&lt;/HintPath&gt;" />
+    <FileUpdate Files="@(SampleProjectFiles)" Regex="&lt;PostBuildEvent&gt;.*Scripts.*&lt;/PostBuildEvent&gt;" ReplacementText="&lt;PostBuildEvent&gt;xcopy &quot;..\..\..\..\shuttle\scripts&quot; &quot;$(TargetDir)scripts\&quot; /s /y&lt;/PostBuildEvent&gt;" />
+  </Target>
+
+  <Target Name="CopyDeploymentItem">
+    <Copy
+       SourceFiles="$(ItemFullPath)"
+       DestinationFolder="$(ReleaseFolder)\samples\binary\$(Sample)\$(Sample).$(Project)" ContinueOnError="false" />
+  </Target>
+</Project>
