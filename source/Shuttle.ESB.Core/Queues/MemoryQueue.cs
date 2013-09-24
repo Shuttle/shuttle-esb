@@ -44,7 +44,7 @@ namespace Shuttle.ESB.Core
 			{
 				throw new UriFormatException(string.Format(ESBResources.UriFormatException,
 														   string.Format("memory://{{.|{0}}}/{{name}}",
-																		 Environment.MachineName.ToLower()), Uri));
+																		 Environment.MachineName.ToLower()), uri));
 			}
 
             Create();

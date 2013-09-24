@@ -73,8 +73,8 @@ namespace Shuttle.ESB.SqlServer
             if (uri.LocalPath == "/" || uri.Segments.Length != 2)
             {
                 throw new UriFormatException(string.Format(ESBResources.UriFormatException,
-                                                           "sql://{{connection name}}/{{table name}}",
-                                                           Uri));
+                                                           "sql://{{connection-name}}/{{table-name}}",
+                                                           uri));
             }
 
             log = Log.For(this);

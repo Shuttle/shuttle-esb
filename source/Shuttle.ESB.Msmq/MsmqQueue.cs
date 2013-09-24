@@ -58,8 +58,8 @@ namespace Shuttle.ESB.Msmq
 
 			if (uri.LocalPath == "/")
 			{
-				throw new UriFormatException(string.Format(ESBResources.UriFormatException, "memory://{{host}}/{{name}}",
-														   Uri));
+				throw new UriFormatException(string.Format(ESBResources.UriFormatException, "msmq://{{host-name}}/{{queue-name}}",
+														   uri));
 			}
 
 			Uri = builder.Uri;
