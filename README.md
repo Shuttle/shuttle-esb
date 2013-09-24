@@ -9,7 +9,7 @@ Once you have downloaded the source you need to perform the following to get sta
 
   - if you don't have .msbuild files associated with MSBuild you can open a Visual Studio Command Prompt
 
-    cd {extract-folder}\build\{relevant-version}\
+    cd {extract-folder}\build\\{relevant-version}\
 
     msbuild initialize-environment.msbuild
 
