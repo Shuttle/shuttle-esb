@@ -8,8 +8,7 @@
 
    <ItemGroup>
       <SharedProject Include="shared.msbuild" />
-      <SampleEndpointUserFile Include="..\..\Shuttle.ESB\samples\**\*.csproj.user" />
-      <ManagementUserFile Include="..\..\Shuttle.Management\source\**\*.csproj.user" />
+      <SampleEndpointUserFile Include="..\..\samples\**\*.csproj.user" />
       <ConfigFile Include="..\..\**\*.config" />
    </ItemGroup>
 

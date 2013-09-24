@@ -1,0 +1,200 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{71B25665-8F18-4A3B-B2CC-0C6444252091}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Shuttle.ESB.SqlServer</RootNamespace>
+    <AssemblyName>Shuttle.ESB.SqlServer</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>true</CodeAnalysisFailOnMissingRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>true</CodeAnalysisFailOnMissingRules>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Framework Condition=" '$(Framework)' == '' ">net35-full</Framework>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Framework)' == 'net35-full'">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <DefineConstants>$(DefineConstants);NET35FULL</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Framework)' == 'net40-full'">
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <DefineConstants>$(DefineConstants);NET40FULL</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Framework)' == 'net45-full'">
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <DefineConstants>$(DefineConstants);NET45FULL</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Shuttle.Core.Data">
+      <HintPath>..\..\external-bin\shuttle.core\$(Framework)\Shuttle.Core.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Shuttle.Core.Domain">
+      <HintPath>..\..\external-bin\shuttle.core\$(Framework)\Shuttle.Core.Domain.dll</HintPath>
+    </Reference>
+    <Reference Include="Shuttle.Core.Infrastructure">
+      <HintPath>..\..\external-bin\shuttle.core\$(Framework)\Shuttle.Core.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Shuttle.Core.SqlServer">
+      <HintPath>..\..\external-bin\shuttle.core\$(Framework)\Shuttle.Core.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Definitions\IdempotenceTrackerColumns.cs" />
+    <Compile Include="Idempotence\IdempotenceTracker.cs" />
+    <Compile Include="IScriptProvider.cs" />
+    <Compile Include="ScriptProvider.cs" />
+    <Compile Include="Subscription\SubscriptionManager.cs" />
+    <Compile Include="Definitions\QueueColumns.cs" />
+    <Compile Include="Definitions\SubscriptionManagerColumns.cs" />
+    <Compile Include="Subscription\ISubscriptionManagerConfiguration.cs" />
+    <Compile Include="Script.cs" />
+    <Compile Include="ScriptException.cs" />
+    <Compile Include="Queue\SqlQueue.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Subscription\SubscriptionManagerConfiguration.cs" />
+    <Compile Include="Queue\SqlQueueFactory.cs" />
+    <Compile Include="SqlResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SqlResources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SqlResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SqlResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\QueueCount.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\QueueRemove.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\2000\QueueCreate.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\QueueDequeue.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\QueueDrop.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\QueueEnqueue.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\QueuePurge.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\QueueCreate.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\QueueExists.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\QueueDequeueId.sql" />
+    <EmbeddedResource Include="Scripts\QueueRead.sql" />
+    <EmbeddedResource Include="Scripts\IdempotenceTrackerContains.sql" />
+    <Content Include="Scripts\2000\IdempotenceTrackerCreate.sql" />
+    <Content Include="Scripts\2000\IdempotenceTrackerExists.sql" />
+    <Content Include="Scripts\2000\SubscriptionManagerExists.sql" />
+    <Content Include="Scripts\2000\SubscriptionManagerCreate.sql" />
+    <Content Include="Scripts\2000\SecureSubscriptionManagerCreate.sql" />
+    <Content Include="Scripts\2000\SecureSubscriptionManagerExists.sql" />
+    <EmbeddedResource Include="Scripts\IdempotenceTrackerRemove.sql" />
+    <EmbeddedResource Include="Scripts\IdempotenceTrackerAdd.sql" />
+    <EmbeddedResource Include="Scripts\IdempotenceTrackerExists.sql" />
+    <Content Include="Scripts\IdempotenceTrackerCreate.sql" />
+    <Content Include="Scripts\SubscriptionManagerCreate.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\SubscriptionManagerExists.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\SubscriptionManagerInboxWorkQueueUris.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\SubscriptionManagerSubscribe.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Shuttle.ESB.Core\Shuttle.ESB.Core.csproj">
+      <Project>{22D75FD9-0E17-43C8-9BD0-F06CA40840C5}</Project>
+      <Name>Shuttle.ESB.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\SecureSubscriptionManagerCreate.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\SecureSubscriptionManagerExists.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\SecureSubscriptionManagerSubscribe.sql" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>md "..\..\..\..\build\$(ConfigurationName)\$(Framework)"
+copy "$(TargetPath)" "..\..\..\..\build\$(ConfigurationName)\$(Framework)"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

@@ -1,15 +1,13 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <RootFolder>..\..</RootFolder>
+    <RootFolder>C:\development.github\shuttle-esb\build\4.0\..\..</RootFolder>
     <Framework Condition="'$(Framework)' == ''">net35-full</Framework>
     <TargetFolder>..\$(Configuration)\</TargetFolder>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Shuttle.ESB\source\**\*.csproj" Exclude="..\..\Shuttle.ESB\source\**\Shuttle.ESB.Test.*.csproj" />
-    <ProjectReference Include="..\..\Shuttle.ESB\samples\**\*.csproj" />
-    <ProjectReference Include="..\..\Shuttle.Scheduling\source\**\*.csproj" />
-    <ProjectReference Include="..\..\Shuttle.Management\source\**\*.csproj" />
+    <ProjectReference Include="..\..\source\**\*.csproj" Exclude="..\..\source\**\Shuttle.ESB.Test.*.csproj" />
+    <ProjectReference Include="..\..\samples\**\*.csproj" />
     <OutputFiles Include="..\$(Configuration)\$(Framework)\*.dll" />
 
     <CastleFiles Include="$(RootFolder)\external-bin\castle\*.dll" />
