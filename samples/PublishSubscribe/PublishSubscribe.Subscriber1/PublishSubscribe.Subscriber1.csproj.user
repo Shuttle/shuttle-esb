@@ -2,6 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <StartAction>Program</StartAction>
-    <StartProgram>C:\development.github\shuttle-esb\samples\PublishSubscribe\PublishSubscribe.Subscriber1\bin\Debug\Shuttle.Core.Host.exe</StartProgram>
+    <StartProgram>C:\development.github\shuttle-esb\samples\PublishSubscribe\PublishSubscribe.Subscriber1\bin\debug\Shuttle.Core.Host.exe</StartProgram>
   </PropertyGroup>
 </Project>
