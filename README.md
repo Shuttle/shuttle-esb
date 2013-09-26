@@ -1,6 +1,13 @@
 shuttle-esb
 ===========
 
+[Have a look at our YouTube channel](http://www.youtube.com/user/shuttleservicebus)
+
+[Please visit our wiki for all the documentation](https://github.com/eben-roux/shuttle-esb/wiki/Shuttle-ESB)
+
+getting started with the source
+===============================
+
 A free .NET open-source enterprise service bus.
 
 Once you have downloaded the source you need to perform the following to get started:
@@ -25,4 +32,4 @@ You will be prompted for your sql data source.
 If you wish to keep the default (.\sqlexpress) or you you would want to check this out later simply press enter.
 
 
-[Please visit our wiki for all the documentation](https://github.com/eben-roux/shuttle-esb/wiki/Shuttle-ESB)
+
