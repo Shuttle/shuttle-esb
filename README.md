@@ -5,6 +5,8 @@ shuttle-esb
 
 [Please visit our wiki for all the documentation](https://github.com/eben-roux/shuttle-esb/wiki/Shuttle-ESB)
 
+We still have a lot of information on our [old wiki](http://servicebus.co.za/) but we will be migrating that here as time goes by.  Feel free to help in this regard if you have time :)
+
 getting started with the source
 ===============================
 
