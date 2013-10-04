@@ -96,15 +96,13 @@
     <Compile Include="Idempotence\IdempotenceTracker.cs" />
     <Compile Include="IScriptProvider.cs" />
     <Compile Include="ScriptProvider.cs" />
-    <Compile Include="Subscription\SubscriptionManager.cs" />
+    <Compile Include="SubscriptionManager.cs" />
     <Compile Include="Definitions\QueueColumns.cs" />
     <Compile Include="Definitions\SubscriptionManagerColumns.cs" />
-    <Compile Include="Subscription\ISubscriptionManagerConfiguration.cs" />
     <Compile Include="Script.cs" />
     <Compile Include="ScriptException.cs" />
     <Compile Include="Queue\SqlQueue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Subscription\SubscriptionManagerConfiguration.cs" />
     <Compile Include="Queue\SqlQueueFactory.cs" />
     <Compile Include="SqlResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -175,15 +173,6 @@
       <Project>{22D75FD9-0E17-43C8-9BD0-F06CA40840C5}</Project>
       <Name>Shuttle.ESB.Core</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Scripts\SecureSubscriptionManagerCreate.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Scripts\SecureSubscriptionManagerExists.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Scripts\SecureSubscriptionManagerSubscribe.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

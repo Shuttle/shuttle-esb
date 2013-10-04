@@ -18,7 +18,6 @@ namespace Shuttle.ESB.SqlServer
 
         private static readonly object padlock = new object();
 
-        private readonly ISubscriptionManagerConfiguration subscriptionManagerConfiguration;
         private readonly IScriptProvider scriptProvider;
 
         private readonly string tableName;
@@ -39,7 +38,6 @@ namespace Shuttle.ESB.SqlServer
 
         public SqlQueue(Uri uri)
             : this(uri,
-                   new SubscriptionManagerConfiguration(),
                    new ScriptProvider(),
                    DatabaseConnectionFactory.Default(),
                    DatabaseGateway.Default())
@@ -47,18 +45,15 @@ namespace Shuttle.ESB.SqlServer
         }
 
         public SqlQueue(Uri uri,
-                        ISubscriptionManagerConfiguration subscriptionManagerConfiguration,
                         IScriptProvider scriptProvider,
                         IDatabaseConnectionFactory databaseConnectionFactory,
                         IDatabaseGateway databaseGateway)
         {
             Guard.AgainstNull(uri, "uri");
-            Guard.AgainstNull(subscriptionManagerConfiguration, "subscriptionManagerConfiguration");
             Guard.AgainstNull(scriptProvider, "scriptProvider");
             Guard.AgainstNull(databaseConnectionFactory, "databaseConnectionFactory");
             Guard.AgainstNull(databaseGateway, "databaseGateway");
 
-            this.subscriptionManagerConfiguration = subscriptionManagerConfiguration;
             this.scriptProvider = scriptProvider;
             this.databaseConnectionFactory = databaseConnectionFactory;
             this.databaseGateway = databaseGateway;

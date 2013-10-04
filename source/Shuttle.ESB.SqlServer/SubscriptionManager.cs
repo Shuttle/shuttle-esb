@@ -23,7 +23,6 @@ namespace Shuttle.ESB.SqlServer
 
         private readonly IDatabaseGateway databaseGateway;
         private readonly IDatabaseConnectionFactory databaseConnectionFactory;
-        private readonly ISubscriptionManagerConfiguration subscriptionManagerConfiguration;
         private readonly IScriptProvider scriptProvider;
 
         private IServiceBusConfiguration serviceBusConfiguration;
@@ -35,23 +34,19 @@ namespace Shuttle.ESB.SqlServer
         public static ISubscriptionManager Default()
         {
             return
-                new SubscriptionManager(new SubscriptionManagerConfiguration(),
-                                        new ScriptProvider(),
+                new SubscriptionManager(new ScriptProvider(),
                                         DatabaseConnectionFactory.Default(),
                                         DatabaseGateway.Default());
         }
 
 
-        public SubscriptionManager(ISubscriptionManagerConfiguration subscriptionManagerConfiguration,
-                                   IScriptProvider scriptProvider, IDatabaseConnectionFactory databaseConnectionFactory,
+        public SubscriptionManager(IScriptProvider scriptProvider, IDatabaseConnectionFactory databaseConnectionFactory,
                                    IDatabaseGateway databaseGateway)
         {
-            Guard.AgainstNull(subscriptionManagerConfiguration, "subscriptionManagerConfiguration");
             Guard.AgainstNull(scriptProvider, "scriptProvider");
             Guard.AgainstNull(databaseConnectionFactory, "databaseConnectionFactory");
             Guard.AgainstNull(databaseGateway, "databaseGateway");
 
-            this.subscriptionManagerConfiguration = subscriptionManagerConfiguration;
             this.scriptProvider = scriptProvider;
             this.databaseConnectionFactory = databaseConnectionFactory;
             this.databaseGateway = databaseGateway;
@@ -102,26 +97,13 @@ namespace Shuttle.ESB.SqlServer
             {
                 foreach (var messageType in messageTypes)
                 {
-                    if (!subscriptionManagerConfiguration.Secured)
-                    {
-                        databaseGateway.ExecuteUsing(
-                            SubscriptionDataSource,
-                            RawQuery.CreateFrom(
-                                scriptProvider.GetScript(Script.SubscriptionManagerSubscribe))
-                                    .AddParameterValue(SubscriptionManagerColumns.InboxWorkQueueUri,
-                                                       serviceBusConfiguration.Inbox.WorkQueue.Uri.ToString())
-                                    .AddParameterValue(SubscriptionManagerColumns.MessageType, messageType));
-                    }
-                    else
-                    {
-                        databaseGateway.ExecuteUsing(
-                            SubscriptionDataSource,
-                            RawQuery.CreateFrom(
-                                scriptProvider.GetScript(Script.SecureSubscriptionManagerSubscribe))
-                                    .AddParameterValue(SubscriptionManagerColumns.InboxWorkQueueUri,
-                                                       serviceBusConfiguration.Inbox.WorkQueue.Uri.ToString())
-                                    .AddParameterValue(SubscriptionManagerColumns.MessageType, messageType));
-                    }
+                    databaseGateway.ExecuteUsing(
+                        SubscriptionDataSource,
+                        RawQuery.CreateFrom(
+                            scriptProvider.GetScript(Script.SubscriptionManagerSubscribe))
+                                .AddParameterValue(SubscriptionManagerColumns.InboxWorkQueueUri,
+                                                   serviceBusConfiguration.Inbox.WorkQueue.Uri.ToString())
+                                .AddParameterValue(SubscriptionManagerColumns.MessageType, messageType));
                 }
             }
         }
