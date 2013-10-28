@@ -95,6 +95,7 @@
     <Compile Include="Configuration\ModuleCollection.cs" />
     <Compile Include="Configuration\Registration\RegisterSharedConfigurationTask.cs" />
     <Compile Include="Configuration\Section\TransactionScopeElement.cs" />
+    <Compile Include="Exceptions\RemoveMessageException.cs" />
     <Compile Include="Exceptions\IdempotenceTrackerException.cs" />
     <Compile Include="Idempotence\IIdempotenceTracker.cs" />
     <Compile Include="Pipeline\Observers\Receive\IdempotenceTrackerObserver.cs" />
