@@ -67,6 +67,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\external-bin\NUnit\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="RabbitMQ.Client">
+      <HintPath>..\..\external-bin\RabbitMq\RabbitMQ.Client.dll</HintPath>
+    </Reference>
     <Reference Include="Rhino.Mocks, Version=3.5.0.1337, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\external-bin\RhinoMocks\Rhino.Mocks.dll</HintPath>
@@ -109,11 +112,11 @@
     <Compile Include="Core\ThreadActivityTest.cs" />
     <Compile Include="InboxFixture.cs" />
     <Compile Include="Msmq\MsmqQueueTest.cs" />
-    <Compile Include="Msmq\MsmqInboxTest.cs" />
+    <Compile Include="RabbitMq\RabbitMqQueueTest.cs" />
+    <Compile Include="RabbitMq\RabbitMqInboxTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MemoryInboxTest.cs" />
     <Compile Include="SqlServer\SqlInboxTest.cs" />
-    <Compile Include="SqlServer\SqlQueueTest.cs" />
     <Compile Include="IntegrationFixture.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -124,6 +127,10 @@
     <ProjectReference Include="..\Shuttle.ESB.Msmq\Shuttle.ESB.Msmq.csproj">
       <Project>{DD6566FD-824C-4275-B4EB-269B0FBC70A8}</Project>
       <Name>Shuttle.ESB.Msmq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Shuttle.ESB.RabbitMq\Shuttle.ESB.RabbitMq.csproj">
+      <Project>{04ecfb09-ee90-49e0-a0df-e110a58a75c4}</Project>
+      <Name>Shuttle.ESB.RabbitMq</Name>
     </ProjectReference>
     <ProjectReference Include="..\Shuttle.ESB.SqlServer\Shuttle.ESB.SqlServer.csproj">
       <Project>{71B25665-8F18-4A3B-B2CC-0C6444252091}</Project>
