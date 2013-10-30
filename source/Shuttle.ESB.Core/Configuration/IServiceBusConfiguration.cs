@@ -34,7 +34,6 @@ namespace Shuttle.ESB.Core
         IWorkerAvailabilityManager WorkerAvailabilityManager { get; }
         IPipelineFactory PipelineFactory { get; }
 
-        IQueueManager QueueManager { get; }
         ModuleCollection Modules { get; }
         string OutgoingEncryptionAlgorithm { get; }
         string OutgoingCompressionAlgorithm { get; }

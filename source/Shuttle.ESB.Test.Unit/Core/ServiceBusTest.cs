@@ -72,8 +72,8 @@ namespace Shuttle.ESB.Test.Unit.Core
 
 			configuration.SubscriptionManager = mockSubscriptionManager;
 
-            var subscriber1 = configuration.QueueManager.CreateQueue(SUBSCRIBER1_URI);
-            var subscriber2 = configuration.QueueManager.CreateQueue(SUBSCRIBER2_URI); ;
+            var subscriber1 = QueueManager.Instance.CreateQueue(SUBSCRIBER1_URI);
+						var subscriber2 = QueueManager.Instance.CreateQueue(SUBSCRIBER2_URI); ;
 
 			using (var bus = new ServiceBus(configuration).Start())
 			{

@@ -31,7 +31,7 @@ namespace Shuttle.ESB.Test.Shared
         {
             MemoryQueue.Clear();
 
-            return ConfigurationBuilder.Build(new ServiceBusConfiguration
+            return new ServiceBusConfiguration
                                                   {
                                                       Inbox =
                                                           new InboxQueueConfiguration
@@ -64,7 +64,7 @@ namespace Shuttle.ESB.Test.Shared
                                                       PipelineFactory = new DefaultPipelineFactory(),
                                                       TransactionScopeFactory = new DefaultServiceBusTransactionScopeFactory(),
                                                       ThreadActivityFactory = new DefaultThreadActivityFactory()
-                                                  });
+                                                  };
         }
 
         public IQueue CreateMemoryInboxWork()

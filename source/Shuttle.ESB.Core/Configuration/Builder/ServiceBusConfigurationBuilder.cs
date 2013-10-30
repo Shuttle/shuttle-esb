@@ -1,214 +1,226 @@
 using System;
+using System.Collections.Generic;
 using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ESB.Core
 {
-    internal class ServiceBusConfigurationBuilder : IServiceBusConfigurationBuilder
-    {
-        private readonly ServiceBusConfiguration configuration = ConfigurationBuilder.Build();
+	internal class ServiceBusConfigurationBuilder : IServiceBusConfigurationBuilder
+	{
+		private readonly ServiceBusConfiguration configuration = new ServiceBusConfiguration();
 
-        public ServiceBusConfigurationBuilder()
-        {
-            DefaultMessageSerializer();
-            DefaultMessageHandlerFactory();
-            DefaultMessageRouteProvider();
-            DefaultForwardingRouteProvider();
-            DefaultPipelineFactory();
-            DefaultTransactionScopeFactory();
-            DefaultServiceBusPolicy();
-            DefaultThreadActivityFactory();
-        }
+		public ServiceBusConfigurationBuilder()
+		{
+			var tasks = new List<RegistrationTask>
+          {
+              new RegisterSharedConfigurationTask(),
+              new RegisterControlInboxQueueConfigurationTask(),
+              new RegisterInboxQueueConfigurationTask(),
+              new RegisterOutboxQueueConfigurationTask(),
+              new RegisterWorkerConfigurationTask()
+          };
 
-        public IServiceBusConfigurationBuilder MessageSerializer(ISerializer serializer)
-        {
-            Guard.AgainstNull(serializer, "serializer");
+			tasks.ForEach(task => task.Execute(configuration));
 
-            configuration.Serializer = serializer;
+			DefaultMessageSerializer();
+			DefaultMessageHandlerFactory();
+			DefaultMessageRouteProvider();
+			DefaultForwardingRouteProvider();
+			DefaultPipelineFactory();
+			DefaultTransactionScopeFactory();
+			DefaultServiceBusPolicy();
+			DefaultThreadActivityFactory();
+		}
 
-            return this;
-        }
+		public IServiceBusConfigurationBuilder MessageSerializer(ISerializer serializer)
+		{
+			Guard.AgainstNull(serializer, "serializer");
 
-        public IServiceBusConfigurationBuilder DefaultMessageSerializer()
-        {
-            configuration.Serializer = new DefaultSerializer();
+			configuration.Serializer = serializer;
 
-            return this;
-        }
+			return this;
+		}
 
-        public IServiceBusConfigurationBuilder MessageHandlerFactory(IMessageHandlerFactory messageHandlerFactory)
-        {
-            Guard.AgainstNull(messageHandlerFactory, "messageHandlerFactory");
+		public IServiceBusConfigurationBuilder DefaultMessageSerializer()
+		{
+			configuration.Serializer = new DefaultSerializer();
 
-            configuration.MessageHandlerFactory = messageHandlerFactory;
+			return this;
+		}
 
-            return this;
-        }
+		public IServiceBusConfigurationBuilder MessageHandlerFactory(IMessageHandlerFactory messageHandlerFactory)
+		{
+			Guard.AgainstNull(messageHandlerFactory, "messageHandlerFactory");
 
-        public IServiceBusConfigurationBuilder DefaultMessageHandlerFactory()
-        {
-            configuration.MessageHandlerFactory = new DefaultMessageHandlerFactory();
+			configuration.MessageHandlerFactory = messageHandlerFactory;
 
-            return this;
-        }
+			return this;
+		}
 
-        public IServiceBusConfigurationBuilder AddCompressionAlgorithm(ICompressionAlgorithm algorithm)
-        {
-            Guard.AgainstNull(algorithm, "algorithm");
+		public IServiceBusConfigurationBuilder DefaultMessageHandlerFactory()
+		{
+			configuration.MessageHandlerFactory = new DefaultMessageHandlerFactory();
 
-            configuration.AddCompressionAlgorithm(algorithm);
+			return this;
+		}
 
-            return this;
-        }
+		public IServiceBusConfigurationBuilder AddCompressionAlgorithm(ICompressionAlgorithm algorithm)
+		{
+			Guard.AgainstNull(algorithm, "algorithm");
 
-        public IServiceBusConfigurationBuilder OutgoingEncryptionAlgorithm(string name)
-        {
-            Guard.AgainstNullOrEmptyString(name, "name");
+			configuration.AddCompressionAlgorithm(algorithm);
 
-            configuration.OutgoingEncryptionAlgorithm = name;
+			return this;
+		}
 
-            return this;
-        }
+		public IServiceBusConfigurationBuilder OutgoingEncryptionAlgorithm(string name)
+		{
+			Guard.AgainstNullOrEmptyString(name, "name");
 
-        public IServiceBusConfigurationBuilder OutgoingCompressionAlgorithm(string name)
-        {
-            Guard.AgainstNullOrEmptyString(name, "name");
+			configuration.OutgoingEncryptionAlgorithm = name;
 
-            configuration.OutgoingCompressionAlgorithm = name;
+			return this;
+		}
 
-            return this;
-        }
+		public IServiceBusConfigurationBuilder OutgoingCompressionAlgorithm(string name)
+		{
+			Guard.AgainstNullOrEmptyString(name, "name");
 
-        public IServiceBusConfigurationBuilder AddEnryptionAlgorithm(IEncryptionAlgorithm algorithm)
-        {
-            Guard.AgainstNull(algorithm, "algorithm");
+			configuration.OutgoingCompressionAlgorithm = name;
 
-            configuration.AddEncryptionAlgorithm(algorithm);
+			return this;
+		}
 
-            return this;
-        }
+		public IServiceBusConfigurationBuilder AddEnryptionAlgorithm(IEncryptionAlgorithm algorithm)
+		{
+			Guard.AgainstNull(algorithm, "algorithm");
 
-        public IServiceBusConfigurationBuilder SubscriptionManager(ISubscriptionManager manager)
-        {
-            Guard.AgainstNull(manager, "manager");
+			configuration.AddEncryptionAlgorithm(algorithm);
 
-            configuration.SubscriptionManager = manager;
+			return this;
+		}
 
-            return this;
-        }
+		public IServiceBusConfigurationBuilder SubscriptionManager(ISubscriptionManager manager)
+		{
+			Guard.AgainstNull(manager, "manager");
 
-        public IServiceBusConfigurationBuilder AddModule(IModule module)
-        {
-            Guard.AgainstNull(module, "module");
+			configuration.SubscriptionManager = manager;
 
-            configuration.Modules.Add(module);
+			return this;
+		}
 
-            return this;
-        }
+		public IServiceBusConfigurationBuilder AddModule(IModule module)
+		{
+			Guard.AgainstNull(module, "module");
 
-        public IServiceBusConfigurationBuilder Policy(IServiceBusPolicy policy)
-        {
-            Guard.AgainstNull(policy, "policy");
+			configuration.Modules.Add(module);
 
-            configuration.Policy = policy;
+			return this;
+		}
 
-            return this;
-        }
+		public IServiceBusConfigurationBuilder Policy(IServiceBusPolicy policy)
+		{
+			Guard.AgainstNull(policy, "policy");
 
-        public IServiceBusConfigurationBuilder ThreadActivityFactory(IThreadActivityFactory factory)
-        {
-            Guard.AgainstNull(factory, "factory");
+			configuration.Policy = policy;
 
-            configuration.ThreadActivityFactory = factory;
+			return this;
+		}
 
-            return this;
-        }
+		public IServiceBusConfigurationBuilder ThreadActivityFactory(IThreadActivityFactory factory)
+		{
+			Guard.AgainstNull(factory, "factory");
 
-        public IServiceBus Start()
-        {
-            return new ServiceBus(configuration).Start();
-        }
+			configuration.ThreadActivityFactory = factory;
 
-        public IServiceBusConfiguration Configuration()
-        {
-            return configuration;
-        }
+			return this;
+		}
 
-        public IServiceBusConfigurationBuilder PipelineFactory(IPipelineFactory pipelineFactory)
-        {
-            Guard.AgainstNull(pipelineFactory, "pipelineFactory");
+		public IServiceBus Start()
+		{
+			return new ServiceBus(configuration).Start();
+		}
 
-            configuration.PipelineFactory = pipelineFactory;
+		public IServiceBusConfiguration Configuration()
+		{
+			return configuration;
+		}
 
-            return this;
-        }
+		public IServiceBusConfigurationBuilder PipelineFactory(IPipelineFactory pipelineFactory)
+		{
+			Guard.AgainstNull(pipelineFactory, "pipelineFactory");
 
-        public IServiceBusConfigurationBuilder DefaultPipelineFactory()
-        {
-            configuration.PipelineFactory = new DefaultPipelineFactory();
+			configuration.PipelineFactory = pipelineFactory;
 
-            return this;
-        }
+			return this;
+		}
 
-        public IServiceBusConfigurationBuilder TransactionScopeFactory(IServiceBusTransactionScopeFactory serviceBusTransactionScopeFactory)
-        {
-            Guard.AgainstNull(serviceBusTransactionScopeFactory, "serviceBusTransactionScopeFactory");
+		public IServiceBusConfigurationBuilder DefaultPipelineFactory()
+		{
+			configuration.PipelineFactory = new DefaultPipelineFactory();
 
-            configuration.TransactionScopeFactory = serviceBusTransactionScopeFactory;
+			return this;
+		}
 
-            return this;
-        }
+		public IServiceBusConfigurationBuilder TransactionScopeFactory(IServiceBusTransactionScopeFactory serviceBusTransactionScopeFactory)
+		{
+			Guard.AgainstNull(serviceBusTransactionScopeFactory, "serviceBusTransactionScopeFactory");
 
-        public IServiceBusConfigurationBuilder DefaultTransactionScopeFactory()
-        {
-            configuration.TransactionScopeFactory = new DefaultServiceBusTransactionScopeFactory();
+			configuration.TransactionScopeFactory = serviceBusTransactionScopeFactory;
 
-            return this;
-        }
+			return this;
+		}
 
-        public IServiceBusConfigurationBuilder MessageRouteProvider(IMessageRouteProvider messageRouteProvider)
-        {
-            Guard.AgainstNull(messageRouteProvider, "messageRouteProvider");
+		public IServiceBusConfigurationBuilder DefaultTransactionScopeFactory()
+		{
+			configuration.TransactionScopeFactory = new DefaultServiceBusTransactionScopeFactory();
 
-            configuration.MessageRouteProvider = messageRouteProvider;
+			return this;
+		}
 
-            return this;
-        }
+		public IServiceBusConfigurationBuilder MessageRouteProvider(IMessageRouteProvider messageRouteProvider)
+		{
+			Guard.AgainstNull(messageRouteProvider, "messageRouteProvider");
 
-        public IServiceBusConfigurationBuilder DefaultMessageRouteProvider()
-        {
-            configuration.MessageRouteProvider = new DefaultMessageRouteProvider();
+			configuration.MessageRouteProvider = messageRouteProvider;
 
-            return this;
-        }
+			return this;
+		}
 
-        public IServiceBusConfigurationBuilder ForwardingRouteProvider(IMessageRouteProvider forwardingRouteProvider)
-        {
-            Guard.AgainstNull(forwardingRouteProvider, "forwardingRouteProvider");
+		public IServiceBusConfigurationBuilder DefaultMessageRouteProvider()
+		{
+			configuration.MessageRouteProvider = new DefaultMessageRouteProvider();
 
-            configuration.ForwardingRouteProvider = forwardingRouteProvider;
+			return this;
+		}
 
-            return this;
-        }
+		public IServiceBusConfigurationBuilder ForwardingRouteProvider(IMessageRouteProvider forwardingRouteProvider)
+		{
+			Guard.AgainstNull(forwardingRouteProvider, "forwardingRouteProvider");
 
-        public IServiceBusConfigurationBuilder DefaultForwardingRouteProvider()
-        {
-            configuration.ForwardingRouteProvider = new DefaultForwardingRouteProvider();
+			configuration.ForwardingRouteProvider = forwardingRouteProvider;
 
-            return this;
-        }
+			return this;
+		}
 
-        public IServiceBusConfigurationBuilder DefaultServiceBusPolicy()
-        {
-            configuration.Policy = new DefaultServiceBusPolicy();
+		public IServiceBusConfigurationBuilder DefaultForwardingRouteProvider()
+		{
+			configuration.ForwardingRouteProvider = new DefaultForwardingRouteProvider();
 
-            return this;
-        }
+			return this;
+		}
 
-        public IServiceBusConfigurationBuilder DefaultThreadActivityFactory()
-        {
-            configuration.ThreadActivityFactory = new DefaultThreadActivityFactory();
+		public IServiceBusConfigurationBuilder DefaultServiceBusPolicy()
+		{
+			configuration.Policy = new DefaultServiceBusPolicy();
 
-            return this;
-        }
-    }
+			return this;
+		}
+
+		public IServiceBusConfigurationBuilder DefaultThreadActivityFactory()
+		{
+			configuration.ThreadActivityFactory = new DefaultThreadActivityFactory();
+
+			return this;
+		}
+	}
 }

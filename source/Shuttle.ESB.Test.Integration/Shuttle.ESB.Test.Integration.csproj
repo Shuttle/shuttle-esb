@@ -111,6 +111,7 @@
     <Compile Include="Core\ReceivePipelineHandler.cs" />
     <Compile Include="Core\ThreadActivityTest.cs" />
     <Compile Include="InboxFixture.cs" />
+    <Compile Include="Msmq\MsmqInboxTest.cs" />
     <Compile Include="Msmq\MsmqQueueTest.cs" />
     <Compile Include="RabbitMq\RabbitMqQueueTest.cs" />
     <Compile Include="RabbitMq\RabbitMqInboxTest.cs" />

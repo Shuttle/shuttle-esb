@@ -11,7 +11,7 @@ namespace RequestResponse.Client
 	{
 		private static void Main()
 		{
-            Log.Assign(new Log4NetLog(LogManager.GetLogger(typeof(Program))));
+			Log.Assign(new Log4NetLog(LogManager.GetLogger(typeof(Program))));
 
 			var bus = ServiceBus
 				.Create()
@@ -29,9 +29,9 @@ namespace RequestResponse.Client
 				Console.ReadLine();
 
 				var command = new ReverseTextCommand
-							  {
-								  Text = Guid.NewGuid().ToString().Substring(0, 5)
-							  };
+								{
+									Text = Guid.NewGuid().ToString().Substring(0, 5)
+								};
 
 				bus.OutgoingCorrelationId = "correlation-id";
 				bus.OutgoingHeaders.Add(new TransportHeader { Key = "header1", Value = "value1" });

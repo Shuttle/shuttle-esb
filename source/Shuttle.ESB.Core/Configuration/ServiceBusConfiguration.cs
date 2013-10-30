@@ -34,7 +34,6 @@ namespace Shuttle.ESB.Core
 		public ServiceBusConfiguration()
 		{
 			WorkerAvailabilityManager = new WorkerAvailabilityManager();
-			QueueManager = new QueueManager();
 			Modules = new ModuleCollection();
 		}
 
@@ -73,9 +72,7 @@ namespace Shuttle.ESB.Core
 		public IControlInboxQueueConfiguration ControlInbox { get; set; }
 		public IOutboxQueueConfiguration Outbox { get; set; }
 		public IWorkerConfiguration Worker { get; set; }
-
-        public IQueueManager QueueManager { get; set; }
-        public IIdempotenceTracker IdempotenceTracker { get; set; }
+		public IIdempotenceTracker IdempotenceTracker { get; set; }
 
 		public ModuleCollection Modules { get; private set; }
 
@@ -83,19 +80,19 @@ namespace Shuttle.ESB.Core
 		public IMessageRouteProvider MessageRouteProvider { get; set; }
 		public IMessageRouteProvider ForwardingRouteProvider { get; set; }
 		public IServiceBusPolicy Policy { get; set; }
-        public IThreadActivityFactory ThreadActivityFactory { get; set; }
+		public IThreadActivityFactory ThreadActivityFactory { get; set; }
 
-        public bool HasIdempotenceTracker
-        {
-            get { return IdempotenceTracker != null; }
-        }
+		public bool HasIdempotenceTracker
+		{
+			get { return IdempotenceTracker != null; }
+		}
 
-        public bool HasSubscriptionManager
-        {
-            get { return subscriptionManager != null; }
-        }
+		public bool HasSubscriptionManager
+		{
+			get { return subscriptionManager != null; }
+		}
 
-        public ISubscriptionManager SubscriptionManager
+		public ISubscriptionManager SubscriptionManager
 		{
 			get
 			{
@@ -130,14 +127,14 @@ namespace Shuttle.ESB.Core
 		}
 
 		public bool RemoveMessagesNotHandled { get; set; }
-        public string EncryptionAlgorithm { get; set; }
-        public string CompressionAlgorithm { get; set; }
+		public string EncryptionAlgorithm { get; set; }
+		public string CompressionAlgorithm { get; set; }
 
 		public IWorkerAvailabilityManager WorkerAvailabilityManager { get; private set; }
 
 		public IPipelineFactory PipelineFactory { get; set; }
 
-        public IServiceBusTransactionScopeFactory TransactionScopeFactory { get; set; }
+		public IServiceBusTransactionScopeFactory TransactionScopeFactory { get; set; }
 
 		public IServiceBus StartServiceBus()
 		{

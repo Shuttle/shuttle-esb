@@ -17,20 +17,20 @@ namespace Shuttle.ESB.Test.Integration
 
 		protected override void FixtureSetUp()
 		{
-            Log.Assign(new Log4NetLog(LogManager.GetLogger(typeof(IntegrationFixture))));
+			Log.Assign(new Log4NetLog(LogManager.GetLogger(typeof(IntegrationFixture))));
 		}
 
 		protected static ServiceBusConfiguration DefaultConfiguration()
 		{
-			var configuration = ConfigurationBuilder.Build();
+			var configuration = new ServiceBusConfiguration();
 
 			configuration.Serializer = new DefaultSerializer();
 			configuration.MessageHandlerFactory = new DefaultMessageHandlerFactory();
 			configuration.PipelineFactory = new DefaultPipelineFactory();
 			configuration.ForwardingRouteProvider = new DefaultForwardingRouteProvider();
-		    configuration.TransactionScopeFactory = new DefaultServiceBusTransactionScopeFactory();
-		    configuration.Policy = new DefaultServiceBusPolicy();
-		    configuration.ThreadActivityFactory = new DefaultThreadActivityFactory();
+			configuration.TransactionScopeFactory = new DefaultServiceBusTransactionScopeFactory();
+			configuration.Policy = new DefaultServiceBusPolicy();
+			configuration.ThreadActivityFactory = new DefaultThreadActivityFactory();
 
 			return configuration;
 		}

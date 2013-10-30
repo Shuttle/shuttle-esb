@@ -122,7 +122,7 @@ namespace Shuttle.ESB.Core
 			OutgoingCorrelationId = TransportMessageReceived.CorrelationId;
 			OutgoingHeaders.Merge(TransportMessageReceived.Headers);
 
-			return Send(message, Configuration.QueueManager.GetQueue(TransportMessageReceived.SenderInboxWorkQueueUri));
+			return Send(message, QueueManager.Instance.GetQueue(TransportMessageReceived.SenderInboxWorkQueueUri));
 		}
 
 		public TransportMessage Send(object message, string uri)
@@ -130,7 +130,7 @@ namespace Shuttle.ESB.Core
 			Guard.AgainstNull(message, "message");
 			Guard.AgainstNullOrEmptyString(uri, "uri");
 
-			return Send(message, Configuration.QueueManager.GetQueue(uri));
+			return Send(message, QueueManager.Instance.GetQueue(uri));
 		}
 
 		public IEnumerable<string> Publish(object message)
@@ -282,9 +282,6 @@ namespace Shuttle.ESB.Core
 			{
 				outboxThreadPool.Dispose();
 			}
-
-			// Todo: check if dispose is required always even if bus not started
-			Configuration.QueueManager.AttemptDispose();
 
 			started = false;
 		}

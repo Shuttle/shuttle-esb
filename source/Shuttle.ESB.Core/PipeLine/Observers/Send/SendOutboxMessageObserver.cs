@@ -19,19 +19,19 @@ namespace Shuttle.ESB.Core
 			Guard.AgainstNullOrEmptyString(transportMessage.RecipientInboxWorkQueueUri, "uri");
 
 			var queue =
-				pipelineEvent.GetServiceBus().Configuration.QueueManager.GetQueue(transportMessage.RecipientInboxWorkQueueUri);
+					QueueManager.Instance.GetQueue(transportMessage.RecipientInboxWorkQueueUri);
 
-            if (log.IsVerboseEnabled)
-            {
-                log.Verbose(string.Format(ESBResources.EnqueueMessage,
-                                          transportMessage.MessageType,
-                                          transportMessage.MessageId,
-                                          queue.Uri));
-            }
+			if (log.IsVerboseEnabled)
+			{
+				log.Verbose(string.Format(ESBResources.EnqueueMessage,
+																	transportMessage.MessageType,
+																	transportMessage.MessageId,
+																	queue.Uri));
+			}
 
-		    pipelineEvent.GetServiceBus().Events.OnBeforeEnqueueStream(
-				this,
-				new QueueMessageEventArgs(pipelineEvent, queue, transportMessage));
+			pipelineEvent.GetServiceBus().Events.OnBeforeEnqueueStream(
+			this,
+			new QueueMessageEventArgs(pipelineEvent, queue, transportMessage));
 
 			using (var stream = pipelineEvent.GetTransportMessageStream().Copy())
 			{
