@@ -9,7 +9,7 @@ namespace Shuttle.ESB.RabbitMq
 {
 	public class RabbitMqQueueFactory : IQueueFactory, IDisposable
 	{
-		private readonly Dictionary<Uri, RabbitMqConnector> _connectors = new Dictionary<Uri, RabbitMqConnector>();		
+		private readonly Dictionary<Uri, RabbitMqConnector> _connectors = new Dictionary<Uri, RabbitMqConnector>();
 		private readonly object _padlock = new object();
 		private bool _disposed;
 
@@ -32,22 +32,19 @@ namespace Shuttle.ESB.RabbitMq
 
 		private IQueue ConstructQueue(Uri uri)
 		{
-			RabbitMqConnector connector = null;
-			var queuePath = new RabbitMqQueuePath(uri);
-			
-			lock (_padlock)
-			{				
+		lock (_padlock)
+			{
+				RabbitMqConnector connector = null;
+				var queuePath = new RabbitMqQueuePath(uri);
+
 				if (!_connectors.TryGetValue(uri, out connector))
 				{
-					connector = new RabbitMqConnector(queuePath.ConnnectUri);
+					connector = new RabbitMqConnector(queuePath);
 					_connectors.Add(uri, connector);
-				}
+				}			
+
+				return new RabbitMqQueue(connector, queuePath, false);
 			}
-						
-			var channel = connector.Connection.CreateModel();
-			if (!string.IsNullOrEmpty(queuePath.Exchange))
-				channel.ExchangeDeclare(queuePath.Exchange, ExchangeType.Direct, true);
-			return new RabbitMqQueue(channel, queuePath, true);
 		}
 
 		public void Dispose()
@@ -58,11 +55,14 @@ namespace Shuttle.ESB.RabbitMq
 
 		protected virtual void Dispose(bool disposing)
 		{
-			if (_disposed) return;
+			if (_disposed)
+			{
+				return;
+			}
 
 			if (disposing)
 			{
-				_connectors.ForEach(connector => connector.Value.Connection.Close());
+				_connectors.ForEach(connector => connector.Value.Close());
 				_connectors.Clear();
 			}
 			_disposed = true;

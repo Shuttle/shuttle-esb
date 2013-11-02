@@ -15,9 +15,12 @@ namespace Shuttle.ESB.RabbitMq
 																									 "rabbitmq://{{user:password@}}{{host-name}}/{{queue-name}}@{{exchange}}", uri));
 
 			var builder = new UriBuilder(uri);
+
 			if (uri.Host.Equals(".") ||
-					uri.Host.Equals("localhost", StringComparison.InvariantCultureIgnoreCase))
+			    uri.Host.Equals("localhost", StringComparison.InvariantCultureIgnoreCase))
+			{
 				builder.Host = Environment.MachineName.ToLower();
+			}
 
 			Uri = builder.Uri;
 
@@ -38,11 +41,15 @@ namespace Shuttle.ESB.RabbitMq
 		{			
 			var split = Uri.PathAndQuery.Split('@');
 
-			if (split.Length <=2 )
+			if (split.Length <= 2)
+			{
 				QueueName = split[0].Remove(0, 1);
+			}
 
 			if (split.Length == 2)
+			{
 				Exchange = split[1];
+			}
 		}
 	}
 }

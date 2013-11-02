@@ -20,16 +20,18 @@ namespace Shuttle.ESB.RabbitMq
 		[ThreadStatic]
 		private static object _underlyingMessageData;
 
-		private readonly IModel _channel;
+		private readonly RabbitMqConnector _connector;
 		private readonly ConfigurationItem<int> _localQueueTimeout;
 		private readonly ConfigurationItem<int> _remoteQueueTimeout;
-		private readonly TimeSpan _timeout;
 		private readonly RabbitMqQueuePath _queuePath;
 		private readonly ILog _log;
 
-		public RabbitMqQueue(IModel channel, RabbitMqQueuePath queuePath, bool isTransactional)
+		// Todo: move to config
+		private readonly TimeSpan _timeout;
+
+		public RabbitMqQueue(RabbitMqConnector connector, RabbitMqQueuePath queuePath, bool isTransactional)
 		{
-			_channel = channel;
+			_connector = connector;
 			_queuePath = queuePath;
 			_localQueueTimeout = ConfigurationItem<int>.ReadSetting("LocalQueueTimeout", 0);
 			_remoteQueueTimeout = ConfigurationItem<int>.ReadSetting("RemoteQueueTimeout", 2000);
@@ -47,14 +49,19 @@ namespace Shuttle.ESB.RabbitMq
 
 		private void EnlistToTransactionScope()
 		{
-			new RabbitMqResourceManager(_channel);
+			new RabbitMqResourceManager(Channel);
+		}
+
+		private IModel Channel
+		{
+			get { return _connector.RequestChannel(); }
 		}
 
 		public int Count
 		{
 			get
 			{
-				var result = _channel.QueueDeclare(_queuePath.QueueName, true, false, false, null);
+				var result = Channel.QueueDeclare(_queuePath.QueueName, true, false, false, null);
 				return result == null ? -1 : (int)result.MessageCount;
 			}
 		}
@@ -62,10 +69,12 @@ namespace Shuttle.ESB.RabbitMq
 		public void Create()
 		{
 			// no need to check if queue exists for the call is idempotent
-			_channel.QueueDeclare(_queuePath.QueueName, true, false, false, null);
+			Channel.QueueDeclare(_queuePath.QueueName, true, false, false, null);
 
 			if (!string.IsNullOrEmpty(_queuePath.Exchange))
-				_channel.QueueBind(_queuePath.QueueName, _queuePath.Exchange, _queuePath.QueueName);
+			{
+				Channel.QueueBind(_queuePath.QueueName, _queuePath.Exchange, _queuePath.QueueName);
+			}
 
 			_log.Information(string.Format("Created private rabbitMq queue '{0}'.", Uri));
 		}
@@ -73,16 +82,18 @@ namespace Shuttle.ESB.RabbitMq
 		public void Drop()
 		{
 			if (!IsLocal)
+			{
 				throw new InvalidOperationException(string.Format(RabbitMqResources.CannotDropRemoteQueue, Uri));
+			}
 
-			_channel.QueueDelete(_queuePath.QueueName);
-			_log.Information(string.Format("Dropped private msmq queue '{0}'.", Uri));
+			Channel.QueueDelete(_queuePath.QueueName);
+			_log.Information(string.Format("Dropped private rabbitMq queue '{0}'.", Uri));
 		}
 
 		public void Purge()
 		{
-			_channel.QueuePurge(_queuePath.QueueName);
-			_log.Information(string.Format("Purged private msmq queue '{0}'.", Uri));
+			Channel.QueuePurge(_queuePath.QueueName);
+			_log.Information(string.Format("Purged private rabbitMq queue '{0}'.", Uri));
 		}
 
 		public bool IsTransactional { get; private set; }
@@ -113,21 +124,34 @@ namespace Shuttle.ESB.RabbitMq
 					EnlistToTransactionScope();
 					break;
 				case MessageQueueTransactionType.Single:
-					_channel.TxSelect();
+					Channel.TxSelect();
 					break;
 			}
 		}
 
-		private void EndTransaction()
+		private void EndTransaction(BasicGetResult message = null)
 		{
 			if (TransactionType() == MessageQueueTransactionType.Single)
-				_channel.TxCommit();
+			{
+				if (message != null)
+				{
+					Channel.BasicAck(message.DeliveryTag, false);
+				}
+				Channel.TxCommit();
+			}
 		}
 
-		private void RollbackTransaction()
+		private void RollbackTransaction(BasicGetResult message = null)
 		{
 			if (TransactionType() == MessageQueueTransactionType.Single)
-				_channel.TxRollback();
+			{
+				if (message != null)
+				{
+					Channel.BasicNack(message.DeliveryTag, false, true);
+				}
+
+				Channel.TxRollback();
+			}
 		}
 
 		public void Enqueue(object data)
@@ -141,8 +165,8 @@ namespace Shuttle.ESB.RabbitMq
 				var stream = new MemoryStream();
 				formatter.Serialize(stream, data);
 
-				var basicProperties = _channel.CreateBasicProperties();
-				_channel.BasicPublish(_queuePath.Exchange, _queuePath.QueueName, basicProperties, stream.ToBytes());
+				var basicProperties = Channel.CreateBasicProperties();
+				Channel.BasicPublish(_queuePath.Exchange, _queuePath.QueueName, basicProperties, stream.ToBytes());
 
 				EndTransaction();
 			}
@@ -159,10 +183,10 @@ namespace Shuttle.ESB.RabbitMq
 
 			try
 			{
-				var basicProperties = _channel.CreateBasicProperties();
+				var basicProperties = Channel.CreateBasicProperties();
 				basicProperties.MessageId = messageId.ToString();
 				basicProperties.DeliveryMode = 2;
-				_channel.BasicPublish(_queuePath.Exchange, _queuePath.QueueName, basicProperties, stream.ToBytes());
+				Channel.BasicPublish(_queuePath.Exchange, _queuePath.QueueName, basicProperties, stream.ToBytes());
 
 				EndTransaction();
 			}
@@ -180,13 +204,11 @@ namespace Shuttle.ESB.RabbitMq
 
 			try
 			{
-				var message = _channel.BasicGet(_queuePath.QueueName, false);
+				var message = Channel.BasicGet(_queuePath.QueueName, !IsTransactional);
 				if (message != null)
 				{
 					_underlyingMessageData = new MemoryStream(message.Body);
-					_channel.BasicAck(message.DeliveryTag, false);
-
-					EndTransaction();
+					EndTransaction(message);
 
 					return message.Body.Length == 0
 									 ? null
@@ -213,7 +235,7 @@ namespace Shuttle.ESB.RabbitMq
 		{
 			try
 			{
-				using (var subscriber = new Subscription(_channel, _queuePath.QueueName))
+				using (var subscriber = new Subscription(Channel, _queuePath.QueueName))
 				{
 					BasicDeliverEventArgs message;
 					while (subscriber.Next(100, out message))
@@ -239,7 +261,7 @@ namespace Shuttle.ESB.RabbitMq
 		{
 			var messageList = new List<Stream>();
 
-			using (var subscriber = new Subscription(_channel, _queuePath.QueueName))
+			using (var subscriber = new Subscription(Channel, _queuePath.QueueName))
 			{
 				BasicDeliverEventArgs message;
 				while (subscriber.Next(100, out message))

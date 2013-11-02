@@ -18,8 +18,11 @@ namespace Shuttle.ESB.RabbitMq
 		{
 			_channel = channel;
 			_channel.TxSelect();
+
 			if (Transaction.Current != null)
+			{
 				Transaction.Current.EnlistVolatile(this, EnlistmentOptions.None);
+			}
 		}
 
 		public void Commit(Enlistment enlistment)
