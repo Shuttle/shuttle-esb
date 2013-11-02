@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Messaging;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Security.Principal;
-using System.Text.RegularExpressions;
 using System.Transactions;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
