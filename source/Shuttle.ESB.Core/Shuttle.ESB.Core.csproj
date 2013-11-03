@@ -92,9 +92,11 @@
     <Compile Include="Configuration\Builder\ServiceBusConfigurationBuilder.cs" />
     <Compile Include="Configuration\IControlInboxQueueConfiguration.cs" />
     <Compile Include="Configuration\IOutboxQueueConfiguration.cs" />
+    <Compile Include="Configuration\ITransactionScopeConfiguration.cs" />
     <Compile Include="Configuration\ModuleCollection.cs" />
     <Compile Include="Configuration\Registration\RegisterSharedConfigurationTask.cs" />
     <Compile Include="Configuration\Section\TransactionScopeElement.cs" />
+    <Compile Include="Configuration\TransactionScopeConfiguration.cs" />
     <Compile Include="Exceptions\IdempotenceTrackerException.cs" />
     <Compile Include="Idempotence\IIdempotenceTracker.cs" />
     <Compile Include="Pipeline\Observers\Receive\IdempotenceTrackerObserver.cs" />
@@ -102,10 +104,12 @@
     <Compile Include="Pipeline\Transactions\DefaultServiceBusTransactionScopeFactory.cs" />
     <Compile Include="Exceptions\ProcessMessageMethodMissingException.cs" />
     <Compile Include="Exceptions\UnrecoverableHandlerException.cs" />
+    <Compile Include="Pipeline\Transactions\IServiceBusTransactionScope.cs" />
     <Compile Include="Pipeline\Transactions\IServiceBusTransactionScopeFactory.cs" />
     <Compile Include="MessageRoute\DefaultForwardingRouteProvider.cs" />
     <Compile Include="Pipeline\Observers\Distribute\DistributorExceptionObserver.cs" />
     <Compile Include="Pipeline\Observers\Send\OutboxExceptionObserver.cs" />
+    <Compile Include="Pipeline\Transactions\NullServiceBusTransactionScope.cs" />
     <Compile Include="Processing\DefaultThreadActivityFactory.cs" />
     <Compile Include="Processing\Inbox\InboxProcessorFactory.cs" />
     <Compile Include="Processing\Inbox\InboxProcessor.cs" />

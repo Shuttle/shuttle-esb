@@ -1,4 +1,5 @@
 using System.Configuration;
+using System.IO;
 
 namespace Shuttle.ESB.Core
 {
@@ -7,7 +8,7 @@ namespace Shuttle.ESB.Core
         public static ServiceBusSection Open(string file)
         {
             return ConfigurationManager
-                       .OpenMappedMachineConfiguration(new ConfigurationFileMap(file))
+                       .OpenMappedMachineConfiguration(new ConfigurationFileMap(Path.GetFullPath(file)))
                        .GetSection("serviceBus") as ServiceBusSection;
         }
 

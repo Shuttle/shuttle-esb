@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Configuration;
+using System.Transactions;
 using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ESB.Core
@@ -36,13 +36,15 @@ namespace Shuttle.ESB.Core
 			WorkerAvailabilityManager = new WorkerAvailabilityManager();
 			QueueManager = new QueueManager();
 			Modules = new ModuleCollection();
+			TransactionScope = new TransactionScopeConfiguration();
 		}
 
 		public static ServiceBusSection ServiceBusSection
 		{
 			get
 			{
-				return serviceBusSection ?? (serviceBusSection = ConfigurationManager.GetSection(ServiceBusSectionName) as ServiceBusSection);
+				return serviceBusSection ??
+				       (serviceBusSection = ConfigurationManager.GetSection(ServiceBusSectionName) as ServiceBusSection);
 			}
 		}
 
@@ -73,9 +75,10 @@ namespace Shuttle.ESB.Core
 		public IControlInboxQueueConfiguration ControlInbox { get; set; }
 		public IOutboxQueueConfiguration Outbox { get; set; }
 		public IWorkerConfiguration Worker { get; set; }
+		public ITransactionScopeConfiguration TransactionScope { get; set; }
 
-        public IQueueManager QueueManager { get; set; }
-        public IIdempotenceTracker IdempotenceTracker { get; set; }
+		public IQueueManager QueueManager { get; set; }
+		public IIdempotenceTracker IdempotenceTracker { get; set; }
 
 		public ModuleCollection Modules { get; private set; }
 
@@ -83,19 +86,19 @@ namespace Shuttle.ESB.Core
 		public IMessageRouteProvider MessageRouteProvider { get; set; }
 		public IMessageRouteProvider ForwardingRouteProvider { get; set; }
 		public IServiceBusPolicy Policy { get; set; }
-        public IThreadActivityFactory ThreadActivityFactory { get; set; }
+		public IThreadActivityFactory ThreadActivityFactory { get; set; }
 
-        public bool HasIdempotenceTracker
-        {
-            get { return IdempotenceTracker != null; }
-        }
+		public bool HasIdempotenceTracker
+		{
+			get { return IdempotenceTracker != null; }
+		}
 
-        public bool HasSubscriptionManager
-        {
-            get { return subscriptionManager != null; }
-        }
+		public bool HasSubscriptionManager
+		{
+			get { return subscriptionManager != null; }
+		}
 
-        public ISubscriptionManager SubscriptionManager
+		public ISubscriptionManager SubscriptionManager
 		{
 			get
 			{
@@ -130,14 +133,14 @@ namespace Shuttle.ESB.Core
 		}
 
 		public bool RemoveMessagesNotHandled { get; set; }
-        public string EncryptionAlgorithm { get; set; }
-        public string CompressionAlgorithm { get; set; }
+		public string EncryptionAlgorithm { get; set; }
+		public string CompressionAlgorithm { get; set; }
 
 		public IWorkerAvailabilityManager WorkerAvailabilityManager { get; private set; }
 
 		public IPipelineFactory PipelineFactory { get; set; }
 
-        public IServiceBusTransactionScopeFactory TransactionScopeFactory { get; set; }
+		public IServiceBusTransactionScopeFactory TransactionScopeFactory { get; set; }
 
 		public IServiceBus StartServiceBus()
 		{
@@ -146,7 +149,8 @@ namespace Shuttle.ESB.Core
 
 		public IEncryptionAlgorithm FindEncryptionAlgorithm(string name)
 		{
-			return encryptionAlgorithms.Find(algorithm => algorithm.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+			return
+				encryptionAlgorithms.Find(algorithm => algorithm.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 		}
 
 		public void AddEncryptionAlgorithm(IEncryptionAlgorithm algorithm)
@@ -158,7 +162,8 @@ namespace Shuttle.ESB.Core
 
 		public ICompressionAlgorithm FindCompressionAlgorithm(string name)
 		{
-			return compressionAlgorithms.Find(algorithm => algorithm.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+			return
+				compressionAlgorithms.Find(algorithm => algorithm.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 		}
 
 		public void AddCompressionAlgorithm(ICompressionAlgorithm algorithm)

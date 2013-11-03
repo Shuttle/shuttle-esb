@@ -71,6 +71,7 @@
       <HintPath>..\..\external-bin\shuttle.core\$(Framework)\Shuttle.Core.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -85,6 +86,9 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Configuration\MsmqQueueElementCollection.cs" />
+    <Compile Include="Configuration\MsmqQueueElement.cs" />
+    <Compile Include="Configuration\MsmqSection.cs" />
     <Compile Include="MsmqQueue.cs" />
     <Compile Include="MsmqQueueFactory.cs" />
     <Compile Include="MsmqResources.Designer.cs">

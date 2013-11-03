@@ -5,8 +5,8 @@ using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ESB.Core
 {
-    public class ServiceBusTransactionScope : IDisposable
-    {
+	public class ServiceBusTransactionScope : IServiceBusTransactionScope
+	{
 		private readonly bool ignore = false;
         private readonly string name;
         private readonly TransactionScope scope;

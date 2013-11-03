@@ -2,20 +2,20 @@ using System;
 using NUnit.Framework;
 using Shuttle.ESB.Core;
 
-namespace Shuttle.ESB.Test.Integration.ConfigurationFile
+namespace Shuttle.ESB.Test.Integration
 {
     [TestFixture]
-    public class ForwardingRoutesConfigurationTest : ConfigurationTestFixture
+    public class MessageRoutesServiceBusSection : ServiceBusSectionFixture
     {
         [Test]
         public void Should_be_able_to_load_the_configuration()
         {
-            var section = GetServiceBusSection("ForwardingRoutes.config");
+            var section = GetServiceBusSection("MessageRoutes.config");
 
             Assert.IsNotNull(section);
-            Assert.AreEqual(2, section.ForwardingRoutes.Count);
+            Assert.AreEqual(2, section.MessageRoutes.Count);
 
-			foreach (MessageRouteElement map in section.ForwardingRoutes)
+            foreach (MessageRouteElement map in section.MessageRoutes)
             {
                 Console.WriteLine(map.Uri);
 

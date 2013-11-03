@@ -1,20 +1,17 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 <package >
   <metadata>
     <id>ShuttleESB</id>
-    <version>2.1.1</version>
+    <version>2.1.2.0</version>
     <authors>Eben Roux / Neill Verreynne</authors>
     <owners>Eben Roux / Neill Verreynne</owners>
-    <licenseUrl>https://shuttle.codeplex.com/license</licenseUrl>
+    <licenseUrl>https://github.com/eben-roux/shuttle-esb/raw/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/eben-roux/shuttle-esb</projectUrl>
     <iconUrl>http://www.servicebus.co.za/content/themes/shuttle/images/logo-full.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Shuttle Enterprise Service Bus</description>
-    <releaseNotes>Contains the command binaries required to develop a Shuttle ESB solution.</releaseNotes>
+    <releaseNotes>Contains the binaries required to develop a Shuttle ESB solution.</releaseNotes>
     <copyright>Copyright (c) 2011-2013, Eben Roux / Neill Verreynne</copyright>
     <tags>Enterprise Service ESB esb c# Event Driven messaging MSMQ nservicebus pipeline development Service Bus shuttle soa</tags>
-    <dependencies>
-      <dependency id="SampleDependency" version="1.0" />
-    </dependencies>
   </metadata>
 </package>

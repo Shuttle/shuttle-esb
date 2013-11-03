@@ -4,8 +4,8 @@ namespace Shuttle.ESB.Core
 {
     public interface IServiceBusTransactionScopeFactory
     {
-        ServiceBusTransactionScope Create();
-        ServiceBusTransactionScope Create(object message);
-        ServiceBusTransactionScope Create(PipelineEvent pipelineEvent);
+        IServiceBusTransactionScope Create();
+        IServiceBusTransactionScope Create(object message);
+        IServiceBusTransactionScope Create(PipelineEvent pipelineEvent);
     }
 }

@@ -204,7 +204,7 @@ namespace Shuttle.ESB.Msmq
 			{
 				using (var queue = CreateGuardedQueue())
 				{
-					queue.Send(message, TransactionTypeForSend());
+					queue.Send(message, TransactionType());
 				}
 			}
 			catch (MessageQueueException ex)
@@ -240,7 +240,7 @@ namespace Shuttle.ESB.Msmq
 			{
 				using (var queue = CreateGuardedQueue())
 				{
-					queue.Send(sendMessage, TransactionTypeForSend());
+					queue.Send(sendMessage, TransactionType());
 				}
 			}
 			catch (MessageQueueException ex)
@@ -272,7 +272,7 @@ namespace Shuttle.ESB.Msmq
 
 				using (var queue = CreateGuardedQueue())
 				{
-					message = queue.Receive(timeout, TransactionTypeForReceive());
+					message = queue.Receive(timeout, TransactionType());
 				}
 
 				if (message == null)
@@ -318,7 +318,7 @@ namespace Shuttle.ESB.Msmq
 
 				using (var queue = CreateGuardedQueue())
 				{
-					message = queue.ReceiveByCorrelationId(string.Format(@"{0}\1", messageId), TransactionTypeForReceive());
+					message = queue.ReceiveByCorrelationId(string.Format(@"{0}\1", messageId), TransactionType());
 				}
 
 				if (message == null)
@@ -355,7 +355,7 @@ namespace Shuttle.ESB.Msmq
 			{
 				using (var queue = CreateGuardedQueue())
 				{
-					return (queue.ReceiveByCorrelationId(string.Format(@"{0}\1", messageId), TransactionTypeForReceive()) != null);
+					return (queue.ReceiveByCorrelationId(string.Format(@"{0}\1", messageId), TransactionType()) != null);
 				}
 			}
 			catch (MessageQueueException ex)
@@ -474,21 +474,12 @@ namespace Shuttle.ESB.Msmq
 			}
 		}
 
-		private MessageQueueTransactionType TransactionTypeForSend()
+		private MessageQueueTransactionType TransactionType()
 		{
 			return IsTransactional
 					? Transaction.Current != null
 						? MessageQueueTransactionType.Automatic
 						: MessageQueueTransactionType.Single
-					: MessageQueueTransactionType.Single;
-		}
-
-		private MessageQueueTransactionType TransactionTypeForReceive()
-		{
-			return IsTransactional
-					? Transaction.Current != null
-						? MessageQueueTransactionType.Automatic
-						: MessageQueueTransactionType.None
 					: MessageQueueTransactionType.None;
 		}
 	}

@@ -10,6 +10,7 @@ namespace Shuttle.ESB.Core
 	public class OnInitializePipelineFactory : PipelineEvent {}
 	public class OnInitializeSubscriptionManager : PipelineEvent {}
 	public class OnInitializeIdempotenceTracker : PipelineEvent {}
+	public class OnInitializeTransactionScopeFactory : PipelineEvent {}
 	public class OnStartInboxProcessing : PipelineEvent {}
 	public class OnStartControlInboxProcessing : PipelineEvent {}
 	public class OnStartOutboxProcessing : PipelineEvent {}

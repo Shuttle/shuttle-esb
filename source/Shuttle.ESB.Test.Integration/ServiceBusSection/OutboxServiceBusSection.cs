@@ -1,10 +1,10 @@
 using System;
 using NUnit.Framework;
 
-namespace Shuttle.ESB.Test.Integration.ConfigurationFile
+namespace Shuttle.ESB.Test.Integration
 {
     [TestFixture]
-    public class OutboxConfigurationTest : ConfigurationTestFixture
+    public class OutboxServiceBusSection : ServiceBusSectionFixture
     {
         [Test]
         public void Should_be_able_to_load_a_full_configuration()

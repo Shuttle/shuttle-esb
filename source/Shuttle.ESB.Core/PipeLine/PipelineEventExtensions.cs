@@ -121,12 +121,12 @@ namespace Shuttle.ESB.Core
 			pipelineEvent.Pipeline.State.Replace(StateKeys.Working, true);
 		}
 
-		public static ServiceBusTransactionScope GetTransactionScope(this PipelineEvent pipelineEvent)
+		public static IServiceBusTransactionScope GetTransactionScope(this PipelineEvent pipelineEvent)
 		{
-            return pipelineEvent.Pipeline.State.Get<ServiceBusTransactionScope>(StateKeys.TransactionScope);
+            return pipelineEvent.Pipeline.State.Get<IServiceBusTransactionScope>(StateKeys.TransactionScope);
 		}
 
-		public static void SetTransactionScope(this PipelineEvent pipelineEvent, ServiceBusTransactionScope scope)
+		public static void SetTransactionScope(this PipelineEvent pipelineEvent, IServiceBusTransactionScope scope)
 		{
 			pipelineEvent.Pipeline.State.Replace(StateKeys.TransactionScope, scope);
 		}

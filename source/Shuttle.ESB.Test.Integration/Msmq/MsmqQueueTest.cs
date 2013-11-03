@@ -42,7 +42,7 @@ namespace Shuttle.ESB.Test.Integration.Msmq
 		}
 
 		[Test]
-		public void Should_be_able_to_send_and_receive_a_message_to_a_queue()
+		public void Should_be_able_to_send_a_message_to_and_receive_a_message_from_a_queue()
 		{
 			var stream = new MemoryStream();
 

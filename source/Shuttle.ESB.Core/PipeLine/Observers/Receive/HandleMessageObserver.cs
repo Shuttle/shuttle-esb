@@ -42,7 +42,7 @@ namespace Shuttle.ESB.Core
                                         handler.GetType().FullName));
             }
 
-            ServiceBusTransactionScope scope = null;
+            IServiceBusTransactionScope scope = null;
 
             try
             {
