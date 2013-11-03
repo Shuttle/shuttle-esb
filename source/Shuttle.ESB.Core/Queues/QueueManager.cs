@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Shuttle.Core.Infrastructure;
+using Shuttle.ESB.Core.Queues;
 
 namespace Shuttle.ESB.Core
 {
-	public class QueueManager : IQueueManager, IDisposable
+	public class QueueManager : Singleton<QueueManager>, IQueueManager, IDisposable
 	{
 		private readonly IReflectionService reflectionService;
 		private static readonly object padlock = new object();

@@ -37,12 +37,12 @@ namespace Shuttle.ESB.Core
         {
             var memoryQueueFactory = new MemoryQueueFactory();
 
-            if (!bus.Configuration.QueueManager.ContainsQueueFactory(memoryQueueFactory.Scheme))
+            if (!QueueManager.Instance.ContainsQueueFactory(memoryQueueFactory.Scheme))
             {
-                bus.Configuration.QueueManager.RegisterQueueFactory(memoryQueueFactory);
+                QueueManager.Instance.RegisterQueueFactory(memoryQueueFactory);
             }
 
-            foreach (var factory in bus.Configuration.QueueManager.GetQueueFactories())
+            foreach (var factory in QueueManager.Instance.GetQueueFactories())
             {
                 factory.AttemptInitialization(bus);
             }
@@ -52,7 +52,7 @@ namespace Shuttle.ESB.Core
         {
             if (ServiceBusConfiguration.ServiceBusSection != null)
             {
-                bus.Configuration.QueueManager.CreatePhysicalQueues(bus.Configuration,
+                QueueManager.Instance.CreatePhysicalQueues(bus.Configuration,
                                                                     ServiceBusConfiguration.ServiceBusSection.QueueCreationType);
             }
         }

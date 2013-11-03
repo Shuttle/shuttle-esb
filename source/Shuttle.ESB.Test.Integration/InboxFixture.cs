@@ -122,12 +122,12 @@ namespace Shuttle.ESB.Test.Integration
             var configuration = DefaultConfiguration();
 
             var inboxWorkQueue =
-                configuration.QueueManager.GetQueue(string.Format("{0}/test-inbox-work", queueSchemeAndHost));
+								QueueManager.Instance.GetQueue(string.Format("{0}/test-inbox-work", queueSchemeAndHost));
             var inboxJournalQueue = useJournal
-                                        ? configuration.QueueManager.GetQueue(string.Format("{0}/test-inbox-journal",
+																				? QueueManager.Instance.GetQueue(string.Format("{0}/test-inbox-journal",
                                                                                             queueSchemeAndHost))
                                         : null;
-            var errorQueue = configuration.QueueManager.GetQueue(string.Format("{0}/test-error", queueSchemeAndHost));
+						var errorQueue = QueueManager.Instance.GetQueue(string.Format("{0}/test-error", queueSchemeAndHost));
 
             configuration.Inbox =
                 new InboxQueueConfiguration
@@ -141,7 +141,7 @@ namespace Shuttle.ESB.Test.Integration
 
 
 
-            configuration.QueueManager.CreatePhysicalQueues(configuration, QueueCreationType.All);
+						QueueManager.Instance.CreatePhysicalQueues(configuration, QueueCreationType.All);
 
             inboxWorkQueue.Purge();
             errorQueue.Purge();

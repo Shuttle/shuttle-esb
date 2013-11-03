@@ -27,7 +27,7 @@ namespace Shuttle.ESB.Core
 
 				if (map == null)
 				{
-					map = new MessageRoute(bus.Configuration.QueueManager.GetQueue(mapElement.Uri));
+					map = new MessageRoute(QueueManager.Instance.GetQueue(mapElement.Uri));
 
 					messageRoutes.Add(map);
 				}
