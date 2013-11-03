@@ -41,7 +41,7 @@ namespace Shuttle.ESB.RabbitMq
 					_connectors.Add(uri, connector);
 				}			
 
-				return new RabbitMqQueue(connector, queuePath, false);
+				return new RabbitMqQueue(connector, queuePath, true);
 			}
 		}
 

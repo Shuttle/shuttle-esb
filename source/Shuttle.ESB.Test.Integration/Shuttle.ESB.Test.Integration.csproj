@@ -95,6 +95,8 @@
     <Compile Include="ConcurrentHandler.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Msmq\MsmqSectionFixture.cs" />
+    <Compile Include="RabbitMq\RabbitMqInboxTest.cs" />
+    <Compile Include="RabbitMq\RabbitMqQueueTest.cs" />
     <Compile Include="ServiceBusSection\ServiceBusSectionFixture.cs" />
     <Compile Include="ServiceBusSection\WorkerServiceBusSection.cs" />
     <Compile Include="ServiceBusSection\SharedServiceBusSection.cs" />
@@ -115,8 +117,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MemoryInboxTest.cs" />
     <Compile Include="SqlServer\SqlInboxTest.cs" />
-    <Compile Include="SqlServer\SqlQueueTest.cs" />
     <Compile Include="IntegrationFixture.cs" />
+    <Compile Include="SqlServer\SqlQueueTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Shuttle.ESB.Core\Shuttle.ESB.Core.csproj">
@@ -126,6 +128,10 @@
     <ProjectReference Include="..\Shuttle.ESB.Msmq\Shuttle.ESB.Msmq.csproj">
       <Project>{DD6566FD-824C-4275-B4EB-269B0FBC70A8}</Project>
       <Name>Shuttle.ESB.Msmq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Shuttle.ESB.RabbitMq\Shuttle.ESB.RabbitMq.csproj">
+      <Project>{04ECFB09-EE90-49E0-A0DF-E110A58A75C4}</Project>
+      <Name>Shuttle.ESB.RabbitMq</Name>
     </ProjectReference>
     <ProjectReference Include="..\Shuttle.ESB.SqlServer\Shuttle.ESB.SqlServer.csproj">
       <Project>{71B25665-8F18-4A3B-B2CC-0C6444252091}</Project>
@@ -182,176 +188,6 @@
     <None Include="ServiceBusSection\files\MessageRoutes.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <Framework Condition="'$(Framework)' == ''">net35-full</Framework>
-    <OldToolsVersion>4.0</OldToolsVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Framework)' == 'net35-full'">
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Framework)' == 'net40-full'">
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{BE0FA91F-538E-4F35-8417-BF93329E4433}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Shuttle.ESB.Test.Integration</RootNamespace>
-    <AssemblyName>Shuttle.ESB.Test.Integration</AssemblyName>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="log4net">
-      <HintPath>..\..\external-bin\log4net\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework, Version=2.5.1.9189, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\external-bin\NUnit\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="RabbitMQ.Client">
-      <HintPath>..\..\external-bin\RabbitMq\RabbitMQ.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="Rhino.Mocks, Version=3.5.0.1337, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\external-bin\RhinoMocks\Rhino.Mocks.dll</HintPath>
-    </Reference>
-    <Reference Include="Shuttle.Core.Data">
-      <HintPath>..\..\external-bin\shuttle.core\$(Framework)\Shuttle.Core.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Shuttle.Core.Infrastructure">
-      <HintPath>..\..\external-bin\shuttle.core\$(Framework)\Shuttle.Core.Infrastructure.dll</HintPath>
-    </Reference>
-    <Reference Include="Shuttle.Core.Infrastructure.Log4Net">
-      <HintPath>..\..\external-bin\shuttle.core\$(Framework)\Shuttle.Core.Infrastructure.Log4Net.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.configuration" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Transactions" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\SharedAssemblyInfo.cs">
-      <Link>Properties\SharedAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="ConcurrentCommand.cs" />
-    <Compile Include="ConcurrentHandler.cs" />
-    <Compile Include="Configuration.cs" />
-    <Compile Include="ConfigurationFile\ConfigurationTestFixture.cs" />
-    <Compile Include="ConfigurationFile\WorkerConfigurationTest.cs" />
-    <Compile Include="ConfigurationFile\SharedConfigurationTest.cs" />
-    <Compile Include="ConfigurationFile\ForwardingRoutesConfigurationTest.cs" />
-    <Compile Include="ConfigurationFile\OutboxConfigurationTest.cs" />
-    <Compile Include="ConfigurationFile\InboxConfigurationTest.cs" />
-    <Compile Include="ConfigurationFile\MessageRoutesConfigurationTest.cs" />
-    <Compile Include="Core\ExceptionAssertion.cs" />
-    <Compile Include="Core\PipelineExceptionHandlingTest.cs" />
-    <Compile Include="Core\ReceivePipelineExceptionModule.cs" />
-    <Compile Include="Core\ReceivePipelineCommand.cs" />
-    <Compile Include="Core\ReceivePipelineHandler.cs" />
-    <Compile Include="Core\ThreadActivityTest.cs" />
-    <Compile Include="InboxFixture.cs" />
-    <Compile Include="Msmq\MsmqInboxTest.cs" />
-    <Compile Include="Msmq\MsmqQueueTest.cs" />
-    <Compile Include="RabbitMq\RabbitMqQueueTest.cs" />
-    <Compile Include="RabbitMq\RabbitMqInboxTest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MemoryInboxTest.cs" />
-    <Compile Include="SqlServer\SqlInboxTest.cs" />
-    <Compile Include="IntegrationFixture.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Shuttle.ESB.Core\Shuttle.ESB.Core.csproj">
-      <Project>{22D75FD9-0E17-43C8-9BD0-F06CA40840C5}</Project>
-      <Name>Shuttle.ESB.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Shuttle.ESB.Msmq\Shuttle.ESB.Msmq.csproj">
-      <Project>{DD6566FD-824C-4275-B4EB-269B0FBC70A8}</Project>
-      <Name>Shuttle.ESB.Msmq</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Shuttle.ESB.RabbitMq\Shuttle.ESB.RabbitMq.csproj">
-      <Project>{04ecfb09-ee90-49e0-a0df-e110a58a75c4}</Project>
-      <Name>Shuttle.ESB.RabbitMq</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Shuttle.ESB.SqlServer\Shuttle.ESB.SqlServer.csproj">
-      <Project>{71B25665-8F18-4A3B-B2CC-0C6444252091}</Project>
-      <Name>Shuttle.ESB.SqlServer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Shuttle.ESB.Test.Shared\Shuttle.ESB.Test.Shared.csproj">
-      <Project>{841EA381-C7AD-415C-9E5C-59C5B2AB6C61}</Project>
-      <Name>Shuttle.ESB.Test.Shared</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="ConfigurationFile\files\Worker.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="ConfigurationFile\files\Shared.config" />
-    <None Include="ConfigurationFile\files\ForwardingRoutes.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="ConfigurationFile\files\Subscription.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="ConfigurationFile\files\Cryptography.config" />
-    <None Include="ConfigurationFile\files\Distributor-Full.config" />
-    <None Include="ConfigurationFile\files\Empty.config" />
-    <None Include="ConfigurationFile\files\Outbox-Required.config" />
-    <None Include="ConfigurationFile\files\Outbox-Full.config" />
-    <None Include="ConfigurationFile\files\Inbox-Required.config" />
-    <None Include="ConfigurationFile\files\Inbox-Full.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="ConfigurationFile\files\MessageRoutes.config">
-      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
