@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Shuttle.Core.Infrastructure;
-using Shuttle.ESB.Core.Queues;
 
 namespace Shuttle.ESB.Core
 {

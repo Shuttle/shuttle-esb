@@ -94,8 +94,10 @@
     <Compile Include="ConcurrentCommand.cs" />
     <Compile Include="ConcurrentHandler.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="Msmq\MsmqNonTransactionalInboxTest.cs" />
     <Compile Include="Msmq\MsmqSectionFixture.cs" />
-    <Compile Include="RabbitMq\RabbitMqInboxTest.cs" />
+    <Compile Include="RabbitMq\RabbitNonTransactionalInboxTest.cs" />
+    <Compile Include="RabbitMq\RabbitTransactionalInboxTest.cs" />
     <Compile Include="RabbitMq\RabbitMqQueueTest.cs" />
     <Compile Include="ServiceBusSection\ServiceBusSectionFixture.cs" />
     <Compile Include="ServiceBusSection\WorkerServiceBusSection.cs" />
@@ -113,10 +115,11 @@
     <Compile Include="InboxFixture.cs" />
     <Compile Include="Msmq\MsmqSectionTest.cs" />
     <Compile Include="Msmq\MsmqQueueTest.cs" />
-    <Compile Include="Msmq\MsmqInboxTest.cs" />
+    <Compile Include="Msmq\MsmqTransactionalInboxTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MemoryInboxTest.cs" />
-    <Compile Include="SqlServer\SqlInboxTest.cs" />
+    <Compile Include="SqlServer\SqlNonTransactionalInboxTest.cs" />
+    <Compile Include="SqlServer\SqlTransactionalInboxTest.cs" />
     <Compile Include="IntegrationFixture.cs" />
     <Compile Include="SqlServer\SqlQueueTest.cs" />
   </ItemGroup>

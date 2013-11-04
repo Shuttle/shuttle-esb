@@ -1,45 +1,44 @@
-using System;
 using NUnit.Framework;
 using Shuttle.ESB.SqlServer.Idempotence;
 
-namespace Shuttle.ESB.Test.Integration
+namespace Shuttle.ESB.Test.Integration.RabbitMq
 {
-    public class SqlInboxTest : InboxFixture
+    public class RabbitTransactionalInboxTest : InboxFixture
     {
         [Test]
         public void Should_be_able_handle_errors_without_journal()
         {
-            TestInboxError("sql://shuttle", false);
+            TestInboxError("rabbitmq://.", false, true);
         }
 
         [Test]
         public void Should_be_able_handle_errors_with_journal()
         {
-            TestInboxError("sql://shuttle", true);
+					TestInboxError("rabbitmq://.", true, true);
         }
 
         [Test]
         public void Should_be_able_to_process_queue_timeously_without_journal()
         {
-            TestInboxThroughput("sql://shuttle", 200, 1000, false);
+					TestInboxThroughput("rabbitmq://.", 350, 1000, false, true);
         }
 
         [Test]
         public void Should_be_able_to_process_queue_timeously_with_journal()
         {
-            TestInboxThroughput("sql://shuttle", 200, 1000, true);
+					TestInboxThroughput("rabbitmq://.", 35, 1000, true, true);
         }
 
         [Test]
         public void Should_be_able_to_process_messages_concurrently_without_journal()
         {
-            TestInboxConcurrency("sql://shuttle", false, 500);
+					TestInboxConcurrency("rabbitmq://.", false, 250, true);
         }
 
         [Test]
         public void Should_be_able_to_process_messages_concurrently_with_journal()
         {
-            TestInboxConcurrency("sql://shuttle", true, 500);
+					TestInboxConcurrency("rabbitmq://.", true, 500, true);
         }
 
         [Test]
@@ -49,7 +48,7 @@ namespace Shuttle.ESB.Test.Integration
             {
                 ConfigurationComplete += OnConfigurationComplete;
 
-                TestInboxThroughput("sql://shuttle", 200, 1000, false);
+								TestInboxThroughput("rabbitmq://.", 35, 1000, false, true);
             }
             finally
             {
@@ -64,7 +63,7 @@ namespace Shuttle.ESB.Test.Integration
             {
                 ConfigurationComplete += OnConfigurationComplete;
 
-                TestInboxThroughput("sql://shuttle", 200, 1000, true);
+								TestInboxThroughput("rabbitmq://.", 20, 1000, true, true);
             }
             finally
             {

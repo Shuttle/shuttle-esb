@@ -2,6 +2,7 @@ using System;
 using NUnit.Framework;
 using Shuttle.ESB.Core;
 using Shuttle.ESB.Msmq;
+using Shuttle.ESB.RabbitMq;
 
 namespace Shuttle.ESB.Test.Unit.RabbitMq
 {
@@ -10,7 +11,7 @@ namespace Shuttle.ESB.Test.Unit.RabbitMq
     {
         private static IQueueFactory SUT()
         {
-            return new MsmqQueueFactory();
+            return new RabbitMqQueueFactory();
         }
 
         [Test]

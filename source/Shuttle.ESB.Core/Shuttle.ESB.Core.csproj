@@ -119,7 +119,6 @@
     <Compile Include="Processing\Policies\DefaultServiceBusPolicy.cs" />
     <Compile Include="Queues\IPeek.cs" />
     <Compile Include="Queues\IQueueExtensions.cs" />
-    <Compile Include="Queues\Singleton.cs" />
     <Compile Include="ServiceBusEvents\PipelineEventEventArgs.cs" />
     <Compile Include="ServiceBusEvents\PipelineExceptionEventArgs.cs" />
     <Compile Include="ServiceBusEvents\ThreadWorkingEventArgs.cs" />
