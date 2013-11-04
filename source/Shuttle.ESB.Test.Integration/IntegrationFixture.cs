@@ -20,17 +20,22 @@ namespace Shuttle.ESB.Test.Integration
 			Log.Assign(new Log4NetLog(LogManager.GetLogger(typeof(IntegrationFixture))));
 		}
 
-		protected static ServiceBusConfiguration DefaultConfiguration()
+		protected static ServiceBusConfiguration DefaultConfiguration(bool isTransactional)
 		{
-			var configuration = new ServiceBusConfiguration();
-
-			configuration.Serializer = new DefaultSerializer();
-			configuration.MessageHandlerFactory = new DefaultMessageHandlerFactory();
-			configuration.PipelineFactory = new DefaultPipelineFactory();
-			configuration.ForwardingRouteProvider = new DefaultForwardingRouteProvider();
-			configuration.TransactionScopeFactory = new DefaultServiceBusTransactionScopeFactory();
-			configuration.Policy = new DefaultServiceBusPolicy();
-			configuration.ThreadActivityFactory = new DefaultThreadActivityFactory();
+			var configuration = new ServiceBusConfiguration
+				{
+					Serializer = new DefaultSerializer(),
+					MessageHandlerFactory = new DefaultMessageHandlerFactory(),
+					PipelineFactory = new DefaultPipelineFactory(),
+					ForwardingRouteProvider = new DefaultForwardingRouteProvider(),
+					TransactionScopeFactory = new DefaultServiceBusTransactionScopeFactory(),
+					Policy = new DefaultServiceBusPolicy(),
+					ThreadActivityFactory = new DefaultThreadActivityFactory(),
+					TransactionScope = new TransactionScopeConfiguration
+						{
+							Enabled = isTransactional
+						}
+				};
 
 			return configuration;
 		}

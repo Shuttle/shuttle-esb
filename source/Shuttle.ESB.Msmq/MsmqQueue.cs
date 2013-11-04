@@ -111,7 +111,7 @@ namespace Shuttle.ESB.Msmq
 				throw new InvalidOperationException(string.Format(MsmqResources.CannotCreateRemoteQueue, Uri));
 			}
 
-			MessageQueue.Create(path, true).Dispose();
+			MessageQueue.Create(path, IsTransactional).Dispose();
 
 			log.Information(string.Format("Created private msmq queue '{0}'.", Uri));
 		}

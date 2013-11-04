@@ -89,7 +89,9 @@
     <Compile Include="Configuration\MsmqQueueElementCollection.cs" />
     <Compile Include="Configuration\MsmqQueueElement.cs" />
     <Compile Include="Configuration\MsmqSection.cs" />
+    <Compile Include="MsmqConfiguration.cs" />
     <Compile Include="MsmqQueue.cs" />
+    <Compile Include="MsmqQueueConfiguration.cs" />
     <Compile Include="MsmqQueueFactory.cs" />
     <Compile Include="MsmqResources.Designer.cs">
       <AutoGen>True</AutoGen>

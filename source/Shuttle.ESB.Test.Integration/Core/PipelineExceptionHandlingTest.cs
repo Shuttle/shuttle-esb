@@ -11,7 +11,7 @@ namespace Shuttle.ESB.Test.Integration.Core
 		[Test]
 		public void Should_be_able_to_roll_back_any_database_and_queue_changes_when_an_exception_occurs_in_the_receive_pipeline()
 		{
-			var configuration = DefaultConfiguration();
+			var configuration = DefaultConfiguration(true);
 
 			var inboxWorkQueue = QueueManager.Instance.GetQueue("msmq://./test-inbox-work");
 			var inboxJournalQueue = QueueManager.Instance.GetQueue("msmq://./test-inbox-journal");
