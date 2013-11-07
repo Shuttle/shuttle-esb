@@ -19,7 +19,7 @@ namespace Shuttle.ESB.Test.Shared
         }
 
         [TearDown]
-        protected virtual void TestTearDown()
+        protected virtual void TearDownTest()
         {
         }
 

@@ -21,9 +21,7 @@ namespace Shuttle.ESB.Test.Integration
 			}
 		}
 
-		public event EventHandler<ConfigurationEventArgs> ConfigurationComplete = delegate { };
-
-		protected void TestInboxThroughput(string queueSchemeAndHost, int count, int timeoutMilliseconds, bool useJournal, bool isTransactional)
+		protected void TestInboxThroughput(string queueSchemeAndHost, int timeoutMilliseconds, int count, bool useIdempotenceTracker, bool useJournal, bool isTransactional)
 		{
 			var configuration = GetTestInboxConfiguration(queueSchemeAndHost, useJournal, 1, isTransactional);
 
@@ -180,12 +178,10 @@ namespace Shuttle.ESB.Test.Integration
 				inboxJournalQueue.Purge();
 			}
 
-			ConfigurationComplete.Invoke(this, new ConfigurationEventArgs(configuration));
-
 			return configuration;
 		}
 
-		protected void TestInboxConcurrency(string queueSchemeAndHost, bool useJournal, int msToComplete, bool isTransactional)
+		protected void TestInboxConcurrency(string queueSchemeAndHost, int msToComplete, bool useJournal, bool isTransactional)
 		{
 			const int COUNT = 10;
 
@@ -239,7 +235,7 @@ namespace Shuttle.ESB.Test.Integration
 
 				while (idleCount < COUNT)
 				{
-					Thread.Sleep(50);
+					Thread.Sleep(30);
 				}
 			}
 
