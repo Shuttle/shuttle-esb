@@ -9,7 +9,7 @@ namespace Shuttle.ESB.Test.Integration.Msmq
 	[TestFixture]
 	public class MsmqQueueTest : IntegrationFixture
 	{
-		protected override void TestTearDown()
+		protected override void TearDownTest()
 		{
 			inboxQueue.Drop();
 			outboxQueue.Drop();

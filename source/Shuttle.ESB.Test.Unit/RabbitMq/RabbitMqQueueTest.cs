@@ -16,7 +16,7 @@ namespace Shuttle.ESB.Test.Unit.RabbitMq
 			_factory = new RabbitMqQueueFactory();			
 		}
 
-		protected override void TestTearDown()
+		protected override void TearDownTest()
 		{
 			_factory.Dispose();
 		}

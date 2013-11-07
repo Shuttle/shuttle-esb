@@ -1,42 +1,38 @@
-using System;
+﻿using System;
 using NUnit.Framework;
 using Shuttle.ESB.Core;
-using Shuttle.ESB.RabbitMq;
+using Shuttle.ESB.Msmq;
 
-namespace Shuttle.ESB.Test.Integration.RabbitMq
+namespace Shuttle.ESB.Test.Integration
 {
-	public class RabbitTransactionalInboxTest : InboxFixture
+	public class MsmqInboxTest : InboxFixture
 	{
 		public void SetUp(bool isTransactional)
 		{
-			var factory = QueueManager.Instance.GetQueueFactory("rabbitmq://") as RabbitMqQueueFactory;
+			var factory = QueueManager.Instance.GetQueueFactory("msmq://") as MsmqQueueFactory;
 
 			if (factory == null)
 			{
 				return;
 			}
 
-			/* todo: implement RabbitMqQueueConfiguration
-			factory.Configuration.AddQueueConfiguration(new RabbitMqQueueConfiguration(new Uri("rabbitmq://./test-inbox-work"), isTransactional));
-			factory.Configuration.AddQueueConfiguration(new RabbitMqQueueConfiguration(new Uri("rabbitmq://./test-inbox-journal"), isTransactional));
-			factory.Configuration.AddQueueConfiguration(new RabbitMqQueueConfiguration(new Uri("rabbitmq://./test-error"), isTransactional));
-			*/
+			factory.Configuration.AddQueueConfiguration(new MsmqQueueConfiguration(new Uri("msmq://./test-inbox-work"), isTransactional));
+			factory.Configuration.AddQueueConfiguration(new MsmqQueueConfiguration(new Uri("msmq://./test-inbox-journal"), isTransactional));
+			factory.Configuration.AddQueueConfiguration(new MsmqQueueConfiguration(new Uri("msmq://./test-error"), isTransactional));
 		}
 
 		public void TearDown()
 		{
-			var factory = QueueManager.Instance.GetQueueFactory("rabbitmq://") as RabbitMqQueueFactory;
+			var factory = QueueManager.Instance.GetQueueFactory("msmq://") as MsmqQueueFactory;
 
 			if (factory == null)
 			{
 				return;
 			}
 
-			/* todo: implement RabbitMqQueueConfiguration
-			factory.Configuration.RemoveQueueConfiguration(new Uri("rabbitmq://./test-inbox-work"));
-			factory.Configuration.RemoveQueueConfiguration(new Uri("rabbitmq://./test-inbox-journal"));
-			factory.Configuration.RemoveQueueConfiguration(new Uri("rabbitmq://./test-error"));
-			*/
+			factory.Configuration.RemoveQueueConfiguration(new Uri("msmq://./test-inbox-work"));
+			factory.Configuration.RemoveQueueConfiguration(new Uri("msmq://./test-inbox-journal"));
+			factory.Configuration.RemoveQueueConfiguration(new Uri("msmq://./test-error"));
 		}
 
 		[Test]
@@ -51,7 +47,7 @@ namespace Shuttle.ESB.Test.Integration.RabbitMq
 		public void Should_be_able_handle_errors(bool useJournal, bool isTransactionalEndpoint, bool isTransactionalQueue)
 		{
 			SetUp(isTransactionalQueue);
-			TestInboxError("rabbitmq://.", useJournal, isTransactionalEndpoint);
+			TestInboxError("msmq://.", useJournal, isTransactionalEndpoint);
 			TearDown();
 		}
 
@@ -67,7 +63,7 @@ namespace Shuttle.ESB.Test.Integration.RabbitMq
 		public void Should_be_able_to_process_messages_concurrently(int msToComplete, bool useJournal, bool isTransactionalEndpoint, bool isTransactionalQueue)
 		{
 			SetUp(isTransactionalQueue);
-			TestInboxConcurrency("rabbitmq://.", 250, false, false);
+			TestInboxConcurrency("msmq://.", 250, false, false);
 			TearDown();
 		}
 
@@ -91,7 +87,7 @@ namespace Shuttle.ESB.Test.Integration.RabbitMq
 		public void Should_be_able_to_process_queue_timeously_without_journal(int count, bool useIdempotenceTracker, bool useJournal, bool isTransactionalEndpoint, bool isTransactionalQueue)
 		{
 			SetUp(isTransactionalQueue);
-			TestInboxThroughput("rabbitmq://.", 1000, count, useIdempotenceTracker, useJournal, isTransactionalEndpoint);
+			TestInboxThroughput("msmq://.", 1000, count, useIdempotenceTracker, useJournal, isTransactionalEndpoint);
 			TearDown();
 		}
 	}

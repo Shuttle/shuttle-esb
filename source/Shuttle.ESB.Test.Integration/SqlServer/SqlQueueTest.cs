@@ -9,7 +9,7 @@ namespace Shuttle.ESB.Test.Integration.SqlServer
 	[TestFixture]
 	public class SqlQueueTest : IntegrationFixture
 	{
-		protected override void TestTearDown()
+		protected override void TearDownTest()
 		{
 			inboxQueue.Drop();
 			outboxQueue.Drop();

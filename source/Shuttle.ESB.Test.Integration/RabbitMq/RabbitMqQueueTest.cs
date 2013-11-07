@@ -11,7 +11,7 @@ namespace Shuttle.ESB.Test.Integration.RabbitMq
 	{
 		private RabbitMqQueueFactory _factory;
 
-		protected override void TestTearDown()
+		protected override void TearDownTest()
 		{
 			inboxQueue.Drop();
 			outboxQueue.Drop();
