@@ -12,7 +12,7 @@ namespace Shuttle.ESB.RabbitMq
 
 			if (uri.LocalPath == "/")
 				throw new UriFormatException(string.Format(ESBResources.UriFormatException,
-																									 "rabbitmq://{{user:password@}}{{host-name}}/{{queue-name}}@{{exchange}}", uri));
+																									 "rabbitmq://{{user:password@}}{{host-name}}/{{queue-name}}", uri));
 
 			var builder = new UriBuilder(uri);
 
@@ -27,29 +27,15 @@ namespace Shuttle.ESB.RabbitMq
 			builder.Scheme = RabbitMqQueueFactory.INTERNAL_SCHEME;
 			builder.Path = string.Empty;
 			ConnnectUri = builder.Uri;
-			Exchange = string.Empty;
-			ExtractUriQueuePath();
 		}
 
-		public string Exchange { get; private set; }
-		public string QueueName { get; private set; }
+		public string QueueName { get { return Uri.PathAndQuery; } }
+
 		public string Host { get { return Uri.Host; } }
+
 		public Uri Uri { get; private set; }
+
 		public Uri ConnnectUri { get; private set; }
 
-		private void ExtractUriQueuePath()
-		{			
-			var split = Uri.PathAndQuery.Split('@');
-
-			if (split.Length <= 2)
-			{
-				QueueName = split[0].Remove(0, 1);
-			}
-
-			if (split.Length == 2)
-			{
-				Exchange = split[1];
-			}
-		}
 	}
 }

@@ -96,6 +96,8 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="Msmq\MsmqInboxTest.cs" />
     <Compile Include="Msmq\MsmqSectionFixture.cs" />
+    <Compile Include="RabbitMq\RabbitMqSectionTest.cs" />
+    <Compile Include="RabbitMq\RabbitMqSectionFixture.cs" />
     <Compile Include="RabbitMq\RabbitTransactionalInboxTest.cs" />
     <Compile Include="RabbitMq\RabbitMqQueueTest.cs" />
     <Compile Include="ServiceBusSection\ServiceBusSectionFixture.cs" />
@@ -145,6 +147,10 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Msmq\files\Msmq.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="RabbitMq\files\RabbitMq.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

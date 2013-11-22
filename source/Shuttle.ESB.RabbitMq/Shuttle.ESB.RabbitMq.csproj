@@ -38,15 +38,20 @@
       <HintPath>..\..\external-bin\shuttle.core\net35-full\Shuttle.Core.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Messaging" />
     <Reference Include="System.Transactions" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\RabbitMqExchangeElementCollection.cs" />
+    <Compile Include="Configuration\RabbitMqExchangeElement.cs" />
+    <Compile Include="Configuration\RabbitMqQueueElement.cs" />
+    <Compile Include="Configuration\RabbitMqQueueElementCollection.cs" />
+    <Compile Include="Configuration\RabbitMqSection.cs" />
+    <Compile Include="Exceptions\UndefinedExchangeException.cs" />
+    <Compile Include="RabbitMqConfiguration.cs" />
+    <Compile Include="RabbitMqQueueConfiguration.cs" />
     <Compile Include="RabbitMqConnector.cs" />
     <Compile Include="RabbitMqQueuePath.cs" />
     <Compile Include="RabbitMqResourceManager.cs" />

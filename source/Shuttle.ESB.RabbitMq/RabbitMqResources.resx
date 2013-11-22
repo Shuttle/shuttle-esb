@@ -157,6 +157,10 @@
     <value>Error trying to send message with id '{0}' on rabbitMq queue '{1}'.  Exception: {2}</value>
     <comment>{0} = message id. {1} = queue uri, {2} = exception</comment>
   </data>
+  <data name="UndefinedExchange" xml:space="preserve">
+    <value>The queue reference the '{0}' exchage which is not defined. </value>
+    <comment>{0} = exchange name</comment>
+  </data>
   <data name="Unknown" xml:space="preserve">
     <value>unknown</value>
   </data>

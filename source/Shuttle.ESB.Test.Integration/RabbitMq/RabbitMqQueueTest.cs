@@ -31,7 +31,6 @@ namespace Shuttle.ESB.Test.Integration.RabbitMq
 
 			inboxQueue.Create();
 			outboxQueue.Create();
-
 		}
 
 		[Test]

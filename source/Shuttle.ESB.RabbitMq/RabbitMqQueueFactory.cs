@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using RabbitMQ.Client.Impl;
 using Shuttle.Core.Infrastructure;
 using Shuttle.ESB.Core;
+using Shuttle.ESB.RabbitMq.Exceptions;
 
 namespace Shuttle.ESB.RabbitMq
 {
@@ -13,6 +15,30 @@ namespace Shuttle.ESB.RabbitMq
 
 		internal const string SCHEME = "rabbitmq";
 		internal const string INTERNAL_SCHEME = "amqp";
+
+		public RabbitMqQueueFactory()
+			: this(RabbitMqConfiguration.Default())
+		{
+		}
+
+		public RabbitMqQueueFactory(RabbitMqConfiguration configuration)
+		{
+			Configuration = configuration;
+			Configuration.OnRemoveQueueConfiguration += delegate(Uri uri)
+			{
+				lock (_padlock)
+				{
+					if (_connectors.ContainsKey(uri))
+					{
+						var connector = _connectors[uri];
+						connector.Close();
+						_connectors.Remove(uri);
+					}
+				}
+			};
+		}
+
+		public RabbitMqConfiguration Configuration { get; private set; }
 
 		public string Scheme { get { return SCHEME; } }
 
@@ -30,25 +56,45 @@ namespace Shuttle.ESB.RabbitMq
 
 		private IQueue ConstructQueue(Uri uri)
 		{
-		lock (_padlock)
+			lock (_padlock)
 			{
 				RabbitMqConnector connector = null;
 				var queuePath = new RabbitMqQueuePath(uri);
 
+				var queueConfiguration = Configuration.FindQueueConfiguration(uri);
+
+				if (queueConfiguration == null)
+				{
+					queueConfiguration = new RabbitMqQueueConfiguration(uri, true, true);
+					Configuration.AddQueueConfiguration(queueConfiguration);
+				}
+
 				if (!_connectors.TryGetValue(uri, out connector))
 				{
-					connector = new RabbitMqConnector(queuePath);
-					_connectors.Add(uri, connector);
-				}			
+					RabbitMqExchangeElement exchangeConfiguration = null;
 
-				return new RabbitMqQueue(connector, queuePath, true);
+					if (!string.IsNullOrEmpty(queueConfiguration.Exchange))
+					{
+						exchangeConfiguration = Configuration.FindExchangeConfiguration(queueConfiguration.Exchange);
+						if (exchangeConfiguration == null)
+							throw new UndefinedExchangeException(string.Format(RabbitMqResources.UndefinedExchange, queueConfiguration.Exchange));
+					}
+
+					connector = new RabbitMqConnector(exchangeConfiguration, queueConfiguration, queuePath);
+					_connectors.Add(uri, connector);
+				}
+
+				return new RabbitMqQueue(connector, queuePath, queueConfiguration);
 			}
 		}
 
 		public void Dispose()
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
+			lock (_padlock)
+			{
+				Dispose(true);
+				GC.SuppressFinalize(this);
+			}
 		}
 
 		protected virtual void Dispose(bool disposing)

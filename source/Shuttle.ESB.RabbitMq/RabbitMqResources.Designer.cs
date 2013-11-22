@@ -151,6 +151,15 @@ namespace Shuttle.ESB.RabbitMq {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The queue reference the &apos;{0}&apos; exchage which is not defined. .
+        /// </summary>
+        internal static string UndefinedExchange {
+            get {
+                return ResourceManager.GetString("UndefinedExchange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to unknown.
         /// </summary>
         internal static string Unknown {

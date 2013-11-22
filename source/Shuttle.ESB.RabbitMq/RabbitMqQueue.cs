@@ -21,13 +21,15 @@ namespace Shuttle.ESB.RabbitMq
 		private readonly ConfigurationItem<int> _localQueueTimeout;
 		private readonly ConfigurationItem<int> _remoteQueueTimeout;
 		private readonly RabbitMqQueuePath _queuePath;
+		private readonly RabbitMqQueueConfiguration _configuration;
 		private readonly ILog _log;
 
 		// Todo: move to config
 		private readonly TimeSpan _timeout;
 
-		public RabbitMqQueue(RabbitMqConnector connector, RabbitMqQueuePath queuePath, bool isTransactional)
+		public RabbitMqQueue(RabbitMqConnector connector, RabbitMqQueuePath queuePath, RabbitMqQueueConfiguration configuration)
 		{
+			_configuration = configuration;
 			_connector = connector;
 			_queuePath = queuePath;
 			_localQueueTimeout = ConfigurationItem<int>.ReadSetting("LocalQueueTimeout", 0);
@@ -35,7 +37,7 @@ namespace Shuttle.ESB.RabbitMq
 			_log = Log.For(this);
 
 			IsLocal = queuePath.Host.Equals(Environment.MachineName, StringComparison.InvariantCultureIgnoreCase);
-			IsTransactional = isTransactional;
+			IsTransactional = _configuration.IsTransactional;
 
 			Uri = queuePath.Uri;
 
@@ -58,7 +60,7 @@ namespace Shuttle.ESB.RabbitMq
 		{
 			get
 			{
-				var result = Channel.QueueDeclare(_queuePath.QueueName, true, false, false, null);
+				var result = Channel.QueueDeclare(_queuePath.QueueName, _configuration.IsDurable, false, false, null);
 				return result == null ? -1 : (int)result.MessageCount;
 			}
 		}
@@ -66,11 +68,11 @@ namespace Shuttle.ESB.RabbitMq
 		public void Create()
 		{
 			// no need to check if queue exists for the call is idempotent
-			Channel.QueueDeclare(_queuePath.QueueName, true, false, false, null);
+			Channel.QueueDeclare(_queuePath.QueueName, _configuration.IsDurable, _configuration.IsExclusive, _configuration.AutoDelete, null);
 
-			if (!string.IsNullOrEmpty(_queuePath.Exchange))
+			if (!string.IsNullOrEmpty(_configuration.Exchange))
 			{
-				Channel.QueueBind(_queuePath.QueueName, _queuePath.Exchange, _queuePath.QueueName);
+				Channel.QueueBind(_queuePath.QueueName, _configuration.Exchange, _queuePath.QueueName);
 			}
 
 			_log.Information(string.Format("Created private rabbitMq queue '{0}'.", Uri));
@@ -163,7 +165,7 @@ namespace Shuttle.ESB.RabbitMq
 				formatter.Serialize(stream, data);
 
 				var basicProperties = Channel.CreateBasicProperties();
-				Channel.BasicPublish(_queuePath.Exchange, _queuePath.QueueName, basicProperties, stream.ToBytes());
+				Channel.BasicPublish(_configuration.Exchange, _queuePath.QueueName, basicProperties, stream.ToBytes());
 
 				EndTransaction();
 			}
@@ -183,7 +185,7 @@ namespace Shuttle.ESB.RabbitMq
 				var basicProperties = Channel.CreateBasicProperties();
 				basicProperties.MessageId = messageId.ToString();
 				basicProperties.DeliveryMode = 2;
-				Channel.BasicPublish(_queuePath.Exchange, _queuePath.QueueName, basicProperties, stream.ToBytes());
+				Channel.BasicPublish(_configuration.Exchange, _queuePath.QueueName, basicProperties, stream.ToBytes());
 
 				EndTransaction();
 			}

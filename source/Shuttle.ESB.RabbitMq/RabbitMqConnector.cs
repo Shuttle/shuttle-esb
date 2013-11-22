@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using RabbitMQ.Client;
+using Shuttle.ESB.RabbitMq.Exceptions;
 
 namespace Shuttle.ESB.RabbitMq
 {
@@ -9,11 +10,21 @@ namespace Shuttle.ESB.RabbitMq
 		private readonly Dictionary<int, IModel> _channels = new Dictionary<int, IModel>();
 		private readonly object _padLock = new object();
 		private readonly IConnection _connection;
+		private readonly RabbitMqQueueConfiguration _queueConfiguration;
+		private readonly RabbitMqExchangeElement _exchangeConfiguration;
 
-		public RabbitMqConnector(RabbitMqQueuePath queuePath)
+		public RabbitMqConnector(RabbitMqExchangeElement exchangeConfiguration, RabbitMqQueueConfiguration queueConfiguration, RabbitMqQueuePath queuePath)
 		{
+			_exchangeConfiguration = exchangeConfiguration;
+			_queueConfiguration = queueConfiguration;
 			QueuePath = queuePath;
-			var factory = new ConnectionFactory {uri = QueuePath.ConnnectUri, Port = AmqpTcpEndpoint.UseDefaultPort};
+
+			var port = QueuePath.ConnnectUri.Port < 1
+				? AmqpTcpEndpoint.UseDefaultPort
+				: QueuePath.ConnnectUri.Port;
+
+			var factory = new ConnectionFactory() {uri = QueuePath.ConnnectUri, Port = port};
+
 			_connection = factory.CreateConnection();
 		}
 
@@ -27,9 +38,9 @@ namespace Shuttle.ESB.RabbitMq
 				{
 					channel = _connection.CreateModel();
 
-					if (!string.IsNullOrEmpty(QueuePath.Exchange))
+					if (_exchangeConfiguration != null)
 					{
-						channel.ExchangeDeclare(QueuePath.Exchange, ExchangeType.Direct, true);
+						channel.ExchangeDeclare(_exchangeConfiguration.Name, _exchangeConfiguration.Type, _exchangeConfiguration.IsDurable, _exchangeConfiguration.AutoDelete, null);
 					}
 
 					_channels.Add(Thread.CurrentThread.ManagedThreadId, channel);
