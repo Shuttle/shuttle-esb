@@ -7,6 +7,7 @@ namespace Shuttle.ESB.Test.Integration.RabbitMq
 {
 	public class RabbitTransactionalInboxTest : InboxFixture
 	{
+
 		public void SetUp(bool isTransactional, bool isDurable)
 		{
 			var factory = QueueManager.Instance.GetQueueFactory("rabbitmq://") as RabbitMqQueueFactory;
