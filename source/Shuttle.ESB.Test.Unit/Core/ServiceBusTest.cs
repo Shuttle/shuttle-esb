@@ -17,25 +17,25 @@ namespace Shuttle.ESB.Test.Unit.Core
 		public void Should_be_able_to_send_a_message_to_a_routed_queue()
 		{
 			var command = new SimpleCommand
-			              	{
-			              		Name = Guid.NewGuid().ToString()
-			              	};
+											{
+												Name = Guid.NewGuid().ToString()
+											};
 
 			var configuration = CreateMemoryConfiguration();
 
 			var mockMessageRouteProvider = Mock<IMessageRouteProvider>();
 
 			mockMessageRouteProvider.Stub(mock => mock.GetRouteUris(Arg<object>.Is.Anything)).Return(new List<string>
-			                                                                                           	{
-			                                                                                           		configuration.Inbox.WorkQueue.Uri.ToString()
-			                                                                                           	});
+			{
+			  configuration.Inbox.WorkQueue.Uri.ToString()
+			});
 
 			configuration.MessageRouteProvider = mockMessageRouteProvider;
 
 			using (var bus = new ServiceBus(configuration))
 			{
 				bus.Configuration.Modules.Add(new MockModule(this));
-
+	
 				bus.Start();
 
 				bus.Send(command);
@@ -72,17 +72,17 @@ namespace Shuttle.ESB.Test.Unit.Core
 
 			configuration.SubscriptionManager = mockSubscriptionManager;
 
-            var subscriber1 = QueueManager.Instance.CreateQueue(SUBSCRIBER1_URI);
-						var subscriber2 = QueueManager.Instance.CreateQueue(SUBSCRIBER2_URI); ;
+			var subscriber1 = QueueManager.Instance.CreateQueue(SUBSCRIBER1_URI);
+			var subscriber2 = QueueManager.Instance.CreateQueue(SUBSCRIBER2_URI); ;
 
 			using (var bus = new ServiceBus(configuration).Start())
 			{
 				const string EVENT_NAME = "test::event";
 
 				bus.Publish(new SimpleEvent
-				            	{
-				            		EventName = EVENT_NAME
-				            	});
+											{
+												EventName = EVENT_NAME
+											});
 			}
 
 			Assert.NotNull(subscriber1.Dequeue());

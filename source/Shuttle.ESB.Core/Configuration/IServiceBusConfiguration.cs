@@ -31,6 +31,8 @@ namespace Shuttle.ESB.Core
 		IWorkerAvailabilityManager WorkerAvailabilityManager { get; }
 		IPipelineFactory PipelineFactory { get; }
 
+		IServiceBusConfiguration QueueFactory<TQueueFactory>(object configuration) where TQueueFactory : IQueueFactory;
+
 		ModuleCollection Modules { get; }
 		string OutgoingEncryptionAlgorithm { get; }
 		string OutgoingCompressionAlgorithm { get; }
