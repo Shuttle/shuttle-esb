@@ -32,6 +32,10 @@ namespace Shuttle.ESB.RabbitMq
 			{
 				return (string)this[_name];
 			}
+			set
+			{
+				this[_name] = value;
+			}
 		}
 
 		[ConfigurationProperty("type", IsRequired = true)]
@@ -40,6 +44,10 @@ namespace Shuttle.ESB.RabbitMq
 			get
 			{
 				return (string)this[_type];
+			}
+			set
+			{
+				this[_type] = value;
 			}
 		}
 
@@ -50,6 +58,10 @@ namespace Shuttle.ESB.RabbitMq
 			{
 				return (bool)this[_isDurable];
 			}
+			set
+			{
+				this[_isDurable] = value;
+			}
 		}
 
 		[ConfigurationProperty("autoDelete", IsRequired = false)]
@@ -58,6 +70,10 @@ namespace Shuttle.ESB.RabbitMq
 			get
 			{
 				return (bool)this[_autoDelete];
+			}
+			set
+			{
+				this[_autoDelete] = value;
 			}
 		}
 	}

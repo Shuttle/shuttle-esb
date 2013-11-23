@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using RabbitMQ.Client;
-using Shuttle.ESB.RabbitMq.Exceptions;
 
 namespace Shuttle.ESB.RabbitMq
 {
@@ -10,13 +9,12 @@ namespace Shuttle.ESB.RabbitMq
 		private readonly Dictionary<int, IModel> _channels = new Dictionary<int, IModel>();
 		private readonly object _padLock = new object();
 		private readonly IConnection _connection;
-		private readonly RabbitMqQueueConfiguration _queueConfiguration;
 		private readonly RabbitMqExchangeElement _exchangeConfiguration;
 
-		public RabbitMqConnector(RabbitMqExchangeElement exchangeConfiguration, RabbitMqQueueConfiguration queueConfiguration, RabbitMqQueuePath queuePath)
+		public RabbitMqConnector(RabbitMqExchangeElement exchangeConfiguration, RabbitMqQueueElement queueConfiguration, RabbitMqQueuePath queuePath)
 		{
 			_exchangeConfiguration = exchangeConfiguration;
-			_queueConfiguration = queueConfiguration;
+			QueueConfiguration = queueConfiguration;
 			QueuePath = queuePath;
 
 			var port = QueuePath.ConnnectUri.Port < 1
@@ -60,5 +58,7 @@ namespace Shuttle.ESB.RabbitMq
 		}
 
 		public RabbitMqQueuePath QueuePath { get; private set; }
+
+		public RabbitMqQueueElement QueueConfiguration { get; private set; }
 	}
 }

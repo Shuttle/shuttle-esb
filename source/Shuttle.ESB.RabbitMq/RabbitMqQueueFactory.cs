@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using RabbitMQ.Client.Impl;
 using Shuttle.Core.Infrastructure;
 using Shuttle.ESB.Core;
 using Shuttle.ESB.RabbitMq.Exceptions;
+using Shuttle.ESB.RabbitMq.Interfaces;
 
 namespace Shuttle.ESB.RabbitMq
 {
@@ -21,9 +21,10 @@ namespace Shuttle.ESB.RabbitMq
 		{
 		}
 
-		public RabbitMqQueueFactory(RabbitMqConfiguration configuration)
+		public RabbitMqQueueFactory(IRabbitMqConfiguration configuration)
 		{
-			Configuration = configuration;
+			Configuration = (RabbitMqConfiguration)configuration;
+
 			Configuration.OnRemoveQueueConfiguration += delegate(Uri uri)
 			{
 				lock (_padlock)
@@ -36,6 +37,7 @@ namespace Shuttle.ESB.RabbitMq
 					}
 				}
 			};
+
 		}
 
 		public RabbitMqConfiguration Configuration { get; private set; }
@@ -65,8 +67,8 @@ namespace Shuttle.ESB.RabbitMq
 
 				if (queueConfiguration == null)
 				{
-					queueConfiguration = new RabbitMqQueueConfiguration(uri, true, true);
-					Configuration.AddQueueConfiguration(queueConfiguration);
+					Configuration.DeclareQueue(uri);
+					queueConfiguration = Configuration.FindQueueConfiguration(uri);
 				}
 
 				if (!_connectors.TryGetValue(uri, out connector))
@@ -84,7 +86,7 @@ namespace Shuttle.ESB.RabbitMq
 					_connectors.Add(uri, connector);
 				}
 
-				return new RabbitMqQueue(connector, queuePath, queueConfiguration);
+				return new RabbitMqQueue(connector);
 			}
 		}
 

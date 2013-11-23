@@ -22,6 +22,12 @@ namespace Shuttle.ESB.RabbitMq
 		private static readonly ConfigurationProperty _exchange =
 			new ConfigurationProperty("exchange", typeof(string), string.Empty, ConfigurationPropertyOptions.None);
 
+		private static readonly ConfigurationProperty _routingKey =
+			new ConfigurationProperty("routingKey", typeof(string), string.Empty, ConfigurationPropertyOptions.None);
+
+		private static readonly ConfigurationProperty _overwriteIfExists =
+			new ConfigurationProperty("overwriteIfExists", typeof(bool), false, ConfigurationPropertyOptions.None);
+
 
 		public RabbitMqQueueElement()
 		{
@@ -31,6 +37,8 @@ namespace Shuttle.ESB.RabbitMq
 			base.Properties.Add(_autoDelete);
 			base.Properties.Add(_isExclusive);
 			base.Properties.Add(_exchange);
+			base.Properties.Add(_routingKey);
+			base.Properties.Add(_overwriteIfExists);
 		}
 
 		[ConfigurationProperty("uri", IsRequired = true)]
@@ -39,6 +47,10 @@ namespace Shuttle.ESB.RabbitMq
 			get
 			{
 				return (string)this[_uri];
+			}
+			set
+			{
+				this[_uri] = value;
 			}
 		}
 
@@ -49,6 +61,10 @@ namespace Shuttle.ESB.RabbitMq
 			{
 				return (bool)this[_isTransactional];
 			}
+			set
+			{
+				this[_isTransactional] = value;
+			}
 		}
 
 		[ConfigurationProperty("isDurable", IsRequired = true)]
@@ -57,6 +73,10 @@ namespace Shuttle.ESB.RabbitMq
 			get
 			{
 				return (bool)this[_isDurable];
+			}
+			set
+			{
+				this[_isDurable] = value;
 			}
 		}
 
@@ -67,6 +87,10 @@ namespace Shuttle.ESB.RabbitMq
 			{
 				return (bool)this[_autoDelete];
 			}
+			set
+			{
+				this[_autoDelete] = value;
+			}
 		}
 
 		[ConfigurationProperty("isExclusive", IsRequired = false)]
@@ -76,6 +100,10 @@ namespace Shuttle.ESB.RabbitMq
 			{
 				return (bool)this[_isExclusive];
 			}
+			set
+			{
+				this[_isExclusive] = value;
+			}
 		}
 
 		[ConfigurationProperty("exchange",  IsRequired = false)]
@@ -84,6 +112,36 @@ namespace Shuttle.ESB.RabbitMq
 			get
 			{
 				return (string)this[_exchange];
+			}
+			set
+			{
+				this[_exchange] = value;
+			}
+		}
+
+		[ConfigurationProperty("routingKey", IsRequired = false)]
+		public string RoutingKey
+		{
+			get
+			{
+				return (string)this[_routingKey];
+			}
+			set
+			{
+				this[_routingKey] = value;
+			}
+		}
+
+		[ConfigurationProperty("overwriteIfExists", IsRequired = false)]
+		public bool OverwriteIfExists
+		{
+			get
+			{
+				return (bool)this[_overwriteIfExists];
+			}
+			set
+			{
+				this[_overwriteIfExists] = value;
 			}
 		}
 	}

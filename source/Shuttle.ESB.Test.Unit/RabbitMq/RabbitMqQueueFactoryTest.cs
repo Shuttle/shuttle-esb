@@ -1,7 +1,6 @@
 using System;
 using NUnit.Framework;
 using Shuttle.ESB.Core;
-using Shuttle.ESB.Msmq;
 using Shuttle.ESB.RabbitMq;
 
 namespace Shuttle.ESB.Test.Unit.RabbitMq

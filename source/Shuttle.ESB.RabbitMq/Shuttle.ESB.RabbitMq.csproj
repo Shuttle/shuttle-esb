@@ -50,8 +50,10 @@
     <Compile Include="Configuration\RabbitMqQueueElementCollection.cs" />
     <Compile Include="Configuration\RabbitMqSection.cs" />
     <Compile Include="Exceptions\UndefinedExchangeException.cs" />
+    <Compile Include="Interfaces\IRabbitMqConfiguration.cs" />
+    <Compile Include="Interfaces\IRabbitMqExchangeConfiguration.cs" />
+    <Compile Include="Interfaces\IRabbitMqQueueConfiguration.cs" />
     <Compile Include="RabbitMqConfiguration.cs" />
-    <Compile Include="RabbitMqQueueConfiguration.cs" />
     <Compile Include="RabbitMqConnector.cs" />
     <Compile Include="RabbitMqQueuePath.cs" />
     <Compile Include="RabbitMqResourceManager.cs" />

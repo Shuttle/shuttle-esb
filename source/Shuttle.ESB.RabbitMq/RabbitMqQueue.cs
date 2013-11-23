@@ -20,26 +20,22 @@ namespace Shuttle.ESB.RabbitMq
 		private readonly RabbitMqConnector _connector;
 		private readonly ConfigurationItem<int> _localQueueTimeout;
 		private readonly ConfigurationItem<int> _remoteQueueTimeout;
-		private readonly RabbitMqQueuePath _queuePath;
-		private readonly RabbitMqQueueConfiguration _configuration;
 		private readonly ILog _log;
 
 		// Todo: move to config
 		private readonly TimeSpan _timeout;
 
-		public RabbitMqQueue(RabbitMqConnector connector, RabbitMqQueuePath queuePath, RabbitMqQueueConfiguration configuration)
+		public RabbitMqQueue(RabbitMqConnector connector)
 		{
-			_configuration = configuration;
 			_connector = connector;
-			_queuePath = queuePath;
 			_localQueueTimeout = ConfigurationItem<int>.ReadSetting("LocalQueueTimeout", 0);
 			_remoteQueueTimeout = ConfigurationItem<int>.ReadSetting("RemoteQueueTimeout", 2000);
 			_log = Log.For(this);
 
-			IsLocal = queuePath.Host.Equals(Environment.MachineName, StringComparison.InvariantCultureIgnoreCase);
-			IsTransactional = _configuration.IsTransactional;
+			IsLocal = connector.QueuePath.Host.Equals(Environment.MachineName, StringComparison.InvariantCultureIgnoreCase);
+			IsTransactional = connector.QueueConfiguration.IsTransactional;
 
-			Uri = queuePath.Uri;
+			Uri = connector.QueuePath.Uri;
 
 			_timeout = IsLocal
 						? TimeSpan.FromMilliseconds(_localQueueTimeout.GetValue())
@@ -60,22 +56,41 @@ namespace Shuttle.ESB.RabbitMq
 		{
 			get
 			{
-				var result = Channel.QueueDeclare(_queuePath.QueueName, _configuration.IsDurable, false, false, null);
+				var result = Channel.QueueDeclare(_connector.QueuePath.QueueName, _connector.QueueConfiguration.IsDurable, false, false, null);
 				return result == null ? -1 : (int)result.MessageCount;
 			}
 		}
 
 		public void Create()
 		{
-			// no need to check if queue exists for the call is idempotent
-			Channel.QueueDeclare(_queuePath.QueueName, _configuration.IsDurable, _configuration.IsExclusive, _configuration.AutoDelete, null);
-
-			if (!string.IsNullOrEmpty(_configuration.Exchange))
+			if (_connector.QueueConfiguration.OverwriteIfExists)
 			{
-				Channel.QueueBind(_queuePath.QueueName, _configuration.Exchange, _queuePath.QueueName);
+				try
+				{
+					Drop();
+				}
+				catch (Exception e)
+				{
+					throw;
+				}
 			}
 
-			_log.Information(string.Format("Created private rabbitMq queue '{0}'.", Uri));
+			// no need to check if queue exists for the call is idempotent
+			Channel.QueueDeclare(
+				_connector.QueuePath.QueueName,
+				_connector.QueueConfiguration.IsDurable, 
+				_connector.QueueConfiguration.IsExclusive, 
+				_connector.QueueConfiguration.AutoDelete, null);
+
+			if (!string.IsNullOrEmpty(_connector.QueueConfiguration.Exchange))
+			{
+				Channel.QueueBind(
+					_connector.QueuePath.QueueName, 
+					_connector.QueueConfiguration.Exchange, 
+					_connector.QueueConfiguration.RoutingKey ?? _connector.QueuePath.QueueName);
+			}
+
+			_log.Information(string.Format("Created rabbitMq queue '{0}'.", Uri));
 		}
 
 		public void Drop()
@@ -85,14 +100,14 @@ namespace Shuttle.ESB.RabbitMq
 				throw new InvalidOperationException(string.Format(RabbitMqResources.CannotDropRemoteQueue, Uri));
 			}
 
-			Channel.QueueDelete(_queuePath.QueueName);
-			_log.Information(string.Format("Dropped private rabbitMq queue '{0}'.", Uri));
+			Channel.QueueDelete(_connector.QueuePath.QueueName);
+			_log.Information(string.Format("Dropped rabbitMq queue '{0}'.", Uri));
 		}
 
 		public void Purge()
 		{
-			Channel.QueuePurge(_queuePath.QueueName);
-			_log.Information(string.Format("Purged private rabbitMq queue '{0}'.", Uri));
+			Channel.QueuePurge(_connector.QueuePath.QueueName);
+			_log.Information(string.Format("Purged rabbitMq queue '{0}'.", Uri));
 		}
 
 		public bool IsTransactional { get; private set; }
@@ -165,7 +180,7 @@ namespace Shuttle.ESB.RabbitMq
 				formatter.Serialize(stream, data);
 
 				var basicProperties = Channel.CreateBasicProperties();
-				Channel.BasicPublish(_configuration.Exchange, _queuePath.QueueName, basicProperties, stream.ToBytes());
+				Channel.BasicPublish(_connector.QueueConfiguration.Exchange, _connector.QueuePath.QueueName, basicProperties, stream.ToBytes());
 
 				EndTransaction();
 			}
@@ -184,8 +199,9 @@ namespace Shuttle.ESB.RabbitMq
 			{
 				var basicProperties = Channel.CreateBasicProperties();
 				basicProperties.MessageId = messageId.ToString();
-				basicProperties.DeliveryMode = 2;
-				Channel.BasicPublish(_configuration.Exchange, _queuePath.QueueName, basicProperties, stream.ToBytes());
+				basicProperties.DeliveryMode = (byte)(_connector.QueueConfiguration.IsDurable ? 1 : 0);
+
+				Channel.BasicPublish(_connector.QueueConfiguration.Exchange, _connector.QueuePath.QueueName, basicProperties, stream.ToBytes());
 
 				EndTransaction();
 			}
@@ -203,7 +219,7 @@ namespace Shuttle.ESB.RabbitMq
 
 			try
 			{
-				var message = Channel.BasicGet(_queuePath.QueueName, !IsTransactional);
+				var message = Channel.BasicGet(_connector.QueuePath.QueueName, !IsTransactional);
 				if (message != null)
 				{
 					_underlyingMessageData = new MemoryStream(message.Body);
@@ -234,7 +250,7 @@ namespace Shuttle.ESB.RabbitMq
 		{
 			try
 			{
-				using (var subscriber = new Subscription(Channel, _queuePath.QueueName))
+				using (var subscriber = new Subscription(Channel, _connector.QueuePath.QueueName))
 				{
 					BasicDeliverEventArgs message;
 					while (subscriber.Next(100, out message))
@@ -260,7 +276,7 @@ namespace Shuttle.ESB.RabbitMq
 		{
 			var messageList = new List<Stream>();
 
-			using (var subscriber = new Subscription(Channel, _queuePath.QueueName))
+			using (var subscriber = new Subscription(Channel, _connector.QueuePath.QueueName))
 			{
 				BasicDeliverEventArgs message;
 				while (subscriber.Next(100, out message))

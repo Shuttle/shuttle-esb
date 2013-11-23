@@ -15,5 +15,30 @@ namespace Shuttle.ESB.RabbitMq
 		{
 			return ((RabbitMqQueueElement)element).Uri;
 		}
+
+		public void Add(RabbitMqQueueElement queueElement)
+		{
+			if (BaseGet(queueElement.Uri) == null)
+				BaseAdd(queueElement);
+		}
+
+		public void Remove(RabbitMqQueueElement queueElement)
+		{
+			if (BaseGet(queueElement.Uri) == null)
+				BaseRemove(queueElement.Uri);
+		}
+		
+		public void Clear()
+		{
+			BaseClear();
+		}
+
+		public RabbitMqQueueElement GetLastAdded
+		{
+			get
+			{
+				return (RabbitMqQueueElement)(Count == 0 ? null : BaseGet(Count - 1));
+			}
+		}
 	}
 }
