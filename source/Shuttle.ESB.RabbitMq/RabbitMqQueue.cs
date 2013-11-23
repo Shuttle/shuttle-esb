@@ -65,28 +65,22 @@ namespace Shuttle.ESB.RabbitMq
 		{
 			if (_connector.QueueConfiguration.OverwriteIfExists)
 			{
-				try
-				{
-					Drop();
-				}
-				catch (Exception e)
-				{
-					throw;
-				}
+				try { Drop(); }
+				catch { } // eat the drop exception, njam njam ;) 
 			}
 
 			// no need to check if queue exists for the call is idempotent
 			Channel.QueueDeclare(
 				_connector.QueuePath.QueueName,
-				_connector.QueueConfiguration.IsDurable, 
-				_connector.QueueConfiguration.IsExclusive, 
+				_connector.QueueConfiguration.IsDurable,
+				_connector.QueueConfiguration.IsExclusive,
 				_connector.QueueConfiguration.AutoDelete, null);
 
 			if (!string.IsNullOrEmpty(_connector.QueueConfiguration.Exchange))
 			{
 				Channel.QueueBind(
-					_connector.QueuePath.QueueName, 
-					_connector.QueueConfiguration.Exchange, 
+					_connector.QueuePath.QueueName,
+					_connector.QueueConfiguration.Exchange,
 					_connector.QueueConfiguration.RoutingKey ?? _connector.QueuePath.QueueName);
 			}
 
