@@ -30,12 +30,27 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <Framework Condition=" '$(Framework)' == '' ">net35-full</Framework>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Framework)' == 'net35-full'">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <DefineConstants>$(DefineConstants);NET35FULL</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Framework)' == 'net40-full'">
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <DefineConstants>$(DefineConstants);NET40FULL</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Framework)' == 'net45-full'">
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <DefineConstants>$(DefineConstants);NET45FULL</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="RabbitMQ.Client">
       <HintPath>..\..\external-bin\RabbitMq\RabbitMQ.Client.dll</HintPath>
     </Reference>
     <Reference Include="Shuttle.Core.Infrastructure">
-      <HintPath>..\..\external-bin\shuttle.core\net35-full\Shuttle.Core.Infrastructure.dll</HintPath>
+      <HintPath>..\..\external-bin\shuttle.core\$(Framework)\Shuttle.Core.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
