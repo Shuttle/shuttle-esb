@@ -29,11 +29,12 @@ namespace Shuttle.ESB.Test.Integration.Core
 						ThreadCount = 1
 					};
 
-			QueueManager.Instance.CreatePhysicalQueues(configuration, QueueCreationType.All);
 
-			inboxWorkQueue.Purge();
-			inboxJournalQueue.Purge();
-			inboxErrorQueue.Purge();
+			inboxWorkQueue.Drop();
+			inboxJournalQueue.Drop();
+			inboxErrorQueue.Drop();
+			
+			QueueManager.Instance.CreatePhysicalQueues(configuration, QueueCreationType.All);
 
 			var module = new ReceivePipelineExceptionModule(inboxWorkQueue);
 

@@ -90,5 +90,13 @@ namespace Shuttle.ESB.Test.Integration
 			TestInboxThroughput("msmq://.", 1000, count, useIdempotenceTracker, useJournal, isTransactionalEndpoint);
 			TearDown();
 		}
+
+		[Test]
+		public void Should_be_able_to_handle_a_deferred_message()
+		{
+			SetUp(false);
+			TestInboxDeferred("msmq://.");
+			TearDown();
+		}
 	}
 }

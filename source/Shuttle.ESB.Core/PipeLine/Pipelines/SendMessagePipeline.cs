@@ -1,4 +1,5 @@
-﻿using Shuttle.Core.Infrastructure;
+﻿using System;
+using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ESB.Core
 {
@@ -25,10 +26,11 @@ namespace Shuttle.ESB.Core
 			RegisterObserver(new SendMessageObserver());
 		}
 
-		public bool Execute(object message, IQueue queue)
+		public bool Execute(DateTime ignoreTillDate, object message, IQueue queue)
 		{
 			Guard.AgainstNull(message, "message");
 
+			IgnoreTillDate = ignoreTillDate;
 			Message = message;
 			DestinationQueue = DestinationQueue ?? queue;
 

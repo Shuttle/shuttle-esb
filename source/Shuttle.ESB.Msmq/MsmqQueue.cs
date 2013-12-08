@@ -20,8 +20,7 @@ namespace Shuttle.ESB.Msmq
 
 		private readonly TimeSpan timeout;
 
-		[ThreadStatic]
-		private static object underlyingMessageData;
+		[ThreadStatic] private static object underlyingMessageData;
 
 		private readonly string path;
 		private readonly string host;
@@ -59,7 +58,7 @@ namespace Shuttle.ESB.Msmq
 			if (uri.LocalPath == "/")
 			{
 				throw new UriFormatException(string.Format(ESBResources.UriFormatException, "msmq://{{host-name}}/{{queue-name}}",
-														   uri));
+				                                           uri));
 			}
 
 			Uri = builder.Uri;
@@ -70,14 +69,14 @@ namespace Shuttle.ESB.Msmq
 			usesIPAddress = regexIPAddress.IsMatch(host);
 
 			path = IsLocal
-					? string.Format(@"{0}\private$\{1}", host, uri.Segments[1])
-					: usesIPAddress
-						? string.Format(@"FormatName:DIRECT=TCP:{0}\private$\{1}", host, uri.Segments[1])
-						: string.Format(@"FormatName:DIRECT=OS:{0}\private$\{1}", host, uri.Segments[1]);
+				       ? string.Format(@"{0}\private$\{1}", host, uri.Segments[1])
+				       : usesIPAddress
+					         ? string.Format(@"FormatName:DIRECT=TCP:{0}\private$\{1}", host, uri.Segments[1])
+					         : string.Format(@"FormatName:DIRECT=OS:{0}\private$\{1}", host, uri.Segments[1]);
 
 			timeout = IsLocal
-						? TimeSpan.FromMilliseconds(localQueueTimeout.GetValue())
-						: TimeSpan.FromMilliseconds(remoteQueueTimeout.GetValue());
+				          ? TimeSpan.FromMilliseconds(localQueueTimeout.GetValue())
+				          : TimeSpan.FromMilliseconds(remoteQueueTimeout.GetValue());
 		}
 
 		public int Count
@@ -151,10 +150,10 @@ namespace Shuttle.ESB.Msmq
 		public QueueAvailability Exists()
 		{
 			return IsLocal
-					? MessageQueue.Exists(path)
-						? QueueAvailability.Exists
-						: QueueAvailability.Missing
-					: QueueAvailability.Unknown;
+				       ? MessageQueue.Exists(path)
+					         ? QueueAvailability.Exists
+					         : QueueAvailability.Missing
+				       : QueueAvailability.Unknown;
 		}
 
 		public bool IsEmpty()
@@ -196,8 +195,8 @@ namespace Shuttle.ESB.Msmq
 			if (message == null)
 			{
 				throw new EnqueueMessageDataTypeMismatchException(data.GetType().FullName,
-																  Uri.ToString(),
-																  typeof(Message).FullName);
+				                                                  Uri.ToString(),
+				                                                  typeof (Message).FullName);
 			}
 
 			try
@@ -229,12 +228,12 @@ namespace Shuttle.ESB.Msmq
 		public void Enqueue(Guid messageId, Stream stream)
 		{
 			var sendMessage = new Message
-			{
-				Recoverable = true,
-				Label = messageId.ToString(),
-				CorrelationId = string.Format(@"{0}\1", messageId),
-				BodyStream = stream
-			};
+				{
+					Recoverable = true,
+					Label = messageId.ToString(),
+					CorrelationId = string.Format(@"{0}\1", messageId),
+					BodyStream = stream
+				};
 
 			try
 			{
@@ -466,7 +465,7 @@ namespace Shuttle.ESB.Msmq
 			{
 				underlyingMessageData = queue.Peek(timeout, cursor, action);
 
-				return (Message)underlyingMessageData;
+				return (Message) underlyingMessageData;
 			}
 			catch
 			{
@@ -477,10 +476,12 @@ namespace Shuttle.ESB.Msmq
 		private MessageQueueTransactionType TransactionType()
 		{
 			return IsTransactional
-					? Transaction.Current != null
-						? MessageQueueTransactionType.Automatic
-						: MessageQueueTransactionType.Single
-					: MessageQueueTransactionType.None;
+				       ? Transaction.Current != null
+					         ? MessageQueueTransactionType.Automatic
+					         : IsTransactional
+						           ? MessageQueueTransactionType.Single
+						           : MessageQueueTransactionType.None
+				       : MessageQueueTransactionType.None;
 		}
 	}
 }

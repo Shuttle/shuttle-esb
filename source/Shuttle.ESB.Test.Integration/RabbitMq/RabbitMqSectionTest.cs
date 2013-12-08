@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Linq;
 using NUnit.Framework;
 using Shuttle.ESB.Core;
@@ -48,7 +47,6 @@ namespace Shuttle.ESB.Test.Integration.RabbitMq
 				.DefineExchange("exchange-fluent")
 				.Type("direct")
 				.IsDurable(true)
-
 				.DeclareQueue("rabbitmq://./inbox-work-1")
 				.IsDurable(false);
 
@@ -71,13 +69,12 @@ namespace Shuttle.ESB.Test.Integration.RabbitMq
 		[Test]
 		public void Should_be_able_to_use_fluent_configuration_via_service_bus()
 		{
-				var rabbitMqConfig = new RabbitMqConfiguration() as IRabbitMqConfiguration;
+			var rabbitMqConfig = new RabbitMqConfiguration() as IRabbitMqConfiguration;
 
 			rabbitMqConfig
 				.DefineExchange("exchange-bus")
 				.Type("direct")
 				.IsDurable(true)
-	
 				.DeclareQueue("rabbitmq://./inbox-work-1")
 				.IsDurable(false);
 

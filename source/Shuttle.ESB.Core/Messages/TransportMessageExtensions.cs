@@ -34,7 +34,7 @@ namespace Shuttle.ESB.Core
 			transportMessage.IgnoreTillDate = DateTime.Now.Add(timeSpanToIgnore);
 		}
 
-		public static bool Ignore(this TransportMessage transportMessage)
+		public static bool IsIgnoring(this TransportMessage transportMessage)
 		{
 			return DateTime.Now <= transportMessage.IgnoreTillDate;
 		}

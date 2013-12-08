@@ -3,15 +3,17 @@ using System.Collections.Generic;
 
 namespace Shuttle.ESB.Core
 {
-    public interface IServiceBus : IDisposable
-    {
+	public interface IServiceBus : IDisposable
+	{
 		TransportMessage TransportMessageReceived { get; set; }
 
 		string OutgoingCorrelationId { get; set; }
 		List<TransportHeader> OutgoingHeaders { get; }
-    	void ResetOutgoingHeaders();
-		
+		void ResetOutgoingHeaders();
+
 		TransportMessage CreateTransportMessage(object message);
+
+		void Send(TransportMessage transportMessage);
 
 		TransportMessage Send(object message);
 		TransportMessage Send(object message, string uri);
@@ -20,13 +22,20 @@ namespace Shuttle.ESB.Core
 		TransportMessage SendLocal(object message);
 		TransportMessage SendReply(object message);
 
+		TransportMessage SendDeferred(DateTime at, object message);
+		TransportMessage SendDeferred(DateTime at, object message, string uri);
+		TransportMessage SendDeferred(DateTime at, object message, IQueue queue);
+
+		TransportMessage SendDeferredLocal(DateTime at, object message);
+		TransportMessage SendDeferredReply(DateTime at, object message);
+
 		IEnumerable<string> Publish(object message);
 
-        IServiceBus Start();
-        void Stop();
-        bool Started { get; }
-        
-        IServiceBusConfiguration Configuration { get; }
+		IServiceBus Start();
+		void Stop();
+		bool Started { get; }
+
+		IServiceBusConfiguration Configuration { get; }
 		IServiceBusEvents Events { get; }
-    }
+	}
 }

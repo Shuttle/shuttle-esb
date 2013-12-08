@@ -10,6 +10,7 @@ namespace Shuttle.ESB.Core
 
 			transportMessage.CorrelationId = pipelineEvent.GetServiceBus().OutgoingCorrelationId;
 			transportMessage.Headers.Merge(pipelineEvent.GetServiceBus().OutgoingHeaders);
+			transportMessage.IgnoreTillDate = pipelineEvent.GetIgnoreTillDate();
 
 			pipelineEvent.SetTransportMessage(transportMessage);
 		}

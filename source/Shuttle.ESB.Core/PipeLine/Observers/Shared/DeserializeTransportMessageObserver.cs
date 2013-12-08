@@ -61,7 +61,7 @@ namespace Shuttle.ESB.Core
                                           transportMessage.MessageId));
             }
 
-		    if (!transportMessage.Ignore())
+		    if (!transportMessage.IsIgnoring())
 			{
 				pipelineEvent.SetWorking();
 

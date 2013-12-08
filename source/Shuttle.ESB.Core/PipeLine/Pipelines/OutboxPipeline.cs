@@ -30,11 +30,11 @@
 		{
 			base.Obtained();
 
-			WorkQueue = bus.Configuration.Outbox.WorkQueue;
-			ErrorQueue = bus.Configuration.Outbox.ErrorQueue;
+			WorkQueue = _bus.Configuration.Outbox.WorkQueue;
+			ErrorQueue = _bus.Configuration.Outbox.ErrorQueue;
 
-			DurationToIgnoreOnFailure = bus.Configuration.Outbox.DurationToIgnoreOnFailure;
-			MaximumFailureCount = bus.Configuration.Outbox.MaximumFailureCount;
+			DurationToIgnoreOnFailure = _bus.Configuration.Outbox.DurationToIgnoreOnFailure;
+			MaximumFailureCount = _bus.Configuration.Outbox.MaximumFailureCount;
 		}
 	}
 }

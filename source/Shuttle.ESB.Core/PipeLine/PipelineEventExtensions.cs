@@ -81,6 +81,11 @@ namespace Shuttle.ESB.Core
 			pipelineEvent.Pipeline.State.Replace(StateKeys.MessageBytes, bytes);
 		}
 
+		public static DateTime GetIgnoreTillDate(this PipelineEvent pipelineEvent)
+		{
+			return pipelineEvent.Pipeline.State.Get<DateTime>(StateKeys.IgnoreTillDate);
+		}
+
 		public static object GetMessage(this PipelineEvent pipelineEvent)
 		{
 			return pipelineEvent.Pipeline.State.Get<object>(StateKeys.Message);

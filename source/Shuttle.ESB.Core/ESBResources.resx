@@ -368,8 +368,8 @@
     <value>dd MMM yyyy HH:mm:ss</value>
   </data>
   <data name="TransportMessageIgnored" xml:space="preserve">
-    <value>Transport message with id '{0}' will be ignored until '{1}'.</value>
-    <comment>{0} = transport message id, {1} = ignore till date</comment>
+    <value>Transport message with id '{0}' will be deferred until '{1}'.</value>
+    <comment>{0} = transport message id, {1} = deferred till date</comment>
   </data>
   <data name="SerializerDoesNotImplementKnownTypes" xml:space="preserve">
     <value>Serializer type '{0}' does not implement IKnownTypes.  Types implementing '{1}' cannot be added from folder '{2}'.</value>
@@ -462,5 +462,8 @@
   </data>
   <data name="NoIdempotenceTracker" xml:space="preserve">
     <value>No idempotence tracker has been specified.</value>
+  </data>
+  <data name="NoDeferredMessageManager" xml:space="preserve">
+    <value>No deferred message manager has been specified.</value>
   </data>
 </root>

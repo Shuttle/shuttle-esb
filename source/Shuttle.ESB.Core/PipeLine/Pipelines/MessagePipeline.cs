@@ -5,13 +5,13 @@ namespace Shuttle.ESB.Core
 {
 	public abstract class MessagePipeline : ObservablePipeline
 	{
-		protected readonly IServiceBus bus;
+		protected readonly IServiceBus _bus;
 
 	    protected MessagePipeline(IServiceBus bus)
 		{
 			Guard.AgainstNull(bus, "bus");
 
-			this.bus = bus;
+			_bus = bus;
 
 			State.Add(bus);
 		}
@@ -44,6 +44,12 @@ namespace Shuttle.ESB.Core
 			set { State.Add(StateKeys.DestinationQueue, value); }
 		}
 
+		public DateTime IgnoreTillDate
+		{
+			get { return State.Get<DateTime>(StateKeys.IgnoreTillDate); }
+			set { State.Add(StateKeys.IgnoreTillDate, value); }
+		}
+
 		public object Message
 		{
 			get { return State.Get<object>(StateKeys.Message); }
@@ -71,14 +77,14 @@ namespace Shuttle.ESB.Core
 		public virtual void Obtained()
 		{
 			State.Clear();
-			State.Add(bus);
+			State.Add(_bus);
 
-			bus.Events.OnPipelineObtained(this, new PipelineEventArgs(this));
+			_bus.Events.OnPipelineObtained(this, new PipelineEventArgs(this));
 		}
 
 		public void Released()
 		{
-			bus.Events.OnPipelineReleased(this, new PipelineEventArgs(this));
+			_bus.Events.OnPipelineReleased(this, new PipelineEventArgs(this));
 		}
 	}
 }

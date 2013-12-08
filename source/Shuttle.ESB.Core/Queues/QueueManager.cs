@@ -227,10 +227,7 @@ namespace Shuttle.ESB.Core
 		{
 			Guard.AgainstNull(queueFactory, "queueFactory");
 
-			if (
-				queueFactories.Find(
-					factory => factory.Scheme.Equals(queueFactory.Scheme, StringComparison.InvariantCultureIgnoreCase)) !=
-				null)
+			if (ContainsQueueFactory(queueFactory.Scheme))
 			{
 				throw new DuplicateQueueFactoryException(queueFactory);
 			}

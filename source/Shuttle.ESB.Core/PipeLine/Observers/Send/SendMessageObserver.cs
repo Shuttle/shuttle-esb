@@ -20,9 +20,16 @@ namespace Shuttle.ESB.Core
 
 			var bus = pipelineEvent.GetServiceBus();
 
+			if (transportMessage.IsIgnoring() && bus.Configuration.HasDeferredMessageManager)
+			{
+				bus.Configuration.DeferredMessageManager.Register(transportMessage.IgnoreTillDate, pipelineEvent.GetTransportMessageStream());
+
+				return;
+			}
+
 			var queue = !bus.Configuration.HasOutbox
-							? QueueManager.Instance.GetQueue(transportMessage.RecipientInboxWorkQueueUri)
-							: bus.Configuration.Outbox.WorkQueue;
+						? QueueManager.Instance.GetQueue(transportMessage.RecipientInboxWorkQueueUri)
+						: bus.Configuration.Outbox.WorkQueue;
 
 			if (log.IsVerboseEnabled)
 			{
@@ -34,9 +41,9 @@ namespace Shuttle.ESB.Core
 				}
 
 				log.Verbose(string.Format(ESBResources.EnqueueMessage,
-										transportMessage.MessageType,
-										transportMessage.MessageId,
-										queue.Uri));
+										  transportMessage.MessageType,
+										  transportMessage.MessageId,
+										  queue.Uri));
 			}
 
 			bus.Events.OnBeforeEnqueueStream(this, new QueueMessageEventArgs(pipelineEvent, queue, transportMessage));

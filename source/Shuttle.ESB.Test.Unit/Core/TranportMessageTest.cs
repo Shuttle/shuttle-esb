@@ -14,11 +14,11 @@ namespace Shuttle.ESB.Test.Unit.Core
                                IgnoreTillDate = DateTime.Now.AddMinutes(1)
                            };
 
-            Assert.IsTrue(messsage.Ignore());
+            Assert.IsTrue(messsage.IsIgnoring());
 
             messsage.IgnoreTillDate = DateTime.Now.AddMilliseconds(-1);
 
-            Assert.IsFalse(messsage.Ignore());
+            Assert.IsFalse(messsage.IsIgnoring());
         }
 
         [Test]
