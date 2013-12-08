@@ -92,6 +92,8 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="DeferredMessageManager.cs" />
+    <Compile Include="Definitions\DeferredMessageManagerColumns.cs" />
     <Compile Include="Definitions\IdempotenceTrackerColumns.cs" />
     <Compile Include="Idempotence\IdempotenceTracker.cs" />
     <Compile Include="IScriptProvider.cs" />
@@ -147,15 +149,18 @@
     <EmbeddedResource Include="Scripts\QueueDequeueId.sql" />
     <EmbeddedResource Include="Scripts\QueueRead.sql" />
     <EmbeddedResource Include="Scripts\IdempotenceTrackerContains.sql" />
+    <Content Include="Scripts\2000\DeferredMessageManagerCreate.sql" />
+    <Content Include="Scripts\2000\DeferredMessageManagerExists.sql" />
     <Content Include="Scripts\2000\IdempotenceTrackerCreate.sql" />
     <Content Include="Scripts\2000\IdempotenceTrackerExists.sql" />
     <Content Include="Scripts\2000\SubscriptionManagerExists.sql" />
     <Content Include="Scripts\2000\SubscriptionManagerCreate.sql" />
-    <Content Include="Scripts\2000\SecureSubscriptionManagerCreate.sql" />
-    <Content Include="Scripts\2000\SecureSubscriptionManagerExists.sql" />
     <EmbeddedResource Include="Scripts\IdempotenceTrackerRemove.sql" />
     <EmbeddedResource Include="Scripts\IdempotenceTrackerAdd.sql" />
     <EmbeddedResource Include="Scripts\IdempotenceTrackerExists.sql" />
+    <EmbeddedResource Include="Scripts\DeferredMessageManagerExists.sql" />
+    <EmbeddedResource Include="Scripts\DeferredMessageManagerRegister.sql" />
+    <Content Include="Scripts\DeferredMessageManagerCreate.sql" />
     <Content Include="Scripts\IdempotenceTrackerCreate.sql" />
     <Content Include="Scripts\SubscriptionManagerCreate.sql" />
   </ItemGroup>

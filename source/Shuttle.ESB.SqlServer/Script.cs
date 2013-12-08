@@ -19,13 +19,14 @@ namespace Shuttle.ESB.SqlServer
         public static readonly Script SubscriptionManagerInboxWorkQueueUris = new Script("SubscriptionManagerInboxWorkQueueUris");
         public static readonly Script SubscriptionManagerExists = new Script("SubscriptionManagerExists");
         public static readonly Script SubscriptionManagerSubscribe = new Script("SubscriptionManagerSubscribe");
-        public static readonly Script SecureSubscriptionManagerExists = new Script("SecureSubscriptionManagerExists");
-        public static readonly Script SecureSubscriptionManagerSubscribe = new Script("SecureSubscriptionManagerSubscribe");
 
         public static readonly Script IdempotenceTrackerExists = new Script("IdempotenceTrackerExists");
         public static readonly Script IdempotenceTrackerAdd = new Script("IdempotenceTrackerAdd");
         public static readonly Script IdempotenceTrackerRemove = new Script("IdempotenceTrackerRemove");
         public static readonly Script IdempotenceTrackerContains = new Script("IdempotenceTrackerContains");
+
+		public static readonly Script DeferredMessageManagerExists = new Script("DeferredMessageManagerExists");
+		public static readonly Script DeferredMessageManagerRegister = new Script("DeferredMessageManagerRegister");
 
         private Script(string name)
         {

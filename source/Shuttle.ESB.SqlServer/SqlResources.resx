@@ -121,6 +121,9 @@
     <value>Could not find connection name '{0}' in the application configuration file.</value>
     <comment>{0} = connection name</comment>
   </data>
+  <data name="DeferredMessageManagerDatabaseNotConfigured" xml:space="preserve">
+    <value>The database has not been configured for deferred message storage.  Please run the DeferredMessageManagerCreate.sql script file against your database.</value>
+  </data>
   <data name="EmbeddedScriptMissingException" xml:space="preserve">
     <value>Could not find embedded resource script with file name '{0}'.</value>
     <comment>{0} = script file name</comment>
@@ -138,9 +141,5 @@
   </data>
   <data name="SubscriptionManagerDatabaseNotConfigured" xml:space="preserve">
     <value>The database has not been configured for subscription storage.  Please run the SubscriptionManagerCreate.sql script file against your database.</value>
-  </data>
-  <data name="SubscriptionManagerSecured" xml:space="preserve">
-    <value>The SubscriptionManager 'Secure' flag is set to '{0}'.  To change this value modify the application setting for key 'SubscriptionManagerSecured' to either 'true' or 'false'.</value>
-    <comment>{0} = current 'SubscriptionManagerSecured' value</comment>
   </data>
 </root>
