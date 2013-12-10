@@ -4,11 +4,11 @@ namespace Shuttle.ESB.Core
 {
 	public class SendMessageObserver : IPipelineObserver<OnSendMessage>
 	{
-		private readonly ILog log;
+		private readonly ILog _log;
 
 		public SendMessageObserver()
 		{
-			log = Log.For(this);
+			_log = Log.For(this);
 		}
 
 		public void Execute(OnSendMessage pipelineEvent)
@@ -22,7 +22,7 @@ namespace Shuttle.ESB.Core
 
 			if (transportMessage.IsIgnoring() && bus.Configuration.HasDeferredMessageManager)
 			{
-				bus.Configuration.DeferredMessageManager.Register(transportMessage.IgnoreTillDate, pipelineEvent.GetTransportMessageStream());
+				bus.Configuration.DeferredMessageQueue.Enqueue(transportMessage.IgnoreTillDate, pipelineEvent.GetTransportMessageStream());
 
 				return;
 			}
@@ -31,16 +31,16 @@ namespace Shuttle.ESB.Core
 						? QueueManager.Instance.GetQueue(transportMessage.RecipientInboxWorkQueueUri)
 						: bus.Configuration.Outbox.WorkQueue;
 
-			if (log.IsVerboseEnabled)
+			if (_log.IsVerboseEnabled)
 			{
-				log.Verbose(string.Format(ESBResources.TraceCorrelationIdReceived, transportMessage.CorrelationId));
+				_log.Verbose(string.Format(ESBResources.TraceCorrelationIdReceived, transportMessage.CorrelationId));
 
 				foreach (var header in transportMessage.Headers)
 				{
-					log.Verbose(string.Format(ESBResources.TraceTransportHeaderReceived, header.Key, header.Value));
+					_log.Verbose(string.Format(ESBResources.TraceTransportHeaderReceived, header.Key, header.Value));
 				}
 
-				log.Verbose(string.Format(ESBResources.EnqueueMessage,
+				_log.Verbose(string.Format(ESBResources.EnqueueMessage,
 										  transportMessage.MessageType,
 										  transportMessage.MessageId,
 										  queue.Uri));

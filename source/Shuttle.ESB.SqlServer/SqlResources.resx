@@ -121,12 +121,52 @@
     <value>Could not find connection name '{0}' in the application configuration file.</value>
     <comment>{0} = connection name</comment>
   </data>
-  <data name="DeferredMessageManagerDatabaseNotConfigured" xml:space="preserve">
-    <value>The database has not been configured for deferred message storage.  Please run the DeferredMessageManagerCreate.sql script file against your database.</value>
+  <data name="CountError" xml:space="preserve">
+    <value>Could not get count for queue '{0}'.  Exception: {1}.  Query: {2}</value>
+    <comment>{0} = queue uri, {1} = exception message, {2} = query</comment>
+  </data>
+  <data name="CreateError" xml:space="preserve">
+    <value>Could not create queue '{0}'.  Exception: {1}.  Query: {2}</value>
+    <comment>{0} = queue uri, {1} = exception message, {2} = query</comment>
+  </data>
+  <data name="DeferredMessageDatabaseNotConfigured" xml:space="preserve">
+    <value>The database has not been configured for deferred message storage.  Please run the DeferredMessageCreate.sql script file against your database.</value>
+  </data>
+  <data name="DeferredMessageDequeueError" xml:space="preserve">
+    <value>Could not dequeue a deferred message.  Exception: {0}.  Query: {1}</value>
+    <comment>{0} = exception message, {1} = query</comment>
+  </data>
+  <data name="DeferredMessageEnqueueError" xml:space="preserve">
+    <value>Could not enqueue a deferred message.  Exception: {0}.  Query: {1}</value>
+    <comment>{0} = exception message, {1} = query</comment>
+  </data>
+  <data name="DequeueError" xml:space="preserve">
+    <value>Could not dequeue message from queue '{0}'.  Exception: {1}.  Query: {2}</value>
+    <comment>{0} = queue uri, {1} = exception message, {2} = query</comment>
+  </data>
+  <data name="DequeueIdError" xml:space="preserve">
+    <value>Could not dequeue message from queue '{0}'.  Exception: {1}.  Query: {2}</value>
+    <comment>{0} = queue uri, {1} = exception message, {2} = query</comment>
+  </data>
+  <data name="DropError" xml:space="preserve">
+    <value>Could not drop queue '{0}'.  Exception: {1}.  Query: {2}</value>
+    <comment>{0} = queue uri, {1} = exception message, {2} = query</comment>
   </data>
   <data name="EmbeddedScriptMissingException" xml:space="preserve">
     <value>Could not find embedded resource script with file name '{0}'.</value>
     <comment>{0} = script file name</comment>
+  </data>
+  <data name="EnqueueDataError" xml:space="preserve">
+    <value>Could not enqueue message data with message id '{0}' on queue '{1}'.  Exception: {2}</value>
+    <comment>{0} = message id, {1} = queue uri, {2} = exception message</comment>
+  </data>
+  <data name="EnqueueError" xml:space="preserve">
+    <value>Could not enqueue message id '{0}' on queue '{1}'.  Exception: {2}</value>
+    <comment>{0} = message id, {1} = queue uri, {2} = exception message</comment>
+  </data>
+  <data name="ExistsError" xml:space="preserve">
+    <value>Could not check whether queue '{0}' exists.  Exception: {1}.  Query: {2}</value>
+    <comment>{0} = queue uri, {1} = exception message, {2} = query</comment>
   </data>
   <data name="IdempotenceTrackerDatabaseNotConfigured" xml:space="preserve">
     <value>The database has not been configured for the idempotence tracker.  Please run the IdempotenceTrackerCreate.sql script file against your database.</value>
@@ -134,6 +174,18 @@
   <data name="InvalidSagaData" xml:space="preserve">
     <value>Saga data with id '{0}' for type '{1}' does not implement SagaData.</value>
     <comment>{0] = saga data id. {1} = full type name</comment>
+  </data>
+  <data name="PurgeError" xml:space="preserve">
+    <value>Could not purge queue '{0}'.  Exception: {1}.  Query: {2}</value>
+    <comment>{0} = queue uri, {1} = exception message, {2} = query</comment>
+  </data>
+  <data name="ReadError" xml:space="preserve">
+    <value>Could not read top {0} messages from queue '{1}'.  Exception: {2}.  Query: {3}</value>
+    <comment>{0} = top number, {1} = queue uri, {2} = exception message, {3} = query</comment>
+  </data>
+  <data name="RemoveError" xml:space="preserve">
+    <value>Could not remove message from queue '{0}'.  Exception: {1}.  Query: {2}</value>
+    <comment>{0} = queue uri, {1} = exception message, {2} = query</comment>
   </data>
   <data name="ScriptCountException" xml:space="preserve">
     <value>Directory '{0}' was searched (recursively) for script file '{1}'.  Exactly 1 file must exist in the directory structure but {2} were found.</value>

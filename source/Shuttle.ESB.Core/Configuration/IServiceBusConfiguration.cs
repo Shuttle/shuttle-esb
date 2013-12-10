@@ -27,7 +27,7 @@ namespace Shuttle.ESB.Core
 
 		IIdempotenceTracker IdempotenceTracker { get; }
 		ISubscriptionManager SubscriptionManager { get; }
-		IDeferredMessageManager DeferredMessageManager { get; }
+		IDeferredMessageQueue DeferredMessageQueue { get; }
 		IWorkerConfiguration Worker { get; }
 
 		IWorkerAvailabilityManager WorkerAvailabilityManager { get; }

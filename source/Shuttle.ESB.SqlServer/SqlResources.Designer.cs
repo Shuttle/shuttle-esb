@@ -70,11 +70,74 @@ namespace Shuttle.ESB.SqlServer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The database has not been configured for deferred message storage.  Please run the DeferredMessageManagerCreate.sql script file against your database..
+        ///   Looks up a localized string similar to Could not get count for queue &apos;{0}&apos;.  Exception: {1}.  Query: {2}.
         /// </summary>
-        internal static string DeferredMessageManagerDatabaseNotConfigured {
+        internal static string CountError {
             get {
-                return ResourceManager.GetString("DeferredMessageManagerDatabaseNotConfigured", resourceCulture);
+                return ResourceManager.GetString("CountError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not create queue &apos;{0}&apos;.  Exception: {1}.  Query: {2}.
+        /// </summary>
+        internal static string CreateError {
+            get {
+                return ResourceManager.GetString("CreateError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The database has not been configured for deferred message storage.  Please run the DeferredMessageCreate.sql script file against your database..
+        /// </summary>
+        internal static string DeferredMessageDatabaseNotConfigured {
+            get {
+                return ResourceManager.GetString("DeferredMessageDatabaseNotConfigured", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not dequeue a deferred message.  Exception: {0}.  Query: {1}.
+        /// </summary>
+        internal static string DeferredMessageDequeueError {
+            get {
+                return ResourceManager.GetString("DeferredMessageDequeueError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not enqueue a deferred message.  Exception: {0}.  Query: {1}.
+        /// </summary>
+        internal static string DeferredMessageEnqueueError {
+            get {
+                return ResourceManager.GetString("DeferredMessageEnqueueError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not dequeue message from queue &apos;{0}&apos;.  Exception: {1}.  Query: {2}.
+        /// </summary>
+        internal static string DequeueError {
+            get {
+                return ResourceManager.GetString("DequeueError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not dequeue message from queue &apos;{0}&apos;.  Exception: {1}.  Query: {2}.
+        /// </summary>
+        internal static string DequeueIdError {
+            get {
+                return ResourceManager.GetString("DequeueIdError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not drop queue &apos;{0}&apos;.  Exception: {1}.  Query: {2}.
+        /// </summary>
+        internal static string DropError {
+            get {
+                return ResourceManager.GetString("DropError", resourceCulture);
             }
         }
         
@@ -84,6 +147,33 @@ namespace Shuttle.ESB.SqlServer {
         internal static string EmbeddedScriptMissingException {
             get {
                 return ResourceManager.GetString("EmbeddedScriptMissingException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not enqueue message data with message id &apos;{0}&apos; on queue &apos;{1}&apos;.  Exception: {2}.
+        /// </summary>
+        internal static string EnqueueDataError {
+            get {
+                return ResourceManager.GetString("EnqueueDataError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not enqueue message id &apos;{0}&apos; on queue &apos;{1}&apos;.  Exception: {2}.
+        /// </summary>
+        internal static string EnqueueError {
+            get {
+                return ResourceManager.GetString("EnqueueError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not check whether queue &apos;{0}&apos; exists.  Exception: {1}.  Query: {2}.
+        /// </summary>
+        internal static string ExistsError {
+            get {
+                return ResourceManager.GetString("ExistsError", resourceCulture);
             }
         }
         
@@ -102,6 +192,33 @@ namespace Shuttle.ESB.SqlServer {
         internal static string InvalidSagaData {
             get {
                 return ResourceManager.GetString("InvalidSagaData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not purge queue &apos;{0}&apos;.  Exception: {1}.  Query: {2}.
+        /// </summary>
+        internal static string PurgeError {
+            get {
+                return ResourceManager.GetString("PurgeError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not read top {0} messages from queue &apos;{1}&apos;.  Exception: {2}.  Query: {3}.
+        /// </summary>
+        internal static string ReadError {
+            get {
+                return ResourceManager.GetString("ReadError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not remove message from queue &apos;{0}&apos;.  Exception: {1}.  Query: {2}.
+        /// </summary>
+        internal static string RemoveError {
+            get {
+                return ResourceManager.GetString("RemoveError", resourceCulture);
             }
         }
         

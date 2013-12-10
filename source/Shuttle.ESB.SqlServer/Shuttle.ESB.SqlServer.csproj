@@ -92,7 +92,7 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="DeferredMessageManager.cs" />
+    <Compile Include="DeferredMessageQueue.cs" />
     <Compile Include="Definitions\DeferredMessageManagerColumns.cs" />
     <Compile Include="Definitions\IdempotenceTrackerColumns.cs" />
     <Compile Include="Idempotence\IdempotenceTracker.cs" />
@@ -125,7 +125,7 @@
     <EmbeddedResource Include="Scripts\QueueRemove.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scripts\2000\QueueCreate.sql" />
+    <Content Include="Scripts\2000\QueueCreate.sql" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scripts\QueueDequeue.sql" />
@@ -149,8 +149,8 @@
     <EmbeddedResource Include="Scripts\QueueDequeueId.sql" />
     <EmbeddedResource Include="Scripts\QueueRead.sql" />
     <EmbeddedResource Include="Scripts\IdempotenceTrackerContains.sql" />
-    <Content Include="Scripts\2000\DeferredMessageManagerCreate.sql" />
-    <Content Include="Scripts\2000\DeferredMessageManagerExists.sql" />
+    <Content Include="Scripts\2000\DeferredMessageCreate.sql" />
+    <Content Include="Scripts\2000\DeferredMessageExists.sql" />
     <Content Include="Scripts\2000\IdempotenceTrackerCreate.sql" />
     <Content Include="Scripts\2000\IdempotenceTrackerExists.sql" />
     <Content Include="Scripts\2000\SubscriptionManagerExists.sql" />
@@ -158,9 +158,10 @@
     <EmbeddedResource Include="Scripts\IdempotenceTrackerRemove.sql" />
     <EmbeddedResource Include="Scripts\IdempotenceTrackerAdd.sql" />
     <EmbeddedResource Include="Scripts\IdempotenceTrackerExists.sql" />
-    <EmbeddedResource Include="Scripts\DeferredMessageManagerExists.sql" />
-    <EmbeddedResource Include="Scripts\DeferredMessageManagerRegister.sql" />
-    <Content Include="Scripts\DeferredMessageManagerCreate.sql" />
+    <EmbeddedResource Include="Scripts\DeferredMessageExists.sql" />
+    <EmbeddedResource Include="Scripts\DeferredMessageEnqueue.sql" />
+    <Content Include="Scripts\DeferredMessageCreate.sql" />
+    <EmbeddedResource Include="Scripts\DeferredMessageDequeue.sql" />
     <Content Include="Scripts\IdempotenceTrackerCreate.sql" />
     <Content Include="Scripts\SubscriptionManagerCreate.sql" />
   </ItemGroup>

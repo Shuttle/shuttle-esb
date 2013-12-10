@@ -141,6 +141,18 @@
     <value>Error trying to establish existence of queue '{0}' (path '{1}').  Exception: {2}</value>
     <comment>{0} = queue uri, {1} = path, {2} = exception</comment>
   </data>
+  <data name="QueueCreated" xml:space="preserve">
+    <value>Created private msmq queue '{0}'.</value>
+    <comment>{0} = queue uri</comment>
+  </data>
+  <data name="QueueDropped" xml:space="preserve">
+    <value>Dropped private msmq queue '{0}'.</value>
+    <comment>{0} = queue uri</comment>
+  </data>
+  <data name="QueuePurged" xml:space="preserve">
+    <value>Purged private msmq queue '{0}'.</value>
+    <comment>{0} = queue uri</comment>
+  </data>
   <data name="ReadError" xml:space="preserve">
     <value>Error trying to read top {0} messages from msmq queue '{1}'.  Exception: {2}</value>
     <comment>{0} = fetch count (top), {1} = queue uri, {2} = exception</comment>

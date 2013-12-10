@@ -29,7 +29,7 @@ namespace Shuttle.ESB.Core
 
 		private ISerializer serializer;
 		private ISubscriptionManager subscriptionManager;
-		private IDeferredMessageManager deferredMessageManager;
+		private IDeferredMessageQueue _deferredMessageQueue;
 
 		public ServiceBusConfiguration()
 		{
@@ -112,10 +112,10 @@ namespace Shuttle.ESB.Core
 
 		public bool HasDeferredMessageManager
 		{
-			get { return deferredMessageManager != null; }
+			get { return _deferredMessageQueue != null; }
 		}
 
-		public IDeferredMessageManager DeferredMessageManager
+		public IDeferredMessageQueue DeferredMessageQueue
 		{
 			get
 			{
@@ -124,9 +124,9 @@ namespace Shuttle.ESB.Core
 					throw new DeferredMessageManagerException(ESBResources.NoDeferredMessageManager);
 				}
 
-				return deferredMessageManager;
+				return _deferredMessageQueue;
 			}
-			set { deferredMessageManager = value; }
+			set { _deferredMessageQueue = value; }
 		}
 
 		public bool HasInbox

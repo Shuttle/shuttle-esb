@@ -1,0 +1,10 @@
+CREATE TABLE [dbo].[DeferredMessage](
+	[SequenceId] [int] IDENTITY(1,1) NOT NULL,
+	[DeferTillDate] [datetime] NOT NULL,
+	[TransportMessage] [image] NOT NULL,
+ CONSTRAINT [PK_DeferredMessage] PRIMARY KEY CLUSTERED 
+(
+	[SequenceId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO

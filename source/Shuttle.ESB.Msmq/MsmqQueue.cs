@@ -112,7 +112,7 @@ namespace Shuttle.ESB.Msmq
 
 			MessageQueue.Create(path, IsTransactional).Dispose();
 
-			log.Information(string.Format("Created private msmq queue '{0}'.", Uri));
+			log.Information(string.Format(MsmqResources.QueueCreated, Uri));
 		}
 
 		public void Drop()
@@ -129,7 +129,7 @@ namespace Shuttle.ESB.Msmq
 
 			MessageQueue.Delete(path);
 
-			log.Information(string.Format("Dropped private msmq queue '{0}'.", Uri));
+			log.Information(string.Format(MsmqResources.QueueDropped, Uri));
 		}
 
 		public void Purge()
@@ -139,7 +139,7 @@ namespace Shuttle.ESB.Msmq
 				queue.Purge();
 			}
 
-			log.Information(string.Format("Purged private msmq queue '{0}'.", Uri));
+			log.Information(string.Format(MsmqResources.QueuePurged, Uri));
 		}
 
 		public bool IsTransactional { get; private set; }

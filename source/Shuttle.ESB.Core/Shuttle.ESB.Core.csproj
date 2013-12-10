@@ -100,7 +100,7 @@
     <Compile Include="Exceptions\DeferredMessageManagerException.cs" />
     <Compile Include="Exceptions\IdempotenceTrackerException.cs" />
     <Compile Include="Idempotence\IIdempotenceTracker.cs" />
-    <Compile Include="MessageHandling\IDeferredMessageManager.cs" />
+    <Compile Include="MessageHandling\IDeferredMessageQueue.cs" />
     <Compile Include="Pipeline\Observers\Receive\IdempotenceTrackerObserver.cs" />
     <Compile Include="Pipeline\Observers\Shared\PeekObserver.cs" />
     <Compile Include="Pipeline\Pipelines\SendTransportMessagePipeline.cs" />
