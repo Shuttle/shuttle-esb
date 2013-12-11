@@ -37,6 +37,7 @@ namespace Shuttle.ESB.Core
 				.WithEvent<OnStartInboxProcessing>()
 				.WithEvent<OnStartControlInboxProcessing>()
 				.WithEvent<OnStartOutboxProcessing>()
+				.WithEvent<OnStartDeferredMessageProcessing>()
 				.WithEvent<OnStartWorker>();
 
 			RegisterStage("Final")

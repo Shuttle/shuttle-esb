@@ -93,7 +93,7 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="DeferredMessageQueue.cs" />
-    <Compile Include="Definitions\DeferredMessageManagerColumns.cs" />
+    <Compile Include="Definitions\DeferredMessageColumns.cs" />
     <Compile Include="Definitions\IdempotenceTrackerColumns.cs" />
     <Compile Include="Idempotence\IdempotenceTracker.cs" />
     <Compile Include="IScriptProvider.cs" />
@@ -160,6 +160,8 @@
     <EmbeddedResource Include="Scripts\IdempotenceTrackerExists.sql" />
     <EmbeddedResource Include="Scripts\DeferredMessageExists.sql" />
     <EmbeddedResource Include="Scripts\DeferredMessageEnqueue.sql" />
+    <EmbeddedResource Include="Scripts\DeferredMessageCount.sql" />
+    <EmbeddedResource Include="Scripts\DeferredMessagePurge.sql" />
     <Content Include="Scripts\DeferredMessageCreate.sql" />
     <EmbeddedResource Include="Scripts\DeferredMessageDequeue.sql" />
     <Content Include="Scripts\IdempotenceTrackerCreate.sql" />

@@ -20,9 +20,9 @@ namespace Shuttle.ESB.Core
 
 			var bus = pipelineEvent.GetServiceBus();
 
-			if (transportMessage.IsIgnoring() && bus.Configuration.HasDeferredMessageManager)
+			if (transportMessage.IsIgnoring() && bus.Configuration.HasDeferredMessageQueue)
 			{
-				bus.Configuration.DeferredMessageQueue.Enqueue(transportMessage.IgnoreTillDate, pipelineEvent.GetTransportMessageStream());
+				bus.Configuration.DeferredMessageConfiguration.DeferredMessageQueue.Enqueue(transportMessage.IgnoreTillDate, pipelineEvent.GetTransportMessageStream());
 
 				return;
 			}

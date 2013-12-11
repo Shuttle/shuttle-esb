@@ -5,16 +5,16 @@ namespace Shuttle.ESB.Core
 {
 	public class DeserializeTransportMessageObserver : IPipelineObserver<OnDeserializeTransportMessage>
 	{
-		private readonly ILog log;
+		private readonly ILog _log;
 
 		public DeserializeTransportMessageObserver()
 		{
-			log = Log.For(this);
+			_log = Log.For(this);
 		}
 
 		public void Execute(OnDeserializeTransportMessage pipelineEvent)
 		{
-			Guard.AgainstNull(pipelineEvent.GetTransportMessageStream(), "dequeuedStream");
+			Guard.AgainstNull(pipelineEvent.GetTransportMessageStream(), "transportMessageStream");
 			Guard.AgainstNull(pipelineEvent.GetWorkQueue(), "workQueue");
 			Guard.AgainstNull(pipelineEvent.GetErrorQueue(), "errorQueue");
 
@@ -29,8 +29,8 @@ namespace Shuttle.ESB.Core
 			}
 			catch (Exception ex)
 			{
-                Log.Error(ex.ToString());
-                log.Error(string.Format(ESBResources.TransportMessageDeserializationException, pipelineEvent.GetWorkQueue().Uri, ex));
+                _log.Error(ex.ToString());
+                _log.Error(string.Format(ESBResources.TransportMessageDeserializationException, pipelineEvent.GetWorkQueue().Uri, ex));
 
 				pipelineEvent.GetErrorQueue().Enqueue(pipelineEvent.GetWorkQueue().UnderlyingMessageData);
 				pipelineEvent.SetTransactionComplete();
@@ -55,9 +55,9 @@ namespace Shuttle.ESB.Core
 					this,
 					new TransportMessageSerializationEventArgs(pipelineEvent, transportMessage));
 
-            if (log.IsVerboseEnabled)
+            if (_log.IsVerboseEnabled)
             {
-                log.Verbose(string.Format(ESBResources.TransportMessageDeserialized, transportMessage.MessageType,
+                _log.Verbose(string.Format(ESBResources.TransportMessageDeserialized, transportMessage.MessageType,
                                           transportMessage.MessageId));
             }
 
@@ -76,9 +76,9 @@ namespace Shuttle.ESB.Core
 			pipelineEvent.SetTransactionComplete();
 			pipelineEvent.Pipeline.Abort();
 
-            if (log.IsVerboseEnabled)
+            if (_log.IsVerboseEnabled)
             {
-                log.Verbose(string.Format(ESBResources.TransportMessageIgnored, transportMessage.MessageId,
+                _log.Verbose(string.Format(ESBResources.TransportMessageIgnored, transportMessage.MessageId,
                                           transportMessage.IgnoreTillDate.ToString(ESBResources.FormatDateFull)));
             }
 		}

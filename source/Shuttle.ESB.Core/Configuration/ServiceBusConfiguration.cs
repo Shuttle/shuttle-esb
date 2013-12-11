@@ -22,34 +22,34 @@ namespace Shuttle.ESB.Core
 	{
 		public const string ServiceBusSectionName = "serviceBus";
 
-		private static ServiceBusSection serviceBusSection;
+		private static ServiceBusSection _serviceBusSection;
 
-		private readonly List<IEncryptionAlgorithm> encryptionAlgorithms = new List<IEncryptionAlgorithm>();
-		private readonly List<ICompressionAlgorithm> compressionAlgorithms = new List<ICompressionAlgorithm>();
+		private readonly List<IEncryptionAlgorithm> _encryptionAlgorithms = new List<IEncryptionAlgorithm>();
+		private readonly List<ICompressionAlgorithm> _compressionAlgorithms = new List<ICompressionAlgorithm>();
 
-		private ISerializer serializer;
-		private ISubscriptionManager subscriptionManager;
-		private IDeferredMessageQueue _deferredMessageQueue;
+		private ISerializer _serializer;
+		private ISubscriptionManager _subscriptionManager;
 
 		public ServiceBusConfiguration()
 		{
 			WorkerAvailabilityManager = new WorkerAvailabilityManager();
 			Modules = new ModuleCollection();
 			TransactionScope = new TransactionScopeConfiguration();
+			DeferredMessageConfiguration = new DeferredMessageConfiguration();
 		}
 
 		public static ServiceBusSection ServiceBusSection
 		{
 			get
 			{
-				return serviceBusSection ??
-				       (serviceBusSection = ConfigurationManager.GetSection(ServiceBusSectionName) as ServiceBusSection);
+				return _serviceBusSection ??
+				       (_serviceBusSection = ConfigurationManager.GetSection(ServiceBusSectionName) as ServiceBusSection);
 			}
 		}
 
 		public ISerializer Serializer
 		{
-			get { return serializer; }
+			get { return _serializer; }
 			set
 			{
 				Guard.AgainstNull(value, "serializer");
@@ -66,7 +66,7 @@ namespace Shuttle.ESB.Core
 					replay.Replay(value);
 				}
 
-				serializer = value;
+				_serializer = value;
 			}
 		}
 
@@ -93,7 +93,7 @@ namespace Shuttle.ESB.Core
 
 		public bool HasSubscriptionManager
 		{
-			get { return subscriptionManager != null; }
+			get { return _subscriptionManager != null; }
 		}
 
 		public ISubscriptionManager SubscriptionManager
@@ -105,29 +105,17 @@ namespace Shuttle.ESB.Core
 					throw new SubscriptionManagerException(ESBResources.NoSubscriptionManager);
 				}
 
-				return subscriptionManager;
+				return _subscriptionManager;
 			}
-			set { subscriptionManager = value; }
+			set { _subscriptionManager = value; }
 		}
 
-		public bool HasDeferredMessageManager
+		public bool HasDeferredMessageQueue
 		{
-			get { return _deferredMessageQueue != null; }
+			get { return DeferredMessageConfiguration.DeferredMessageQueue != null; }
 		}
 
-		public IDeferredMessageQueue DeferredMessageQueue
-		{
-			get
-			{
-				if (!HasDeferredMessageManager)
-				{
-					throw new DeferredMessageManagerException(ESBResources.NoDeferredMessageManager);
-				}
-
-				return _deferredMessageQueue;
-			}
-			set { _deferredMessageQueue = value; }
-		}
+		public IDeferredMessageConfiguration DeferredMessageConfiguration { get; set; }
 
 		public bool HasInbox
 		{
@@ -167,27 +155,27 @@ namespace Shuttle.ESB.Core
 		public IEncryptionAlgorithm FindEncryptionAlgorithm(string name)
 		{
 			return
-				encryptionAlgorithms.Find(algorithm => algorithm.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+				_encryptionAlgorithms.Find(algorithm => algorithm.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 		}
 
 		public void AddEncryptionAlgorithm(IEncryptionAlgorithm algorithm)
 		{
 			Guard.AgainstNull(algorithm, "algorithm");
 
-			encryptionAlgorithms.Add(algorithm);
+			_encryptionAlgorithms.Add(algorithm);
 		}
 
 		public ICompressionAlgorithm FindCompressionAlgorithm(string name)
 		{
 			return
-				compressionAlgorithms.Find(algorithm => algorithm.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+				_compressionAlgorithms.Find(algorithm => algorithm.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 		}
 
 		public void AddCompressionAlgorithm(ICompressionAlgorithm algorithm)
 		{
 			Guard.AgainstNull(algorithm, "algorithm");
 
-			compressionAlgorithms.Add(algorithm);
+			_compressionAlgorithms.Add(algorithm);
 		}
 
 		public bool IsWorker

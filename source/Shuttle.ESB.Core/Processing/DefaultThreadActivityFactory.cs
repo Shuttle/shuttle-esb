@@ -22,5 +22,10 @@ namespace Shuttle.ESB.Core
         {
             return new ThreadActivity(bus.Configuration.Outbox);
         }
+
+	    public IThreadActivity CreateDeferredMessageThreadActivity(IServiceBus bus)
+	    {
+		    return new ThreadActivity(bus.Configuration.DeferredMessageConfiguration);
+	    }
     }
 }

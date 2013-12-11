@@ -7,5 +7,6 @@ namespace Shuttle.ESB.Core
         IThreadActivity CreateInboxThreadActivity(IServiceBus bus);
         IThreadActivity CreateControlInboxThreadActivity(IServiceBus bus);
         IThreadActivity CreateOutboxThreadActivity(IServiceBus bus);
+	    IThreadActivity CreateDeferredMessageThreadActivity(IServiceBus bus);
     }
 }

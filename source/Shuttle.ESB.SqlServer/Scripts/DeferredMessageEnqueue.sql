@@ -1,4 +1,4 @@
 insert into [dbo].[DeferredMessage]
-	(DeferTillDate, TransportMessage) 
+	(DeferTillDate, MessageBody) 
 values 
-	(@DeferTillDate, @TransportMessage)
+	(@DeferTillDate, @MessageBody)

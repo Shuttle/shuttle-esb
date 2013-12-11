@@ -16,6 +16,7 @@ namespace Shuttle.ESB.Core
         IPipelineObserver<OnStartInboxProcessing>,
         IPipelineObserver<OnStartControlInboxProcessing>,
         IPipelineObserver<OnStartOutboxProcessing>,
+		IPipelineObserver<OnStartDeferredMessageProcessing>,
         IPipelineObserver<OnStartWorker>,
         IPipelineObserver<OnRecoverInboxJournal>,
         IPipelineObserver<OnRecoverControlInboxJournal>
@@ -159,6 +160,21 @@ namespace Shuttle.ESB.Core
                     "OutboxProcessor",
                     bus.Configuration.Outbox.ThreadCount,
                     new OutboxProcessorFactory(bus)).Start());
+        }
+
+		public void Execute(OnStartDeferredMessageProcessing pipelineEvent)
+        {
+            if (!bus.Configuration.HasDeferredMessageQueue || bus.Configuration.IsWorker)
+            {
+                return;
+            }
+
+            pipelineEvent.Pipeline.State.Add(
+				"DeferredMessageThreadPool",
+                new ProcessorThreadPool(
+					"DeferredMessageProcessor",
+                    1,
+					new DeferredMessageProcessorFactory(bus)).Start());
         }
 
         public void Execute(OnStartWorker pipelineEvent)

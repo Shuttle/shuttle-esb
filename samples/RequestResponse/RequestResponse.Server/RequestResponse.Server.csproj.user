@@ -4,4 +4,7 @@
     <StartAction>Program</StartAction>
     <StartProgram>C:\development.github\shuttle-esb\samples\RequestResponse\RequestResponse.Server\bin\debug\Shuttle.Core.Host.exe</StartProgram>
   </PropertyGroup>
+  <PropertyGroup>
+    <ProjectView>ProjectFiles</ProjectView>
+  </PropertyGroup>
 </Project>

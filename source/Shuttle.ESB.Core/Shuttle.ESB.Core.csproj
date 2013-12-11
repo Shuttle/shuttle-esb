@@ -90,19 +90,25 @@
     <Compile Include="Compression\GZipCompressionAlgorithm.cs" />
     <Compile Include="Configuration\Builder\IServiceBusConfigurationBuilder.cs" />
     <Compile Include="Configuration\Builder\ServiceBusConfigurationBuilder.cs" />
+    <Compile Include="Configuration\DeferredMessageConfiguration.cs" />
     <Compile Include="Configuration\IControlInboxQueueConfiguration.cs" />
+    <Compile Include="Configuration\IDeferredMessageConfiguration.cs" />
     <Compile Include="Configuration\IOutboxQueueConfiguration.cs" />
     <Compile Include="Configuration\ITransactionScopeConfiguration.cs" />
     <Compile Include="Configuration\ModuleCollection.cs" />
     <Compile Include="Configuration\Registration\RegisterSharedConfigurationTask.cs" />
+    <Compile Include="Configuration\Section\DeferredMessageElement.cs" />
     <Compile Include="Configuration\Section\TransactionScopeElement.cs" />
     <Compile Include="Configuration\TransactionScopeConfiguration.cs" />
-    <Compile Include="Exceptions\DeferredMessageManagerException.cs" />
+    <Compile Include="Exceptions\DeferredMessageException.cs" />
     <Compile Include="Exceptions\IdempotenceTrackerException.cs" />
     <Compile Include="Idempotence\IIdempotenceTracker.cs" />
     <Compile Include="MessageHandling\IDeferredMessageQueue.cs" />
+    <Compile Include="Pipeline\Observers\DeferredMessage\DeferredMessageDequeueObserver.cs" />
+    <Compile Include="Pipeline\Observers\DeferredMessage\DeferredMessageDeserializeTransportMessageObserver.cs" />
     <Compile Include="Pipeline\Observers\Receive\IdempotenceTrackerObserver.cs" />
     <Compile Include="Pipeline\Observers\Shared\PeekObserver.cs" />
+    <Compile Include="Pipeline\Pipelines\DeferredMessagePipeline.cs" />
     <Compile Include="Pipeline\Pipelines\SendTransportMessagePipeline.cs" />
     <Compile Include="Pipeline\Transactions\DefaultServiceBusTransactionScopeFactory.cs" />
     <Compile Include="Exceptions\ProcessMessageMethodMissingException.cs" />
@@ -117,6 +123,8 @@
     <Compile Include="Processing\Inbox\InboxProcessorFactory.cs" />
     <Compile Include="Processing\Inbox\InboxProcessor.cs" />
     <Compile Include="Processing\IThreadActivityFactory.cs" />
+    <Compile Include="Processing\Outbox\OutboxProcessor.cs" />
+    <Compile Include="Processing\Outbox\OutboxProcessorFactory.cs" />
     <Compile Include="Processing\Policies\IServiceBusPolicy.cs" />
     <Compile Include="Processing\Policies\MessageFailureAction.cs" />
     <Compile Include="Processing\Policies\DefaultServiceBusPolicy.cs" />
@@ -255,7 +263,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Processing\Outbox\OutboxProcessorFactory.cs" />
+    <Compile Include="Processing\DeferredMessage\DeferredMessageProcessorFactory.cs" />
     <Compile Include="Processing\IMessageFailureConfiguration.cs" />
     <Compile Include="Queues\MemoryQueue.cs" />
     <Compile Include="Queues\MemoryQueueFactory.cs" />
@@ -281,7 +289,7 @@
     <Compile Include="ServiceBus\ServiceBus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Configuration\ServiceBusConfiguration.cs" />
-    <Compile Include="Processing\Outbox\OutboxProcessor.cs" />
+    <Compile Include="Processing\DeferredMessage\DeferredMessageProcessor.cs" />
     <Compile Include="Pipeline\Transactions\ServiceBusTransactionScope.cs" />
   </ItemGroup>
   <ItemGroup>

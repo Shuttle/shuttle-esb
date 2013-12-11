@@ -1,7 +1,7 @@
 CREATE TABLE [dbo].[DeferredMessage](
 	[SequenceId] [int] IDENTITY(1,1) NOT NULL,
 	[DeferTillDate] [datetime] NOT NULL,
-	[TransportMessage] [image] NOT NULL,
+	[MessageBody] [image] NOT NULL,
  CONSTRAINT [PK_DeferredMessage] PRIMARY KEY CLUSTERED 
 (
 	[SequenceId] ASC

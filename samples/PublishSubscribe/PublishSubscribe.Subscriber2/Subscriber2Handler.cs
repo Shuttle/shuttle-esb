@@ -17,6 +17,11 @@ namespace PublishSubscribe.Subscriber2
 			{
 				Comment = comment
 			});
+			
+			context.Bus.SendDeferredReply(DateTime.Now.AddSeconds(5), new WorkDoneEvent
+			{
+				Comment = "[DEFERRED / Subscriber2] : order id = " + context.Message.OrderId
+			});
 		}
 
     	public bool IsReusable

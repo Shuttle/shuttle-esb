@@ -100,6 +100,7 @@
     <Compile Include="RabbitMq\RabbitMqSectionFixture.cs" />
     <Compile Include="RabbitMq\RabbitTransactionalInboxTest.cs" />
     <Compile Include="RabbitMq\RabbitMqQueueTest.cs" />
+    <Compile Include="ServiceBusSection\DeferredMessageServiceBusSection.cs" />
     <Compile Include="ServiceBusSection\ServiceBusSectionFixture.cs" />
     <Compile Include="ServiceBusSection\WorkerServiceBusSection.cs" />
     <Compile Include="ServiceBusSection\SharedServiceBusSection.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="Msmq\MsmqQueueTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MemoryInboxTest.cs" />
+    <Compile Include="SqlServer\DeferredMessageQueueTest.cs" />
     <Compile Include="SqlServer\SqlInboxTest.cs" />
     <Compile Include="IntegrationFixture.cs" />
     <Compile Include="SqlServer\SqlQueueTest.cs" />
@@ -151,6 +153,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="RabbitMq\files\RabbitMq.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ServiceBusSection\files\DeferredMessage-Full.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

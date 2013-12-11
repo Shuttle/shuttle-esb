@@ -58,7 +58,7 @@ namespace Shuttle.ESB.Test.Integration.SqlServer
 		}
 
 		[Test]
-		public void Should_be_able_to_send_and_receive_a_message()
+		public void Should_be_able_to_enqueue_and_dequeue_a_message()
 		{
 			var stream = new MemoryStream();
 

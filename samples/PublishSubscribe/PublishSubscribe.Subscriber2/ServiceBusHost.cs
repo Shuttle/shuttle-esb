@@ -31,6 +31,7 @@ namespace PublishSubscribe.Subscriber2
             bus = ServiceBus
                 .Create()
                 .SubscriptionManager(subscriptionManager)
+                //.DeferredMessageQueue(DeferredMessageQueue.Default()) <-- uncomment to enable the sql server deferred message queue
                 .AddModule(new SystemExceptionModule())
                 .Start();
         }

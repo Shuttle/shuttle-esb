@@ -23,6 +23,7 @@ namespace Shuttle.ESB.Core
 		private IProcessorThreadPool controlThreadPool;
 		private IProcessorThreadPool inboxThreadPool;
 		private IProcessorThreadPool outboxThreadPool;
+		private IProcessorThreadPool deferredMessageThreadPool;
 
 		private readonly IEnumerable<string> EmptyPublishFlyweight =
 			new ReadOnlyCollection<string>(new List<string>());
@@ -241,6 +242,7 @@ namespace Shuttle.ESB.Core
 			inboxThreadPool = startupPipeline.State.Get<IProcessorThreadPool>("InboxThreadPool");
 			controlThreadPool = startupPipeline.State.Get<IProcessorThreadPool>("ControlInboxThreadPool");
 			outboxThreadPool = startupPipeline.State.Get<IProcessorThreadPool>("OutboxThreadPool");
+			deferredMessageThreadPool = startupPipeline.State.Get<IProcessorThreadPool>("DeferredMessageThreadPool");
 
 			started = true;
 

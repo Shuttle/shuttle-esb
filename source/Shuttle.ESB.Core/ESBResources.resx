@@ -463,7 +463,7 @@
   <data name="NoIdempotenceTracker" xml:space="preserve">
     <value>No idempotence tracker has been specified.</value>
   </data>
-  <data name="NoDeferredMessageManager" xml:space="preserve">
-    <value>No deferred message manager has been specified.</value>
+  <data name="NoDeferredMessageQueue" xml:space="preserve">
+    <value>No deferred message queue has been specified.</value>
   </data>
 </root>

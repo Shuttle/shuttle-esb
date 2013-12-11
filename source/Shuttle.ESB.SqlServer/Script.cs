@@ -25,9 +25,11 @@ namespace Shuttle.ESB.SqlServer
         public static readonly Script IdempotenceTrackerRemove = new Script("IdempotenceTrackerRemove");
         public static readonly Script IdempotenceTrackerContains = new Script("IdempotenceTrackerContains");
 
-		public static readonly Script DeferredMessageManagerExists = new Script("DeferredMessageManagerExists");
-		public static readonly Script DeferredMessageQueueEnqueue = new Script("DeferredMessageQueueEnqueue");
-		public static readonly Script DeferredMessageQueueDequeue = new Script("DeferredMessageQueueDequeue");
+		public static readonly Script DeferredMessageExists = new Script("DeferredMessageExists");
+		public static readonly Script DeferredMessageEnqueue = new Script("DeferredMessageEnqueue");
+		public static readonly Script DeferredMessageDequeue = new Script("DeferredMessageDequeue");
+		public static readonly Script DeferredMessagePurge = new Script("DeferredMessagePurge");
+		public static readonly Script DeferredMessageCount = new Script("DeferredMessageCount");
 
         private Script(string name)
         {

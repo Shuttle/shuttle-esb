@@ -358,11 +358,11 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No deferred message manager has been specified..
+        ///   Looks up a localized string similar to No deferred message queue has been specified..
         /// </summary>
-        public static string NoDeferredMessageManager {
+        public static string NoDeferredMessageQueue {
             get {
-                return ResourceManager.GetString("NoDeferredMessageManager", resourceCulture);
+                return ResourceManager.GetString("NoDeferredMessageQueue", resourceCulture);
             }
         }
         

@@ -88,6 +88,15 @@ namespace Shuttle.ESB.SqlServer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not get count for DeferredMessage table.  Exception: {0}.  Query: {1}.
+        /// </summary>
+        internal static string DeferredMessageCountError {
+            get {
+                return ResourceManager.GetString("DeferredMessageCountError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The database has not been configured for deferred message storage.  Please run the DeferredMessageCreate.sql script file against your database..
         /// </summary>
         internal static string DeferredMessageDatabaseNotConfigured {
@@ -111,6 +120,15 @@ namespace Shuttle.ESB.SqlServer {
         internal static string DeferredMessageEnqueueError {
             get {
                 return ResourceManager.GetString("DeferredMessageEnqueueError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not purge DeferredMessage table.  Exception: {0}.  Query: {1}.
+        /// </summary>
+        internal static string DeferredMessagePurgeError {
+            get {
+                return ResourceManager.GetString("DeferredMessagePurgeError", resourceCulture);
             }
         }
         

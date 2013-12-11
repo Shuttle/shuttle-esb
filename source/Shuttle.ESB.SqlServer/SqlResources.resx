@@ -129,6 +129,10 @@
     <value>Could not create queue '{0}'.  Exception: {1}.  Query: {2}</value>
     <comment>{0} = queue uri, {1} = exception message, {2} = query</comment>
   </data>
+  <data name="DeferredMessageCountError" xml:space="preserve">
+    <value>Could not get count for DeferredMessage table.  Exception: {0}.  Query: {1}</value>
+    <comment>{0} = exception message, {1} = query</comment>
+  </data>
   <data name="DeferredMessageDatabaseNotConfigured" xml:space="preserve">
     <value>The database has not been configured for deferred message storage.  Please run the DeferredMessageCreate.sql script file against your database.</value>
   </data>
@@ -138,6 +142,10 @@
   </data>
   <data name="DeferredMessageEnqueueError" xml:space="preserve">
     <value>Could not enqueue a deferred message.  Exception: {0}.  Query: {1}</value>
+    <comment>{0} = exception message, {1} = query</comment>
+  </data>
+  <data name="DeferredMessagePurgeError" xml:space="preserve">
+    <value>Could not purge DeferredMessage table.  Exception: {0}.  Query: {1}</value>
     <comment>{0} = exception message, {1} = query</comment>
   </data>
   <data name="DequeueError" xml:space="preserve">

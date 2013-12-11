@@ -108,6 +108,15 @@ namespace Shuttle.ESB.Core
 			return this;
 		}
 
+		public IServiceBusConfigurationBuilder DeferredMessageQueue(IDeferredMessageQueue deferredMessageQueue)
+		{
+			Guard.AgainstNull(deferredMessageQueue, "deferredMessageQueue");
+
+			configuration.DeferredMessageConfiguration.DeferredMessageQueue = deferredMessageQueue;
+
+			return this;
+		}
+
 		public IServiceBusConfigurationBuilder AddModule(IModule module)
 		{
 			Guard.AgainstNull(module, "module");

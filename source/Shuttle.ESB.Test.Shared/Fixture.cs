@@ -51,14 +51,6 @@ namespace Shuttle.ESB.Test.Shared
                                                                   DurationToSleepWhenIdle = new[] { TimeSpan.FromMilliseconds(5) },
                                                                   ThreadCount = 1
                                                               },
-                                                      //Outbox =
-                                                      //    new OutboxQueueConfiguration
-                                                      //        {
-                                                      //            WorkQueue = CreateMemoryOutboxWork(),
-                                                      //            ErrorQueue = CreateMemoryOutboxError(),
-                                                      //            DurationToSleepWhenIdle = new[] { TimeSpan.FromMilliseconds(5) },
-                                                      //            ThreadCount = 1
-                                                      //        },
                                                       Serializer = new DefaultSerializer(),
                                                       MessageHandlerFactory = new DefaultMessageHandlerFactory(),
                                                       PipelineFactory = new DefaultPipelineFactory(),

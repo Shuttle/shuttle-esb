@@ -38,6 +38,9 @@ namespace Shuttle.ESB.Core
         private static readonly ConfigurationProperty outbox =
             new ConfigurationProperty("outbox", typeof (OutboxElement), null, ConfigurationPropertyOptions.None);
 
+        private static readonly ConfigurationProperty deferredMessage =
+			new ConfigurationProperty("deferredMessage", typeof(DeferredMessageElement), null, ConfigurationPropertyOptions.None);
+
         private static readonly ConfigurationProperty queueCreationType =
             new ConfigurationProperty("queueCreationType", typeof (QueueCreationType), QueueCreationType.Local,
                                       ConfigurationPropertyOptions.None);
@@ -57,6 +60,7 @@ namespace Shuttle.ESB.Core
             base.Properties.Add(inbox);
             base.Properties.Add(outbox);
             base.Properties.Add(control);
+            base.Properties.Add(deferredMessage);
             base.Properties.Add(queueCreationType);
             base.Properties.Add(worker);
             base.Properties.Add(transactionScope);
@@ -90,6 +94,12 @@ namespace Shuttle.ESB.Core
         public OutboxElement Outbox
         {
             get { return (OutboxElement) this[outbox]; }
+        }
+
+		[ConfigurationProperty("deferredMessage", IsRequired = false)]
+		public DeferredMessageElement DeferredMessage
+        {
+			get { return (DeferredMessageElement)this[deferredMessage]; }
         }
 
         [ConfigurationProperty("queueCreationType", IsRequired = false, DefaultValue = QueueCreationType.Local)]

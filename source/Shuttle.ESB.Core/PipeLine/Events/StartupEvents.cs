@@ -14,6 +14,7 @@ namespace Shuttle.ESB.Core
 	public class OnStartInboxProcessing : PipelineEvent {}
 	public class OnStartControlInboxProcessing : PipelineEvent {}
 	public class OnStartOutboxProcessing : PipelineEvent {}
+	public class OnStartDeferredMessageProcessing : PipelineEvent {}
 	public class OnStartWorker : PipelineEvent {}
 	public class OnRecoverInboxJournal : PipelineEvent {}
 	public class OnRecoverControlInboxJournal : PipelineEvent { }

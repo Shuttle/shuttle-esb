@@ -8,7 +8,9 @@ namespace Shuttle.ESB.SqlServer
 {
 	public class DeferredMessageQueue :
 		IDeferredMessageQueue,
-		IRequireInitialization
+		IRequireInitialization,
+		IPurge,
+		ICount
 	{
 		private static readonly DataSource DeferredMessageDataSource = new DataSource("DeferredMessage",
 		                                                                              new SqlServerDbDataParameterFactory(),
@@ -27,12 +29,16 @@ namespace Shuttle.ESB.SqlServer
 		private string _dequeueQueryStatement;
 		private string _enqueueQueryStatement;
 
+		private IQuery _countQuery;
+		private IQuery _purgeQuery;
+
+
 		private readonly ILog _log;
 
-		public static ISubscriptionManager Default()
+		public static IDeferredMessageQueue Default()
 		{
 			return
-				new SubscriptionManager(new ScriptProvider(),
+				new DeferredMessageQueue(new ScriptProvider(),
 				                        DatabaseConnectionFactory.Default(),
 				                        DatabaseGateway.Default());
 		}
@@ -56,8 +62,10 @@ namespace Shuttle.ESB.SqlServer
 
 		private void BuildQueries()
 		{
-			_dequeueQueryStatement = _scriptProvider.GetScript(Script.DeferredMessageQueueDequeue);
-			_enqueueQueryStatement = _scriptProvider.GetScript(Script.DeferredMessageQueueEnqueue);
+			_dequeueQueryStatement = _scriptProvider.GetScript(Script.DeferredMessageDequeue);
+			_enqueueQueryStatement = _scriptProvider.GetScript(Script.DeferredMessageEnqueue);
+			_purgeQuery = RawQuery.CreateFrom(_scriptProvider.GetScript(Script.DeferredMessagePurge));
+			_countQuery = RawQuery.CreateFrom(_scriptProvider.GetScript(Script.DeferredMessageCount));
 		}
 
 		public void Enqueue(DateTime at, Stream stream)
@@ -69,8 +77,8 @@ namespace Shuttle.ESB.SqlServer
 					_databaseGateway.ExecuteUsing(
 						DeferredMessageDataSource,
 						RawQuery.CreateFrom(_enqueueQueryStatement)
-						        .AddParameterValue(DeferredMessageManagerColumns.DeferTillDate, at)
-						        .AddParameterValue(DeferredMessageManagerColumns.MessageBody, stream.ToBytes()));
+						        .AddParameterValue(DeferredMessageColumns.DeferTillDate, at)
+						        .AddParameterValue(DeferredMessageColumns.MessageBody, stream.ToBytes()));
 				}
 			}
 			catch (Exception ex)
@@ -87,12 +95,15 @@ namespace Shuttle.ESB.SqlServer
 			{
 				try
 				{
-					var row = _databaseGateway.GetSingleRowUsing(
-						DeferredMessageDataSource,
-						RawQuery.CreateFrom(_dequeueQueryStatement)
-						        .AddParameterValue(DeferredMessageManagerColumns.DeferTillDate, now));
+					using (_databaseConnectionFactory.Create(DeferredMessageDataSource))
+					{
+						var row = _databaseGateway.GetSingleRowUsing(
+							DeferredMessageDataSource,
+							RawQuery.CreateFrom(_dequeueQueryStatement)
+							        .AddParameterValue(DeferredMessageColumns.DeferTillDate, now));
 
-					return row == null ? null : new MemoryStream((byte[]) row["MessageBody"]);
+						return row == null ? null : new MemoryStream((byte[]) row["MessageBody"]);
+					}
 				}
 				catch (Exception ex)
 				{
@@ -111,9 +122,46 @@ namespace Shuttle.ESB.SqlServer
 					DeferredMessageDataSource,
 					RawQuery.CreateFrom(
 						_scriptProvider.GetScript(
-							Script.DeferredMessageManagerExists))) != 1)
+							Script.DeferredMessageExists))) != 1)
 				{
-					throw new DeferredMessageManagerException(SqlResources.DeferredMessageDatabaseNotConfigured);
+					throw new DeferredMessageException(SqlResources.DeferredMessageDatabaseNotConfigured);
+				}
+			}
+		}
+
+		public void Purge()
+		{
+			try
+			{
+				using (_databaseConnectionFactory.Create(DeferredMessageDataSource))
+				{
+					_databaseGateway.ExecuteUsing(DeferredMessageDataSource, _purgeQuery);
+				}
+			}
+			catch (Exception ex)
+			{
+				_log.Error(string.Format(SqlResources.DeferredMessagePurgeError, ex.Message, _purgeQuery));
+
+				throw;
+			}
+		}
+
+		public int Count
+		{
+			get
+			{
+				try
+				{
+					using (_databaseConnectionFactory.Create(DeferredMessageDataSource))
+					{
+						return _databaseGateway.GetScalarUsing<int>(DeferredMessageDataSource, _countQuery);
+					}
+				}
+				catch (Exception ex)
+				{
+					_log.Error(string.Format(SqlResources.DeferredMessageCountError, ex.Message, _countQuery));
+
+					return 0;
 				}
 			}
 		}

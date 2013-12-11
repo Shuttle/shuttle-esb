@@ -55,9 +55,9 @@ namespace Shuttle.ESB.SqlServer
 			Guard.AgainstNull(databaseConnectionFactory, "databaseConnectionFactory");
 			Guard.AgainstNull(databaseGateway, "databaseGateway");
 
-			this._scriptProvider = scriptProvider;
-			this._databaseConnectionFactory = databaseConnectionFactory;
-			this._databaseGateway = databaseGateway;
+			_scriptProvider = scriptProvider;
+			_databaseConnectionFactory = databaseConnectionFactory;
+			_databaseGateway = databaseGateway;
 
 			if (!uri.Scheme.Equals(SCHEME, StringComparison.InvariantCultureIgnoreCase))
 			{
@@ -158,7 +158,7 @@ namespace Shuttle.ESB.SqlServer
 			}
 			catch (Exception ex)
 			{
-				_log.Error(string.Format(SqlResources.DropError, Uri, ex.Message, _createQuery));
+				_log.Error(string.Format(SqlResources.DropError, Uri, ex.Message, _dropQuery));
 
 				throw;
 			}
@@ -180,7 +180,7 @@ namespace Shuttle.ESB.SqlServer
 			}
 			catch (Exception ex)
 			{
-				_log.Error(string.Format(SqlResources.PurgeError, Uri, ex.Message, _createQuery));
+				_log.Error(string.Format(SqlResources.PurgeError, Uri, ex.Message, _purgeQuery));
 
 				throw;
 			}
@@ -345,7 +345,7 @@ namespace Shuttle.ESB.SqlServer
 				}
 				catch (Exception ex)
 				{
-					_log.Error(string.Format(SqlResources.DequeueIdError, Uri, ex.Message, _createQuery));
+					_log.Error(string.Format(SqlResources.DequeueIdError, Uri, ex.Message, _dequeueIdQueryStatement));
 
 					throw;
 				}
@@ -368,7 +368,7 @@ namespace Shuttle.ESB.SqlServer
 			}
 			catch (Exception ex)
 			{
-				_log.Error(string.Format(SqlResources.RemoveError, Uri, ex.Message, _createQuery));
+				_log.Error(string.Format(SqlResources.RemoveError, Uri, ex.Message, _removeQueryStatement));
 
 				throw;
 			}
@@ -412,9 +412,7 @@ namespace Shuttle.ESB.SqlServer
 			}
 			catch (Exception ex)
 			{
-				_log.Error(string.Format(
-					"",
-					top, Uri, ex.Message, _createQuery));
+				_log.Error(string.Format(SqlResources.ReadError, top, Uri, ex.Message, _createQuery));
 
 				throw;
 			}
