@@ -9,7 +9,7 @@ namespace Shuttle.ESB.Core
         private static readonly ConfigurationProperty durationToSleepWhenIdle =
             new ConfigurationProperty("durationToSleepWhenIdle", typeof(TimeSpan[]), null, ConfigurationPropertyOptions.None);
 
-        public DeferredMessageElement()
+	    public DeferredMessageElement()
         {
             base.Properties.Add(durationToSleepWhenIdle);
         }

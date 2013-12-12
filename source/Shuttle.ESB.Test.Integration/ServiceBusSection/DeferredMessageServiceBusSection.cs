@@ -17,6 +17,6 @@ namespace Shuttle.ESB.Test.Integration
             Assert.AreEqual(TimeSpan.FromMilliseconds(250), section.DeferredMessage.DurationToSleepWhenIdle[0]);
 			Assert.AreEqual(TimeSpan.FromSeconds(1), section.DeferredMessage.DurationToSleepWhenIdle[1]);
 			Assert.AreEqual(TimeSpan.FromSeconds(3), section.DeferredMessage.DurationToSleepWhenIdle[2]);
-        }
+		}
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Shuttle.Core.Infrastructure;
 
@@ -11,13 +10,14 @@ namespace Shuttle.ESB.Core
 		public ServiceBusConfigurationBuilder()
 		{
 			var tasks = new List<RegistrationTask>
-          {
-              new RegisterSharedConfigurationTask(),
-              new RegisterControlInboxQueueConfigurationTask(),
-              new RegisterInboxQueueConfigurationTask(),
-              new RegisterOutboxQueueConfigurationTask(),
-              new RegisterWorkerConfigurationTask()
-          };
+				{
+					new RegisterSharedConfigurationTask(),
+					new RegisterDeferredMessageConfigurationTask(),
+					new RegisterControlInboxQueueConfigurationTask(),
+					new RegisterInboxQueueConfigurationTask(),
+					new RegisterOutboxQueueConfigurationTask(),
+					new RegisterWorkerConfigurationTask()
+				};
 
 			tasks.ForEach(task => task.Execute(configuration));
 
@@ -170,7 +170,8 @@ namespace Shuttle.ESB.Core
 			return this;
 		}
 
-		public IServiceBusConfigurationBuilder TransactionScopeFactory(IServiceBusTransactionScopeFactory serviceBusTransactionScopeFactory)
+		public IServiceBusConfigurationBuilder TransactionScopeFactory(
+			IServiceBusTransactionScopeFactory serviceBusTransactionScopeFactory)
 		{
 			Guard.AgainstNull(serviceBusTransactionScopeFactory, "serviceBusTransactionScopeFactory");
 

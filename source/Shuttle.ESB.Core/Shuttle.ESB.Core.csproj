@@ -96,6 +96,7 @@
     <Compile Include="Configuration\IOutboxQueueConfiguration.cs" />
     <Compile Include="Configuration\ITransactionScopeConfiguration.cs" />
     <Compile Include="Configuration\ModuleCollection.cs" />
+    <Compile Include="Configuration\Registration\RegisterDeferredMessageConfigurationTask.cs" />
     <Compile Include="Configuration\Registration\RegisterSharedConfigurationTask.cs" />
     <Compile Include="Configuration\Section\DeferredMessageElement.cs" />
     <Compile Include="Configuration\Section\TransactionScopeElement.cs" />
