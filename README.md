@@ -3,9 +3,7 @@ shuttle-esb
 
 [Have a look at our YouTube channel](http://www.youtube.com/user/shuttleservicebus)
 
-[Please visit our wiki for all the documentation](https://github.com/eben-roux/shuttle-esb/wiki/Shuttle-ESB)
-
-We still have a lot of information on our [old wiki](http://servicebus.co.za/) but we will be migrating that here as time goes by.  Feel free to help in this regard if you have time :)
+We still have a lot of information on our [old wiki](http://servicebus.co.za/) but we will be migrating that as time goes by.
 
 getting started with the source
 ===============================
