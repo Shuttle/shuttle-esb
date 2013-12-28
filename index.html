@@ -1,6 +1,12 @@
 ---
 layout: default
 ---
+<div class="jumbotron">
+	<h1>shuttle-esb</h1>
+		<p>Shuttle ESB is a free open-source enterprise service bus that provides you with a mechanism to create <a href='{{ site.baseurl }}/autonomous-component/index.html'>Autonomous Business Components</a> that are loosely coupled.  This enables you to develop and deploy specific business functionality that can be independently versioned.</p>
+		<a class="btn btn-primary btn-lg">Getting Started</a>
+	</p>
+</div>
 
 {% for post in paginator.posts %}
 <div class="row">
@@ -16,15 +22,15 @@ layout: default
 <div class="row">
   <div class="col-md-12">
     <div class="pagination">
-      <ul>
+      <ul class="pagination">
         {% if paginator.previous_page %}
           {% if paginator.previous_page == 1 %}
-          <li><a href="/">Prev</a></li>
+          <li><a href="/">&laquo;</a></li>
           {% else %}
-          <li><a href="/page{{ paginator.previous_page }}">Prev</a></li>
+          <li><a href="/page{{ paginator.previous_page }}">&laquo;</a></li>
           {% endif %}
         {% else %}
-        <li><span class="disabled">Prev</span></li>
+        <li><span class="disabled">&laquo;</span></li>
         {% endif %}
         {% if paginator.page == 1 %}
         <li><span class="active">1</span></li>
@@ -39,9 +45,9 @@ layout: default
           {% endif %}
         {% endfor %}
         {% if paginator.next_page %}
-        <li><a href="/page{{ paginator.next_page }}">Next</a></li>
+        <li><a href="/page{{ paginator.next_page }}">&raquo;</a></li>
         {% else %}
-        <li><span class="disabled">Next</span></li>
+        <li><span class="disabled">&raquo;</span></li>
         {% endif %}
       </ul>
     </div>
