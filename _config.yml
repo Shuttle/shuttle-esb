@@ -1,7 +1,7 @@
 name: "Shuttle Service Bus"
 description: "Shuttle ESB is a free open-source enterprise service bus"
 
-url: "http://localhost:4000"
+baseurl: "http://shuttle.github.io/shuttle-esb"
 
 paginate: 1
 
