@@ -3,7 +3,7 @@ description: "Shuttle ESB is a free open-source enterprise service bus"
 
 baseurl: "http://shuttle.github.io/shuttle-esb"
 
-paginate: 1
+paginate: 10
 
 markdown: redcarpet
 permalink: pretty
