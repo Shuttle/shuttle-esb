@@ -1,0 +1,31 @@
+---
+title: Archive
+layout: default
+---
+
+
+
+<ul class='blog-archive'>
+  {% for post in site.posts %}
+
+    {% unless post.next %}
+      <h2>{{ post.date | date: '%Y' }}</h2>
+      <h4>{{ post.date | date: '%B' }}</h4>
+    {% else %}
+      {% capture year %}{{ post.date | date: '%Y' }}{% endcapture %}
+      {% capture nyear %}{{ post.next.date | date: '%Y' }}{% endcapture %}
+      {% capture month %}{{ post.date | date: '%m%Y' }}{% endcapture %}
+      {% capture nmonth %}{{ post.next.date | date: '%m%Y' }}{% endcapture %}
+
+      {% if year != nyear %}
+        <h2>{{ post.date | date: '%Y' }}</h2>
+      {% endif %}
+	  
+	  {% if month != nmonth %}
+        <h4>{{ post.date | date: '%B' }}</h4>
+	  {% endif %}
+    {% endunless %}
+
+    <li>{{ post.date | date:"%d" }} <a href="{{ post.url }}">{{ post.title }}</a></li>
+  {% endfor %}
+</ul>
