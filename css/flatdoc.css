@@ -600,6 +600,9 @@ body.no-literate .content pre > code:hover::-webkit-scrollbar-thumb {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
+.menubar.fixed .section {
+  padding-top: 60px;
+}
 .menubar .section + .section {
   border-top: solid 1px #dfe2e7;
 }

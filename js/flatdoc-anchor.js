@@ -62,7 +62,7 @@
 
     $window
       .on('resize.sidestick', function() {
-        elTop = $sidebar.offset().top;
+        elTop = $sidebar.offset().top - 30;
         $window.trigger('scroll.sidestick');
       })
       .on('scroll.sidestick', function() {

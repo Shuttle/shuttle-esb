@@ -1,5 +1,5 @@
 ---
 title: Getting Started with Shuttle-ESB
-layout: default
+layout: api
+flatdocFileUrl: /getting-started/getting-started.md
 ---
-# Getting Started
