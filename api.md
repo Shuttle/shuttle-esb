@@ -1,5 +1,5 @@
 ---
 title: Shuttle-ESB API
-layout: default
+layout: api
+flatdocFileUrl: /api/api.md
 ---
-# Shuttle-ESB API
