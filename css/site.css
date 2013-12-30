@@ -1,3 +1,4 @@
+body { padding-top: 60px; font-family: sans-serif; }
 .navbar-collapse { text-transform: uppercase; }
 .navbar-brand { font-weight: bold; }
 ul.blog-archive { list-style: none; }

@@ -1,10 +1,12 @@
-# Download Shuttle ESB
+# Getting started with Shuttle ESB
+
+## Download Shuttle ESB
 
 The first step is to get the latest binary release from the GitHub project releases page:
 
 > [Take me to the download page](https://github.com/Shuttle/shuttle-esb/releases)
 
-# Quick Start using MSMQ
+## Quick Start using MSMQ
 
 Since Shuttle ESB requires queues to operate we will use MSMQ for this.  Before we get started ensure that you have MSMQ installed on your version of Windows.
 
@@ -14,7 +16,7 @@ We will create a very simple scenario where we will send a command for processin
 
 **Note**: Be sure to target the same framework for all the project to ensure that `IHost` types can be picked up.
 
-# The Visual Studio solution
+## The Visual Studio solution
 
 Start up Visual Studio  and create a new blank solution:
 
@@ -24,7 +26,7 @@ Start up Visual Studio  and create a new blank solution:
 
 Click **OK** to create the solution.
 
-# Messages
+## Messages
 
 Since our message is shared we will create a separate assembly to contain it.  Add a new class library project to the solution and call it **QuickStart.Shuttle.Messages**.
 
@@ -34,7 +36,7 @@ Add references from the Shuttle ESB installation folder to the following:
 
 You can then rename the default **Class1** file to **WriteBlueMessageCommand** and add an automatic property for the **Message**:
 
-``` c#
+```csharp
 using Shuttle.ESB.Core;
 
 namespace QuickStart.Shuttle.Messages
@@ -46,7 +48,7 @@ namespace QuickStart.Shuttle.Messages
 }
 ```
 
-# Client
+## Client
 
 Now add a console application called **QuickStart.Shuttle.Client** (remember to target .NET 3.5) to the solution and reference the following:
 
@@ -120,7 +122,7 @@ Shuttle ESB will need to know where to send the message.  Since we are using the
 
 This will tell Shuttle ESB to send all messages that have their full name start with **QuickStart** to endpoint **msmq://./quickstart_server_inbox_work**
 
-# Server
+## Server
 
 Add a class library project to the solution and call it **QuickStart.Shuttle.Server** reference the following:
 
@@ -201,7 +203,7 @@ namespace QuickStart.Shuttle.Server
 }
 ```
 
-# Running the solution
+## Running the solution
 
 In order to run the solution correctly right-click on the solution and select **Set StartUp Projects**.  Select the **Multiple startup projects** option and have both the client and the server projects start.  Move the server project so that it starts first since it needs to create its inbox work queue (should it not yet exist).  Click OK to close the dialog.
 

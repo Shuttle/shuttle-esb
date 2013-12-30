@@ -1,7 +1,7 @@
 shuttle-esb
 ===========
 
-[Have a look at our YouTube channel]
+[Have a look at our YouTube channel](http://www.youtube.com/shuttleservicebus)
 
 We still have a lot of information on our [old wiki](http://servicebus.co.za/) but we will be migrating that as time goes by.
 

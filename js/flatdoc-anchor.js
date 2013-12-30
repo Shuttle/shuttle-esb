@@ -62,12 +62,20 @@
 
     $window
       .on('resize.sidestick', function() {
-        elTop = $sidebar.offset().top - 30;
+        elTop = $sidebar.offset().top - $('.navbar')[0].clientHeight; // added by shuttle
         $window.trigger('scroll.sidestick');
       })
       .on('scroll.sidestick', function() {
         var scrollY = $window.scrollTop();
         $sidebar.toggleClass('fixed', (scrollY >= elTop));
+		
+		// added by shuttle : start
+		if (scrollY >= elTop) {
+			$sidebar.css('top', '50px');
+		} else {
+			$sidebar.css('top', '0px');
+		}
+		// added by shuttle : end
       })
       .trigger('resize.sidestick');
   });

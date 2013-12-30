@@ -221,7 +221,7 @@ Also includes:
       var $a = $(this);
 
       var m = $a.text().match(/^(.*) >$/);
-      if (m) $a.text(m[1]).addClass('btn').addClass('btn-primary').addClass('btn-lg');
+      if (m) $a.text(m[1]).addClass('button');
     });
   };
 
