@@ -10,7 +10,7 @@ namespace Shuttle.ESB.Test.Integration
         [Test]
         public void Should_be_able_to_load_a_full_configuration()
         {
-            var section = GetServiceBusSection("DeferredMessage-Full.config");
+            var section = GetServiceBusSection("DeferredMessage.config");
 
             Assert.IsNotNull(section);
 

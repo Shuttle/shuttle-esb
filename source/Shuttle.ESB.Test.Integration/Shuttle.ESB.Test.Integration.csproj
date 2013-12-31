@@ -100,6 +100,7 @@
     <Compile Include="RabbitMq\RabbitMqSectionFixture.cs" />
     <Compile Include="RabbitMq\RabbitTransactionalInboxTest.cs" />
     <Compile Include="RabbitMq\RabbitMqQueueTest.cs" />
+    <Compile Include="ServiceBusSection\TransactionScopeServiceBusSection.cs" />
     <Compile Include="ServiceBusSection\DeferredMessageServiceBusSection.cs" />
     <Compile Include="ServiceBusSection\ServiceBusSectionFixture.cs" />
     <Compile Include="ServiceBusSection\WorkerServiceBusSection.cs" />
@@ -171,7 +172,7 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="ServiceBusSection\files\Cryptography.config">
+    <None Include="ServiceBusSection\files\TransactionScope.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="ServiceBusSection\files\Distributor-Full.config">

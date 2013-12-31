@@ -215,7 +215,6 @@
     <Compile Include="ServiceBusEvents\DistributeMessageEventArgs.cs" />
     <Compile Include="ServiceBusEvents\MessageSerializationEventArgs.cs" />
     <Compile Include="ServiceBusEvents\QueueEmptyEventArgs.cs" />
-    <Compile Include="Exceptions\CryptographyException.cs" />
     <Compile Include="Exceptions\EnqueueMessageDataTypeMismatchException.cs" />
     <Compile Include="Exceptions\WorkerException.cs" />
     <Compile Include="MessageHandling\DefaultMessageHandlerFactory.cs" />
