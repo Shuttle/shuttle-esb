@@ -94,6 +94,8 @@ You can also set the transaction scope behaviour by providing the `transactionSc
       timeoutSeconds="30" />
 ```
 
+When the endpoint is not a physical endpoint but rather a worker use the `worker` tag to specify the relevant configuration.
+
 ```xml
     <worker
       distributorControlWorkQueueUri="msmq://./distributor-server-control-inbox-work"
