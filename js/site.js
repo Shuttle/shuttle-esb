@@ -12,7 +12,7 @@ $(function(){
 			return result;
 		};
 
-	if (Flatdoc && flatdocFileUrl && flatdocFileUrl.length){
+	if (window.Flatdoc && flatdocFileUrl && flatdocFileUrl.length){
 		Flatdoc.highlighters.csharp = Flatdoc.highlighters.cs = Flatdoc.highlighters['c#'] = function(text) {
 			return highlighter('cs', text);
 		}
