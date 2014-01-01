@@ -41,7 +41,7 @@ Add references from the Shuttle ESB installation folder to the following:
 
 You can then rename the default **Class1** file to **WriteBlueMessageCommand** and add an automatic property for the **Message**:
 
-```csharp
+{% highlight c# linenos %}
 using Shuttle.ESB.Core;
 
 namespace QuickStart.Shuttle.Messages
@@ -51,7 +51,7 @@ namespace QuickStart.Shuttle.Messages
 		public string BlueMessage { get; set; }
 	}
 }
-```
+{% endhighlight %}
 
 ## Client
 
