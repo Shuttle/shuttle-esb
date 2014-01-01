@@ -7,8 +7,8 @@ layout: default
   {% for post in site.posts %}
 
     {% unless post.next %}
-      <h2>{{ post.date | date: '%Y' }}</h2>
-      <h4>{{ post.date | date: '%B' }}</h4>
+      <h1>{{ post.date | date: '%Y' }}</h1>
+      <h3>{{ post.date | date: '%B' }}</h3>
     {% else %}
       {% capture year %}{{ post.date | date: '%Y' }}{% endcapture %}
       {% capture nyear %}{{ post.next.date | date: '%Y' }}{% endcapture %}
@@ -16,11 +16,11 @@ layout: default
       {% capture nmonth %}{{ post.next.date | date: '%m%Y' }}{% endcapture %}
 
       {% if year != nyear %}
-        <h2>{{ post.date | date: '%Y' }}</h2>
+        <h1>{{ post.date | date: '%Y' }}</h1>
       {% endif %}
 	  
 	  {% if month != nmonth %}
-        <h4>{{ post.date | date: '%B' }}</h4>
+        <h3>{{ post.date | date: '%B' }}</h3>
 	  {% endif %}
     {% endunless %}
 

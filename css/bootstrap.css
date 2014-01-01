@@ -97,11 +97,10 @@ samp {
   font-size: 1em;
 }
 
-/* removed by shuttle
 pre {
   white-space: pre-wrap;
 }
-*/
+
 q {
   quotes: "\201C" "\201D" "\2018" "\2019";
 }
@@ -745,7 +744,6 @@ samp {
   font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
-/* removed by shuttle
 code {
   padding: 2px 4px;
   font-size: 90%;
@@ -777,7 +775,7 @@ pre code {
   background-color: transparent;
   border-radius: 0;
 }
-*/
+
 .pre-scrollable {
   max-height: 340px;
   overflow-y: scroll;
