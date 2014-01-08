@@ -16,11 +16,11 @@ namespace Shuttle.ESB.Core
             configuration.Inbox =
                 new InboxQueueConfiguration
                 {
-                    WorkQueue = QueueManager.Instance.GetQueue(ServiceBusConfiguration.ServiceBusSection.Inbox.WorkQueueUri),
-                    ErrorQueue = QueueManager.Instance.GetQueue(ServiceBusConfiguration.ServiceBusSection.Inbox.ErrorQueueUri),
+					WorkQueue = configuration.QueueManager.GetQueue(ServiceBusConfiguration.ServiceBusSection.Inbox.WorkQueueUri),
+                    ErrorQueue = configuration.QueueManager.GetQueue(ServiceBusConfiguration.ServiceBusSection.Inbox.ErrorQueueUri),
                     JournalQueue = string.IsNullOrEmpty(ServiceBusConfiguration.ServiceBusSection.Inbox.JournalQueueUri)
                                        ? null
-                                       : QueueManager.Instance.GetQueue(ServiceBusConfiguration.ServiceBusSection.Inbox.JournalQueueUri),
+                                       : configuration.QueueManager.GetQueue(ServiceBusConfiguration.ServiceBusSection.Inbox.JournalQueueUri),
                     WorkQueueStartupAction = ServiceBusConfiguration.ServiceBusSection.Inbox.WorkQueueStartupAction,
                     ThreadCount = ServiceBusConfiguration.ServiceBusSection.Inbox.ThreadCount,
                     MaximumFailureCount = ServiceBusConfiguration.ServiceBusSection.Inbox.MaximumFailureCount,

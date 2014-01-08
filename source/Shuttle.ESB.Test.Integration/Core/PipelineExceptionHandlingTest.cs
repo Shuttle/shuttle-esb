@@ -13,9 +13,9 @@ namespace Shuttle.ESB.Test.Integration.Core
 		{
 			var configuration = DefaultConfiguration(true);
 
-			var inboxWorkQueue = QueueManager.Instance.GetQueue("msmq://./test-inbox-work");
-			var inboxJournalQueue = QueueManager.Instance.GetQueue("msmq://./test-inbox-journal");
-			var inboxErrorQueue = QueueManager.Instance.GetQueue("msmq://./test-error");
+			var inboxWorkQueue = configuration.QueueManager.GetQueue("msmq://./test-inbox-work");
+			var inboxJournalQueue = configuration.QueueManager.GetQueue("msmq://./test-inbox-journal");
+			var inboxErrorQueue = configuration.QueueManager.GetQueue("msmq://./test-error");
 
 			configuration.Inbox =
 				new InboxQueueConfiguration
@@ -33,8 +33,8 @@ namespace Shuttle.ESB.Test.Integration.Core
 			inboxWorkQueue.Drop();
 			inboxJournalQueue.Drop();
 			inboxErrorQueue.Drop();
-			
-			QueueManager.Instance.CreatePhysicalQueues(configuration, QueueCreationType.All);
+
+			configuration.QueueManager.CreatePhysicalQueues(configuration, QueueCreationType.All);
 
 			var module = new ReceivePipelineExceptionModule(inboxWorkQueue);
 

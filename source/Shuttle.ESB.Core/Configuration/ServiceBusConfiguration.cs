@@ -36,6 +36,7 @@ namespace Shuttle.ESB.Core
 			Modules = new ModuleCollection();
 			TransactionScope = new TransactionScopeConfiguration();
 			DeferredMessageConfiguration = new DeferredMessageConfiguration();
+			QueueManager = Core.QueueManager.Default();
 		}
 
 		public static ServiceBusSection ServiceBusSection
@@ -76,6 +77,7 @@ namespace Shuttle.ESB.Core
 		public IWorkerConfiguration Worker { get; set; }
 		public ITransactionScopeConfiguration TransactionScope { get; set; }
 
+		public IQueueManager QueueManager { get; set; }
 		public IIdempotenceTracker IdempotenceTracker { get; set; }
 
 		public ModuleCollection Modules { get; private set; }
@@ -185,14 +187,5 @@ namespace Shuttle.ESB.Core
 
 		public string OutgoingEncryptionAlgorithm { get; internal set; }
 		public string OutgoingCompressionAlgorithm { get; internal set; }
-
-
-		public IServiceBusConfiguration QueueFactory<TQueueFactory>(object configuration)
-			where TQueueFactory : IQueueFactory
-		{
-			var queueFactory = Activator.CreateInstance(typeof (TQueueFactory), configuration) as IQueueFactory;
-			QueueManager.Instance.RegisterQueueFactory(queueFactory);
-			return this;
-		}
 	}
 }

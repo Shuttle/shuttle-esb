@@ -16,8 +16,8 @@ namespace Shuttle.ESB.Core
             configuration.Outbox =
                 new OutboxQueueConfiguration
                 {
-                    WorkQueue = QueueManager.Instance.GetQueue(ServiceBusConfiguration.ServiceBusSection.Outbox.WorkQueueUri),
-                    ErrorQueue = QueueManager.Instance.GetQueue(ServiceBusConfiguration.ServiceBusSection.Outbox.ErrorQueueUri),
+                    WorkQueue = configuration.QueueManager.GetQueue(ServiceBusConfiguration.ServiceBusSection.Outbox.WorkQueueUri),
+                    ErrorQueue = configuration.QueueManager.GetQueue(ServiceBusConfiguration.ServiceBusSection.Outbox.ErrorQueueUri),
                     MaximumFailureCount = ServiceBusConfiguration.ServiceBusSection.Outbox.MaximumFailureCount,
                     DurationToIgnoreOnFailure = DurationToIgnoreOnFailure(ServiceBusConfiguration.ServiceBusSection.Outbox.DurationToIgnoreOnFailure),
                     DurationToSleepWhenIdle = DurationToSleepWhenIdle(ServiceBusConfiguration.ServiceBusSection.Outbox.DurationToSleepWhenIdle),

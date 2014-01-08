@@ -8,6 +8,7 @@ namespace Shuttle.ESB.Core
 	public class OnInitializeMessageRouteProvider : PipelineEvent {}
 	public class OnInitializeForwardingRouteProvider : PipelineEvent {}
 	public class OnInitializePipelineFactory : PipelineEvent {}
+	public class OnInitializeQueueManager : PipelineEvent {}
 	public class OnInitializeSubscriptionManager : PipelineEvent {}
 	public class OnInitializeIdempotenceTracker : PipelineEvent {}
 	public class OnInitializeTransactionScopeFactory : PipelineEvent {}

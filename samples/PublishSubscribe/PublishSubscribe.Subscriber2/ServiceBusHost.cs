@@ -22,7 +22,7 @@ namespace PublishSubscribe.Subscriber2
         {
 			Log.Assign(new ConsoleLog(typeof(ServiceBusHost)) { LogLevel = LogLevel.Trace });
 
-            ConnectionStrings.Approve();
+            new ConnectionStringService().Approve();
 
             var subscriptionManager = SubscriptionManager.Default();
 

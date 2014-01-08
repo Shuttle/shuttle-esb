@@ -129,6 +129,7 @@
     <Compile Include="Processing\Policies\IServiceBusPolicy.cs" />
     <Compile Include="Processing\Policies\MessageFailureAction.cs" />
     <Compile Include="Processing\Policies\DefaultServiceBusPolicy.cs" />
+    <Compile Include="Queues\IAcknowledge.cs" />
     <Compile Include="Queues\IPeek.cs" />
     <Compile Include="Queues\IQueueExtensions.cs" />
     <Compile Include="ServiceBusEvents\PipelineEventEventArgs.cs" />

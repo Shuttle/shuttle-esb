@@ -77,13 +77,7 @@ namespace Shuttle.ESB.SqlServer
 
 			Uri = builder.Uri;
 
-			_dataSource = new DataSource(Uri.Host,
-										new SqlServerDbDataParameterFactory(),
-										new SqlServerContainsQueryFactory(),
-										new SqlServerInsertQueryFactory(),
-										new SqlServerUpdateQueryFactory(),
-										new SqlServerDeleteQueryFactory(),
-										new SqlServerSelectQueryFactory());
+			_dataSource = new DataSource(Uri.Host, new SqlServerDbDataParameterFactory());
 
 			using (databaseConnectionFactory.Create(_dataSource))
 			{

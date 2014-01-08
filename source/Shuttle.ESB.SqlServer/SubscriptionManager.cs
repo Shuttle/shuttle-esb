@@ -11,13 +11,7 @@ namespace Shuttle.ESB.SqlServer
         ISubscriptionManager,
         IRequireInitialization
     {
-        private static readonly DataSource SubscriptionDataSource = new DataSource("Subscription",
-                                                                                   new SqlServerDbDataParameterFactory(),
-                                                                                   new SqlServerContainsQueryFactory(),
-                                                                                   new SqlServerInsertQueryFactory(),
-                                                                                   new SqlServerUpdateQueryFactory(),
-                                                                                   new SqlServerDeleteQueryFactory(),
-                                                                                   new SqlServerSelectQueryFactory());
+        private static readonly DataSource SubscriptionDataSource = new DataSource("Subscription", new SqlServerDbDataParameterFactory());
 
         private readonly List<string> deferredSubscriptions = new List<string>();
 

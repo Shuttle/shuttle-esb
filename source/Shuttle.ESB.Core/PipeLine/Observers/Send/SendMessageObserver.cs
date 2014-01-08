@@ -28,7 +28,7 @@ namespace Shuttle.ESB.Core
 			}
 
 			var queue = !bus.Configuration.HasOutbox
-						? QueueManager.Instance.GetQueue(transportMessage.RecipientInboxWorkQueueUri)
+						? bus.Configuration.QueueManager.GetQueue(transportMessage.RecipientInboxWorkQueueUri)
 						: bus.Configuration.Outbox.WorkQueue;
 
 			if (_log.IsVerboseEnabled)

@@ -1,117 +1,50 @@
-using System;
-using System.Collections.Generic;
+﻿using System;
 using Shuttle.Core.Infrastructure;
 using Shuttle.ESB.Core;
-using Shuttle.ESB.RabbitMq.Exceptions;
-using Shuttle.ESB.RabbitMq.Interfaces;
 
-namespace Shuttle.ESB.RabbitMq
+namespace Shuttle.ESB.RabbitMQ
 {
-	public class RabbitMqQueueFactory : IQueueFactory, IDisposable
+	public class RabbitMQQueueFactory : IQueueFactory, IDisposable
 	{
-		private readonly Dictionary<Uri, RabbitMqConnector> _connectors = new Dictionary<Uri, RabbitMqConnector>();
-		private readonly object _padlock = new object();
-		private bool _disposed;
+		private IRabbitMqManager _manager;
 
-		internal const string SCHEME = "rabbitmq";
-		internal const string INTERNAL_SCHEME = "amqp";
-
-		public RabbitMqQueueFactory()
-			: this(RabbitMqConfiguration.Default())
+		public RabbitMQQueueFactory()
+			: this(new RabbitMQManager())
 		{
 		}
-
-		public RabbitMqQueueFactory(IRabbitMqConfiguration configuration)
+		
+		public RabbitMQQueueFactory(IRabbitMqManager manager)
 		{
-			Configuration = (RabbitMqConfiguration)configuration;
-
-			Configuration.OnRemoveQueueConfiguration += delegate(Uri uri)
-			{
-				lock (_padlock)
-				{
-					if (_connectors.ContainsKey(uri))
-					{
-						var connector = _connectors[uri];
-						connector.Close();
-						_connectors.Remove(uri);
-					}
-				}
-			};
-
+			_manager = manager;
 		}
 
-		public RabbitMqConfiguration Configuration { get; private set; }
-
-		public string Scheme { get { return SCHEME; } }
+		public string Scheme
+		{
+			get { return RabbitMQQueue.SCHEME; }
+		}
 
 		public IQueue Create(Uri uri)
 		{
 			Guard.AgainstNull(uri, "uri");
-			return ConstructQueue(uri);
+
+			return new RabbitMQQueue(uri, _manager);
 		}
 
 		public bool CanCreate(Uri uri)
 		{
 			Guard.AgainstNull(uri, "uri");
+
 			return Scheme.Equals(uri.Scheme, StringComparison.InvariantCultureIgnoreCase);
 		}
 
-		private IQueue ConstructQueue(Uri uri)
+		public void Initialize(IServiceBus bus)
 		{
-			lock (_padlock)
-			{
-				RabbitMqConnector connector = null;
-				var queuePath = new RabbitMqQueuePath(uri);
-
-				var queueConfiguration = Configuration.FindQueueConfiguration(uri);
-
-				if (queueConfiguration == null)
-				{
-					Configuration.DeclareQueue(uri);
-					queueConfiguration = Configuration.FindQueueConfiguration(uri);
-				}
-
-				if (!_connectors.TryGetValue(uri, out connector))
-				{
-					RabbitMqExchangeElement exchangeConfiguration = null;
-
-					if (!string.IsNullOrEmpty(queueConfiguration.Exchange))
-					{
-						exchangeConfiguration = Configuration.FindExchangeConfiguration(queueConfiguration.Exchange);
-						if (exchangeConfiguration == null)
-							throw new UndefinedExchangeException(string.Format(RabbitMqResources.UndefinedExchange, queueConfiguration.Exchange));
-					}
-
-					connector = new RabbitMqConnector(exchangeConfiguration, queueConfiguration, queuePath);
-					_connectors.Add(uri, connector);
-				}
-
-				return new RabbitMqQueue(connector);
-			}
+			_manager = new RabbitMQManager();
 		}
 
 		public void Dispose()
 		{
-			lock (_padlock)
-			{
-				Dispose(true);
-				GC.SuppressFinalize(this);
-			}
-		}
-
-		protected virtual void Dispose(bool disposing)
-		{
-			if (_disposed)
-			{
-				return;
-			}
-
-			if (disposing)
-			{
-				_connectors.ForEach(connector => connector.Value.Close());
-				_connectors.Clear();
-			}
-			_disposed = true;
+			_manager.AttemptDispose();
 		}
 	}
 }

@@ -94,12 +94,13 @@
     <Compile Include="ConcurrentCommand.cs" />
     <Compile Include="ConcurrentHandler.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="ConfigurationAvailableEventArgs.cs" />
+    <Compile Include="RabbitMQ\MsmqInboxTest.cs" />
+    <Compile Include="RabbitMQ\MsmqQueueTest.cs" />
+    <Compile Include="RabbitMQ\MsmqSectionFixture.cs" />
+    <Compile Include="RabbitMQ\MsmqSectionTest.cs" />
     <Compile Include="Msmq\MsmqInboxTest.cs" />
     <Compile Include="Msmq\MsmqSectionFixture.cs" />
-    <Compile Include="RabbitMq\RabbitMqSectionTest.cs" />
-    <Compile Include="RabbitMq\RabbitMqSectionFixture.cs" />
-    <Compile Include="RabbitMq\RabbitTransactionalInboxTest.cs" />
-    <Compile Include="RabbitMq\RabbitMqQueueTest.cs" />
     <Compile Include="ServiceBusSection\ControlInboxServiceBusSection.cs" />
     <Compile Include="ServiceBusSection\TransactionScopeServiceBusSection.cs" />
     <Compile Include="ServiceBusSection\DeferredMessageServiceBusSection.cs" />
@@ -135,10 +136,6 @@
       <Project>{DD6566FD-824C-4275-B4EB-269B0FBC70A8}</Project>
       <Name>Shuttle.ESB.Msmq</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Shuttle.ESB.RabbitMq\Shuttle.ESB.RabbitMq.csproj">
-      <Project>{04ECFB09-EE90-49E0-A0DF-E110A58A75C4}</Project>
-      <Name>Shuttle.ESB.RabbitMq</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Shuttle.ESB.SqlServer\Shuttle.ESB.SqlServer.csproj">
       <Project>{71B25665-8F18-4A3B-B2CC-0C6444252091}</Project>
       <Name>Shuttle.ESB.SqlServer</Name>
@@ -150,11 +147,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Msmq\files\Msmq.config">
+    <None Include="RabbitMQ\files\Msmq.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="RabbitMq\files\RabbitMq.config">
+    <None Include="Msmq\files\Msmq.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -14,7 +14,7 @@ namespace Shuttle.ESB.Core
             }
 
             configuration.Worker =
-                new WorkerConfiguration(QueueManager.Instance.CreateQueue(
+                new WorkerConfiguration(configuration.QueueManager.CreateQueue(
                         ServiceBusConfiguration.ServiceBusSection.Worker.DistributorControlWorkQueueUri),
                         ServiceBusConfiguration.ServiceBusSection.Worker.ThreadAvailableNotificationIntervalSeconds);
         }

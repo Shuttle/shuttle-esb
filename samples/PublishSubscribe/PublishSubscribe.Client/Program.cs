@@ -13,7 +13,7 @@ namespace PublishSubscribe.Client
 		{
 			Log.Assign(new ConsoleLog(typeof(Program)) { LogLevel = LogLevel.Trace });
 
-            ConnectionStrings.Approve();
+			new ConnectionStringService().Approve();
 
 		    var subscriptionManager = SubscriptionManager.Default();
 

@@ -9,7 +9,7 @@ namespace Shuttle.ESB.Core
         public void Execute(OnHandleDistributeMessage pipelineEvent)
         {
             var bus = pipelineEvent.GetServiceBus();
-            var destinationQueue = QueueManager.Instance.GetQueue(pipelineEvent.GetAvailableWorker().InboxWorkQueueUri);
+            var destinationQueue = pipelineEvent.GetServiceBus().Configuration.QueueManager.GetQueue(pipelineEvent.GetAvailableWorker().InboxWorkQueueUri);
             var transportMessage = pipelineEvent.GetTransportMessage();
 
             bus.Events.OnBeforeDistributeMessage(

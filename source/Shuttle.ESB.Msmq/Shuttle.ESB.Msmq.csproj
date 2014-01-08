@@ -89,6 +89,7 @@
     <Compile Include="Configuration\MsmqQueueElementCollection.cs" />
     <Compile Include="Configuration\MsmqQueueElement.cs" />
     <Compile Include="Configuration\MsmqSection.cs" />
+    <Compile Include="IMsmqConfiguration.cs" />
     <Compile Include="MsmqConfiguration.cs" />
     <Compile Include="MsmqQueue.cs" />
     <Compile Include="MsmqQueueConfiguration.cs" />

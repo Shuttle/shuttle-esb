@@ -7,9 +7,9 @@ namespace Shuttle.ESB.Test.Integration
 {
 	public class MsmqInboxTest : InboxFixture
 	{
-		public void SetUp(bool isTransactional)
+		public void SetUp(IServiceBusConfiguration configuration, bool isTransactional)
 		{
-			var factory = QueueManager.Instance.GetQueueFactory("msmq://") as MsmqQueueFactory;
+			var factory = configuration.QueueManager.GetQueueFactory("msmq://") as MsmqQueueFactory;
 
 			if (factory == null)
 			{
@@ -19,20 +19,6 @@ namespace Shuttle.ESB.Test.Integration
 			factory.Configuration.AddQueueConfiguration(new MsmqQueueConfiguration(new Uri("msmq://./test-inbox-work"), isTransactional));
 			factory.Configuration.AddQueueConfiguration(new MsmqQueueConfiguration(new Uri("msmq://./test-inbox-journal"), isTransactional));
 			factory.Configuration.AddQueueConfiguration(new MsmqQueueConfiguration(new Uri("msmq://./test-error"), isTransactional));
-		}
-
-		public void TearDown()
-		{
-			var factory = QueueManager.Instance.GetQueueFactory("msmq://") as MsmqQueueFactory;
-
-			if (factory == null)
-			{
-				return;
-			}
-
-			factory.Configuration.RemoveQueueConfiguration(new Uri("msmq://./test-inbox-work"));
-			factory.Configuration.RemoveQueueConfiguration(new Uri("msmq://./test-inbox-journal"));
-			factory.Configuration.RemoveQueueConfiguration(new Uri("msmq://./test-error"));
 		}
 
 		[Test]
@@ -46,9 +32,13 @@ namespace Shuttle.ESB.Test.Integration
 		[TestCase(true, false, true)]
 		public void Should_be_able_handle_errors(bool useJournal, bool isTransactionalEndpoint, bool isTransactionalQueue)
 		{
-			SetUp(isTransactionalQueue);
+			EventHandler<ConfigurationAvailableEventArgs> onConfigurationAvailable = (sender, eventArgs) => SetUp(eventArgs.Configuration, isTransactionalQueue);
+			
+			ConfigurationAvailable += onConfigurationAvailable;
+			
 			TestInboxError("msmq://.", useJournal, isTransactionalEndpoint);
-			TearDown();
+
+			ConfigurationAvailable -= onConfigurationAvailable;
 		}
 
 		[Test]
@@ -62,9 +52,13 @@ namespace Shuttle.ESB.Test.Integration
 		[TestCase(500, true, false, true)]
 		public void Should_be_able_to_process_messages_concurrently(int msToComplete, bool useJournal, bool isTransactionalEndpoint, bool isTransactionalQueue)
 		{
-			SetUp(isTransactionalQueue);
+			EventHandler<ConfigurationAvailableEventArgs> onConfigurationAvailable = (sender, eventArgs) => SetUp(eventArgs.Configuration, isTransactionalQueue);
+
+			ConfigurationAvailable += onConfigurationAvailable;
+
 			TestInboxConcurrency("msmq://.", 250, false, false);
-			TearDown();
+
+			ConfigurationAvailable -= onConfigurationAvailable;
 		}
 
 		[Test]
@@ -86,17 +80,25 @@ namespace Shuttle.ESB.Test.Integration
 		[TestCase(20, true, true, false, true)]
 		public void Should_be_able_to_process_queue_timeously_without_journal(int count, bool useIdempotenceTracker, bool useJournal, bool isTransactionalEndpoint, bool isTransactionalQueue)
 		{
-			SetUp(isTransactionalQueue);
+			EventHandler<ConfigurationAvailableEventArgs> onConfigurationAvailable = (sender, eventArgs) => SetUp(eventArgs.Configuration, isTransactionalQueue);
+
+			ConfigurationAvailable += onConfigurationAvailable;
+
 			TestInboxThroughput("msmq://.", 1000, count, useIdempotenceTracker, useJournal, isTransactionalEndpoint);
-			TearDown();
+
+			ConfigurationAvailable -= onConfigurationAvailable;
 		}
 
 		[Test]
 		public void Should_be_able_to_handle_a_deferred_message()
 		{
-			SetUp(false);
+			EventHandler<ConfigurationAvailableEventArgs> onConfigurationAvailable = (sender, eventArgs) => SetUp(eventArgs.Configuration, false);
+
+			ConfigurationAvailable += onConfigurationAvailable;
+
 			TestInboxDeferred("msmq://.");
-			TearDown();
+
+			ConfigurationAvailable -= onConfigurationAvailable;
 		}
 	}
 }

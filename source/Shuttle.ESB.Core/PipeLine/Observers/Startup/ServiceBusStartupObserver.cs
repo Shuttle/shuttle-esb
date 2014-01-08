@@ -11,6 +11,7 @@ namespace Shuttle.ESB.Core
         IPipelineObserver<OnInitializeForwardingRouteProvider>,
         IPipelineObserver<OnInitializePipelineFactory>,
         IPipelineObserver<OnInitializeSubscriptionManager>,
+        IPipelineObserver<OnInitializeQueueManager>,
         IPipelineObserver<OnInitializeIdempotenceTracker>,
         IPipelineObserver<OnInitializeTransactionScopeFactory>,
         IPipelineObserver<OnStartInboxProcessing>,
@@ -21,31 +22,30 @@ namespace Shuttle.ESB.Core
         IPipelineObserver<OnRecoverInboxJournal>,
         IPipelineObserver<OnRecoverControlInboxJournal>
     {
-        private readonly IServiceBus bus;
+        private readonly IServiceBus _bus;
 
-        private readonly ILog log;
+        private readonly ILog _log;
 
         public ServiceBusStartupObserver(IServiceBus bus)
         {
             Guard.AgainstNull(bus, "bus");
 
-            this.bus = bus;
-
-            log = Log.For(this);
+            _bus = bus;
+            _log = Log.For(this);
         }
 
         public void Execute(OnInitializeQueueFactories pipelineEvent)
         {
             var memoryQueueFactory = new MemoryQueueFactory();
 
-            if (!QueueManager.Instance.ContainsQueueFactory(memoryQueueFactory.Scheme))
+            if (!_bus.Configuration.QueueManager.ContainsQueueFactory(memoryQueueFactory.Scheme))
             {
-                QueueManager.Instance.RegisterQueueFactory(memoryQueueFactory);
+                _bus.Configuration.QueueManager.RegisterQueueFactory(memoryQueueFactory);
             }
 
-            foreach (var factory in QueueManager.Instance.GetQueueFactories())
+            foreach (var factory in _bus.Configuration.QueueManager.GetQueueFactories())
             {
-                factory.AttemptInitialization(bus);
+                factory.AttemptInitialization(_bus);
             }
         }
 
@@ -53,58 +53,58 @@ namespace Shuttle.ESB.Core
         {
             if (ServiceBusConfiguration.ServiceBusSection != null)
             {
-                QueueManager.Instance.CreatePhysicalQueues(bus.Configuration,
+                _bus.Configuration.QueueManager.CreatePhysicalQueues(_bus.Configuration,
                                                                     ServiceBusConfiguration.ServiceBusSection.QueueCreationType);
             }
         }
 
         public void Execute(OnInitializeMessageHandlerFactory pipelineEvent)
         {
-			bus.Configuration.MessageHandlerFactory.AttemptInitialization(bus);
+			_bus.Configuration.MessageHandlerFactory.AttemptInitialization(_bus);
         }
 
         public void Execute(OnInitializePipelineFactory pipelineEvent)
         {
-            bus.Configuration.PipelineFactory.AttemptInitialization(bus);
+            _bus.Configuration.PipelineFactory.AttemptInitialization(_bus);
         }
 
         public void Execute(OnInitializeSubscriptionManager pipelineEvent)
         {
-            if (!bus.Configuration.HasSubscriptionManager)
+            if (!_bus.Configuration.HasSubscriptionManager)
             {
-                log.Information(ESBResources.NoSubscriptionManager);
+                _log.Information(ESBResources.NoSubscriptionManager);
 
                 return;
             }
 
-            bus.Configuration.SubscriptionManager.AttemptInitialization(bus);
+            _bus.Configuration.SubscriptionManager.AttemptInitialization(_bus);
         }
 
         public void Execute(OnInitializeIdempotenceTracker pipelineEvent)
         {
-            if (!bus.Configuration.HasIdempotenceTracker)
+            if (!_bus.Configuration.HasIdempotenceTracker)
             {
-                log.Information(ESBResources.NoIdempotenceTracker);
+                _log.Information(ESBResources.NoIdempotenceTracker);
 
                 return;
             }
 
-            bus.Configuration.IdempotenceTracker.AttemptInitialization(bus);
+            _bus.Configuration.IdempotenceTracker.AttemptInitialization(_bus);
         }
 
         public void Execute(OnInitializeTransactionScopeFactory pipelineEvent)
         {
-            bus.Configuration.TransactionScopeFactory.AttemptInitialization(bus);
+            _bus.Configuration.TransactionScopeFactory.AttemptInitialization(_bus);
         }
 
         public void Execute(OnStartInboxProcessing pipelineEvent)
         {
-            if (!bus.Configuration.HasInbox)
+            if (!_bus.Configuration.HasInbox)
             {
                 return;
             }
 
-            var inbox = bus.Configuration.Inbox;
+            var inbox = _bus.Configuration.Inbox;
 
             if (inbox.WorkQueueStartupAction == QueueStartupAction.Purge)
             {
@@ -112,15 +112,15 @@ namespace Shuttle.ESB.Core
 
                 if (queue != null)
                 {
-                    log.Information(string.Format(ESBResources.PurgingInboxWorkQueue, inbox.WorkQueue.Uri));
+                    _log.Information(string.Format(ESBResources.PurgingInboxWorkQueue, inbox.WorkQueue.Uri));
 
                     queue.Purge();
 
-                    log.Information(string.Format(ESBResources.PurgingInboxWorkQueueComplete, inbox.WorkQueue.Uri));
+                    _log.Information(string.Format(ESBResources.PurgingInboxWorkQueueComplete, inbox.WorkQueue.Uri));
                 }
                 else
                 {
-                    log.Warning(string.Format(ESBResources.CannotPurgeQueue, inbox.WorkQueue.Uri));
+                    _log.Warning(string.Format(ESBResources.CannotPurgeQueue, inbox.WorkQueue.Uri));
                 }
             }
 
@@ -129,12 +129,12 @@ namespace Shuttle.ESB.Core
                      new ProcessorThreadPool(
                         "InboxProcessor",
                         inbox.ThreadCount,
-                        new InboxProcessorFactory(bus)).Start());
+                        new InboxProcessorFactory(_bus)).Start());
         }
 
         public void Execute(OnStartControlInboxProcessing pipelineEvent)
         {
-            if (!bus.Configuration.HasControlInbox)
+            if (!_bus.Configuration.HasControlInbox)
             {
                 return;
             }
@@ -143,13 +143,13 @@ namespace Shuttle.ESB.Core
                 "ControlInboxThreadPool",
                 new ProcessorThreadPool(
                     "ControlInboxProcessor",
-                    bus.Configuration.ControlInbox.ThreadCount,
-                    new ControlInboxProcessorFactory(bus)).Start());
+                    _bus.Configuration.ControlInbox.ThreadCount,
+                    new ControlInboxProcessorFactory(_bus)).Start());
         }
 
         public void Execute(OnStartOutboxProcessing pipelineEvent)
         {
-            if (!bus.Configuration.HasOutbox)
+            if (!_bus.Configuration.HasOutbox)
             {
                 return;
             }
@@ -158,13 +158,13 @@ namespace Shuttle.ESB.Core
                 "OutboxThreadPool",
                 new ProcessorThreadPool(
                     "OutboxProcessor",
-                    bus.Configuration.Outbox.ThreadCount,
-                    new OutboxProcessorFactory(bus)).Start());
+                    _bus.Configuration.Outbox.ThreadCount,
+                    new OutboxProcessorFactory(_bus)).Start());
         }
 
 		public void Execute(OnStartDeferredMessageProcessing pipelineEvent)
         {
-            if (!bus.Configuration.HasDeferredMessageQueue || bus.Configuration.IsWorker)
+            if (!_bus.Configuration.HasDeferredMessageQueue || _bus.Configuration.IsWorker)
             {
                 return;
             }
@@ -174,42 +174,42 @@ namespace Shuttle.ESB.Core
                 new ProcessorThreadPool(
 					"DeferredMessageProcessor",
                     1,
-					new DeferredMessageProcessorFactory(bus)).Start());
+					new DeferredMessageProcessorFactory(_bus)).Start());
         }
 
         public void Execute(OnStartWorker pipelineEvent)
         {
-            if (!bus.Configuration.IsWorker)
+            if (!_bus.Configuration.IsWorker)
             {
                 return;
             }
 
-            bus.Send(new WorkerStartedEvent
+            _bus.Send(new WorkerStartedEvent
                         {
-                            InboxWorkQueueUri = bus.Configuration.Inbox.WorkQueue.Uri.ToString(),
+                            InboxWorkQueueUri = _bus.Configuration.Inbox.WorkQueue.Uri.ToString(),
                             DateStarted = DateTime.Now
                         },
-                     bus.Configuration.Worker.DistributorControlInboxWorkQueue);
+                     _bus.Configuration.Worker.DistributorControlInboxWorkQueue);
         }
 
         public void Execute(OnInitializeMessageRouteProvider pipelineEvent)
         {
-            bus.Configuration.MessageRouteProvider.AttemptInitialization(bus);
+            _bus.Configuration.MessageRouteProvider.AttemptInitialization(_bus);
         }
 
         public void Execute(OnRecoverInboxJournal pipelineEvent)
         {
-            if (bus.Configuration.HasInbox && bus.Configuration.Inbox.HasJournalQueue)
+            if (_bus.Configuration.HasInbox && _bus.Configuration.Inbox.HasJournalQueue)
             {
-                RecoverJournal(bus.Configuration.Inbox.WorkQueue, bus.Configuration.Inbox.JournalQueue);
+                RecoverJournal(_bus.Configuration.Inbox.WorkQueue, _bus.Configuration.Inbox.JournalQueue);
             }
         }
 
         public void Execute(OnRecoverControlInboxJournal pipelineEvent)
         {
-            if (bus.Configuration.HasControlInbox && bus.Configuration.ControlInbox.HasJournalQueue)
+            if (_bus.Configuration.HasControlInbox && _bus.Configuration.ControlInbox.HasJournalQueue)
             {
-                RecoverJournal(bus.Configuration.ControlInbox.WorkQueue, bus.Configuration.ControlInbox.JournalQueue);
+                RecoverJournal(_bus.Configuration.ControlInbox.WorkQueue, _bus.Configuration.ControlInbox.JournalQueue);
             }
         }
 
@@ -221,7 +221,7 @@ namespace Shuttle.ESB.Core
             while (stream != null)
             {
                 var transportMessage =
-                    (TransportMessage)bus.Configuration.Serializer.Deserialize(typeof(TransportMessage), stream);
+                    (TransportMessage)_bus.Configuration.Serializer.Deserialize(typeof(TransportMessage), stream);
 
                 workerQueue.Enqueue(transportMessage.MessageId, stream);
 
@@ -230,12 +230,17 @@ namespace Shuttle.ESB.Core
                 recoverCount++;
             }
 
-            log.Information(string.Format(ESBResources.JournalRecoverCount, recoverCount, workerQueue.Uri));
+            _log.Information(string.Format(ESBResources.JournalRecoverCount, recoverCount, workerQueue.Uri));
         }
 
         public void Execute(OnInitializeForwardingRouteProvider pipelineEvent1)
         {
-            bus.Configuration.ForwardingRouteProvider.AttemptInitialization(bus);
+            _bus.Configuration.ForwardingRouteProvider.AttemptInitialization(_bus);
         }
+
+	    public void Execute(OnInitializeQueueManager pipelineEvent1)
+	    {
+			_bus.Configuration.QueueManager.AttemptInitialization(_bus);
+	    }
     }
 }

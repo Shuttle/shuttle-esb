@@ -6,29 +6,29 @@ using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ESB.Core
 {
-	public class QueueManager : Singleton<QueueManager>, IQueueManager, IDisposable
+	public class QueueManager : IRequireInitialization, IQueueManager, IDisposable
 	{
-		private readonly IReflectionService reflectionService;
-		private static readonly object padlock = new object();
+		private readonly IReflectionService _reflectionService;
+		private static readonly object _padlock = new object();
 
-		private readonly List<IQueue> queues = new List<IQueue>();
-		private readonly List<IQueueFactory> queueFactories = new List<IQueueFactory>();
-		private bool initialized;
+		private readonly List<IQueue> _queues = new List<IQueue>();
+		private readonly List<IQueueFactory> _queueFactories = new List<IQueueFactory>();
+		private bool _initialized;
 
-		private readonly ILog log;
+		private readonly ILog _log;
 
 		public QueueManager(IReflectionService reflectionService)
 		{
 			Guard.AgainstNull(reflectionService, "reflectionService");
 
-			this.reflectionService = reflectionService;
+			_reflectionService = reflectionService;
 
-			log = Log.For(this);
+			_log = Log.For(this);
 		}
 
-		public QueueManager()
-			: this(new ReflectionService())
+		public static IQueueManager Default()
 		{
+			return new QueueManager(new ReflectionService());
 		}
 
 		public IQueueFactory GetQueueFactory(string uri)
@@ -48,21 +48,21 @@ namespace Shuttle.ESB.Core
 
 		private List<IQueueFactory> QueueFactories()
 		{
-			if (initialized)
+			if (_initialized)
 			{
-				return queueFactories;
+				return _queueFactories;
 			}
 
-			lock (padlock)
+			lock (_padlock)
 			{
-				if (!initialized)
+				if (!_initialized)
 				{
 					var factoryTypes = new List<Type>();
 
-					reflectionService.GetAssemblies(AppDomain.CurrentDomain.BaseDirectory).ForEach(
-						assembly => factoryTypes.AddRange(reflectionService.GetTypes<IQueueFactory>(assembly)));
+					_reflectionService.GetAssemblies(AppDomain.CurrentDomain.BaseDirectory).ForEach(
+						assembly => factoryTypes.AddRange(_reflectionService.GetTypes<IQueueFactory>(assembly)));
 
-					foreach (var type in factoryTypes.Union(reflectionService.GetTypes<IQueueFactory>()))
+					foreach (var type in factoryTypes.Union(_reflectionService.GetTypes<IQueueFactory>()))
 					{
 						try
 						{
@@ -78,21 +78,21 @@ namespace Shuttle.ESB.Core
 						}
 						catch (Exception ex)
 						{
-							log.Warning(string.Format("Queue factory not instantiated: {0}", ex.Message));
+							_log.Warning(string.Format("Queue factory not instantiated: {0}", ex.Message));
 						}
 					}
 
-					initialized = true;
+					_initialized = true;
 				}
 			}
 
-			return queueFactories;
+			return _queueFactories;
 		}
 
 		public IQueue GetQueue(string uri)
 		{
 			var queue =
-				queues.Find(
+				_queues.Find(
 					candidate => FindByString(candidate, uri));
 
 			if (queue != null)
@@ -100,10 +100,10 @@ namespace Shuttle.ESB.Core
 				return queue;
 			}
 
-			lock (padlock)
+			lock (_padlock)
 			{
 				queue =
-					queues.Find(
+					_queues.Find(
 						candidate => FindByString(candidate, uri));
 
 				if (queue != null)
@@ -115,7 +115,7 @@ namespace Shuttle.ESB.Core
 
 				queue = GetQueueFactory(identifier).Create(identifier);
 
-				queues.Add(queue);
+				_queues.Add(queue);
 
 				return queue;
 			}
@@ -232,20 +232,26 @@ namespace Shuttle.ESB.Core
 				throw new DuplicateQueueFactoryException(queueFactory);
 			}
 
-			queueFactories.Add(queueFactory);
+			_queueFactories.Add(queueFactory);
 		}
 
 		public bool ContainsQueueFactory(string scheme)
 		{
-			return queueFactories.Find(
+			return _queueFactories.Find(
 					   factory => factory.Scheme.Equals(scheme, StringComparison.InvariantCultureIgnoreCase)
 					   ) != null;
 		}
 
 		public void Dispose()
 		{
-			queueFactories.AttemptDispose();
-			queues.AttemptDispose();
+			_queueFactories.AttemptDispose();
+			_queues.AttemptDispose();
+		}
+
+		public void Initialize(IServiceBus bus)
+		{
+			// todo: initialize the queues here... maybe have an internal registration to handle the duplicate business depending on whether the developer registered a factory
+			throw new NotImplementedException();
 		}
 	}
 }

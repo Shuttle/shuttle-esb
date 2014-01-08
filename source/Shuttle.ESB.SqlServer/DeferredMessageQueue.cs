@@ -12,13 +12,7 @@ namespace Shuttle.ESB.SqlServer
 		IPurge,
 		ICount
 	{
-		private static readonly DataSource DeferredMessageDataSource = new DataSource("DeferredMessage",
-		                                                                              new SqlServerDbDataParameterFactory(),
-		                                                                              new SqlServerContainsQueryFactory(),
-		                                                                              new SqlServerInsertQueryFactory(),
-		                                                                              new SqlServerUpdateQueryFactory(),
-		                                                                              new SqlServerDeleteQueryFactory(),
-		                                                                              new SqlServerSelectQueryFactory());
+		private static readonly DataSource DeferredMessageDataSource = new DataSource("DeferredMessage", new SqlServerDbDataParameterFactory());
 
 		private readonly IDatabaseGateway _databaseGateway;
 		private readonly IDatabaseConnectionFactory _databaseConnectionFactory;

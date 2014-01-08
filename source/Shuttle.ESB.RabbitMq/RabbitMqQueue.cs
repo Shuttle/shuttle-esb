@@ -1,117 +1,95 @@
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Messaging;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Transactions;
-using RabbitMQ.Client;
+using System.Linq;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.MessagePatterns;
 using Shuttle.Core.Infrastructure;
 using Shuttle.ESB.Core;
 
-namespace Shuttle.ESB.RabbitMq
+namespace Shuttle.ESB.RabbitMQ
 {
-	public class RabbitMqQueue : IQueue, ICreate, IDrop, IPurge, ICount, IQueueReader
+	public class RabbitMQQueue : IQueue, ICount
 	{
-		[ThreadStatic]
-		private static object _underlyingMessageData;
+		internal const string SCHEME = "rabbitmq";
 
-		private readonly RabbitMqConnector _connector;
-		private readonly ConfigurationItem<int> _localQueueTimeout;
-		private readonly ConfigurationItem<int> _remoteQueueTimeout;
-		private readonly ILog _log;
+		private readonly IRabbitMqManager _manager;
 
-		// Todo: move to config
-		private readonly TimeSpan _timeout;
-
-		public RabbitMqQueue(RabbitMqConnector connector)
+		public RabbitMQQueue(Uri uri, IRabbitMqManager manager)
 		{
-			_connector = connector;
-			_localQueueTimeout = ConfigurationItem<int>.ReadSetting("LocalQueueTimeout", 0);
-			_remoteQueueTimeout = ConfigurationItem<int>.ReadSetting("RemoteQueueTimeout", 2000);
-			_log = Log.For(this);
+			Guard.AgainstNull(manager, "manager");
 
-			IsLocal = connector.QueuePath.Host.Equals(Environment.MachineName, StringComparison.InvariantCultureIgnoreCase);
-			IsTransactional = connector.QueueConfiguration.IsTransactional;
+			_manager = manager;
 
-			Uri = connector.QueuePath.Uri;
+			Password = "";
+			Username = "";
+			Host = uri.Host;
+			Port = uri.Port;
 
-			_timeout = IsLocal
-						? TimeSpan.FromMilliseconds(_localQueueTimeout.GetValue())
-						: TimeSpan.FromMilliseconds(_remoteQueueTimeout.GetValue());
-		}
-
-		private void EnlistToTransactionScope()
-		{
-			new RabbitMqResourceManager(Channel);
-		}
-
-		private IModel Channel
-		{
-			get { return _connector.RequestChannel(); }
-		}
-
-		public int Count
-		{
-			get
+			if (uri.UserInfo.Contains(':'))
 			{
-				var result = Channel.QueueDeclare(_connector.QueuePath.QueueName, _connector.QueueConfiguration.IsDurable, false, false, null);
-				return result == null ? -1 : (int)result.MessageCount;
-			}
-		}
-
-		public void Create()
-		{
-			if (_connector.QueueConfiguration.OverwriteIfExists)
-			{
-				try { Drop(); }
-				catch { } // eat the drop exception, njam njam ;) 
+				Username = uri.UserInfo.Split(':').First();
+				Password = uri.UserInfo.Split(':').Last();
 			}
 
-			// no need to check if queue exists for the call is idempotent
-			Channel.QueueDeclare(
-				_connector.QueuePath.QueueName,
-				_connector.QueueConfiguration.IsDurable,
-				_connector.QueueConfiguration.IsExclusive,
-				_connector.QueueConfiguration.AutoDelete, null);
-
-			if (!string.IsNullOrEmpty(_connector.QueueConfiguration.Exchange))
+			switch (uri.Segments.Length)
 			{
-				Channel.QueueBind(
-					_connector.QueuePath.QueueName,
-					_connector.QueueConfiguration.Exchange,
-					_connector.QueueConfiguration.RoutingKey ?? _connector.QueuePath.QueueName);
+				case 2:
+					{
+						VirtualHost = "/";
+						Queue = uri.Segments[1];
+						break;
+					}
+				case 3:
+					{
+						VirtualHost = uri.Segments[1];
+						Queue = uri.Segments[2];
+						break;
+					}
+				default:
+					{
+						throw new UriFormatException(string.Format(ESBResources.UriFormatException,
+						                                           "rabbitmq://[username:password@]host:port/[vhost/]queue", Uri));
+					}
 			}
 
-			_log.Information(string.Format("Created rabbitMq queue '{0}'.", Uri));
-		}
+			var builder = new UriBuilder(uri);
 
-		public void Drop()
-		{
-			if (!IsLocal)
+			if (Host.Equals("."))
 			{
-				throw new InvalidOperationException(string.Format(RabbitMqResources.CannotDropRemoteQueue, Uri));
+				builder.Host = Environment.MachineName.ToLower();
 			}
 
-			Channel.QueueDelete(_connector.QueuePath.QueueName);
-			_log.Information(string.Format("Dropped rabbitMq queue '{0}'.", Uri));
-		}
+			builder.Port = Port;
+			builder.UserName = Username;
+			builder.Password = Password;
+			builder.Path = VirtualHost == "/" ? string.Format("/{0}", Queue) : string.Format("/{0}/{1}", VirtualHost, Queue);
 
-		public void Purge()
-		{
-			Channel.QueuePurge(_connector.QueuePath.QueueName);
-			_log.Information(string.Format("Purged rabbitMq queue '{0}'.", Uri));
-		}
+			Uri = builder.Uri;
 
-		public bool IsTransactional { get; private set; }
+			IsLocal = Uri.Host.Equals(Environment.MachineName, StringComparison.OrdinalIgnoreCase);
+		}
 
 		public bool IsLocal { get; private set; }
+
+		public bool IsTransactional
+		{
+			get { return false; }
+		}
+
 		public Uri Uri { get; private set; }
 
 		public QueueAvailability Exists()
 		{
-			return QueueAvailability.Unknown;
+			try
+			{
+				_manager.GetModel(this).QueueDeclarePassive(Queue);
+			}
+			catch
+			{
+				return QueueAvailability.Missing;
+			}
+
+			return QueueAvailability.Exists;
 		}
 
 		public bool IsEmpty()
@@ -119,117 +97,52 @@ namespace Shuttle.ESB.RabbitMq
 			return Count == 0;
 		}
 
-		public object UnderlyingMessageData
-		{
-			get { return _underlyingMessageData; }
-		}
+		public object UnderlyingMessageData { get; private set; }
 
-		private void BeginTransaction()
-		{
-			switch (TransactionType())
-			{
-				case MessageQueueTransactionType.Automatic:
-					EnlistToTransactionScope();
-					break;
-				case MessageQueueTransactionType.Single:
-					Channel.TxSelect();
-					break;
-			}
-		}
+		public string Username { get; private set; }
+		public string Password { get; private set; }
+		public string Host { get; private set; }
+		public int Port { get; private set; }
+		public string VirtualHost { get; private set; }
+		public string Queue { get; private set; }
 
-		private void EndTransaction(BasicGetResult message = null)
+		public bool HasUserInfo
 		{
-			if (TransactionType() == MessageQueueTransactionType.Single)
-			{
-				if (message != null)
-				{
-					Channel.BasicAck(message.DeliveryTag, false);
-				}
-				Channel.TxCommit();
-			}
-		}
-
-		private void RollbackTransaction(BasicGetResult message = null)
-		{
-			if (TransactionType() == MessageQueueTransactionType.Single)
-			{
-				if (message != null)
-				{
-					Channel.BasicNack(message.DeliveryTag, false, true);
-				}
-
-				Channel.TxRollback();
-			}
+			get { return !string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password); }
 		}
 
 		public void Enqueue(object data)
 		{
-			Guard.AgainstNull(data, "data");
-			BeginTransaction();
-
-			try
-			{
-				var formatter = new BinaryFormatter();
-				var stream = new MemoryStream();
-				formatter.Serialize(stream, data);
-
-				var basicProperties = Channel.CreateBasicProperties();
-				Channel.BasicPublish(_connector.QueueConfiguration.Exchange, _connector.QueuePath.QueueName, basicProperties, stream.ToBytes());
-
-				EndTransaction();
-			}
-			catch
-			{
-				RollbackTransaction();
-				throw;
-			}
+			throw new NotImplementedException();
 		}
 
 		public void Enqueue(Guid messageId, Stream stream)
 		{
-			BeginTransaction();
+			Guard.AgainstNull(messageId, "messageId");
+			Guard.AgainstNull(stream, "stream");
 
-			try
-			{
-				var basicProperties = Channel.CreateBasicProperties();
-				basicProperties.MessageId = messageId.ToString();
-				basicProperties.DeliveryMode = (byte)(_connector.QueueConfiguration.IsDurable ? 1 : 0);
+			var model = _manager.GetModel(this);
 
-				Channel.BasicPublish(_connector.QueueConfiguration.Exchange, _connector.QueuePath.QueueName, basicProperties, stream.ToBytes());
+			var properties = model.CreateBasicProperties();
 
-				EndTransaction();
-			}
-			catch
-			{
-				RollbackTransaction();
-				throw;
-			}
+			properties.SetPersistent(true);
+			properties.CorrelationId = messageId.ToString();
+
+			model.BasicPublish("", Queue, false, false, properties, stream.ToBytes());
 		}
 
 		public Stream Dequeue()
 		{
-			ResetUnderlyingMessageData();
-			BeginTransaction();
+			var model = _manager.GetModel(this);
 
-			try
+			using (var subscription = new Subscription(model, Queue, false))
 			{
-				var message = Channel.BasicGet(_connector.QueuePath.QueueName, !IsTransactional);
-				if (message != null)
+				BasicDeliverEventArgs result;
+
+				if (subscription.Next(100, out result))
 				{
-					_underlyingMessageData = new MemoryStream(message.Body);
-					EndTransaction(message);
-
-					return message.Body.Length == 0
-									 ? null
-									 : _underlyingMessageData as MemoryStream;
+					return new MemoryStream(result.Body);
 				}
-
-				RollbackTransaction();
-			}
-			catch
-			{
-				RollbackTransaction();
-				throw;
 			}
 
 			return null;
@@ -237,64 +150,99 @@ namespace Shuttle.ESB.RabbitMq
 
 		public Stream Dequeue(Guid messageId)
 		{
-			throw new NotSupportedException("Used only for memory queues.");
+			var model = _manager.GetModel(this);
+
+			using (var subscription = new Subscription(model, Queue, false))
+			{
+				var read = true;
+
+				while (read)
+				{
+					BasicDeliverEventArgs result;
+
+					if (subscription.Next(100, out result))
+					{
+						Guid guid;
+
+						try
+						{
+							guid = new Guid(result.BasicProperties.CorrelationId);
+						}
+						catch
+						{
+							guid = Guid.Empty;
+						}
+
+						if (guid.Equals(messageId))
+						{
+							return new MemoryStream(result.Body);
+						}
+					}
+					else
+					{
+						read = false;
+					}
+				}
+			}
+
+			return null;
 		}
 
 		public bool Remove(Guid messageId)
 		{
-			try
+			var model = _manager.GetModel(this);
+
+			using (var subscription = new Subscription(model, Queue, false))
 			{
-				using (var subscriber = new Subscription(Channel, _connector.QueuePath.QueueName))
+				var read = true;
+
+				while (read)
 				{
-					BasicDeliverEventArgs message;
-					while (subscriber.Next(100, out message))
+					BasicDeliverEventArgs result;
+
+					if (subscription.Next(100, out result))
 					{
-						if (message.BasicProperties.MessageId == messageId.ToString())
+						Guid guid;
+
+						try
 						{
-							subscriber.Ack(message);
+							guid = new Guid(result.BasicProperties.CorrelationId);
+						}
+						catch
+						{
+							guid = Guid.Empty;
+						}
+
+						if (guid.Equals(messageId))
+						{
+							subscription.Ack(result);
+
 							return true;
 						}
 					}
-
-					return false;
+					else
+					{
+						read = false;
+					}
 				}
 			}
-			catch (Exception e)
-			{
-				_log.Error(string.Format(RabbitMqResources.RemoveError, messageId, Uri, e.CompactMessages()));
-				throw;
-			}
+
+			return false;
 		}
 
-		public IEnumerable<Stream> Read(int top)
+		public int Count
 		{
-			var messageList = new List<Stream>();
-
-			using (var subscriber = new Subscription(Channel, _connector.QueuePath.QueueName))
+			get
 			{
-				BasicDeliverEventArgs message;
-				while (subscriber.Next(100, out message))
+				try
 				{
-					_underlyingMessageData = new MemoryStream(message.Body);
-					messageList.Add(_underlyingMessageData as Stream);
+					return (int) _manager.GetModel(this).QueueDeclarePassive(Queue).MessageCount;
+				}
+				catch (Exception ex)
+				{
+					throw;
 				}
 			}
-
-			return messageList;
-		}
-
-		private void ResetUnderlyingMessageData()
-		{
-			_underlyingMessageData = null;
-		}
-
-		private MessageQueueTransactionType TransactionType()
-		{
-			return IsTransactional
-					? Transaction.Current != null
-						? MessageQueueTransactionType.Automatic
-						: MessageQueueTransactionType.Single
-					: MessageQueueTransactionType.None;
 		}
 	}
 }

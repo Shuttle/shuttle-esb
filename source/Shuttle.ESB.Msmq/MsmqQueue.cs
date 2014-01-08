@@ -13,9 +13,6 @@ namespace Shuttle.ESB.Msmq
 {
 	public class MsmqQueue : IQueue, ICreate, IDrop, IPurge, ICount, IQueueReader
 	{
-		private readonly ConfigurationItem<int> localQueueTimeout;
-		private readonly ConfigurationItem<int> remoteQueueTimeout;
-
 		internal const string SCHEME = "msmq";
 
 		private readonly TimeSpan timeout;
@@ -32,7 +29,7 @@ namespace Shuttle.ESB.Msmq
 
 		private readonly ILog log;
 
-		public MsmqQueue(Uri uri, bool isTransactional)
+		public MsmqQueue(Uri uri, MsmqConfiguration msmqConfiguration)
 		{
 			Guard.AgainstNull(uri, "uri");
 
@@ -40,9 +37,6 @@ namespace Shuttle.ESB.Msmq
 			{
 				throw new InvalidSchemeException(SCHEME, uri.ToString());
 			}
-
-			localQueueTimeout = ConfigurationItem<int>.ReadSetting("LocalQueueTimeout", 0);
-			remoteQueueTimeout = ConfigurationItem<int>.ReadSetting("RemoteQueueTimeout", 2000);
 
 			log = Log.For(this);
 
@@ -65,7 +59,10 @@ namespace Shuttle.ESB.Msmq
 
 			IsLocal = Uri.Host.Equals(Environment.MachineName, StringComparison.InvariantCultureIgnoreCase);
 
-			IsTransactional = isTransactional;
+			var queueConfiguration = msmqConfiguration.FindQueueConfiguration(uri);
+
+			IsTransactional = queueConfiguration != null && queueConfiguration.IsTransactional;
+
 			usesIPAddress = regexIPAddress.IsMatch(host);
 
 			path = IsLocal
@@ -75,8 +72,8 @@ namespace Shuttle.ESB.Msmq
 					         : string.Format(@"FormatName:DIRECT=OS:{0}\private$\{1}", host, uri.Segments[1]);
 
 			timeout = IsLocal
-				          ? TimeSpan.FromMilliseconds(localQueueTimeout.GetValue())
-				          : TimeSpan.FromMilliseconds(remoteQueueTimeout.GetValue());
+				          ? TimeSpan.FromMilliseconds(msmqConfiguration.LocalQueueTimeoutMilliseconds )
+				          : TimeSpan.FromMilliseconds(msmqConfiguration.RemoteQueueTimeoutMilliseconds);
 		}
 
 		public int Count

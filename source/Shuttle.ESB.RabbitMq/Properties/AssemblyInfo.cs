@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Shuttle.ESB.RabbitMq")]
-[assembly: AssemblyDescription("RabbitMq for Shuttle Enterprise Service Bus")]
+[assembly: AssemblyTitle("Shuttle.ESB.RabbitMQ")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Shuttle.ESB.RabbitMq")]
-[assembly: AssemblyCopyright("Copyright © 2013 Eben Roux & Neill Verreynne")]
+[assembly: AssemblyProduct("Shuttle.ESB.RabbitMQ")]
+[assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("030b010f-c4e7-4ec2-8be6-98b509d83dda")]
+[assembly: Guid("71f8cbd7-6d22-4ff7-a049-133af05268f2")]
 
 // Version information for an assembly consists of the following four values:
 //

@@ -9,13 +9,7 @@ namespace Shuttle.ESB.SqlServer.Idempotence
         IIdempotenceTracker,
         IRequireInitialization
     {
-        private static readonly DataSource IdempotenceDataSource = new DataSource("Idempotence",
-                                                                                  new SqlServerDbDataParameterFactory(),
-                                                                                  new SqlServerContainsQueryFactory(),
-                                                                                  new SqlServerInsertQueryFactory(),
-                                                                                  new SqlServerUpdateQueryFactory(),
-                                                                                  new SqlServerDeleteQueryFactory(),
-                                                                                  new SqlServerSelectQueryFactory());
+        private static readonly DataSource IdempotenceDataSource = new DataSource("Idempotence", new SqlServerDbDataParameterFactory());
 
         private readonly IDatabaseGateway databaseGateway;
         private readonly IDatabaseConnectionFactory databaseConnectionFactory;

@@ -18,7 +18,7 @@ namespace Shuttle.ESB.Modules.ActiveTimeRange
 
 		private void PipelineCreated(object sender, PipelineEventArgs e)
 		{
-			if (e.Pipeline.FullName().Equals(startupPipelineName, StringComparison.InvariantCultureIgnoreCase))
+			if (e.Pipeline.GetType().FullName.Equals(startupPipelineName, StringComparison.InvariantCultureIgnoreCase))
 			{
 				return;
 			}

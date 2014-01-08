@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using Shuttle.Core.Infrastructure;
-using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.Msmq
 {
-	public class MsmqConfiguration
+	public class MsmqConfiguration : IMsmqConfiguration
 	{
 		private readonly List<MsmqQueueConfiguration> queueConfigurations = new List<MsmqQueueConfiguration>();
 
@@ -21,6 +20,8 @@ namespace Shuttle.ESB.Msmq
 			}
 		}
 
+		public int LocalQueueTimeoutMilliseconds { get; set; }
+		public int RemoteQueueTimeoutMilliseconds { get; set; }
 
 		public void AddQueueConfiguration(MsmqQueueConfiguration queueConfiguration)
 		{
@@ -40,6 +41,9 @@ namespace Shuttle.ESB.Msmq
 
 			if (MsmqSection != null && msmqSection.Queues != null)
 			{
+				configuration.LocalQueueTimeoutMilliseconds = MsmqSection.LocalQueueTimeoutMilliseconds;
+				configuration.RemoteQueueTimeoutMilliseconds = MsmqSection.RemoteQueueTimeoutMilliseconds;
+
 				foreach (MsmqQueueElement queue in msmqSection.Queues)
 				{
 					configuration.AddQueueConfiguration(new MsmqQueueConfiguration(new Uri(queue.Uri), queue.IsTransactional));

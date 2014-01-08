@@ -33,9 +33,9 @@ namespace Shuttle.ESB.Modules.SystemException
 		{
 			var @event = ExceptionEventExtensions.CorePipelineExceptionEvent(e.Pipeline.Exception, hostName, ipAddresses);
 
-			@event.PipelineTypeFullName = e.Pipeline.FullName();
+			@event.PipelineTypeFullName = e.Pipeline.GetType().FullName;
 			@event.PipelineStageName = e.Pipeline.StageName;
-			@event.PipelineEventTypeFullName = e.Pipeline.Event.FullName();
+			@event.PipelineEventTypeFullName = e.Pipeline.Event.GetType().FullName;
 
 			lock(padlock)
 			{
@@ -54,7 +54,7 @@ namespace Shuttle.ESB.Modules.SystemException
 		{
 			var @event = ExceptionEventExtensions.CoreHandlerExceptionEvent(e.Exception, hostName, ipAddresses);
 
-			@event.HandlerTypeFullName = e.MessageHandler.FullName();
+			@event.HandlerTypeFullName = e.MessageHandler.GetType().FullName;
 			@event.MessageId = e.TransportMessage.MessageId;
 			@event.MessageTypeFullName = e.TransportMessage.MessageType;
 			@event.WorkQueueUri = e.WorkQueue != null ? e.WorkQueue.Uri.ToString() : string.Empty;

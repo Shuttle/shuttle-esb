@@ -96,7 +96,7 @@ namespace Shuttle.ESB.Core
 		{
 			Guard.AgainstNullOrEmptyString(uri, "uri");
 
-			return SendDeferred(DateTime.MinValue, message, QueueManager.Instance.GetQueue(uri));
+			return SendDeferred(DateTime.MinValue, message, Configuration.QueueManager.GetQueue(uri));
 		}
 
 	public TransportMessage Send(object message, IQueue queue)
@@ -111,7 +111,7 @@ namespace Shuttle.ESB.Core
 
 		public TransportMessage SendReply(object message)
 		{
-			return SendDeferred(DateTime.MinValue, message, QueueManager.Instance.GetQueue(TransportMessageReceived.SenderInboxWorkQueueUri));
+			return SendDeferred(DateTime.MinValue, message, Configuration.QueueManager.GetQueue(TransportMessageReceived.SenderInboxWorkQueueUri));
 		}
 
 		public TransportMessage SendDeferred(DateTime at, object message)
@@ -123,7 +123,7 @@ namespace Shuttle.ESB.Core
 		{
 			Guard.AgainstNullOrEmptyString(uri, "uri");
 
-			return SendDeferred(at, message, QueueManager.Instance.GetQueue(uri));
+			return SendDeferred(at, message, Configuration.QueueManager.GetQueue(uri));
 		}
 
 		public TransportMessage SendDeferred(DateTime at, object message, IQueue queue)
@@ -179,7 +179,7 @@ namespace Shuttle.ESB.Core
 			OutgoingCorrelationId = TransportMessageReceived.CorrelationId;
 			OutgoingHeaders.Merge(TransportMessageReceived.Headers);
 
-			return SendDeferred(at, message, QueueManager.Instance.GetQueue(TransportMessageReceived.SenderInboxWorkQueueUri));
+			return SendDeferred(at, message, Configuration.QueueManager.GetQueue(TransportMessageReceived.SenderInboxWorkQueueUri));
 		}
 
 		public IEnumerable<string> Publish(object message)
@@ -338,6 +338,11 @@ namespace Shuttle.ESB.Core
 			if (Configuration.HasDeferredMessageQueue)
 			{
 				deferredMessageThreadPool.Dispose();
+			}
+
+			foreach (var factory in Configuration.QueueManager.GetQueueFactories())
+			{
+				factory.AttemptDispose();
 			}
 
 			started = false;

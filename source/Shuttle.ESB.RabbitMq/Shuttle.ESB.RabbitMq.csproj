@@ -4,14 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{04ECFB09-EE90-49E0-A0DF-E110A58A75C4}</ProjectGuid>
+    <ProjectGuid>{72096229-B17B-4A19-916E-626E05FC1946}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Shuttle.ESB.RabbitMq</RootNamespace>
-    <AssemblyName>Shuttle.ESB.RabbitMq</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <RootNamespace>Shuttle.ESB.RabbitMQ</RootNamespace>
+    <AssemblyName>Shuttle.ESB.RabbitMQ</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -47,52 +45,34 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="RabbitMQ.Client">
-      <HintPath>..\..\external-bin\RabbitMq\RabbitMQ.Client.dll</HintPath>
+      <HintPath>..\..\external-bin\RabbitMQ\RabbitMQ.Client.dll</HintPath>
     </Reference>
     <Reference Include="Shuttle.Core.Infrastructure">
-      <HintPath>..\..\external-bin\shuttle.core\$(Framework)\Shuttle.Core.Infrastructure.dll</HintPath>
+      <HintPath>..\Shuttle.ESB.Core\bin\Debug\Shuttle.Core.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.configuration" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Messaging" />
-    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\RabbitMqExchangeElementCollection.cs" />
-    <Compile Include="Configuration\RabbitMqExchangeElement.cs" />
-    <Compile Include="Configuration\RabbitMqQueueElement.cs" />
-    <Compile Include="Configuration\RabbitMqQueueElementCollection.cs" />
-    <Compile Include="Configuration\RabbitMqSection.cs" />
-    <Compile Include="Exceptions\UndefinedExchangeException.cs" />
-    <Compile Include="Interfaces\IRabbitMqConfiguration.cs" />
-    <Compile Include="Interfaces\IRabbitMqExchangeConfiguration.cs" />
-    <Compile Include="Interfaces\IRabbitMqQueueConfiguration.cs" />
-    <Compile Include="RabbitMqConfiguration.cs" />
-    <Compile Include="RabbitMqConnector.cs" />
-    <Compile Include="RabbitMqQueuePath.cs" />
-    <Compile Include="RabbitMqResourceManager.cs" />
-    <Compile Include="RabbitMqResources.Designer.cs">
-      <DependentUpon>RabbitMqResources.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="RabbitMqQueue.cs" />
-    <Compile Include="RabbitMqQueueFactory.cs" />
+    <Compile Include="ConnectionModel.cs" />
+    <Compile Include="IRabbitMQManager.cs" />
+    <Compile Include="RabbitMQManager.cs" />
+    <Compile Include="RabbitMQQueue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RabbitMQQueueFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Shuttle.ESB.Core\Shuttle.ESB.Core.csproj">
-      <Project>{22d75fd9-0e17-43c8-9bd0-f06ca40840c5}</Project>
+      <Project>{22D75FD9-0E17-43C8-9BD0-F06CA40840C5}</Project>
       <Name>Shuttle.ESB.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="RabbitMqResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>RabbitMqResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

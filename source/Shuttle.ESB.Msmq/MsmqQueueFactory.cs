@@ -30,9 +30,7 @@ namespace Shuttle.ESB.Msmq
 		{
 			Guard.AgainstNull(uri, "uri");
 
-			var queueConfiguration = Configuration.FindQueueConfiguration(uri);
-
-			return new MsmqQueue(uri, queueConfiguration == null || queueConfiguration.IsTransactional);
+			return new MsmqQueue(uri, Configuration);
 		}
 
 		public bool CanCreate(Uri uri)
