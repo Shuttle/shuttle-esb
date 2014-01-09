@@ -2,39 +2,36 @@ using System;
 using System.IO;
 using System.Transactions;
 using NUnit.Framework;
-using Shuttle.ESB.Msmq;
+using Shuttle.ESB.Core;
+using Shuttle.ESB.RabbitMQ;
 
-namespace Shuttle.ESB.Test.Integration.Msmq
+namespace Shuttle.ESB.Test.Integration.RabbitMQ
 {
 	[TestFixture]
-	public class MsmqQueueTest : IntegrationFixture
+	public class RabbitMQQueueTest : IntegrationFixture
 	{
+		private IRabbitMqManager _manager;
+
 		protected override void TearDownTest()
 		{
 			inboxQueue.Drop();
 			outboxQueue.Drop();
 		}
 
-		private MsmqQueue inboxQueue;
-		private MsmqQueue outboxQueue;
+		private RabbitMQQueue inboxQueue;
+		private RabbitMQQueue outboxQueue;
 
 		protected override void TestSetUp()
 		{
 			base.TestSetUp();
 
-			var inboxUri = new Uri("msmq://./sit-inbox");
-			var outboxUri = new Uri("msmq://./sit-outbox");
+			var inboxUri = new Uri("rabbitmq://shuttle:shuttle!@localhost/sit-inbox");
+			var outboxUri = new Uri("rabbitmq://shuttle:shuttle!@localhost/sit-outbox");
 
-			var configuration = new MsmqConfiguration();
+			_manager = new RabbitMQManager();
 
-			configuration.AddQueueConfiguration(new MsmqQueueConfiguration(inboxUri, true));
-			configuration.AddQueueConfiguration(new MsmqQueueConfiguration(outboxUri, true));
-
-			inboxQueue = new MsmqQueue(inboxUri, configuration);
-			outboxQueue = new MsmqQueue(outboxUri, configuration);
-
-			inboxQueue.Create();
-			outboxQueue.Create();
+			inboxQueue = new RabbitMQQueue(inboxUri, _manager);
+			outboxQueue = new RabbitMQQueue(outboxUri, _manager);
 		}
 
 		[Test]

@@ -2,7 +2,7 @@
 using Shuttle.Core.Infrastructure;
 using Shuttle.ESB.Core;
 
-namespace Shuttle.ESB.Modules.ActiveTimeRange
+namespace Shuttle.ESB.Modules
 {
 	public class ActiveTimeRangeModule : IModule, IDisposable, IActiveState
 	{

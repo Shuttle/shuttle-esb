@@ -18,10 +18,7 @@ namespace Shuttle.ESB.Core
         QueueAvailability Exists();
     	bool IsEmpty();
 
-        object UnderlyingMessageData { get; }
-
-        void Enqueue(object data);
-        void Enqueue(Guid messageId, Stream stream);
+	    void Enqueue(Guid messageId, Stream stream);
         Stream Dequeue();
         Stream Dequeue(Guid messageId);
     	bool Remove(Guid messageId);

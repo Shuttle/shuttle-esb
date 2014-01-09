@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using Shuttle.Core.Data;
 using Shuttle.Core.Infrastructure;
@@ -182,41 +181,6 @@ namespace Shuttle.ESB.SqlServer
 
 		public bool IsTransactional { get; private set; }
 
-		public void Enqueue(object data)
-		{
-			Guard.AgainstNull(data, "data");
-
-			var row = data as DataRow;
-
-			if (row == null)
-			{
-				throw new EnqueueMessageDataTypeMismatchException(data.GetType().FullName,
-																  Uri.ToString(),
-																  typeof(DataRow).FullName);
-			}
-
-			var messageId = QueueColumns.MessageId.MapFrom(row);
-
-			try
-			{
-				using (_databaseConnectionFactory.Create(_dataSource))
-				{
-					_databaseGateway.ExecuteUsing(
-						_dataSource,
-						RawQuery.CreateFrom(_enqueueQueryStatement)
-								.AddParameterValue(QueueColumns.MessageId, messageId)
-								.AddParameterValue(QueueColumns.MessageBody, QueueColumns.MessageBody.MapFrom(row)));
-				}
-			}
-			catch (Exception ex)
-			{
-				_log.Error(
-					string.Format(SqlResources.EnqueueDataError, messageId, Uri, ex.Message));
-
-				throw;
-			}
-		}
-
 		public void Enqueue(Guid messageId, Stream stream)
 		{
 			try
@@ -264,11 +228,6 @@ namespace Shuttle.ESB.SqlServer
 		public bool IsEmpty()
 		{
 			return Count == 0;
-		}
-
-		public object UnderlyingMessageData
-		{
-			get { return _underlyingMessageData; }
 		}
 
 		private void ResetUnderlyingMessageData()

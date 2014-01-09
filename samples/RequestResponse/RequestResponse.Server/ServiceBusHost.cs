@@ -1,11 +1,10 @@
 using System;
+using Shuttle.ESB.Modules;
 using log4net;
-using log4net.Config;
 using Shuttle.Core.Host;
 using Shuttle.Core.Infrastructure;
 using Shuttle.Core.Infrastructure.Log4Net;
 using Shuttle.ESB.Core;
-using Shuttle.ESB.Modules.ActiveTimeRange;
 
 namespace RequestResponse.Server
 {

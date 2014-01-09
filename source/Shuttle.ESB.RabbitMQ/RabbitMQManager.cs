@@ -30,7 +30,11 @@ namespace Shuttle.ESB.RabbitMQ
 
 				var connectionKey = ConnectionKey(queue);
 
-				models.Add(key, new ConnectionModel(connectionKey, GetConnection(connectionKey, queue).CreateModel()));
+				var model = GetConnection(connectionKey, queue).CreateModel();
+
+				models.Add(key, new ConnectionModel(connectionKey, model));
+
+				model.QueueDeclare(queue.Queue, true, false, false, null);
 
 				return models[key].Model;
 			}

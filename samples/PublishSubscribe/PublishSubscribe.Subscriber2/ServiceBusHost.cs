@@ -4,7 +4,7 @@ using Shuttle.Core.Data;
 using Shuttle.Core.Host;
 using Shuttle.Core.Infrastructure;
 using Shuttle.ESB.Core;
-using Shuttle.ESB.Modules.SystemException;
+using Shuttle.ESB.Modules;
 using Shuttle.ESB.SqlServer;
 
 namespace PublishSubscribe.Subscriber2

@@ -3,8 +3,9 @@ using System.Linq;
 using System.Net;
 using Shuttle.Core.Infrastructure;
 using Shuttle.ESB.Core;
+using Shuttle.ESB.Modules.Extensions;
 
-namespace Shuttle.ESB.Modules.SystemException
+namespace Shuttle.ESB.Modules
 {
 	public class SystemExceptionModule : IModule
 	{

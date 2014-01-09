@@ -1,6 +1,6 @@
 using System;
 
-namespace Shuttle.ESB.Modules.SystemException
+namespace Shuttle.ESB.Modules.Events
 {
 	public class PipelineExceptionEvent 
 	{

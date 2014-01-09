@@ -57,6 +57,7 @@
     </Compile>
     <Compile Include="ActiveTimeRange\ActiveTimeRangeModule.cs" />
     <Compile Include="ActiveTimeRange\ActiveTimeRangeObserver.cs" />
+    <Compile Include="CorruptTransportMessage\CorruptTransportMessageModule.cs" />
     <Compile Include="ESBModuleResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

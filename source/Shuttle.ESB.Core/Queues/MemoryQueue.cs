@@ -73,21 +73,6 @@ namespace Shuttle.ESB.Core
 			return Count == 0;
 		}
 
-		public object UnderlyingMessageData
-		{
-			get { return underlyingMessageData; }
-		}
-
-		public void Enqueue(object data)
-		{
-			lock (padlock)
-			{
-				var kvp = (KeyValuePair<Guid, Stream>)data;
-
-				queues[Uri.ToString()].Add(kvp.Key, kvp.Value);
-			}
-		}
-
 		public void Enqueue(Guid messageId, Stream stream)
 		{
 			lock (padlock)
@@ -193,15 +178,6 @@ namespace Shuttle.ESB.Core
 		public bool IsEmpty()
 		{
 			return true;
-		}
-
-		public object UnderlyingMessageData
-		{
-			get { return null; }
-		}
-
-		public void Enqueue(object data)
-		{
 		}
 
 		public void Enqueue(Guid messageId, Stream stream)

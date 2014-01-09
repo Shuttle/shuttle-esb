@@ -1,13 +1,12 @@
 ﻿using Shuttle.Core.Infrastructure;
 
-namespace Shuttle.ESB.Modules.ActiveTimeRange
+namespace Shuttle.ESB.Modules
 {
 	internal class ActiveTimeRangeObserver : IPipelineObserver<OnPipelineStarting>
 	{
 		private readonly IActiveState state;
 
-		private readonly Shuttle.Core.Infrastructure.ActiveTimeRange range =
-			new ActiveTimeRangeConfiguration().CreateActiveTimeRange();
+		private readonly ActiveTimeRange range = new ActiveTimeRangeConfiguration().CreateActiveTimeRange();
 
 		public ActiveTimeRangeObserver(IActiveState state)
 		{

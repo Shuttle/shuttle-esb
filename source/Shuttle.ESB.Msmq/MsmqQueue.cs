@@ -178,50 +178,6 @@ namespace Shuttle.ESB.Msmq
 			}
 		}
 
-		public object UnderlyingMessageData
-		{
-			get { return underlyingMessageData; }
-		}
-
-		public void Enqueue(object data)
-		{
-			Guard.AgainstNull(data, "data");
-
-			var message = data as Message;
-
-			if (message == null)
-			{
-				throw new EnqueueMessageDataTypeMismatchException(data.GetType().FullName,
-				                                                  Uri.ToString(),
-				                                                  typeof (Message).FullName);
-			}
-
-			try
-			{
-				using (var queue = CreateGuardedQueue())
-				{
-					queue.Send(message, TransactionType());
-				}
-			}
-			catch (MessageQueueException ex)
-			{
-				if (ex.MessageQueueErrorCode == MessageQueueErrorCode.AccessDenied)
-				{
-					AccessDenied();
-				}
-
-				log.Error(string.Format(MsmqResources.SendError, Uri, ex.CompactMessages()));
-
-				throw;
-			}
-			catch (Exception ex)
-			{
-				log.Error(string.Format(MsmqResources.SendError, Uri, ex.CompactMessages()));
-
-				throw;
-			}
-		}
-
 		public void Enqueue(Guid messageId, Stream stream)
 		{
 			var sendMessage = new Message

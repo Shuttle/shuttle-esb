@@ -95,10 +95,8 @@
     <Compile Include="ConcurrentHandler.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="ConfigurationAvailableEventArgs.cs" />
-    <Compile Include="RabbitMQ\MsmqInboxTest.cs" />
-    <Compile Include="RabbitMQ\MsmqQueueTest.cs" />
-    <Compile Include="RabbitMQ\MsmqSectionFixture.cs" />
-    <Compile Include="RabbitMQ\MsmqSectionTest.cs" />
+    <Compile Include="RabbitMQ\RabbitMQInboxTest.cs" />
+    <Compile Include="RabbitMQ\RabbitMQQueueTest.cs" />
     <Compile Include="Msmq\MsmqInboxTest.cs" />
     <Compile Include="Msmq\MsmqSectionFixture.cs" />
     <Compile Include="ServiceBusSection\ControlInboxServiceBusSection.cs" />
@@ -136,6 +134,10 @@
       <Project>{DD6566FD-824C-4275-B4EB-269B0FBC70A8}</Project>
       <Name>Shuttle.ESB.Msmq</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Shuttle.ESB.RabbitMQ\Shuttle.ESB.RabbitMQ.csproj">
+      <Project>{72096229-B17B-4A19-916E-626E05FC1946}</Project>
+      <Name>Shuttle.ESB.RabbitMQ</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Shuttle.ESB.SqlServer\Shuttle.ESB.SqlServer.csproj">
       <Project>{71B25665-8F18-4A3B-B2CC-0C6444252091}</Project>
       <Name>Shuttle.ESB.SqlServer</Name>
@@ -147,10 +149,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="RabbitMQ\files\Msmq.config">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Msmq\files\Msmq.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

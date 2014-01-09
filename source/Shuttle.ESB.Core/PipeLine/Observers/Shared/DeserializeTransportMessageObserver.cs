@@ -32,7 +32,6 @@ namespace Shuttle.ESB.Core
                 _log.Error(ex.ToString());
                 _log.Error(string.Format(ESBResources.TransportMessageDeserializationException, pipelineEvent.GetWorkQueue().Uri, ex));
 
-				pipelineEvent.GetErrorQueue().Enqueue(pipelineEvent.GetWorkQueue().UnderlyingMessageData);
 				pipelineEvent.SetTransactionComplete();
 				pipelineEvent.Pipeline.Abort();
 

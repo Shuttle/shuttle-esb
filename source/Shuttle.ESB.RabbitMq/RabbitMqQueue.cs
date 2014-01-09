@@ -8,7 +8,7 @@ using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.RabbitMQ
 {
-	public class RabbitMQQueue : IQueue, ICount
+	public class RabbitMQQueue : IQueue, ICount, IDrop
 	{
 		internal const string SCHEME = "rabbitmq";
 
@@ -22,8 +22,8 @@ namespace Shuttle.ESB.RabbitMQ
 
 			Password = "";
 			Username = "";
-			Host = uri.Host;
 			Port = uri.Port;
+			Host = uri.Host;
 
 			if (uri.UserInfo.Contains(':'))
 			{
@@ -52,13 +52,14 @@ namespace Shuttle.ESB.RabbitMQ
 					}
 			}
 
-			var builder = new UriBuilder(uri);
-
 			if (Host.Equals("."))
 			{
-				builder.Host = Environment.MachineName.ToLower();
+				Host = "localhost";
 			}
 
+			var builder = new UriBuilder(uri);
+
+			builder.Host = Host;
 			builder.Port = Port;
 			builder.UserName = Username;
 			builder.Password = Password;
@@ -66,7 +67,7 @@ namespace Shuttle.ESB.RabbitMQ
 
 			Uri = builder.Uri;
 
-			IsLocal = Uri.Host.Equals(Environment.MachineName, StringComparison.OrdinalIgnoreCase);
+			IsLocal = Uri.Host.Equals("localhost", StringComparison.OrdinalIgnoreCase) || Uri.Host.Equals("127.0.0.1");
 		}
 
 		public bool IsLocal { get; private set; }
@@ -97,8 +98,6 @@ namespace Shuttle.ESB.RabbitMQ
 			return Count == 0;
 		}
 
-		public object UnderlyingMessageData { get; private set; }
-
 		public string Username { get; private set; }
 		public string Password { get; private set; }
 		public string Host { get; private set; }
@@ -109,11 +108,6 @@ namespace Shuttle.ESB.RabbitMQ
 		public bool HasUserInfo
 		{
 			get { return !string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password); }
-		}
-
-		public void Enqueue(object data)
-		{
-			throw new NotImplementedException();
 		}
 
 		public void Enqueue(Guid messageId, Stream stream)
@@ -243,6 +237,11 @@ namespace Shuttle.ESB.RabbitMQ
 					throw;
 				}
 			}
+		}
+
+		public void Drop()
+		{
+			_manager.GetModel(this).QueueDelete(Queue);
 		}
 	}
 }
