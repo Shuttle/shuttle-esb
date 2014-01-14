@@ -5,6 +5,35 @@ namespace Shuttle.ESB.Core
 {
 	public static class IQueueExtensions
 	{
+		public static bool AttemptCreate(this IQueue queue)
+		{
+			var operation = queue as ICreate;
+
+			if (operation == null)
+			{
+				return false;
+			}
+
+			operation.Create();
+
+			return true;
+		}
+		
+		public static void Create(this IQueue queue)
+		{
+			Guard.AgainstNull(queue, "queue");
+
+			var operation = queue as ICreate;
+
+			if (operation == null)
+			{
+				throw new InvalidOperationException(string.Format(ESBResources.NotImplementedOnQueue,
+																  queue.GetType().FullName, "ICreate"));
+			}
+
+			operation.Create();
+		}
+		
 		public static bool AttemptDrop(this IQueue queue)
 		{
 			var operation = queue as IDrop;

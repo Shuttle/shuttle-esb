@@ -10,7 +10,6 @@
             if (hasJournalQueue)
             {
                 RegisterStage("Read")
-                    .WithEvent<OnPeek>()
                     .WithEvent<OnStartTransactionScope>()
                     .WithEvent<OnDequeue>()
                     .WithEvent<OnDeserializeTransportMessage>()
@@ -28,7 +27,8 @@
                     .WithEvent<OnMessageHandled>()
                     .WithEvent<OnRemoveJournalMessage>()
                     .WithEvent<OnCompleteTransactionScope>()
-                    .WithEvent<OnDisposeTransactionScope>();
+                    .WithEvent<OnDisposeTransactionScope>()
+                    .WithEvent<OnAcknowledgeMessage>();
 
                 RegisterObserver(new EnqueueJournalObserver());
                 RegisterObserver(new RemoveJournalMessageObserver());
@@ -36,7 +36,6 @@
             else
             {
                 RegisterStage("Read")
-                    .WithEvent<OnPeek>()
                     .WithEvent<OnStartTransactionScope>()
                     .WithEvent<OnDequeue>()
                     .WithEvent<OnDeserializeTransportMessage>()
@@ -49,8 +48,9 @@
                     .WithEvent<OnHandleMessage>()
                     .WithEvent<OnMessageHandled>()
                     .WithEvent<OnCompleteTransactionScope>()
-                    .WithEvent<OnDisposeTransactionScope>();
-            }
+                    .WithEvent<OnDisposeTransactionScope>()
+					.WithEvent<OnAcknowledgeMessage>();
+			}
 
             RegisterObserver(new PeekObserver());
             RegisterObserver(new DequeueObserver());
@@ -62,6 +62,7 @@
             RegisterObserver(new ReceiveExceptionObserver());
             RegisterObserver(new TransactionScopeObserver());
             RegisterObserver(new IdempotenceTrackerObserver());
+            RegisterObserver(new AcknowledgeMessageObserver());
         }
     }
 }

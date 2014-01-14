@@ -107,6 +107,7 @@
     <Compile Include="MessageHandling\IDeferredMessageQueue.cs" />
     <Compile Include="Pipeline\Observers\DeferredMessage\DeferredMessageDequeueObserver.cs" />
     <Compile Include="Pipeline\Observers\DeferredMessage\DeferredMessageDeserializeTransportMessageObserver.cs" />
+    <Compile Include="Pipeline\Observers\Receive\AcknowledgeMessageObserver.cs" />
     <Compile Include="Pipeline\Observers\Receive\IdempotenceTrackerObserver.cs" />
     <Compile Include="Pipeline\Observers\Shared\PeekObserver.cs" />
     <Compile Include="Pipeline\Pipelines\DeferredMessagePipeline.cs" />

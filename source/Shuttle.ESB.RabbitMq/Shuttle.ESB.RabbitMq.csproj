@@ -59,9 +59,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConnectionModel.cs" />
-    <Compile Include="IRabbitMQManager.cs" />
-    <Compile Include="RabbitMQManager.cs" />
+    <Compile Include="Channel.cs" />
+    <Compile Include="ConnectionException.cs" />
     <Compile Include="RabbitMQQueue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RabbitMQQueueFactory.cs" />

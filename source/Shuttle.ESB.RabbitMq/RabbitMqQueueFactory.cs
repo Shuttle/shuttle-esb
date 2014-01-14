@@ -4,20 +4,8 @@ using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.RabbitMQ
 {
-	public class RabbitMQQueueFactory : IQueueFactory, IDisposable
+	public class RabbitMQQueueFactory : IQueueFactory
 	{
-		private IRabbitMqManager _manager;
-
-		public RabbitMQQueueFactory()
-			: this(new RabbitMQManager())
-		{
-		}
-		
-		public RabbitMQQueueFactory(IRabbitMqManager manager)
-		{
-			_manager = manager;
-		}
-
 		public string Scheme
 		{
 			get { return RabbitMQQueue.SCHEME; }
@@ -27,7 +15,7 @@ namespace Shuttle.ESB.RabbitMQ
 		{
 			Guard.AgainstNull(uri, "uri");
 
-			return new RabbitMQQueue(uri, _manager);
+			return new RabbitMQQueue(uri);
 		}
 
 		public bool CanCreate(Uri uri)
@@ -35,16 +23,6 @@ namespace Shuttle.ESB.RabbitMQ
 			Guard.AgainstNull(uri, "uri");
 
 			return Scheme.Equals(uri.Scheme, StringComparison.InvariantCultureIgnoreCase);
-		}
-
-		public void Initialize(IServiceBus bus)
-		{
-			_manager = new RabbitMQManager();
-		}
-
-		public void Dispose()
-		{
-			_manager.AttemptDispose();
 		}
 	}
 }

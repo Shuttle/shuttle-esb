@@ -1,8 +1,6 @@
 using System;
 using System.IO;
-using System.Transactions;
 using NUnit.Framework;
-using Shuttle.ESB.Core;
 using Shuttle.ESB.RabbitMQ;
 
 namespace Shuttle.ESB.Test.Integration.RabbitMQ
@@ -10,8 +8,6 @@ namespace Shuttle.ESB.Test.Integration.RabbitMQ
 	[TestFixture]
 	public class RabbitMQQueueTest : IntegrationFixture
 	{
-		private IRabbitMqManager _manager;
-
 		protected override void TearDownTest()
 		{
 			inboxQueue.Drop();
@@ -28,10 +24,8 @@ namespace Shuttle.ESB.Test.Integration.RabbitMQ
 			var inboxUri = new Uri("rabbitmq://shuttle:shuttle!@localhost/sit-inbox");
 			var outboxUri = new Uri("rabbitmq://shuttle:shuttle!@localhost/sit-outbox");
 
-			_manager = new RabbitMQManager();
-
-			inboxQueue = new RabbitMQQueue(inboxUri, _manager);
-			outboxQueue = new RabbitMQQueue(outboxUri, _manager);
+			inboxQueue = new RabbitMQQueue(inboxUri);
+			outboxQueue = new RabbitMQQueue(outboxUri);
 		}
 
 		[Test]
@@ -58,21 +52,6 @@ namespace Shuttle.ESB.Test.Integration.RabbitMQ
 			var dequeued = inboxQueue.Dequeue();
 
 			Assert.AreEqual(100, dequeued.ReadByte());
-		}
-
-		[Test]
-		public void Should_be_able_to_rollback_message_sent_in_transaction()
-		{
-			using (new TransactionScope())
-			{
-				inboxQueue.Enqueue(Guid.NewGuid(), new MemoryStream());
-			}
-
-			Assert.AreEqual(0, inboxQueue.Count);
-
-			inboxQueue.Enqueue(Guid.NewGuid(), new MemoryStream());
-
-			Assert.AreEqual(1, inboxQueue.Count);
 		}
 	}
 }

@@ -15,7 +15,7 @@ namespace Shuttle.ESB.Test.Integration
 		[TestCase(true, false)]
 		public void Should_be_able_handle_errors(bool useJournal, bool isTransactionalEndpoint)
 		{
-			TestInboxError("rabbitmq://.", useJournal, isTransactionalEndpoint);
+			TestInboxError("rabbitmq://shuttle:shuttle!@localhost", useJournal, isTransactionalEndpoint);
 		}
 
 		[Test]
@@ -30,7 +30,7 @@ namespace Shuttle.ESB.Test.Integration
 		public void Should_be_able_to_process_messages_concurrently(int msToComplete, bool useJournal,
 		                                                            bool isTransactionalEndpoint)
 		{
-			TestInboxConcurrency("rabbitmq://.", 250, false, false);
+			TestInboxConcurrency("rabbitmq://shuttle:shuttle!@localhost", 250, false, false);
 		}
 
 		[Test]
@@ -53,13 +53,13 @@ namespace Shuttle.ESB.Test.Integration
 		public void Should_be_able_to_process_queue_timeously_without_journal(int count, bool useIdempotenceTracker,
 		                                                                      bool useJournal, bool isTransactionalEndpoint)
 		{
-			TestInboxThroughput("rabbitmq://.", 1000, count, useIdempotenceTracker, useJournal, isTransactionalEndpoint);
+			TestInboxThroughput("rabbitmq://shuttle:shuttle!@localhost", 1000, count, useIdempotenceTracker, useJournal, isTransactionalEndpoint);
 		}
 
 		[Test]
 		public void Should_be_able_to_handle_a_deferred_message()
 		{
-			TestInboxDeferred("rabbitmq://.");
+			TestInboxDeferred("rabbitmq://shuttle:shuttle!@localhost");
 		}
 	}
 }

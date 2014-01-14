@@ -30,15 +30,15 @@ namespace Shuttle.ESB.Core
 	{
 	}
 
-    public class OnHandleMessage : PipelineEvent
-    {
-    }
+	public class OnHandleMessage : PipelineEvent
+	{
+	}
 
-    public class OnMessageHandled : PipelineEvent
-    {
-    }
+	public class OnMessageHandled : PipelineEvent
+	{
+	}
 
-    public class OnRemoveJournalMessage : PipelineEvent
+	public class OnRemoveJournalMessage : PipelineEvent
 	{
 	}
 
@@ -51,6 +51,10 @@ namespace Shuttle.ESB.Core
 	}
 
 	public class OnDisposeTransactionScope : PipelineEvent
+	{
+	}
+
+	public class OnAcknowledgeMessage : PipelineEvent
 	{
 	}
 

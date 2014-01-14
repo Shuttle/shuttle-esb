@@ -1,24 +1,32 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using RabbitMQ.Client.Events;
+using System.Threading;
+using RabbitMQ.Client;
 using RabbitMQ.Client.MessagePatterns;
 using Shuttle.Core.Infrastructure;
 using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.RabbitMQ
 {
-	public class RabbitMQQueue : IQueue, ICount, IDrop
+	public class RabbitMQQueue : IQueue, ICount, ICreate, IDrop, IDisposable, IAcknowledge, IPurge
 	{
 		internal const string SCHEME = "rabbitmq";
 
-		private readonly IRabbitMqManager _manager;
+		private readonly object connectionlock = new object();
+		private readonly object queuelock = new object();
+		private readonly object disposelock = new object();
 
-		public RabbitMQQueue(Uri uri, IRabbitMqManager manager)
+		private readonly ConnectionFactory _factory;
+		private IConnection _connection;
+
+		[ThreadStatic]
+		private static Channel _channel;
+
+		public RabbitMQQueue(Uri uri)
 		{
-			Guard.AgainstNull(manager, "manager");
-
-			_manager = manager;
+			Guard.AgainstNull(uri, "uri");
 
 			Password = "";
 			Username = "";
@@ -48,7 +56,7 @@ namespace Shuttle.ESB.RabbitMQ
 				default:
 					{
 						throw new UriFormatException(string.Format(ESBResources.UriFormatException,
-						                                           "rabbitmq://[username:password@]host:port/[vhost/]queue", Uri));
+																   "rabbitmq://[username:password@]host:port/[vhost/]queue", Uri));
 					}
 			}
 
@@ -57,17 +65,28 @@ namespace Shuttle.ESB.RabbitMQ
 				Host = "localhost";
 			}
 
-			var builder = new UriBuilder(uri);
-
-			builder.Host = Host;
-			builder.Port = Port;
-			builder.UserName = Username;
-			builder.Password = Password;
-			builder.Path = VirtualHost == "/" ? string.Format("/{0}", Queue) : string.Format("/{0}/{1}", VirtualHost, Queue);
+			var builder = new UriBuilder(uri)
+				{
+					Host = Host,
+					Port = Port,
+					UserName = Username,
+					Password = Password,
+					Path = VirtualHost == "/" ? string.Format("/{0}", Queue) : string.Format("/{0}/{1}", VirtualHost, Queue)
+				};
 
 			Uri = builder.Uri;
 
 			IsLocal = Uri.Host.Equals("localhost", StringComparison.OrdinalIgnoreCase) || Uri.Host.Equals("127.0.0.1");
+
+			_factory = new ConnectionFactory
+				{
+					UserName = Username,
+					Password = Password,
+					HostName = Host,
+					VirtualHost = VirtualHost,
+					Port = Port,
+					RequestedHeartbeat = 30 //TODO: get from configuration
+				};
 		}
 
 		public bool IsLocal { get; private set; }
@@ -83,7 +102,7 @@ namespace Shuttle.ESB.RabbitMQ
 		{
 			try
 			{
-				_manager.GetModel(this).QueueDeclarePassive(Queue);
+				AccessQueue(() => { GetChannel().Model.QueueDeclarePassive(Queue); });
 			}
 			catch
 			{
@@ -115,133 +134,240 @@ namespace Shuttle.ESB.RabbitMQ
 			Guard.AgainstNull(messageId, "messageId");
 			Guard.AgainstNull(stream, "stream");
 
-			var model = _manager.GetModel(this);
+			AccessQueue(() =>
+				{
+					var model = GetChannel().Model;
 
-			var properties = model.CreateBasicProperties();
+					var properties = model.CreateBasicProperties();
 
-			properties.SetPersistent(true);
-			properties.CorrelationId = messageId.ToString();
+					properties.SetPersistent(true);
+					properties.CorrelationId = messageId.ToString();
 
-			model.BasicPublish("", Queue, false, false, properties, stream.ToBytes());
+					model.BasicPublish("", Queue, false, false, properties, stream.ToBytes());
+				});
 		}
 
 		public Stream Dequeue()
 		{
-			var model = _manager.GetModel(this);
-
-			using (var subscription = new Subscription(model, Queue, false))
-			{
-				BasicDeliverEventArgs result;
-
-				if (subscription.Next(100, out result))
+			return AccessQueue<Stream>(() =>
 				{
-					return new MemoryStream(result.Body);
-				}
-			}
+					var result = GetChannel().Next();
 
-			return null;
+					return (result != null)
+							   ? new MemoryStream(result.Body)
+							   : null;
+				});
 		}
 
 		public Stream Dequeue(Guid messageId)
 		{
-			var model = _manager.GetModel(this);
-
-			using (var subscription = new Subscription(model, Queue, false))
-			{
-				var read = true;
-
-				while (read)
+			return AccessQueue<Stream>(() =>
 				{
-					BasicDeliverEventArgs result;
+					var read = true;
 
-					if (subscription.Next(100, out result))
+					while (read)
 					{
-						Guid guid;
+						var result = GetChannel().Next();
 
-						try
+						if (result != null)
 						{
-							guid = new Guid(result.BasicProperties.CorrelationId);
-						}
-						catch
-						{
-							guid = Guid.Empty;
-						}
+							Guid guid;
 
-						if (guid.Equals(messageId))
+							try
+							{
+								guid = new Guid(result.BasicProperties.CorrelationId);
+							}
+							catch
+							{
+								guid = Guid.Empty;
+							}
+
+							if (guid.Equals(messageId))
+							{
+								return new MemoryStream(result.Body);
+							}
+						}
+						else
 						{
-							return new MemoryStream(result.Body);
+							read = false;
 						}
 					}
-					else
-					{
-						read = false;
-					}
-				}
-			}
 
-			return null;
+					return null;
+				});
 		}
 
 		public bool Remove(Guid messageId)
 		{
-			var model = _manager.GetModel(this);
-
-			using (var subscription = new Subscription(model, Queue, false))
-			{
-				var read = true;
-
-				while (read)
+			return AccessQueue(() =>
 				{
-					BasicDeliverEventArgs result;
+					var read = true;
 
-					if (subscription.Next(100, out result))
+					while (read)
 					{
-						Guid guid;
+						var result = GetChannel().Next();
 
-						try
+						if (result != null)
 						{
-							guid = new Guid(result.BasicProperties.CorrelationId);
+							Guid guid;
+
+							try
+							{
+								guid = new Guid(result.BasicProperties.CorrelationId);
+							}
+							catch
+							{
+								guid = Guid.Empty;
+							}
+
+							if (guid.Equals(messageId))
+							{
+								GetChannel().Acknowledge();
+
+								return true;
+							}
 						}
-						catch
+						else
 						{
-							guid = Guid.Empty;
-						}
-
-						if (guid.Equals(messageId))
-						{
-							subscription.Ack(result);
-
-							return true;
+							read = false;
 						}
 					}
-					else
-					{
-						read = false;
-					}
-				}
-			}
 
-			return false;
+					return false;
+				});
 		}
 
 		public int Count
 		{
-			get
-			{
-				try
-				{
-					return (int) _manager.GetModel(this).QueueDeclarePassive(Queue).MessageCount;
-				}
-				catch (Exception ex)
-				{
-					throw;
-				}
-			}
+			get { return AccessQueue(() => (int)QueueDeclare(GetChannel().Model).MessageCount); }
 		}
 
 		public void Drop()
 		{
-			_manager.GetModel(this).QueueDelete(Queue);
+			AccessQueue(() => { GetChannel().Model.QueueDelete(Queue); });
+		}
+
+		public void Create()
+		{
+			AccessQueue(() => { QueueDeclare(GetChannel().Model); });
+		}
+
+		private QueueDeclareOk QueueDeclare(IModel model)
+		{
+			return model.QueueDeclare(Queue, true, false, false, null);
+		}
+
+		private IConnection GetConnection()
+		{
+			if (_connection != null)
+			{
+				return _connection;
+			}
+
+			lock (connectionlock)
+			{
+				if (_connection == null)
+				{
+					_connection = _factory.CreateConnection();
+				}
+			}
+
+			return _connection;
+		}
+
+		private Channel GetChannel()
+		{
+			if (_channel != null)
+			{
+				return _channel;
+			}
+
+			lock (queuelock)
+			{
+				if (_channel != null)
+				{
+					return _channel;
+				}
+
+				var model = GetConnection().CreateModel();
+
+				model.BasicQos(0, 1, false);
+
+				QueueDeclare(model);
+
+				_channel = new Channel(model, new Subscription(model, Queue, false), 100);
+
+				return _channel;
+			}
+		}
+
+		public void Dispose()
+		{
+			lock (disposelock)
+			{
+				if (_channel != null)
+				{
+					_channel.Dispose();
+					_channel = null;
+				}
+
+				if (_connection != null)
+				{
+					_connection.Dispose();
+					_connection = null;
+				}
+			}
+		}
+
+		public void Acknowledge()
+		{
+			AccessQueue(() => GetChannel().Acknowledge());
+		}
+
+		public void Purge()
+		{
+			AccessQueue(() =>
+				{
+					GetChannel().Model.QueuePurge(Queue);
+				});
+		}
+
+		private void AccessQueue(Action action, int retry = 0)
+		{
+			try
+			{
+				action.Invoke();
+			}
+			catch (ConnectionException)
+			{
+				if (retry == 3)
+				{
+					throw;
+				}
+
+				Dispose();
+
+				AccessQueue(action, retry + 1);
+			}
+		}
+
+		private T AccessQueue<T>(Func<T> action, int retry = 0)
+		{
+			try
+			{
+				return action.Invoke();
+			}
+			catch (ConnectionException)
+			{
+				if (retry == 3)
+				{
+					throw;
+				}
+
+				Dispose();
+
+				return AccessQueue(action, retry + 1);
+			}
 		}
 	}
 }
