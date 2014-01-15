@@ -172,7 +172,7 @@ namespace Shuttle.ESB.Test.Integration
 
 		protected void TestInboxConcurrency(string queueSchemeAndHost, int msToComplete, bool useJournal, bool isTransactional)
 		{
-			const int COUNT = 10;
+			const int COUNT = 1;
 
 			var padlock = new object();
 			var afterDequeueDate = new List<DateTime>();
@@ -194,13 +194,18 @@ namespace Shuttle.ESB.Test.Integration
 					configuration.Inbox.WorkQueue.Enqueue(message.MessageId, configuration.Serializer.Serialize(message));
 				}
 
-				var idleCount = 0;
+				var idleThreads = new List<int>();
 
 				bus.Events.ThreadWaiting += (sender, args) =>
 					{
 						lock (padlock)
 						{
-							idleCount++;
+							if (idleThreads.Contains(Thread.CurrentThread.ManagedThreadId))
+							{
+								return;
+							}
+
+							idleThreads.Add(Thread.CurrentThread.ManagedThreadId);
 						}
 					};
 
@@ -225,7 +230,7 @@ namespace Shuttle.ESB.Test.Integration
 
 				bus.Start();
 
-				while (idleCount < COUNT)
+				while (idleThreads.Count < COUNT)
 				{
 					Thread.Sleep(30);
 				}

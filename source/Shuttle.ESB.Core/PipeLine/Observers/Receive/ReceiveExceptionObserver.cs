@@ -117,11 +117,17 @@ namespace Shuttle.ESB.Core
                             }
                         }
 
-                        scope.Complete();
+	                    if (scope != null)
+	                    {
+		                    scope.Complete();
+	                    }
                     }
                     finally
                     {
-                        scope.Dispose();
+	                    if (scope != null)
+	                    {
+		                    scope.Dispose();
+	                    }
                     }
                 }
                 finally

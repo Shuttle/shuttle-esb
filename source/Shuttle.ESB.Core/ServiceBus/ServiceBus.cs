@@ -318,7 +318,7 @@ namespace Shuttle.ESB.Core
 				return;
 			}
 
-			Configuration.Modules.ForEach(module => module.AttemptDispose());
+			Configuration.Modules.AttemptDispose();
 
 			if (Configuration.HasInbox)
 			{
@@ -340,10 +340,7 @@ namespace Shuttle.ESB.Core
 				deferredMessageThreadPool.Dispose();
 			}
 
-			foreach (var factory in Configuration.QueueManager.GetQueueFactories())
-			{
-				factory.AttemptDispose();
-			}
+			Configuration.QueueManager.AttemptDispose();
 
 			started = false;
 		}

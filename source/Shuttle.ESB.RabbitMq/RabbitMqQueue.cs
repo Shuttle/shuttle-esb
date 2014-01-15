@@ -21,8 +21,7 @@ namespace Shuttle.ESB.RabbitMQ
 		private readonly ConnectionFactory _factory;
 		private IConnection _connection;
 
-		[ThreadStatic]
-		private static Channel _channel;
+		private readonly Dictionary<int, Channel> _channels = new Dictionary<int, Channel>();
 
 		public RabbitMQQueue(Uri uri)
 		{
@@ -269,6 +268,8 @@ namespace Shuttle.ESB.RabbitMQ
 				if (_connection == null)
 				{
 					_connection = _factory.CreateConnection();
+
+					_connection.AutoClose = false;
 				}
 			}
 
@@ -277,27 +278,51 @@ namespace Shuttle.ESB.RabbitMQ
 
 		private Channel GetChannel()
 		{
-			if (_channel != null)
+			var key = Thread.CurrentThread.ManagedThreadId;
+
+			if (_channels.ContainsKey(key))
 			{
-				return _channel;
+				return _channels[key];
 			}
 
 			lock (queuelock)
 			{
-				if (_channel != null)
+				if (_channels.ContainsKey(key))
 				{
-					return _channel;
+					return _channels[key];
 				}
 
-				var model = GetConnection().CreateModel();
+				var retry = 0;
+				IConnection connection = null;
+
+				while (connection == null && retry < 3) // TODO: retry should be configurable
+				{
+					try
+					{
+						connection = GetConnection();
+					}
+					catch (Exception)
+					{
+						retry++;
+					}
+				}
+
+				if (connection == null)
+				{
+					throw new ConnectionException(); // TODO: proper message maybe
+				}
+
+				var model = connection.CreateModel();
 
 				model.BasicQos(0, 1, false);
 
 				QueueDeclare(model);
 
-				_channel = new Channel(model, new Subscription(model, Queue, false), 100);
+				var channel = new Channel(model, new Subscription(model, Queue, false), 100); // TODO: timeout in configuration (local & remote)
 
-				return _channel;
+				_channels.Add(key, channel);
+
+				return channel;
 			}
 		}
 
@@ -305,15 +330,32 @@ namespace Shuttle.ESB.RabbitMQ
 		{
 			lock (disposelock)
 			{
-				if (_channel != null)
+				foreach (var channel in _channels.Values)
 				{
-					_channel.Dispose();
-					_channel = null;
+					if (channel.Model.IsOpen)
+					{
+						channel.Model.Close();
+					}
 				}
+				
+				_channels.Values.AttemptDispose();
+				_channels.Clear();
 
 				if (_connection != null)
 				{
-					_connection.Dispose();
+					if (_connection.IsOpen)
+					{
+						_connection.Close(1000); // TODO: timeout in configuration
+					}
+
+					try
+					{
+						_connection.Dispose();
+					}
+					catch (IOException)
+					{
+					}
+
 					_connection = null;
 				}
 			}

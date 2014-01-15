@@ -52,7 +52,6 @@
 					.WithEvent<OnAcknowledgeMessage>();
 			}
 
-            RegisterObserver(new PeekObserver());
             RegisterObserver(new DequeueObserver());
             RegisterObserver(new DeserializeTransportMessageObserver());
             RegisterObserver(new DeserializeMessageObserver());

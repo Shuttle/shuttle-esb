@@ -56,7 +56,7 @@ namespace Shuttle.ESB.Test.Integration
 
 			ConfigurationAvailable += onConfigurationAvailable;
 
-			TestInboxConcurrency("msmq://.", 250, false, false);
+			TestInboxConcurrency("msmq://.", msToComplete, useJournal, isTransactionalEndpoint);
 
 			ConfigurationAvailable -= onConfigurationAvailable;
 		}
