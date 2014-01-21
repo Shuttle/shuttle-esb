@@ -77,10 +77,7 @@
       <HintPath>..\..\..\external-bin\shuttle.core\$(Framework)\Shuttle.Core.Host.exe</HintPath>
     </Reference>
     <Reference Include="Shuttle.Core.Infrastructure">
-      <HintPath>..\..\..\external-bin\shuttle.core\$(Framework)\Shuttle.Core.Infrastructure.dll</HintPath>
-    </Reference>
-    <Reference Include="Shuttle.Core.SqlServer">
-      <HintPath>..\..\..\external-bin\shuttle.core\$(Framework)\Shuttle.Core.SqlServer.dll</HintPath>
+      <HintPath>..\..\..\source\packages\shuttle-core-infrastructure.2.1.2.0\lib\net35-full\Shuttle.Core.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="Shuttle.ESB.Core, Version=0.1.4075.35334, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -92,10 +89,6 @@
     <Reference Include="Shuttle.ESB.Msmq, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\build\Debug\$(Framework)\Shuttle.ESB.Msmq.dll</HintPath>
-    </Reference>
-    <Reference Include="Shuttle.ESB.SqlServer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\build\Debug\$(Framework)\Shuttle.ESB.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -112,15 +105,20 @@
     <Compile Include="ServiceBusHost.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\source\Shuttle.ESB.SqlServer\Shuttle.ESB.SqlServer.csproj">
+      <Project>{71b25665-8f18-4a3b-b2cc-0c6444252091}</Project>
+      <Name>Shuttle.ESB.SqlServer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PublishSubscribe.Messages\PublishSubscribe.Messages.csproj">
       <Project>{9F8BE523-C748-499A-90C1-E0FB59CE6B18}</Project>
       <Name>PublishSubscribe.Messages</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -5,7 +5,7 @@ namespace Shuttle.ESB.Core
 {
     public interface IQueueManager
     {
-        IQueueFactory GetQueueFactory(string uri);
+        IQueueFactory GetQueueFactory(string scheme);
         IQueueFactory GetQueueFactory(Uri uri);
         IQueue GetQueue(string uri);
         IQueue CreateQueue(string uri);

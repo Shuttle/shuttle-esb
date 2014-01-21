@@ -1,6 +1,5 @@
 using System;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.Test.Shared
@@ -11,8 +10,6 @@ namespace Shuttle.ESB.Test.Shared
 		[SetUp]
 		public void SetUpTest()
 		{
-			Mocks = new MockRepository();
-
 			Serializer = new DefaultSerializer();
 
 			TestSetUp();
@@ -22,8 +19,6 @@ namespace Shuttle.ESB.Test.Shared
 		protected virtual void TearDownTest()
 		{
 		}
-
-		protected MockRepository Mocks { get; private set; }
 
 		public ISerializer Serializer { get; private set; }
 
@@ -106,16 +101,6 @@ namespace Shuttle.ESB.Test.Shared
 
 		protected virtual void TestSetUp()
 		{
-		}
-
-		protected T Mock<T>() where T : class
-		{
-			return MockRepository.GenerateMock<T>();
-		}
-
-		protected T Stub<T>() where T : class
-		{
-			return MockRepository.GenerateStub<T>();
 		}
 
 		[TestFixtureTearDown]

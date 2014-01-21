@@ -133,9 +133,9 @@
     <value>A default service has already been registered for type '{0}'.</value>
     <comment>{0} = full service type</comment>
   </data>
-  <data name="DuplicateQueueFactoryException" xml:space="preserve">
-    <value>A queue factory for scheme '{0}' already exists.  Cannot register queue factory type '{1}'.</value>
-    <comment>{0} = scheme, {1} = full factory type name</comment>
+  <data name="DuplicateQueueFactoryReplaced" xml:space="preserve">
+    <value>A queue factory for scheme '{0}' already existed.  Removed queue factory type '{1}' to register queue factory type '{2}'.</value>
+    <comment>{0} = scheme, {1} = full factory type name removed, {2} full factory type name registered</comment>
   </data>
   <data name="DuplicateServiceTypeException" xml:space="preserve">
     <value>A service has already been registered for type '{0}'.</value>

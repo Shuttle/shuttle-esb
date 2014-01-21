@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using Moq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Shuttle.ESB.Core;
 using Shuttle.ESB.Test.Shared.Mocks;
 
@@ -23,14 +23,14 @@ namespace Shuttle.ESB.Test.Unit.Core
 
 			var configuration = CreateMemoryConfiguration();
 
-			var mockMessageRouteProvider = Mock<IMessageRouteProvider>();
+			var mockMessageRouteProvider = new Mock<IMessageRouteProvider>();
 
-			mockMessageRouteProvider.Stub(mock => mock.GetRouteUris(Arg<object>.Is.Anything)).Return(new List<string>
+			mockMessageRouteProvider.Setup(mock => mock.GetRouteUris(It.IsAny<object>())).Returns(new List<string>
 			{
 			  configuration.Inbox.WorkQueue.Uri.ToString()
 			});
 
-			configuration.MessageRouteProvider = mockMessageRouteProvider;
+			configuration.MessageRouteProvider = mockMessageRouteProvider.Object;
 
 			using (var bus = new ServiceBus(configuration))
 			{
@@ -55,7 +55,7 @@ namespace Shuttle.ESB.Test.Unit.Core
 		[Test]
 		public void Should_be_able_to_publish_an_event()
 		{
-			var mockSubscriptionManager = Mock<ISubscriptionManager>();
+			var mockSubscriptionManager = new Mock<ISubscriptionManager>();
 
 			const string SUBSCRIBER1_URI = "memory://./subscriber1";
 			const string SUBSCRIBER2_URI = "memory://./subscriber2";
@@ -66,11 +66,11 @@ namespace Shuttle.ESB.Test.Unit.Core
 			                  		SUBSCRIBER2_URI
 			                  	};
 
-			mockSubscriptionManager.Stub(mock => mock.GetSubscribedUris(Arg<object>.Is.Anything)).Return(subscribers);
+			mockSubscriptionManager.Setup(mock => mock.GetSubscribedUris(It.IsAny<object>())).Returns(subscribers);
 
 			var configuration = CreateMemoryConfiguration();
 
-			configuration.SubscriptionManager = mockSubscriptionManager;
+			configuration.SubscriptionManager = mockSubscriptionManager.Object;
 
 			var subscriber1 = configuration.QueueManager.CreateQueue(SUBSCRIBER1_URI);
 			var subscriber2 = configuration.QueueManager.CreateQueue(SUBSCRIBER2_URI); ;

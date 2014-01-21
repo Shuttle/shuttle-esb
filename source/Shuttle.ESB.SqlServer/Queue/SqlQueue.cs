@@ -76,12 +76,12 @@ namespace Shuttle.ESB.SqlServer
 
 			Uri = builder.Uri;
 
-			_dataSource = new DataSource(Uri.Host, new SqlServerDbDataParameterFactory());
+			_dataSource = new DataSource(Uri.Host, new SqlDbDataParameterFactory());
 
 			using (databaseConnectionFactory.Create(_dataSource))
 			{
 				var host = databaseGateway.GetScalarUsing<string>(_dataSource,
-																  RawQuery.CreateFrom("select host_name()"));
+																  RawQuery.Create("select host_name()"));
 
 				IsLocal = (host ?? string.Empty) == Environment.MachineName;
 			}
@@ -189,7 +189,7 @@ namespace Shuttle.ESB.SqlServer
 				{
 					_databaseGateway.ExecuteUsing(
 						_dataSource,
-						RawQuery.CreateFrom(_enqueueQueryStatement)
+						RawQuery.Create(_enqueueQueryStatement)
 								.AddParameterValue(QueueColumns.MessageId, messageId)
 								.AddParameterValue(QueueColumns.MessageBody, stream.ToBytes()));
 				}
@@ -278,7 +278,7 @@ namespace Shuttle.ESB.SqlServer
 					{
 						var row = _databaseGateway.GetSingleRowUsing(
 							_dataSource,
-							RawQuery.CreateFrom(_dequeueIdQueryStatement).AddParameterValue(QueueColumns.MessageId,
+							RawQuery.Create(_dequeueIdQueryStatement).AddParameterValue(QueueColumns.MessageId,
 																						   messageId));
 
 						if (row == null)
@@ -315,7 +315,7 @@ namespace Shuttle.ESB.SqlServer
 				{
 					return _databaseGateway.ExecuteUsing(
 						_dataSource,
-						RawQuery.CreateFrom(_removeQueryStatement)
+						RawQuery.Create(_removeQueryStatement)
 								.AddParameterValue(QueueColumns.MessageId, messageId)) > 0;
 				}
 			}
@@ -329,12 +329,12 @@ namespace Shuttle.ESB.SqlServer
 
 		private void BuildQueries()
 		{
-			_existsQuery = RawQuery.CreateFrom(_scriptProvider.GetScript(Script.QueueExists, _tableName));
-			_createQuery = RawQuery.CreateFrom(_scriptProvider.GetScript(Script.QueueCreate, _tableName));
-			_dropQuery = RawQuery.CreateFrom(_scriptProvider.GetScript(Script.QueueDrop, _tableName));
-			_purgeQuery = RawQuery.CreateFrom(_scriptProvider.GetScript(Script.QueuePurge, _tableName));
-			_dequeueQuery = RawQuery.CreateFrom(_scriptProvider.GetScript(Script.QueueDequeue, _tableName));
-			_countQuery = RawQuery.CreateFrom(_scriptProvider.GetScript(Script.QueueCount, _tableName));
+			_existsQuery = RawQuery.Create(_scriptProvider.GetScript(Script.QueueExists, _tableName));
+			_createQuery = RawQuery.Create(_scriptProvider.GetScript(Script.QueueCreate, _tableName));
+			_dropQuery = RawQuery.Create(_scriptProvider.GetScript(Script.QueueDrop, _tableName));
+			_purgeQuery = RawQuery.Create(_scriptProvider.GetScript(Script.QueuePurge, _tableName));
+			_dequeueQuery = RawQuery.Create(_scriptProvider.GetScript(Script.QueueDequeue, _tableName));
+			_countQuery = RawQuery.Create(_scriptProvider.GetScript(Script.QueueCount, _tableName));
 			_enqueueQueryStatement = _scriptProvider.GetScript(Script.QueueEnqueue, _tableName);
 			_removeQueryStatement = _scriptProvider.GetScript(Script.QueueRemove, _tableName);
 			_dequeueIdQueryStatement = _scriptProvider.GetScript(Script.QueueDequeueId, _tableName);
@@ -350,7 +350,7 @@ namespace Shuttle.ESB.SqlServer
 				{
 					using (var reader = _databaseGateway.GetReaderUsing(
 						_dataSource,
-						RawQuery.CreateFrom(_scriptProvider.GetScript(Script.QueueRead,
+						RawQuery.Create(_scriptProvider.GetScript(Script.QueueRead,
 																	 top.ToString(),
 																	 _tableName))))
 					{

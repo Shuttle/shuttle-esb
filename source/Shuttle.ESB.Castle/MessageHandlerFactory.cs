@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
+using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Shuttle.Core.Infrastructure;
-using Shuttle.Core.Infrastructure.Castle;
 using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.Castle
@@ -26,7 +25,9 @@ namespace Shuttle.ESB.Castle
 
 		public override IMessageHandler CreateHandler(object message)
 		{
-			return (IMessageHandler)container.ResolveAssignable(generic.MakeGenericType(message.GetType())).FirstOrDefault();
+			var all = container.ResolveAll(generic.MakeGenericType(message.GetType()));
+
+			return all.Length == 0 ? (IMessageHandler)all.GetValue(0) : null;
 		}
 
 		public override IEnumerable<Type> MessageTypesHandled
@@ -40,7 +41,7 @@ namespace Shuttle.ESB.Castle
 
 			if (!container.Kernel.HasComponent(typeof(IServiceBus)))
 			{
-				container.Register(bus);
+				container.Register(Component.For<IServiceBus>().Instance(bus));
 			}
 
 			messageTypesHandled.Clear();

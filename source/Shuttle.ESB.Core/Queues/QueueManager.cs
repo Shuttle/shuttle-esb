@@ -6,14 +6,15 @@ using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ESB.Core
 {
-	public class QueueManager : IRequireInitialization, IQueueManager, IDisposable
+	public class QueueManager : IQueueManager, IDisposable
 	{
+		private bool _initialized;
+		private bool _initializing;
 		private readonly IReflectionService _reflectionService;
 		private static readonly object _padlock = new object();
 
 		private readonly List<IQueue> _queues = new List<IQueue>();
 		private readonly List<IQueueFactory> _queueFactories = new List<IQueueFactory>();
-		private bool _initialized;
 
 		private readonly ILog _log;
 
@@ -26,14 +27,69 @@ namespace Shuttle.ESB.Core
 			_log = Log.For(this);
 		}
 
-		public static IQueueManager Default()
+		public static QueueManager Default()
 		{
 			return new QueueManager(new ReflectionService());
 		}
 
-		public IQueueFactory GetQueueFactory(string uri)
+		private List<IQueueFactory> QueueFactories()
 		{
-			return GetQueueFactory(new Uri(uri));
+			if (_initialized || _initializing)
+			{
+				return _queueFactories;
+			}
+
+			try
+			{
+				_initializing = true;
+
+				lock (_padlock)
+				{
+					if (!_initialized)
+					{
+						var factoryTypes = new List<Type>();
+
+						_reflectionService.GetAssemblies(AppDomain.CurrentDomain.BaseDirectory).ForEach(
+							assembly => factoryTypes.AddRange(_reflectionService.GetTypes<IQueueFactory>(assembly)));
+
+						foreach (var type in factoryTypes.Union(_reflectionService.GetTypes<IQueueFactory>()))
+						{
+							try
+							{
+								type.AssertDefaultConstructor(string.Format(ESBResources.DefaultConstructorRequired, "Queue factory", type.FullName));
+
+								var instance = (IQueueFactory)Activator.CreateInstance(type);
+
+								if (!ContainsQueueFactory(instance.Scheme))
+								{
+									RegisterQueueFactory(instance);
+								}
+							}
+							catch (Exception ex)
+							{
+								_log.Warning(string.Format("Queue factory not instantiated: {0}", ex.Message));
+							}
+						}
+
+						_initialized = true;
+					}
+				}
+			}
+			finally
+			{
+				_initializing = false;
+			}
+
+			return _queueFactories;
+		}
+
+		public IQueueFactory GetQueueFactory(string scheme)
+		{
+			Uri uri;
+
+			return Uri.TryCreate(scheme, UriKind.Absolute, out uri)
+					   ? GetQueueFactory(uri)
+					   : QueueFactories().Find(factory => factory.Scheme.Equals(scheme, StringComparison.InvariantCultureIgnoreCase));
 		}
 
 		public IQueueFactory GetQueueFactory(Uri uri)
@@ -44,49 +100,6 @@ namespace Shuttle.ESB.Core
 			}
 
 			throw new QueueFactoryNotFoundException(uri.Scheme);
-		}
-
-		private List<IQueueFactory> QueueFactories()
-		{
-			if (_initialized)
-			{
-				return _queueFactories;
-			}
-
-			lock (_padlock)
-			{
-				if (!_initialized)
-				{
-					var factoryTypes = new List<Type>();
-
-					_reflectionService.GetAssemblies(AppDomain.CurrentDomain.BaseDirectory).ForEach(
-						assembly => factoryTypes.AddRange(_reflectionService.GetTypes<IQueueFactory>(assembly)));
-
-					foreach (var type in factoryTypes.Union(_reflectionService.GetTypes<IQueueFactory>()))
-					{
-						try
-						{
-							type.AssertDefaultConstructor(string.Format(ESBResources.DefaultConstructorRequired,
-																		"Queue factory", type.FullName));
-
-							var instance = (IQueueFactory)Activator.CreateInstance(type);
-
-							if (!ContainsQueueFactory(instance.Scheme))
-							{
-								RegisterQueueFactory(instance);
-							}
-						}
-						catch (Exception ex)
-						{
-							_log.Warning(string.Format("Queue factory not instantiated: {0}", ex.Message));
-						}
-					}
-
-					_initialized = true;
-				}
-			}
-
-			return _queueFactories;
 		}
 
 		public IQueue GetQueue(string uri)
@@ -169,7 +182,7 @@ namespace Shuttle.ESB.Core
 
 		public IEnumerable<IQueueFactory> GetQueueFactories()
 		{
-			return new ReadOnlyCollection<IQueueFactory>(QueueFactories());
+			return new ReadOnlyCollection<IQueueFactory>(_queueFactories);
 		}
 
 		private void CreateQueues(QueueCreationType queueCreationType, IWorkQueueConfiguration workQueueConfiguration)
@@ -212,31 +225,32 @@ namespace Shuttle.ESB.Core
 		{
 			Guard.AgainstNull(queueFactory, "queueFactory");
 
-			if (ContainsQueueFactory(queueFactory.Scheme))
+			var factory = GetQueueFactory(queueFactory.Scheme);
+
+			if (factory != null)
 			{
-				throw new DuplicateQueueFactoryException(queueFactory);
+				QueueFactories().Remove(factory);
+
+				_log.Warning(string.Format(ESBResources.DuplicateQueueFactoryReplaced, queueFactory.Scheme, factory.GetType().FullName, queueFactory.GetType().FullName));
 			}
 
-			_queueFactories.Add(queueFactory);
+			QueueFactories().Add(queueFactory);
 		}
 
 		public bool ContainsQueueFactory(string scheme)
 		{
-			return _queueFactories.Find(
-					   factory => factory.Scheme.Equals(scheme, StringComparison.InvariantCultureIgnoreCase)
-					   ) != null;
+			return GetQueueFactory(scheme) != null;
 		}
 
 		public void Dispose()
 		{
 			_queueFactories.AttemptDispose();
 			_queues.AttemptDispose();
-		}
 
-		public void Initialize(IServiceBus bus)
-		{
-			// todo: initialize the queues here... maybe have an internal registration to handle the duplicate business depending on whether the developer registered a factory
-			throw new NotImplementedException();
+			_queueFactories.Clear();
+			_queues.Clear();
+
+			_initialized = false;
 		}
 	}
 }

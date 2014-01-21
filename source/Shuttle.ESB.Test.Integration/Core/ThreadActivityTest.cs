@@ -1,6 +1,6 @@
 using System;
+using Moq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ESB.Test.Integration.Core
@@ -18,15 +18,15 @@ namespace Shuttle.ESB.Test.Integration.Core
 
             var start = DateTime.Now;
 
-            var mockState = Mock<IActiveState>();
+            var mockState = new Mock<IActiveState>();
 
-            mockState.Stub(mock => mock.Active).Return(true);
+            mockState.Setup(mock => mock.Active).Returns(true);
 
-            activity.Waiting(mockState);
+            activity.Waiting(mockState.Object);
 
             Assert.IsTrue((DateTime.Now - start).TotalMilliseconds >= 250);
 
-            activity.Waiting(mockState);
+            activity.Waiting(mockState.Object);
 
             Assert.IsTrue((DateTime.Now - start).TotalMilliseconds >= 750);
         }

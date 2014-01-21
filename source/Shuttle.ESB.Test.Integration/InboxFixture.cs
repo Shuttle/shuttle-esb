@@ -11,7 +11,7 @@ namespace Shuttle.ESB.Test.Integration
 {
 	public abstract class InboxFixture : IntegrationFixture
 	{
-		protected event EventHandler<ConfigurationAvailableEventArgs> ConfigurationAvailable = delegate { }; 
+		protected event EventHandler<ConfigurationAvailableEventArgs> ConfigurationAvailable = delegate { };
 
 		protected void TestInboxThroughput(string queueSchemeAndHost, int timeoutMilliseconds, int count,
 										   bool useIdempotenceTracker, bool useJournal, bool isTransactional)
@@ -73,6 +73,8 @@ namespace Shuttle.ESB.Test.Integration
 				}
 
 				sw.Stop();
+
+				AttemptDropQueues(configuration.QueueManager, queueSchemeAndHost, useJournal);
 			}
 
 			var ms = sw.ElapsedMilliseconds;
@@ -82,8 +84,6 @@ namespace Shuttle.ESB.Test.Integration
 			Assert.IsTrue(ms < timeoutMilliseconds,
 						  "Should be able to process at least {0} messages in {1} ms but it ook {2} ms.",
 						  count, timeoutMilliseconds, ms);
-
-			AttemptDropQueues(configuration.QueueManager, queueSchemeAndHost, useJournal);
 		}
 
 		private void AttemptDropQueues(IQueueManager queueManager, string queueSchemeAndHost, bool useJournal)
@@ -120,11 +120,11 @@ namespace Shuttle.ESB.Test.Integration
 				{
 					Thread.Sleep(5);
 				}
+
+				Assert.NotNull(configuration.Inbox.ErrorQueue.Dequeue());
+
+				AttemptDropQueues(configuration.QueueManager, queueSchemeAndHost, useJournal);
 			}
-
-			Assert.NotNull(configuration.Inbox.ErrorQueue.Dequeue());
-
-			AttemptDropQueues(configuration.QueueManager, queueSchemeAndHost, useJournal);
 		}
 
 		private IServiceBusConfiguration GetTestInboxConfiguration(string queueSchemeAndHost, bool useJournal, int threadCount,
@@ -234,6 +234,8 @@ namespace Shuttle.ESB.Test.Integration
 				{
 					Thread.Sleep(30);
 				}
+
+				AttemptDropQueues(configuration.QueueManager, queueSchemeAndHost, useJournal);
 			}
 
 			Assert.AreEqual(COUNT, afterDequeueDate.Count,
@@ -244,8 +246,6 @@ namespace Shuttle.ESB.Test.Integration
 				Assert.IsTrue(dateTime.Subtract(offsetDate) < TimeSpan.FromMilliseconds(msToComplete),
 							  "All dequeued messages have to be within {0} ms of first dequeue.", msToComplete);
 			}
-
-			AttemptDropQueues(configuration.QueueManager, queueSchemeAndHost, useJournal);
 		}
 
 		protected void TestInboxDeferred(string queueSchemeAndHost)

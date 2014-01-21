@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Shuttle.Core.Infrastructure;
 using Shuttle.ESB.Core;
+using Guard = Shuttle.Core.Infrastructure.Guard;
 
 namespace Shuttle.ESB.Test.Integration.Core
 {

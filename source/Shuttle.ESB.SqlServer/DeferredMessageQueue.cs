@@ -12,7 +12,7 @@ namespace Shuttle.ESB.SqlServer
 		IPurge,
 		ICount
 	{
-		private static readonly DataSource DeferredMessageDataSource = new DataSource("DeferredMessage", new SqlServerDbDataParameterFactory());
+		private static readonly DataSource DeferredMessageDataSource = new DataSource("DeferredMessage", new SqlDbDataParameterFactory());
 
 		private readonly IDatabaseGateway _databaseGateway;
 		private readonly IDatabaseConnectionFactory _databaseConnectionFactory;
@@ -58,8 +58,8 @@ namespace Shuttle.ESB.SqlServer
 		{
 			_dequeueQueryStatement = _scriptProvider.GetScript(Script.DeferredMessageDequeue);
 			_enqueueQueryStatement = _scriptProvider.GetScript(Script.DeferredMessageEnqueue);
-			_purgeQuery = RawQuery.CreateFrom(_scriptProvider.GetScript(Script.DeferredMessagePurge));
-			_countQuery = RawQuery.CreateFrom(_scriptProvider.GetScript(Script.DeferredMessageCount));
+			_purgeQuery = RawQuery.Create(_scriptProvider.GetScript(Script.DeferredMessagePurge));
+			_countQuery = RawQuery.Create(_scriptProvider.GetScript(Script.DeferredMessageCount));
 		}
 
 		public void Enqueue(DateTime at, Stream stream)
@@ -70,7 +70,7 @@ namespace Shuttle.ESB.SqlServer
 				{
 					_databaseGateway.ExecuteUsing(
 						DeferredMessageDataSource,
-						RawQuery.CreateFrom(_enqueueQueryStatement)
+						RawQuery.Create(_enqueueQueryStatement)
 						        .AddParameterValue(DeferredMessageColumns.DeferTillDate, at)
 						        .AddParameterValue(DeferredMessageColumns.MessageBody, stream.ToBytes()));
 				}
@@ -93,7 +93,7 @@ namespace Shuttle.ESB.SqlServer
 					{
 						var row = _databaseGateway.GetSingleRowUsing(
 							DeferredMessageDataSource,
-							RawQuery.CreateFrom(_dequeueQueryStatement)
+							RawQuery.Create(_dequeueQueryStatement)
 							        .AddParameterValue(DeferredMessageColumns.DeferTillDate, now));
 
 						return row == null ? null : new MemoryStream((byte[]) row["MessageBody"]);
@@ -114,7 +114,7 @@ namespace Shuttle.ESB.SqlServer
 			{
 				if (_databaseGateway.GetScalarUsing<int>(
 					DeferredMessageDataSource,
-					RawQuery.CreateFrom(
+					RawQuery.Create(
 						_scriptProvider.GetScript(
 							Script.DeferredMessageExists))) != 1)
 				{

@@ -9,12 +9,12 @@ namespace Shuttle.ESB.Test.Integration
 	{
 		public void SetUp(IServiceBusConfiguration configuration, bool isTransactional)
 		{
-			var factory = configuration.QueueManager.GetQueueFactory("msmq://") as MsmqQueueFactory;
-
-			if (factory == null)
+			if (!configuration.QueueManager.ContainsQueueFactory("msmq"))
 			{
 				return;
 			}
+
+			var factory = configuration.QueueManager.GetQueueFactory("msmq") as MsmqQueueFactory;
 
 			factory.Configuration.AddQueueConfiguration(new MsmqQueueConfiguration(new Uri("msmq://./test-inbox-work"), isTransactional));
 			factory.Configuration.AddQueueConfiguration(new MsmqQueueConfiguration(new Uri("msmq://./test-inbox-journal"), isTransactional));

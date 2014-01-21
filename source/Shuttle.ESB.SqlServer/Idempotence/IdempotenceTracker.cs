@@ -9,7 +9,7 @@ namespace Shuttle.ESB.SqlServer.Idempotence
         IIdempotenceTracker,
         IRequireInitialization
     {
-        private static readonly DataSource IdempotenceDataSource = new DataSource("Idempotence", new SqlServerDbDataParameterFactory());
+        private static readonly DataSource IdempotenceDataSource = new DataSource("Idempotence", new SqlDbDataParameterFactory());
 
         private readonly IDatabaseGateway databaseGateway;
         private readonly IDatabaseConnectionFactory databaseConnectionFactory;
@@ -44,7 +44,7 @@ namespace Shuttle.ESB.SqlServer.Idempotence
             {
                 return databaseGateway.GetScalarUsing<int>(
                     IdempotenceDataSource,
-                    RawQuery.CreateFrom(
+                    RawQuery.Create(
                         scriptProvider.GetScript(
                             Script.IdempotenceTrackerContains))
                             .AddParameterValue(IdempotenceTrackerColumns.MessageId, transportMessage.MessageId)) == 1;
@@ -57,7 +57,7 @@ namespace Shuttle.ESB.SqlServer.Idempotence
             {
                 databaseGateway.ExecuteUsing(
                     IdempotenceDataSource,
-                    RawQuery.CreateFrom(
+                    RawQuery.Create(
                         scriptProvider.GetScript(Script.IdempotenceTrackerAdd))
                             .AddParameterValue(IdempotenceTrackerColumns.MessageId, transportMessage.MessageId));
             }
@@ -69,7 +69,7 @@ namespace Shuttle.ESB.SqlServer.Idempotence
             {
                 databaseGateway.ExecuteUsing(
                     IdempotenceDataSource,
-                    RawQuery.CreateFrom(
+                    RawQuery.Create(
                         scriptProvider.GetScript(Script.IdempotenceTrackerRemove))
                             .AddParameterValue(IdempotenceTrackerColumns.MessageId, transportMessage.MessageId));
             }
@@ -81,7 +81,7 @@ namespace Shuttle.ESB.SqlServer.Idempotence
             {
                 if (databaseGateway.GetScalarUsing<int>(
                     IdempotenceDataSource,
-                    RawQuery.CreateFrom(
+                    RawQuery.Create(
                         scriptProvider.GetScript(
                             Script.IdempotenceTrackerExists))) != 1)
                 {

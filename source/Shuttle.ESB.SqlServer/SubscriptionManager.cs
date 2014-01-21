@@ -11,7 +11,7 @@ namespace Shuttle.ESB.SqlServer
         ISubscriptionManager,
         IRequireInitialization
     {
-        private static readonly DataSource SubscriptionDataSource = new DataSource("Subscription", new SqlServerDbDataParameterFactory());
+        private static readonly DataSource SubscriptionDataSource = new DataSource("Subscription", new SqlDbDataParameterFactory());
 
         private readonly List<string> deferredSubscriptions = new List<string>();
 
@@ -64,7 +64,7 @@ namespace Shuttle.ESB.SqlServer
             {
                 if (databaseGateway.GetScalarUsing<int>(
                     SubscriptionDataSource,
-                    RawQuery.CreateFrom(
+                    RawQuery.Create(
                         scriptProvider.GetScript(
                             Script.SubscriptionManagerExists))) != 1)
                 {
@@ -93,7 +93,7 @@ namespace Shuttle.ESB.SqlServer
                 {
                     databaseGateway.ExecuteUsing(
                         SubscriptionDataSource,
-                        RawQuery.CreateFrom(
+                        RawQuery.Create(
                             scriptProvider.GetScript(Script.SubscriptionManagerSubscribe))
                                 .AddParameterValue(SubscriptionManagerColumns.InboxWorkQueueUri,
                                                    serviceBusConfiguration.Inbox.WorkQueue.Uri.ToString())
@@ -120,7 +120,7 @@ namespace Shuttle.ESB.SqlServer
                         {
                             table = databaseGateway.GetDataTableFor(
                                 SubscriptionDataSource,
-                                RawQuery.CreateFrom(
+                                RawQuery.Create(
                                     scriptProvider.GetScript(
                                         Script.SubscriptionManagerInboxWorkQueueUris))
                                         .AddParameterValue(SubscriptionManagerColumns.MessageType, messageType));
