@@ -63,11 +63,6 @@ namespace Shuttle.ESB.Core
 
 		public Uri Uri { get; private set; }
 
-		public QueueAvailability Exists()
-		{
-			return QueueAvailability.Exists;
-		}
-
 		public bool IsEmpty()
 		{
 			return Count == 0;
@@ -131,11 +126,6 @@ namespace Shuttle.ESB.Core
 			get { return true; }
 		}
 
-		public bool IsTransactional
-		{
-			get { return false; }
-		}
-
 		public static IQueue From(string uri)
 		{
 			return new MemoryQueue(new Uri(uri));
@@ -170,11 +160,6 @@ namespace Shuttle.ESB.Core
 			Uri = new Uri("memory://./null");
 		}
 
-		public QueueAvailability Exists()
-		{
-			return QueueAvailability.Exists;
-		}
-
 		public bool IsEmpty()
 		{
 			return true;
@@ -202,11 +187,6 @@ namespace Shuttle.ESB.Core
 		public bool IsLocal
 		{
 			get { return true; }
-		}
-
-		public bool IsTransactional
-		{
-			get { return false; }
 		}
 
 		public Uri Uri { get; private set; }

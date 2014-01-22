@@ -90,11 +90,6 @@ namespace Shuttle.ESB.RabbitMQ
 
 		public bool IsLocal { get; private set; }
 
-		public bool IsTransactional
-		{
-			get { return false; }
-		}
-
 		public Uri Uri { get; private set; }
 
 		public QueueAvailability Exists()

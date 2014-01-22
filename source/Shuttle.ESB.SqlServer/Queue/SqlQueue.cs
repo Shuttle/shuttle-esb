@@ -88,8 +88,6 @@ namespace Shuttle.ESB.SqlServer
 
 			_tableName = Uri.Segments[1];
 
-			IsTransactional = true;
-
 			BuildQueries();
 		}
 
@@ -178,8 +176,6 @@ namespace Shuttle.ESB.SqlServer
 				throw;
 			}
 		}
-
-		public bool IsTransactional { get; private set; }
 
 		public void Enqueue(Guid messageId, Stream stream)
 		{

@@ -34,5 +34,13 @@ namespace Shuttle.ESB.Test.Unit.Msmq
 		{
 			Assert.Throws<InvalidSchemeException>(() => new MsmqQueue(new Uri("sql://./inputqueue"), new MsmqConfiguration()));
 		}
+
+		[Test]
+		public void Should_be_able_to_get_transactional_parameter()
+		{
+			var queue = new MsmqQueue(new Uri("msmq://./work-queue?transactional=true"), new MsmqConfiguration());
+
+			Assert.True(queue.IsTransactional);
+		}
 	}
 }

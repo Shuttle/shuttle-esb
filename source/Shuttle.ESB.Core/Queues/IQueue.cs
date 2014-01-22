@@ -3,20 +3,11 @@ using System.IO;
 
 namespace Shuttle.ESB.Core
 {
-	public enum QueueAvailability
-	{
-		Missing = 0,
-		Exists = 1,
-		Unknown =2
-	}
-
     public interface IQueue
     {
-        bool IsLocal { get; }
-        bool IsTransactional { get; }
         Uri Uri { get; }
-        QueueAvailability Exists();
-    	bool IsEmpty();
+
+		bool IsEmpty();
 
 	    void Enqueue(Guid messageId, Stream stream);
         Stream Dequeue();
