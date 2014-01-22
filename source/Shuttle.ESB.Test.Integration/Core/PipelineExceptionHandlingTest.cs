@@ -34,7 +34,7 @@ namespace Shuttle.ESB.Test.Integration.Core
 			inboxJournalQueue.Drop();
 			inboxErrorQueue.Drop();
 
-			configuration.QueueManager.CreatePhysicalQueues(configuration, QueueCreationType.All);
+			configuration.QueueManager.CreatePhysicalQueues(configuration);
 
 			var module = new ReceivePipelineExceptionModule(inboxWorkQueue);
 

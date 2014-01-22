@@ -41,9 +41,8 @@ namespace Shuttle.ESB.Core
         private static readonly ConfigurationProperty deferredMessage =
 			new ConfigurationProperty("deferredMessage", typeof(DeferredMessageElement), null, ConfigurationPropertyOptions.None);
 
-        private static readonly ConfigurationProperty queueCreationType =
-            new ConfigurationProperty("queueCreationType", typeof (QueueCreationType), QueueCreationType.Local,
-                                      ConfigurationPropertyOptions.None);
+        private static readonly ConfigurationProperty createQueues =
+            new ConfigurationProperty("createQueues", typeof (bool), true, ConfigurationPropertyOptions.None);
 
         private static readonly ConfigurationProperty worker =
             new ConfigurationProperty("worker", typeof (WorkerElement), null, ConfigurationPropertyOptions.None);
@@ -61,7 +60,7 @@ namespace Shuttle.ESB.Core
             base.Properties.Add(outbox);
             base.Properties.Add(control);
             base.Properties.Add(deferredMessage);
-            base.Properties.Add(queueCreationType);
+            base.Properties.Add(createQueues);
             base.Properties.Add(worker);
             base.Properties.Add(transactionScope);
         }
@@ -102,10 +101,10 @@ namespace Shuttle.ESB.Core
 			get { return (DeferredMessageElement)this[deferredMessage]; }
         }
 
-        [ConfigurationProperty("queueCreationType", IsRequired = false, DefaultValue = QueueCreationType.Local)]
-        public QueueCreationType QueueCreationType
+        [ConfigurationProperty("createQueues", IsRequired = false, DefaultValue = true)]
+		public bool CreateQueues
         {
-            get { return (QueueCreationType) this[queueCreationType]; }
+            get { return (bool) this[createQueues]; }
         }
 
         [ConfigurationProperty("worker", IsRequired = false)]

@@ -19,6 +19,9 @@ namespace Shuttle.ESB.Msmq
 
 		[ThreadStatic] private static object underlyingMessageData;
 
+		private readonly bool _transactional;
+		private readonly bool _local;
+
 		private readonly string path;
 		private readonly string host;
 		private readonly bool usesIPAddress;
@@ -57,21 +60,21 @@ namespace Shuttle.ESB.Msmq
 
 			Uri = builder.Uri;
 
-			IsLocal = Uri.Host.Equals(Environment.MachineName, StringComparison.InvariantCultureIgnoreCase);
+			_local = Uri.Host.Equals(Environment.MachineName, StringComparison.InvariantCultureIgnoreCase);
 
 			var queueConfiguration = msmqConfiguration.FindQueueConfiguration(uri);
 
-			IsTransactional = queueConfiguration != null && queueConfiguration.IsTransactional;
+			_transactional = queueConfiguration != null && queueConfiguration.IsTransactional;
 
 			usesIPAddress = regexIPAddress.IsMatch(host);
 
-			path = IsLocal
+			path = _local
 				       ? string.Format(@"{0}\private$\{1}", host, uri.Segments[1])
 				       : usesIPAddress
 					         ? string.Format(@"FormatName:DIRECT=TCP:{0}\private$\{1}", host, uri.Segments[1])
 					         : string.Format(@"FormatName:DIRECT=OS:{0}\private$\{1}", host, uri.Segments[1]);
 
-			timeout = IsLocal
+			timeout = _local
 				          ? TimeSpan.FromMilliseconds(msmqConfiguration.LocalQueueTimeoutMilliseconds )
 				          : TimeSpan.FromMilliseconds(msmqConfiguration.RemoteQueueTimeoutMilliseconds);
 		}
@@ -97,29 +100,29 @@ namespace Shuttle.ESB.Msmq
 
 		public void Create()
 		{
-			if (Exists() != QueueAvailability.Missing)
+			if (Exists())
 			{
 				return;
 			}
 
-			if (!IsLocal)
+			if (!_local)
 			{
 				throw new InvalidOperationException(string.Format(MsmqResources.CannotCreateRemoteQueue, Uri));
 			}
 
-			MessageQueue.Create(path, IsTransactional).Dispose();
+			MessageQueue.Create(path, _transactional).Dispose();
 
 			log.Information(string.Format(MsmqResources.QueueCreated, Uri));
 		}
 
 		public void Drop()
 		{
-			if (Exists() == QueueAvailability.Missing)
+			if (!Exists())
 			{
 				return;
 			}
 
-			if (!IsLocal)
+			if (!_local)
 			{
 				throw new InvalidOperationException(string.Format(MsmqResources.CannotDropRemoteQueue, Uri));
 			}
@@ -139,18 +142,11 @@ namespace Shuttle.ESB.Msmq
 			log.Information(string.Format(MsmqResources.QueuePurged, Uri));
 		}
 
-		public bool IsTransactional { get; private set; }
-
-		public bool IsLocal { get; private set; }
 		public Uri Uri { get; private set; }
 
-		public QueueAvailability Exists()
+		private bool Exists()
 		{
-			return IsLocal
-				       ? MessageQueue.Exists(path)
-					         ? QueueAvailability.Exists
-					         : QueueAvailability.Missing
-				       : QueueAvailability.Unknown;
+			return MessageQueue.Exists(path);
 		}
 
 		public bool IsEmpty()
@@ -216,8 +212,6 @@ namespace Shuttle.ESB.Msmq
 
 		public Stream Dequeue()
 		{
-			ResetUnderlyingMessageData();
-
 			try
 			{
 				Message message;
@@ -231,8 +225,6 @@ namespace Shuttle.ESB.Msmq
 				{
 					return null;
 				}
-
-				underlyingMessageData = message;
 
 				return message.BodyStream;
 			}
@@ -262,8 +254,6 @@ namespace Shuttle.ESB.Msmq
 
 		public Stream Dequeue(Guid messageId)
 		{
-			ResetUnderlyingMessageData();
-
 			try
 			{
 				Message message;
@@ -277,8 +267,6 @@ namespace Shuttle.ESB.Msmq
 				{
 					return null;
 				}
-
-				underlyingMessageData = message;
 
 				return message.BodyStream;
 			}
@@ -405,20 +393,11 @@ namespace Shuttle.ESB.Msmq
 			Process.GetCurrentProcess().Kill();
 		}
 
-		private void ResetUnderlyingMessageData()
-		{
-			underlyingMessageData = null;
-		}
-
 		private Message PeekMessage(MessageQueue queue, Cursor cursor, PeekAction action)
 		{
-			ResetUnderlyingMessageData();
-
 			try
 			{
-				underlyingMessageData = queue.Peek(timeout, cursor, action);
-
-				return (Message) underlyingMessageData;
+				return queue.Peek(timeout, cursor, action);
 			}
 			catch
 			{
@@ -428,10 +407,10 @@ namespace Shuttle.ESB.Msmq
 
 		private MessageQueueTransactionType TransactionType()
 		{
-			return IsTransactional
+			return _transactional
 				       ? Transaction.Current != null
 					         ? MessageQueueTransactionType.Automatic
-					         : IsTransactional
+					         : _transactional
 						           ? MessageQueueTransactionType.Single
 						           : MessageQueueTransactionType.None
 				       : MessageQueueTransactionType.None;

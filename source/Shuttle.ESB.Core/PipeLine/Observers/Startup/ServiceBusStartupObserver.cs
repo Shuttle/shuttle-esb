@@ -47,10 +47,11 @@ namespace Shuttle.ESB.Core
 
 		public void Execute(OnCreateQueues pipelineEvent)
 		{
-			if (ServiceBusConfiguration.ServiceBusSection != null)
+			if (ServiceBusConfiguration.ServiceBusSection != null 
+				&&
+				ServiceBusConfiguration.ServiceBusSection.CreateQueues)
 			{
-				_bus.Configuration.QueueManager.CreatePhysicalQueues(_bus.Configuration,
-																	ServiceBusConfiguration.ServiceBusSection.QueueCreationType);
+				_bus.Configuration.QueueManager.CreatePhysicalQueues(_bus.Configuration);
 			}
 		}
 

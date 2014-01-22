@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using Shuttle.Core.Data;
 using Shuttle.Core.Infrastructure;
@@ -9,8 +10,7 @@ namespace Shuttle.ESB.SqlServer
 {
 	public class SqlQueue : IQueue, ICreate, IDrop, IPurge, ICount, IQueueReader
 	{
-		[ThreadStatic]
-		private static object _underlyingMessageData;
+		[ThreadStatic] private static object _underlyingMessageData;
 
 		internal const string SCHEME = "sql";
 		private readonly DataSource _dataSource;
@@ -38,16 +38,16 @@ namespace Shuttle.ESB.SqlServer
 
 		public SqlQueue(Uri uri)
 			: this(uri,
-				   new ScriptProvider(),
-				   DatabaseConnectionFactory.Default(),
-				   DatabaseGateway.Default())
+			       new ScriptProvider(),
+			       DatabaseConnectionFactory.Default(),
+			       DatabaseGateway.Default())
 		{
 		}
 
 		public SqlQueue(Uri uri,
-						IScriptProvider scriptProvider,
-						IDatabaseConnectionFactory databaseConnectionFactory,
-						IDatabaseGateway databaseGateway)
+		                IScriptProvider scriptProvider,
+		                IDatabaseConnectionFactory databaseConnectionFactory,
+		                IDatabaseGateway databaseGateway)
 		{
 			Guard.AgainstNull(uri, "uri");
 			Guard.AgainstNull(scriptProvider, "scriptProvider");
@@ -68,8 +68,8 @@ namespace Shuttle.ESB.SqlServer
 			if (uri.LocalPath == "/" || uri.Segments.Length != 2)
 			{
 				throw new UriFormatException(string.Format(ESBResources.UriFormatException,
-														   "sql://{{connection-name}}/{{table-name}}",
-														   uri));
+				                                           "sql://{{connection-name}}/{{table-name}}",
+				                                           uri));
 			}
 
 			_log = Log.For(this);
@@ -81,7 +81,7 @@ namespace Shuttle.ESB.SqlServer
 			using (databaseConnectionFactory.Create(_dataSource))
 			{
 				var host = databaseGateway.GetScalarUsing<string>(_dataSource,
-																  RawQuery.Create("select host_name()"));
+				                                                  RawQuery.Create("select host_name()"));
 
 				IsLocal = (host ?? string.Empty) == Environment.MachineName;
 			}
@@ -113,7 +113,7 @@ namespace Shuttle.ESB.SqlServer
 
 		public void Create()
 		{
-			if (Exists() != QueueAvailability.Missing)
+			if (Exists())
 			{
 				return;
 			}
@@ -135,7 +135,7 @@ namespace Shuttle.ESB.SqlServer
 
 		public void Drop()
 		{
-			if (Exists() != QueueAvailability.Exists)
+			if (!Exists())
 			{
 				return;
 			}
@@ -157,7 +157,7 @@ namespace Shuttle.ESB.SqlServer
 
 		public void Purge()
 		{
-			if (Exists() != QueueAvailability.Exists)
+			if (!Exists())
 			{
 				return;
 			}
@@ -186,8 +186,8 @@ namespace Shuttle.ESB.SqlServer
 					_databaseGateway.ExecuteUsing(
 						_dataSource,
 						RawQuery.Create(_enqueueQueryStatement)
-								.AddParameterValue(QueueColumns.MessageId, messageId)
-								.AddParameterValue(QueueColumns.MessageBody, stream.ToBytes()));
+						        .AddParameterValue(QueueColumns.MessageId, messageId)
+						        .AddParameterValue(QueueColumns.MessageBody, stream.ToBytes()));
 				}
 			}
 			catch (Exception ex)
@@ -202,15 +202,13 @@ namespace Shuttle.ESB.SqlServer
 		public bool IsLocal { get; private set; }
 		public Uri Uri { get; private set; }
 
-		public QueueAvailability Exists()
+		private bool Exists()
 		{
 			try
 			{
 				using (_databaseConnectionFactory.Create(_dataSource))
 				{
-					return _databaseGateway.GetScalarUsing<int>(_dataSource, _existsQuery) == 1
-							   ? QueueAvailability.Exists
-							   : QueueAvailability.Missing;
+					return _databaseGateway.GetScalarUsing<int>(_dataSource, _existsQuery) == 1;
 				}
 			}
 			catch (Exception ex)
@@ -250,7 +248,7 @@ namespace Shuttle.ESB.SqlServer
 
 						_underlyingMessageData = row;
 
-						return new MemoryStream((byte[])row["MessageBody"]);
+						return new MemoryStream((byte[]) row["MessageBody"]);
 					}
 				}
 				catch (Exception ex)
@@ -275,7 +273,7 @@ namespace Shuttle.ESB.SqlServer
 						var row = _databaseGateway.GetSingleRowUsing(
 							_dataSource,
 							RawQuery.Create(_dequeueIdQueryStatement).AddParameterValue(QueueColumns.MessageId,
-																						   messageId));
+							                                                            messageId));
 
 						if (row == null)
 						{
@@ -284,11 +282,11 @@ namespace Shuttle.ESB.SqlServer
 
 						_underlyingMessageData = row;
 
-						using (var stream = new MemoryStream((byte[])row["MessageBody"]))
+						using (var stream = new MemoryStream((byte[]) row["MessageBody"]))
 						{
 							_underlyingMessageData = new MemoryStream(stream.ToBytes());
 
-							return (Stream)_underlyingMessageData;
+							return (Stream) _underlyingMessageData;
 						}
 					}
 				}
@@ -312,7 +310,7 @@ namespace Shuttle.ESB.SqlServer
 					return _databaseGateway.ExecuteUsing(
 						_dataSource,
 						RawQuery.Create(_removeQueryStatement)
-								.AddParameterValue(QueueColumns.MessageId, messageId)) > 0;
+						        .AddParameterValue(QueueColumns.MessageId, messageId)) > 0;
 				}
 			}
 			catch (Exception ex)
@@ -346,13 +344,12 @@ namespace Shuttle.ESB.SqlServer
 				{
 					using (var reader = _databaseGateway.GetReaderUsing(
 						_dataSource,
-						RawQuery.Create(_scriptProvider.GetScript(Script.QueueRead,
-																	 top.ToString(),
-																	 _tableName))))
+						RawQuery.Create(_scriptProvider.GetScript(Script.QueueRead, top.ToString(CultureInfo.InvariantCulture), _tableName)))
+						)
 					{
 						while (reader.Read())
 						{
-							result.Add(new MemoryStream((byte[])reader["MessageBody"]));
+							result.Add(new MemoryStream((byte[]) reader["MessageBody"]));
 						}
 					}
 				}

@@ -149,34 +149,26 @@ namespace Shuttle.ESB.Core
 			return GetQueueFactory(uri).Create(uri);
 		}
 
-		public void CreatePhysicalQueues(IServiceBusConfiguration serviceBusConfiguration, QueueCreationType queueCreationType)
+		public void CreatePhysicalQueues(IServiceBusConfiguration serviceBusConfiguration)
 		{
-			if (queueCreationType == QueueCreationType.None)
-			{
-				return;
-			}
-
 			if (serviceBusConfiguration.HasInbox)
 			{
-				CreateQueues(queueCreationType, serviceBusConfiguration.Inbox);
+				CreateQueues(serviceBusConfiguration.Inbox);
 			}
 
 			if (serviceBusConfiguration.HasOutbox)
 			{
-				CreateQueues(queueCreationType, serviceBusConfiguration.Outbox);
+				CreateQueues(serviceBusConfiguration.Outbox);
 			}
 
 			if (serviceBusConfiguration.HasControlInbox)
 			{
-				CreateQueues(queueCreationType, serviceBusConfiguration.ControlInbox);
+				CreateQueues(serviceBusConfiguration.ControlInbox);
 			}
 
 			if (serviceBusConfiguration.IsWorker)
 			{
-				if (ShouldCreate(queueCreationType, serviceBusConfiguration.Worker.DistributorControlInboxWorkQueue))
-				{
-					serviceBusConfiguration.Worker.DistributorControlInboxWorkQueue.AttemptCreate();
-				}
+				serviceBusConfiguration.Worker.DistributorControlInboxWorkQueue.AttemptCreate();
 			}
 		}
 
@@ -185,21 +177,15 @@ namespace Shuttle.ESB.Core
 			return new ReadOnlyCollection<IQueueFactory>(_queueFactories);
 		}
 
-		private void CreateQueues(QueueCreationType queueCreationType, IWorkQueueConfiguration workQueueConfiguration)
+		private void CreateQueues(IWorkQueueConfiguration workQueueConfiguration)
 		{
-			if (ShouldCreate(queueCreationType, workQueueConfiguration.WorkQueue))
-			{
-				workQueueConfiguration.WorkQueue.AttemptCreate();
-			}
+			workQueueConfiguration.WorkQueue.AttemptCreate();
 
 			var errorQueueConfiguration = workQueueConfiguration as IErrorQueueConfiguration;
 
 			if (errorQueueConfiguration != null)
 			{
-				if (ShouldCreate(queueCreationType, errorQueueConfiguration.ErrorQueue))
-				{
-					errorQueueConfiguration.ErrorQueue.AttemptCreate();
-				}
+				errorQueueConfiguration.ErrorQueue.AttemptCreate();
 			}
 
 			var journalQueueConfiguration = workQueueConfiguration as IJournalQueueConfiguration;
@@ -209,16 +195,7 @@ namespace Shuttle.ESB.Core
 				return;
 			}
 
-			if (ShouldCreate(queueCreationType, journalQueueConfiguration.JournalQueue))
-			{
-				journalQueueConfiguration.JournalQueue.AttemptCreate();
-			}
-		}
-
-		private static bool ShouldCreate(QueueCreationType queueCreationType, IQueue queue)
-		{
-			return (queueCreationType == QueueCreationType.All) ||
-				   (queueCreationType == QueueCreationType.Local && queue.IsLocal);
+			journalQueueConfiguration.JournalQueue.AttemptCreate();
 		}
 
 		public void RegisterQueueFactory(IQueueFactory queueFactory)

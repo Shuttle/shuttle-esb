@@ -18,6 +18,8 @@ namespace Shuttle.ESB.RabbitMQ
 		private readonly object queuelock = new object();
 		private readonly object disposelock = new object();
 
+		private bool _local;
+
 		private readonly ConnectionFactory _factory;
 		private IConnection _connection;
 
@@ -75,7 +77,7 @@ namespace Shuttle.ESB.RabbitMQ
 
 			Uri = builder.Uri;
 
-			IsLocal = Uri.Host.Equals("localhost", StringComparison.OrdinalIgnoreCase) || Uri.Host.Equals("127.0.0.1");
+			_local = Uri.Host.Equals("localhost", StringComparison.OrdinalIgnoreCase) || Uri.Host.Equals("127.0.0.1");
 
 			_factory = new ConnectionFactory
 				{
@@ -88,23 +90,7 @@ namespace Shuttle.ESB.RabbitMQ
 				};
 		}
 
-		public bool IsLocal { get; private set; }
-
 		public Uri Uri { get; private set; }
-
-		public QueueAvailability Exists()
-		{
-			try
-			{
-				AccessQueue(() => { GetChannel().Model.QueueDeclarePassive(Queue); });
-			}
-			catch
-			{
-				return QueueAvailability.Missing;
-			}
-
-			return QueueAvailability.Exists;
-		}
 
 		public bool IsEmpty()
 		{

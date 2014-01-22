@@ -156,7 +156,7 @@ namespace Shuttle.ESB.Test.Integration
 			inboxJournalQueue.AttemptDrop();
 			errorQueue.AttemptDrop();
 
-			configuration.QueueManager.CreatePhysicalQueues(configuration, QueueCreationType.All);
+			configuration.QueueManager.CreatePhysicalQueues(configuration);
 
 			inboxWorkQueue.AttemptPurge();
 			inboxJournalQueue.AttemptPurge();

@@ -11,13 +11,6 @@ namespace Shuttle.ESB.Core
 		Purge = 1
 	}
 
-	public enum QueueCreationType
-	{
-		None = 0,
-		All = 1,
-		Local = 2
-	}
-
 	public class ServiceBusConfiguration : IServiceBusConfiguration
 	{
 		public const string ServiceBusSectionName = "serviceBus";
