@@ -67,16 +67,20 @@
     <DefineConstants>$(DefineConstants);NET45FULL</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net">
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\source\packages\log4net.2.0.3\lib\net35-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Shuttle.Core.Host">
+    <Reference Include="Shuttle.Core.Host, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\source\packages\shuttle-core-host.2.1.2.0\lib\net35-full\Shuttle.Core.Host.exe</HintPath>
     </Reference>
-    <Reference Include="Shuttle.Core.Infrastructure">
+    <Reference Include="Shuttle.Core.Infrastructure, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\source\packages\shuttle-core-infrastructure.2.1.2.0\lib\net35-full\Shuttle.Core.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Shuttle.Core.Infrastructure.Log4Net">
+    <Reference Include="Shuttle.Core.Infrastructure.Log4Net, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\source\packages\shuttle-core-infrastructure-log4net.2.1.2.0\lib\net35-full\Shuttle.Core.Infrastructure.Log4Net.dll</HintPath>
     </Reference>
     <Reference Include="Shuttle.ESB.Core, Version=0.1.4075.22014, Culture=neutral, processorArchitecture=MSIL">

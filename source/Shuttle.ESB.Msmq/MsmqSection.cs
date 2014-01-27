@@ -17,15 +17,10 @@ namespace Shuttle.ESB.Msmq
 		private static readonly ConfigurationProperty remoteQueueTimeoutMilliseconds =
 			new ConfigurationProperty("remoteQueueTimeoutMilliseconds", typeof(int), 2000, ConfigurationPropertyOptions.None);
 
-		private static readonly ConfigurationProperty queues =
-			new ConfigurationProperty("queues", typeof(MsmqQueueElementCollection), null,
-									  ConfigurationPropertyOptions.None);
-
         public MsmqSection()
         {
 			base.Properties.Add(localQueueTimeoutMilliseconds);
 			base.Properties.Add(remoteQueueTimeoutMilliseconds);
-			base.Properties.Add(queues);
         }
 
 		[ConfigurationProperty("localQueueTimeoutMilliseconds", IsRequired = false)]
@@ -45,11 +40,5 @@ namespace Shuttle.ESB.Msmq
 				return (int)this[remoteQueueTimeoutMilliseconds];
 			}
 		}
-
-		[ConfigurationProperty("queues", IsRequired = true)]
-		public MsmqQueueElementCollection Queues
-        {
-			get { return (MsmqQueueElementCollection)this[queues]; }
-        }
 	}
 }

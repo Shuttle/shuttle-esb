@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Threading;
 using NUnit.Framework;
 using Shuttle.ESB.Core;
+using Shuttle.ESB.RabbitMQ;
 using Shuttle.ESB.Test.Integration.Core;
 using Shuttle.ESB.Test.Shared.Mocks;
 
@@ -13,10 +14,12 @@ namespace Shuttle.ESB.Test.Integration
 	{
 		protected event EventHandler<ConfigurationAvailableEventArgs> ConfigurationAvailable = delegate { };
 
-		protected void TestInboxThroughput(string queueSchemeAndHost, int timeoutMilliseconds, int count,
+		protected void TestInboxThroughput(string uriFormat, int timeoutMilliseconds, int count,
 										   bool useIdempotenceTracker, bool useJournal, bool isTransactional)
 		{
-			var configuration = GetTestInboxConfiguration(queueSchemeAndHost, useJournal, 1, isTransactional);
+			const int threadCount = 1;
+			var padlock = new object();
+			var configuration = GetTestInboxConfiguration(uriFormat, useJournal, threadCount, isTransactional);
 
 			ConfigurationAvailable.Invoke(this, new ConfigurationAvailableEventArgs(configuration));
 
@@ -33,13 +36,24 @@ namespace Shuttle.ESB.Test.Integration
 					configuration.Inbox.WorkQueue.Enqueue(warmup.MessageId, configuration.Serializer.Serialize(warmup));
 				}
 
-				var working = true;
+				var idleThreads = new List<int>();
 
-				bus.Events.ThreadWaiting += (sender, args) => { working = false; };
+				bus.Events.ThreadWaiting += (sender, args) =>
+				{
+					lock (padlock)
+					{
+						if (idleThreads.Contains(Thread.CurrentThread.ManagedThreadId))
+						{
+							return;
+						}
+
+						idleThreads.Add(Thread.CurrentThread.ManagedThreadId);
+					}
+				};
 
 				bus.Start();
 
-				while (working)
+				while (idleThreads.Count < threadCount)
 				{
 					Thread.Sleep(25);
 				}
@@ -60,22 +74,21 @@ namespace Shuttle.ESB.Test.Integration
 				Console.WriteLine("Took {0} ms to send {1} messages.  Starting processing.", sw.ElapsedMilliseconds,
 								  count);
 
+				idleThreads.Clear();
 				bus.Start();
 
 				sw.Reset();
 				sw.Start();
 
-				working = true;
-
-				while (working)
+				while (idleThreads.Count < threadCount)
 				{
 					Thread.Sleep(25);
 				}
 
 				sw.Stop();
-
-				AttemptDropQueues(configuration.QueueManager, queueSchemeAndHost, useJournal);
 			}
+
+			AttemptDropQueues(uriFormat, useJournal);
 
 			var ms = sw.ElapsedMilliseconds;
 
@@ -86,21 +99,25 @@ namespace Shuttle.ESB.Test.Integration
 						  count, timeoutMilliseconds, ms);
 		}
 
-		private void AttemptDropQueues(IQueueManager queueManager, string queueSchemeAndHost, bool useJournal)
+		private void AttemptDropQueues(string uriFormat, bool useJournal)
 		{
-			queueManager.GetQueue(string.Format("{0}/test-inbox-work", queueSchemeAndHost)).AttemptDrop();
-
-			if (useJournal)
+			using (var queueManager = QueueManager.Default())
 			{
-				queueManager.GetQueue(string.Format("{0}/test-inbox-journal", queueSchemeAndHost)).AttemptDrop();
-			}
+				queueManager.GetQueue(string.Format(uriFormat, "test-inbox-work")).AttemptDrop();
 
-			queueManager.GetQueue(string.Format("{0}/test-error", queueSchemeAndHost)).AttemptDrop();
+				if (useJournal)
+				{
+					queueManager.GetQueue(string.Format(uriFormat, "test-inbox-journal")).AttemptDrop();
+				}
+
+				queueManager.GetQueue(string.Format(uriFormat, "test-error")).AttemptDrop();
+			}
 		}
 
-		protected void TestInboxError(string queueSchemeAndHost, bool useJournal, bool isTransactional)
+		protected void TestInboxError(string uriFormat, bool useJournal, bool isTransactional)
 		{
-			var configuration = GetTestInboxConfiguration(queueSchemeAndHost, useJournal, 1, isTransactional);
+			var padlock = new object();
+			var configuration = GetTestInboxConfiguration(uriFormat, useJournal, 1, isTransactional);
 
 			ConfigurationAvailable.Invoke(this, new ConfigurationAvailableEventArgs(configuration));
 
@@ -110,37 +127,46 @@ namespace Shuttle.ESB.Test.Integration
 
 				configuration.Inbox.WorkQueue.Enqueue(message.MessageId, configuration.Serializer.Serialize(message));
 
-				var working = true;
+				var idleThreads = new List<int>();
 
-				bus.Events.ThreadWaiting += (sender, args) => { working = false; };
+				bus.Events.ThreadWaiting += (sender, args) =>
+				{
+					lock (padlock)
+					{
+						if (idleThreads.Contains(Thread.CurrentThread.ManagedThreadId))
+						{
+							return;
+						}
+
+						idleThreads.Add(Thread.CurrentThread.ManagedThreadId);
+					}
+				};
 
 				bus.Start();
 
-				while (working)
+				while (idleThreads.Count < 1)
 				{
 					Thread.Sleep(5);
 				}
 
 				Assert.NotNull(configuration.Inbox.ErrorQueue.Dequeue());
-
-				AttemptDropQueues(configuration.QueueManager, queueSchemeAndHost, useJournal);
 			}
+
+			AttemptDropQueues(uriFormat, useJournal);
 		}
 
-		private IServiceBusConfiguration GetTestInboxConfiguration(string queueSchemeAndHost, bool useJournal, int threadCount,
-																   bool isTransactional)
+		private IServiceBusConfiguration GetTestInboxConfiguration(string uriFormat, bool useJournal, int threadCount, bool isTransactional)
 		{
 			var configuration = DefaultConfiguration(isTransactional);
 
 			ConfigurationAvailable.Invoke(this, new ConfigurationAvailableEventArgs(configuration));
 
 			var inboxWorkQueue =
-				configuration.QueueManager.GetQueue(string.Format("{0}/test-inbox-work", queueSchemeAndHost));
+				configuration.QueueManager.GetQueue(string.Format(uriFormat, "test-inbox-work"));
 			var inboxJournalQueue = useJournal
-										? configuration.QueueManager.GetQueue(string.Format("{0}/test-inbox-journal",
-																					   queueSchemeAndHost))
+										? configuration.QueueManager.GetQueue(string.Format(uriFormat, "test-inbox-journal"))
 										: null;
-			var errorQueue = configuration.QueueManager.GetQueue(string.Format("{0}/test-error", queueSchemeAndHost));
+			var errorQueue = configuration.QueueManager.GetQueue(string.Format(uriFormat, "test-error"));
 
 			configuration.Inbox =
 				new InboxQueueConfiguration
@@ -170,7 +196,7 @@ namespace Shuttle.ESB.Test.Integration
 			return configuration;
 		}
 
-		protected void TestInboxConcurrency(string queueSchemeAndHost, int msToComplete, bool useJournal, bool isTransactional)
+		protected void TestInboxConcurrency(string uriFormat, int msToComplete, bool useJournal, bool isTransactional)
 		{
 			const int COUNT = 1;
 
@@ -178,7 +204,7 @@ namespace Shuttle.ESB.Test.Integration
 			var afterDequeueDate = new List<DateTime>();
 			var offsetDate = DateTime.MinValue;
 
-			var configuration = GetTestInboxConfiguration(queueSchemeAndHost, useJournal, COUNT, isTransactional);
+			var configuration = GetTestInboxConfiguration(uriFormat, useJournal, COUNT, isTransactional);
 
 			ConfigurationAvailable.Invoke(this, new ConfigurationAvailableEventArgs(configuration));
 
@@ -234,9 +260,9 @@ namespace Shuttle.ESB.Test.Integration
 				{
 					Thread.Sleep(30);
 				}
-
-				AttemptDropQueues(configuration.QueueManager, queueSchemeAndHost, useJournal);
 			}
+
+			AttemptDropQueues(uriFormat, useJournal);
 
 			Assert.AreEqual(COUNT, afterDequeueDate.Count,
 							string.Format("Dequeued {0} messages but {1} were sent.", afterDequeueDate.Count, COUNT));
@@ -248,9 +274,9 @@ namespace Shuttle.ESB.Test.Integration
 			}
 		}
 
-		protected void TestInboxDeferred(string queueSchemeAndHost)
+		protected void TestInboxDeferred(string uriFormat)
 		{
-			var configuration = GetTestInboxConfiguration(queueSchemeAndHost, false, 1, false);
+			var configuration = GetTestInboxConfiguration(uriFormat, false, 1, false);
 
 			ConfigurationAvailable.Invoke(this, new ConfigurationAvailableEventArgs(configuration));
 
@@ -259,28 +285,31 @@ namespace Shuttle.ESB.Test.Integration
 
 			using (var bus = new ServiceBus(configuration))
 			{
-				var id = messageId;
-				var type = messageType;
-				var waiting = true;
+				var received = false;
 
 				bus.Events.AfterTransportMessageDeserialization +=
 					(sender, eventArgs) =>
 					{
-						Assert.True(id.Equals(eventArgs.TransportMessage.MessageId));
-						Assert.True(type.Equals(eventArgs.TransportMessage.MessageType, StringComparison.OrdinalIgnoreCase));
-						waiting = false;
+						Assert.True(messageId.Equals(eventArgs.TransportMessage.MessageId));
+						Assert.True(messageType.Equals(eventArgs.TransportMessage.MessageType, StringComparison.OrdinalIgnoreCase));
+						received = true;
 					};
-
-				bus.Events.ThreadWaiting += (sender, args) => { waiting = false; };
 
 				bus.Start();
 
-				Assert.IsNotNull(bus.SendDeferred(DateTime.Now.AddMilliseconds(500), new ReceivePipelineCommand(), configuration.Inbox.WorkQueue).MessageId);
+				var transportMessage = bus.SendDeferred(DateTime.Now.AddMilliseconds(500), new ReceivePipelineCommand(), configuration.Inbox.WorkQueue);
+				var timeout = DateTime.Now.AddMilliseconds(1000);
 
-				while (waiting)
+				Assert.IsNotNull(transportMessage);
+
+				messageId = transportMessage.MessageId;
+
+				while (!received && DateTime.Now < timeout)
 				{
 					Thread.Sleep(5);
 				}
+
+				Assert.IsTrue(received);
 			}
 		}
 	}

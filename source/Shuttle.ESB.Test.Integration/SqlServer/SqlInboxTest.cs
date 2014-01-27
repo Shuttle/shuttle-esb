@@ -15,7 +15,7 @@ namespace Shuttle.ESB.Test.Integration
 		[TestCase(true, false)]
 		public void Should_be_able_handle_errors(bool useJournal, bool isTransactionalEndpoint)
 		{
-			TestInboxError("sql://shuttle", useJournal, isTransactionalEndpoint);
+			TestInboxError("sql://shuttle/{0}", useJournal, isTransactionalEndpoint);
 		}
 
 		[Test]
@@ -29,7 +29,7 @@ namespace Shuttle.ESB.Test.Integration
 		[TestCase(500, true, false)]
 		public void Should_be_able_to_process_messages_concurrently(int msToComplete, bool useJournal, bool isTransactionalEndpoint)
 		{
-			TestInboxConcurrency("sql://shuttle", 250, false, false);
+			TestInboxConcurrency("sql://shuttle/{0}", 250, false, false);
 		}
 
 		[Test]
@@ -51,7 +51,7 @@ namespace Shuttle.ESB.Test.Integration
 		[TestCase(20, true, true, false)]
 		public void Should_be_able_to_process_queue_timeously_without_journal(int count, bool useIdempotenceTracker, bool useJournal, bool isTransactionalEndpoint)
 		{
-			TestInboxThroughput("sql://shuttle", 1000, count, useIdempotenceTracker, useJournal, isTransactionalEndpoint);
+			TestInboxThroughput("sql://shuttle/{0}", 1000, count, useIdempotenceTracker, useJournal, isTransactionalEndpoint);
 		}
 	}
 }

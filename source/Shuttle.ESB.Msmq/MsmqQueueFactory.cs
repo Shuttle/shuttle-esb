@@ -6,14 +6,14 @@ namespace Shuttle.ESB.Msmq
 {
 	public class MsmqQueueFactory : IQueueFactory
 	{
-		public MsmqConfiguration Configuration { get; private set; }
+		public IMsmqConfiguration Configuration { get; private set; }
 
 		public MsmqQueueFactory()
 			: this(MsmqConfiguration.Default())
 		{
 		}
 
-		public MsmqQueueFactory(MsmqConfiguration configuration)
+		public MsmqQueueFactory(IMsmqConfiguration configuration)
 		{
 			Configuration = configuration;
 		}
@@ -22,7 +22,7 @@ namespace Shuttle.ESB.Msmq
 		{
 			get
 			{
-				return MsmqQueue.SCHEME;
+				return MsmqUriParser.SCHEME;
 			}
 		}
 

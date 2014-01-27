@@ -13,14 +13,9 @@ namespace Shuttle.ESB.Test.Integration.Msmq
 			var section = GetMsmqSection("Msmq.config");
 
 			Assert.IsNotNull(section);
-			Assert.AreEqual(2, section.Queues.Count);
 
-			var queues = section.Queues.Cast<MsmqQueueElement>().ToList();
-
-			Assert.AreEqual("msmq://./inbox-work-1", queues.ElementAt(0).Uri);
-			Assert.IsTrue(queues.ElementAt(0).IsTransactional);
-			Assert.AreEqual("msmq://./inbox-work-2", queues.ElementAt(1).Uri);
-			Assert.IsFalse(queues.ElementAt(1).IsTransactional);
+			Assert.AreEqual(1500, section.LocalQueueTimeoutMilliseconds);
+			Assert.AreEqual(3500, section.RemoteQueueTimeoutMilliseconds);
 		}
 	}
 }

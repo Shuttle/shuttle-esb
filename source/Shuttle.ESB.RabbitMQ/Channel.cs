@@ -33,7 +33,7 @@ namespace Shuttle.ESB.RabbitMQ
 
 			if (next && _basicDeliverEventArgs == null)
 			{
-				throw new ConnectionException();
+				throw new ConnectionException(string.Format(RabbitMQResources.SubscriptionNextConnectionException, _subscription.QueueName));
 			}
 
 			return (next)
@@ -48,6 +48,11 @@ namespace Shuttle.ESB.RabbitMQ
 
 		public void Dispose()
 		{
+			if (Model.IsOpen)
+			{
+				Model.Close();
+			}
+
 			Model.Dispose();
 		}
 	}

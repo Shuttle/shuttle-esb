@@ -67,7 +67,8 @@
     <DefineConstants>$(DefineConstants);NET45FULL</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Shuttle.Core.Infrastructure">
+    <Reference Include="Shuttle.Core.Infrastructure, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\shuttle-core-infrastructure.2.1.2.0\lib\net35-full\Shuttle.Core.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -80,25 +81,24 @@
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Configuration\MsmqQueueElementCollection.cs" />
-    <Compile Include="Configuration\MsmqQueueElement.cs" />
-    <Compile Include="Configuration\MsmqSection.cs" />
+    <Compile Include="MsmqSection.cs" />
     <Compile Include="IMsmqConfiguration.cs" />
     <Compile Include="MsmqConfiguration.cs" />
     <Compile Include="MsmqQueue.cs" />
-    <Compile Include="MsmqQueueConfiguration.cs" />
     <Compile Include="MsmqQueueFactory.cs" />
     <Compile Include="MsmqResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MsmqResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="MsmqUriParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

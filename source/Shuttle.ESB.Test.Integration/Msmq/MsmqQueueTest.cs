@@ -22,13 +22,10 @@ namespace Shuttle.ESB.Test.Integration.Msmq
 		{
 			base.TestSetUp();
 
-			var inboxUri = new Uri("msmq://./sit-inbox");
-			var outboxUri = new Uri("msmq://./sit-outbox");
+			var inboxUri = new Uri("msmq://./sit-inbox?transactional=true");
+			var outboxUri = new Uri("msmq://./sit-outbox?transactional=true");
 
 			var configuration = new MsmqConfiguration();
-
-			configuration.AddQueueConfiguration(new MsmqQueueConfiguration(inboxUri, true));
-			configuration.AddQueueConfiguration(new MsmqQueueConfiguration(outboxUri, true));
 
 			inboxQueue = new MsmqQueue(inboxUri, configuration);
 			outboxQueue = new MsmqQueue(outboxUri, configuration);

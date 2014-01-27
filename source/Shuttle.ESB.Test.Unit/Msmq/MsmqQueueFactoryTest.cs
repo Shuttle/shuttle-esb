@@ -16,7 +16,7 @@ namespace Shuttle.ESB.Test.Unit.Msmq
         [Test]
         public void Should_be_able_to_create_a_new_queue_from_a_given_uri()
         {
-            Assert.NotNull(SUT().Create(new Uri("msmq://./inputqueue")));
+            Assert.NotNull(SUT().Create(new Uri("msmq://./work-queue")));
         }
     }
 }

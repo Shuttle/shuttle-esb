@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Messaging;
 using System.Security.Principal;
-using System.Text.RegularExpressions;
 using System.Transactions;
 using Shuttle.Core.Infrastructure;
 using Shuttle.ESB.Core;
@@ -13,70 +12,26 @@ namespace Shuttle.ESB.Msmq
 {
 	public class MsmqQueue : IQueue, ICreate, IDrop, IPurge, ICount, IQueueReader
 	{
-		internal const string SCHEME = "msmq";
-
 		private readonly TimeSpan timeout;
-
-		[ThreadStatic] private static object underlyingMessageData;
-
-		private readonly bool _transactional;
-		private readonly bool _local;
-
-		private readonly string path;
-		private readonly string host;
-		private readonly bool usesIPAddress;
-
-		private readonly Regex regexIPAddress =
-			new Regex(
-				@"^([1-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])){3}$");
 
 		private readonly ILog log;
 
-		public MsmqQueue(Uri uri, MsmqConfiguration msmqConfiguration)
+		private readonly MsmqUriParser parser;
+
+		public MsmqQueue(Uri uri, IMsmqConfiguration configuration)
 		{
 			Guard.AgainstNull(uri, "uri");
-
-			if (!uri.Scheme.Equals(SCHEME, StringComparison.InvariantCultureIgnoreCase))
-			{
-				throw new InvalidSchemeException(SCHEME, uri.ToString());
-			}
+			Guard.AgainstNull(configuration, "configuration");
 
 			log = Log.For(this);
 
-			var builder = new UriBuilder(uri);
+			parser = new MsmqUriParser(uri);
 
-			host = uri.Host;
+			timeout = parser.Local
+				          ? TimeSpan.FromMilliseconds(configuration.LocalQueueTimeoutMilliseconds )
+				          : TimeSpan.FromMilliseconds(configuration.RemoteQueueTimeoutMilliseconds);
 
-			if (host.Equals("."))
-			{
-				builder.Host = Environment.MachineName.ToLower();
-			}
-
-			if (uri.LocalPath == "/")
-			{
-				throw new UriFormatException(string.Format(ESBResources.UriFormatException, "msmq://{{host-name}}/{{queue-name}}",
-				                                           uri));
-			}
-
-			Uri = builder.Uri;
-
-			_local = Uri.Host.Equals(Environment.MachineName, StringComparison.InvariantCultureIgnoreCase);
-
-			var queueConfiguration = msmqConfiguration.FindQueueConfiguration(uri);
-
-			_transactional = queueConfiguration != null && queueConfiguration.IsTransactional;
-
-			usesIPAddress = regexIPAddress.IsMatch(host);
-
-			path = _local
-				       ? string.Format(@"{0}\private$\{1}", host, uri.Segments[1])
-				       : usesIPAddress
-					         ? string.Format(@"FormatName:DIRECT=TCP:{0}\private$\{1}", host, uri.Segments[1])
-					         : string.Format(@"FormatName:DIRECT=OS:{0}\private$\{1}", host, uri.Segments[1]);
-
-			timeout = _local
-				          ? TimeSpan.FromMilliseconds(msmqConfiguration.LocalQueueTimeoutMilliseconds )
-				          : TimeSpan.FromMilliseconds(msmqConfiguration.RemoteQueueTimeoutMilliseconds);
+			Uri = parser.Uri;
 		}
 
 		public int Count
@@ -105,12 +60,12 @@ namespace Shuttle.ESB.Msmq
 				return;
 			}
 
-			if (!_local)
+			if (!parser.Local)
 			{
 				throw new InvalidOperationException(string.Format(MsmqResources.CannotCreateRemoteQueue, Uri));
 			}
 
-			MessageQueue.Create(path, _transactional).Dispose();
+			MessageQueue.Create(parser.Path, parser.Transactional).Dispose();
 
 			log.Information(string.Format(MsmqResources.QueueCreated, Uri));
 		}
@@ -122,12 +77,12 @@ namespace Shuttle.ESB.Msmq
 				return;
 			}
 
-			if (!_local)
+			if (!parser.Local)
 			{
 				throw new InvalidOperationException(string.Format(MsmqResources.CannotDropRemoteQueue, Uri));
 			}
 
-			MessageQueue.Delete(path);
+			MessageQueue.Delete(parser.Path);
 
 			log.Information(string.Format(MsmqResources.QueueDropped, Uri));
 		}
@@ -146,7 +101,7 @@ namespace Shuttle.ESB.Msmq
 
 		private bool Exists()
 		{
-			return MessageQueue.Exists(path);
+			return MessageQueue.Exists(parser.Path);
 		}
 
 		public bool IsEmpty()
@@ -364,7 +319,7 @@ namespace Shuttle.ESB.Msmq
 
 		private MessageQueue CreateGuardedQueue()
 		{
-			var messageQueue = new MessageQueue(path);
+			var messageQueue = new MessageQueue(parser.Path);
 
 			var messagePropertyFilter = new MessagePropertyFilter();
 
@@ -383,7 +338,7 @@ namespace Shuttle.ESB.Msmq
 					WindowsIdentity.GetCurrent() != null
 						? WindowsIdentity.GetCurrent().Name
 						: MsmqResources.Unknown,
-					path));
+					parser.Path));
 
 			if (Environment.UserInteractive)
 			{
@@ -407,10 +362,10 @@ namespace Shuttle.ESB.Msmq
 
 		private MessageQueueTransactionType TransactionType()
 		{
-			return _transactional
+			return parser.Transactional
 				       ? Transaction.Current != null
 					         ? MessageQueueTransactionType.Automatic
-					         : _transactional
+					         : parser.Transactional
 						           ? MessageQueueTransactionType.Single
 						           : MessageQueueTransactionType.None
 				       : MessageQueueTransactionType.None;

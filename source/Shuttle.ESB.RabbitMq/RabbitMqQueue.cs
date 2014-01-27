@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using RabbitMQ.Client;
 using RabbitMQ.Client.MessagePatterns;
@@ -12,81 +11,51 @@ namespace Shuttle.ESB.RabbitMQ
 {
 	public class RabbitMQQueue : IQueue, ICount, ICreate, IDrop, IDisposable, IAcknowledge, IPurge
 	{
-		internal const string SCHEME = "rabbitmq";
+		private readonly int _timeout;
+		private readonly IRabbitMQConfiguration _configuration;
 
 		private readonly object connectionlock = new object();
 		private readonly object queuelock = new object();
 		private readonly object disposelock = new object();
+		private readonly int _operationRetryCount;
 
-		private bool _local;
+		private readonly RabbitMQUriParser parser;
 
 		private readonly ConnectionFactory _factory;
 		private IConnection _connection;
 
 		private readonly Dictionary<int, Channel> _channels = new Dictionary<int, Channel>();
 
-		public RabbitMQQueue(Uri uri)
+		public RabbitMQQueue(Uri uri, IRabbitMQConfiguration configuration)
 		{
 			Guard.AgainstNull(uri, "uri");
+			Guard.AgainstNull(configuration, "configuration");
 
-			Password = "";
-			Username = "";
-			Port = uri.Port;
-			Host = uri.Host;
+			parser = new RabbitMQUriParser(uri);
 
-			if (uri.UserInfo.Contains(':'))
+			Uri = parser.Uri;
+
+			_configuration = configuration;
+
+			_timeout = parser.Local
+				           ? configuration.LocalQueueTimeoutMilliseconds
+				           : configuration.RemoteQueueTimeoutMilliseconds;
+
+			_operationRetryCount = _configuration.OperationRetryCount;
+
+			if (_operationRetryCount < 1)
 			{
-				Username = uri.UserInfo.Split(':').First();
-				Password = uri.UserInfo.Split(':').Last();
+				_operationRetryCount = 3;
 			}
-
-			switch (uri.Segments.Length)
-			{
-				case 2:
-					{
-						VirtualHost = "/";
-						Queue = uri.Segments[1];
-						break;
-					}
-				case 3:
-					{
-						VirtualHost = uri.Segments[1];
-						Queue = uri.Segments[2];
-						break;
-					}
-				default:
-					{
-						throw new UriFormatException(string.Format(ESBResources.UriFormatException,
-																   "rabbitmq://[username:password@]host:port/[vhost/]queue", Uri));
-					}
-			}
-
-			if (Host.Equals("."))
-			{
-				Host = "localhost";
-			}
-
-			var builder = new UriBuilder(uri)
-				{
-					Host = Host,
-					Port = Port,
-					UserName = Username,
-					Password = Password,
-					Path = VirtualHost == "/" ? string.Format("/{0}", Queue) : string.Format("/{0}/{1}", VirtualHost, Queue)
-				};
-
-			Uri = builder.Uri;
-
-			_local = Uri.Host.Equals("localhost", StringComparison.OrdinalIgnoreCase) || Uri.Host.Equals("127.0.0.1");
 
 			_factory = new ConnectionFactory
 				{
-					UserName = Username,
-					Password = Password,
-					HostName = Host,
-					VirtualHost = VirtualHost,
-					Port = Port,
-					RequestedHeartbeat = 30 //TODO: get from configuration
+					UserName = parser.Username,
+					Password = parser.Password,
+					HostName = parser.Host,
+					VirtualHost = parser.VirtualHost,
+					Port = parser.Port,
+					RequestedHeartbeat = configuration.RequestedHeartbeat
 				};
 		}
 
@@ -97,16 +66,9 @@ namespace Shuttle.ESB.RabbitMQ
 			return Count == 0;
 		}
 
-		public string Username { get; private set; }
-		public string Password { get; private set; }
-		public string Host { get; private set; }
-		public int Port { get; private set; }
-		public string VirtualHost { get; private set; }
-		public string Queue { get; private set; }
-
 		public bool HasUserInfo
 		{
-			get { return !string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password); }
+			get { return !string.IsNullOrEmpty(parser.Username) && !string.IsNullOrEmpty(parser.Password); }
 		}
 
 		public void Enqueue(Guid messageId, Stream stream)
@@ -123,7 +85,7 @@ namespace Shuttle.ESB.RabbitMQ
 					properties.SetPersistent(true);
 					properties.CorrelationId = messageId.ToString();
 
-					model.BasicPublish("", Queue, false, false, properties, stream.ToBytes());
+					model.BasicPublish("", parser.Queue, false, false, properties, stream.ToBytes());
 				});
 		}
 
@@ -134,8 +96,8 @@ namespace Shuttle.ESB.RabbitMQ
 					var result = GetChannel().Next();
 
 					return (result != null)
-							   ? new MemoryStream(result.Body)
-							   : null;
+						       ? new MemoryStream(result.Body)
+						       : null;
 				});
 		}
 
@@ -219,12 +181,12 @@ namespace Shuttle.ESB.RabbitMQ
 
 		public int Count
 		{
-			get { return AccessQueue(() => (int)QueueDeclare(GetChannel().Model).MessageCount); }
+			get { return AccessQueue(() => (int) QueueDeclare(GetChannel().Model).MessageCount); }
 		}
 
 		public void Drop()
 		{
-			AccessQueue(() => { GetChannel().Model.QueueDelete(Queue); });
+			AccessQueue(() => { GetChannel().Model.QueueDelete(parser.Queue); });
 		}
 
 		public void Create()
@@ -234,7 +196,7 @@ namespace Shuttle.ESB.RabbitMQ
 
 		private QueueDeclareOk QueueDeclare(IModel model)
 		{
-			return model.QueueDeclare(Queue, true, false, false, null);
+			return model.QueueDeclare(parser.Queue, true, false, false, null);
 		}
 
 		private IConnection GetConnection()
@@ -276,7 +238,7 @@ namespace Shuttle.ESB.RabbitMQ
 				var retry = 0;
 				IConnection connection = null;
 
-				while (connection == null && retry < 3) // TODO: retry should be configurable
+				while (connection == null && retry < _operationRetryCount)
 				{
 					try
 					{
@@ -290,7 +252,7 @@ namespace Shuttle.ESB.RabbitMQ
 
 				if (connection == null)
 				{
-					throw new ConnectionException(); // TODO: proper message maybe
+					throw new ConnectionException(string.Format(RabbitMQResources.ConnectionException, Uri.Secured()));
 				}
 
 				var model = connection.CreateModel();
@@ -299,7 +261,7 @@ namespace Shuttle.ESB.RabbitMQ
 
 				QueueDeclare(model);
 
-				var channel = new Channel(model, new Subscription(model, Queue, false), 100); // TODO: timeout in configuration (local & remote)
+				var channel = new Channel(model, new Subscription(model, parser.Queue, false), _timeout);
 
 				_channels.Add(key, channel);
 
@@ -311,14 +273,6 @@ namespace Shuttle.ESB.RabbitMQ
 		{
 			lock (disposelock)
 			{
-				foreach (var channel in _channels.Values)
-				{
-					if (channel.Model.IsOpen)
-					{
-						channel.Model.Close();
-					}
-				}
-				
 				_channels.Values.AttemptDispose();
 				_channels.Clear();
 
@@ -326,7 +280,7 @@ namespace Shuttle.ESB.RabbitMQ
 				{
 					if (_connection.IsOpen)
 					{
-						_connection.Close(1000); // TODO: timeout in configuration
+						_connection.Close(_configuration.ConnectionCloseTimeoutMilliseconds);
 					}
 
 					try
@@ -335,6 +289,10 @@ namespace Shuttle.ESB.RabbitMQ
 					}
 					catch (IOException)
 					{
+					}
+					catch (Exception ex)
+					{
+						var e = ex;
 					}
 
 					_connection = null;
@@ -349,10 +307,7 @@ namespace Shuttle.ESB.RabbitMQ
 
 		public void Purge()
 		{
-			AccessQueue(() =>
-				{
-					GetChannel().Model.QueuePurge(Queue);
-				});
+			AccessQueue(() => { GetChannel().Model.QueuePurge(parser.Queue); });
 		}
 
 		private void AccessQueue(Action action, int retry = 0)

@@ -76,7 +76,8 @@
     <Reference Include="Shuttle.Core.Host">
       <HintPath>..\..\..\external-bin\shuttle.core\$(Framework)\Shuttle.Core.Host.exe</HintPath>
     </Reference>
-    <Reference Include="Shuttle.Core.Infrastructure">
+    <Reference Include="Shuttle.Core.Infrastructure, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\source\packages\shuttle-core-infrastructure.2.1.2.0\lib\net35-full\Shuttle.Core.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="Shuttle.ESB.Core, Version=0.1.4075.35334, Culture=neutral, processorArchitecture=MSIL">

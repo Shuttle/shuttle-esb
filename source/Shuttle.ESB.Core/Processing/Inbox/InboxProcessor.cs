@@ -5,16 +5,16 @@ namespace Shuttle.ESB.Core
 {
     public class InboxProcessor : IProcessor
     {
-        protected readonly IServiceBus bus;
-        protected readonly IThreadActivity threadActivity;
+        protected readonly IServiceBus _bus;
+        protected readonly IThreadActivity _threadActivity;
 
         public InboxProcessor(IServiceBus bus, IThreadActivity threadActivity)
         {
             Guard.AgainstNull(bus, "bus");
             Guard.AgainstNull(threadActivity, "threadActivity");
 
-            this.bus = bus;
-            this.threadActivity = threadActivity;
+            _bus = bus;
+            _threadActivity = threadActivity;
         }
 
         [DebuggerNonUserCode]
@@ -25,18 +25,18 @@ namespace Shuttle.ESB.Core
 
         public virtual void Execute(IActiveState state)
         {
-            var availableWorker = bus.Configuration.WorkerAvailabilityManager.GetAvailableWorker();
+            var availableWorker = _bus.Configuration.WorkerAvailabilityManager.GetAvailableWorker();
 
-            if (bus.Configuration.Inbox.Distribute && availableWorker == null)
+            if (_bus.Configuration.Inbox.Distribute && availableWorker == null)
             {
-                threadActivity.Waiting(state);
+                _threadActivity.Waiting(state);
 
                 return;
             }
 
             var messagePipeline = availableWorker == null
-                                      ? bus.Configuration.PipelineFactory.GetPipeline<InboxMessagePipeline>(bus)
-                                      : bus.Configuration.PipelineFactory.GetPipeline<DistributorPipeline>(bus);
+                                      ? _bus.Configuration.PipelineFactory.GetPipeline<InboxMessagePipeline>(_bus)
+                                      : _bus.Configuration.PipelineFactory.GetPipeline<DistributorPipeline>(_bus);
 
             try
             {
@@ -44,24 +44,29 @@ namespace Shuttle.ESB.Core
                 messagePipeline.State.Replace(StateKeys.Working, false);
                 messagePipeline.State.Replace(StateKeys.ActiveState, state);
 
-                messagePipeline.Execute();
+	            if (!state.Active)
+	            {
+		            return;
+	            }
+
+	            messagePipeline.Execute();
 
                 if (messagePipeline.State.Get<bool>(StateKeys.Working))
                 {
-                    bus.Events.OnThreadWorking(this, new ThreadStateEventArgs(typeof(InboxMessagePipeline)));
+                    _bus.Events.OnThreadWorking(this, new ThreadStateEventArgs(typeof(InboxMessagePipeline)));
 
-                    threadActivity.Working();
+                    _threadActivity.Working();
                 }
                 else
                 {
-                    bus.Events.OnThreadWaiting(this, new ThreadStateEventArgs(typeof(InboxMessagePipeline)));
+                    _bus.Events.OnThreadWaiting(this, new ThreadStateEventArgs(typeof(InboxMessagePipeline)));
 
-                    threadActivity.Waiting(state);
+                    _threadActivity.Waiting(state);
                 }
             }
             finally
             {
-                bus.Configuration.PipelineFactory.ReleasePipeline(messagePipeline);
+                _bus.Configuration.PipelineFactory.ReleasePipeline(messagePipeline);
             }
         }
     }

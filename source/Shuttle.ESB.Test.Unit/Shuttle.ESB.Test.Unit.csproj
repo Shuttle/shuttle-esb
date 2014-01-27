@@ -5,7 +5,7 @@
     <OldToolsVersion>4.0</OldToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Framework)' == 'net35-full'">
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Framework)' == 'net40-full'">
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
@@ -62,13 +62,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Moq">
-      <HintPath>..\packages\Moq.4.2.1312.1622\lib\net40\Moq.dll</HintPath>
+      <HintPath>..\packages\Moq.4.2.1312.1622\lib\net35\Moq.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="Shuttle.Core.Infrastructure">
-      <HintPath>..\packages\shuttle-core-infrastructure.2.1.2.0\lib\net40-full\Shuttle.Core.Infrastructure.dll</HintPath>
+    <Reference Include="Shuttle.Core.Infrastructure, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\shuttle-core\build\Debug\net35-full\Shuttle.Core.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -80,6 +81,9 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Core\UriExtensionsTest.cs" />
+    <Compile Include="RabbitMq\RabbitMQQueueFactoryTest.cs" />
+    <Compile Include="RabbitMq\RabbitMQUriParserTests.cs" />
     <Compile Include="Core\AssemblyMessageRouteSpecificationTest.cs" />
     <Compile Include="Core\CompressionAlgorithmTest.cs" />
     <Compile Include="Core\MockModule.cs" />
@@ -93,7 +97,7 @@
     <Compile Include="Core\RouteSpecificationTest.cs" />
     <Compile Include="Core\TypeListMessageRouteSpecificationTest.cs" />
     <Compile Include="Msmq\MsmqQueueFactoryTest.cs" />
-    <Compile Include="Msmq\MsmqQueueTest.cs" />
+    <Compile Include="Msmq\MsmqUriParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlServer\SqlQueueTest.cs" />
     <Compile Include="Configuration\StringDurationArrayConverterTest.cs" />
@@ -107,6 +111,10 @@
     <ProjectReference Include="..\Shuttle.ESB.Msmq\Shuttle.ESB.Msmq.csproj">
       <Project>{DD6566FD-824C-4275-B4EB-269B0FBC70A8}</Project>
       <Name>Shuttle.ESB.Msmq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Shuttle.ESB.RabbitMQ\Shuttle.ESB.RabbitMQ.csproj">
+      <Project>{72096229-B17B-4A19-916E-626E05FC1946}</Project>
+      <Name>Shuttle.ESB.RabbitMQ</Name>
     </ProjectReference>
     <ProjectReference Include="..\Shuttle.ESB.SqlServer\Shuttle.ESB.SqlServer.csproj">
       <Project>{71B25665-8F18-4A3B-B2CC-0C6444252091}</Project>

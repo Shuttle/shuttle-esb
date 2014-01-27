@@ -66,9 +66,8 @@
     <DefineConstants>$(DefineConstants);NET45FULL</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Shuttle.Core.Infrastructure, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\shuttle-core-infrastructure.2.1.2.0\lib\net35-full\Shuttle.Core.Infrastructure.dll</HintPath>
+    <Reference Include="Shuttle.Core.Infrastructure">
+      <HintPath>..\..\..\shuttle-core\source\Shuttle.Core.Infrastructure\bin\Debug\Shuttle.Core.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -133,6 +132,7 @@
     <Compile Include="Queues\IAcknowledge.cs" />
     <Compile Include="Queues\IPeek.cs" />
     <Compile Include="Queues\IQueueExtensions.cs" />
+    <Compile Include="Queues\UriExtensions.cs" />
     <Compile Include="ServiceBusEvents\PipelineEventEventArgs.cs" />
     <Compile Include="ServiceBusEvents\PipelineExceptionEventArgs.cs" />
     <Compile Include="ServiceBusEvents\ThreadWorkingEventArgs.cs" />

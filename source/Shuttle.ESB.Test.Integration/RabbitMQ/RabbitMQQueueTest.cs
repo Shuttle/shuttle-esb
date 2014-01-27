@@ -24,8 +24,10 @@ namespace Shuttle.ESB.Test.Integration.RabbitMQ
 			var inboxUri = new Uri("rabbitmq://shuttle:shuttle!@localhost/sit-inbox");
 			var outboxUri = new Uri("rabbitmq://shuttle:shuttle!@localhost/sit-outbox");
 
-			inboxQueue = new RabbitMQQueue(inboxUri);
-			outboxQueue = new RabbitMQQueue(outboxUri);
+			var configuration = new RabbitMQConfiguration();
+
+			inboxQueue = new RabbitMQQueue(inboxUri, configuration);
+			outboxQueue = new RabbitMQQueue(outboxUri, configuration);
 		}
 
 		[Test]

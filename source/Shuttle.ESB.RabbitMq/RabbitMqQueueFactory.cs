@@ -6,16 +6,28 @@ namespace Shuttle.ESB.RabbitMQ
 {
 	public class RabbitMQQueueFactory : IQueueFactory
 	{
+		public IRabbitMQConfiguration Configuration { get; private set; }
+
+		public RabbitMQQueueFactory()
+			: this(RabbitMQConfiguration.Default())
+		{
+		}
+
+		public RabbitMQQueueFactory(IRabbitMQConfiguration configuration)
+		{
+			Configuration = configuration;
+		}
+
 		public string Scheme
 		{
-			get { return RabbitMQQueue.SCHEME; }
+			get { return RabbitMQUriParser.SCHEME; }
 		}
 
 		public IQueue Create(Uri uri)
 		{
 			Guard.AgainstNull(uri, "uri");
 
-			return new RabbitMQQueue(uri);
+			return new RabbitMQQueue(uri, Configuration);
 		}
 
 		public bool CanCreate(Uri uri)
