@@ -23,9 +23,10 @@ The `compressionAlgorithm` and `encryptionAlgorithm` attributes indicate the def
 
 ```xml
   <serviceBus
-     removeMessagesNotHandled="true"
-     compressionAlgorithm="GZip"
-     encryptionAlgorithm="3DES">
+    createQueues="true"  
+    removeMessagesNotHandled="true"
+    compressionAlgorithm="GZip"
+    encryptionAlgorithm="3DES">
 ```
 
 Use the `forwardingRoutes` tag to enable message forwarding.  All messages that are received and have been sucessfully handled will be forwarded to the specified queue.
