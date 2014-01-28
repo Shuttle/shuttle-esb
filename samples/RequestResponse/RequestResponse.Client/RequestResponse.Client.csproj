@@ -87,7 +87,7 @@
     </Reference>
     <Reference Include="Shuttle.Core.Infrastructure, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\source\packages\shuttle-core-infrastructure.2.1.2.0\lib\net35-full\Shuttle.Core.Infrastructure.dll</HintPath>
+      <HintPath>..\..\..\source\packages\shuttle-core-infrastructure.2.1.2.1\lib\net35-full\Shuttle.Core.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="Shuttle.Core.Infrastructure.Log4Net, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
