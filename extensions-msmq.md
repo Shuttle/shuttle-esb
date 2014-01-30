@@ -19,7 +19,7 @@ The queue configuration is part of the specified uri, e.g.:
     />
 ```
 
-If you do not specify the 'transactional' parameter it defaults to false.
+If you do not specify the `transactional` parameter it defaults to false.
 
 In addition to this there is also a MSMQ specific section (defaults specified here):
 

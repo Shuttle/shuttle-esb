@@ -23,7 +23,7 @@ The queue configuration is part of the specified uri, e.g.:
     />
 ```
 
-The user information and virtual host bits are optional.
+The `user information` and `virtual host` bits are optional.
 
 In addition to this there is also a RabbitMQ specific section (defaults specified here):
 
