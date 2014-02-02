@@ -95,7 +95,6 @@
     <Compile Include="DeferredMessageQueue.cs" />
     <Compile Include="Definitions\DeferredMessageColumns.cs" />
     <Compile Include="Definitions\IdempotenceTrackerColumns.cs" />
-    <Compile Include="Idempotence\IdempotenceTracker.cs" />
     <Compile Include="IScriptProvider.cs" />
     <Compile Include="ScriptProvider.cs" />
     <Compile Include="SubscriptionManager.cs" />

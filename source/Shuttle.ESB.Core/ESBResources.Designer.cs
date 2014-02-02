@@ -232,6 +232,15 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [configuration] : state folder = &apos;{0}&apos;.
+        /// </summary>
+        public static string InformationStateFolder {
+            get {
+                return ResourceManager.GetString("InformationStateFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Only scheme &apos;{0}&apos; is supported.  The given uri &apos;{1}&apos; is not supported..
         /// </summary>
         public static string InvalidSchemeException {
@@ -700,29 +709,20 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [idempotence tracker - add] : transport message type &apos;{0}&apos; with id &apos;{1}&apos; has been added..
+        ///   Looks up a localized string similar to [receive message state service] : transport message type &apos;{0}&apos; with id &apos;{1}&apos; has been handled and state has been removed..
         /// </summary>
-        public static string TraceIdempotenceTrackerAdd {
+        public static string TraceMessageAcknowledged {
             get {
-                return ResourceManager.GetString("TraceIdempotenceTrackerAdd", resourceCulture);
+                return ResourceManager.GetString("TraceMessageAcknowledged", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [idempotence tracker - contains] : transport message type &apos;{0}&apos; with id &apos;{1}&apos; has been handled..
+        ///   Looks up a localized string similar to [receive message state service] : transport message type &apos;{0}&apos; with id &apos;{1}&apos; has already been handled..
         /// </summary>
-        public static string TraceIdempotenceTrackerContains {
+        public static string TraceMessageHandled {
             get {
-                return ResourceManager.GetString("TraceIdempotenceTrackerContains", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to [idempotence tracker - remove] : transport message type &apos;{0}&apos; with id &apos;{1}&apos; has been removed..
-        /// </summary>
-        public static string TraceIdempotenceTrackerRemove {
-            get {
-                return ResourceManager.GetString("TraceIdempotenceTrackerRemove", resourceCulture);
+                return ResourceManager.GetString("TraceMessageHandled", resourceCulture);
             }
         }
         

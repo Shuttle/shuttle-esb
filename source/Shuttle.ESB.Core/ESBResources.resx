@@ -448,22 +448,22 @@
     <value>Could not deserialize the transport message from queue '{0}'.  Exception reported: {1}</value>
     <comment>{0} = queue uri, {1} = exception</comment>
   </data>
-  <data name="TraceIdempotenceTrackerAdd" xml:space="preserve">
-    <value>[idempotence tracker - add] : transport message type '{0}' with id '{1}' has been added.</value>
-    <comment>{0} = message type, {1} = message id</comment>
-  </data>
-  <data name="TraceIdempotenceTrackerContains" xml:space="preserve">
-    <value>[idempotence tracker - contains] : transport message type '{0}' with id '{1}' has been handled.</value>
-    <comment>{0} = message type, {1} = message id</comment>
-  </data>
-  <data name="TraceIdempotenceTrackerRemove" xml:space="preserve">
-    <value>[idempotence tracker - remove] : transport message type '{0}' with id '{1}' has been removed.</value>
-    <comment>{0} = message type, {1} = message id</comment>
-  </data>
   <data name="NoIdempotenceTracker" xml:space="preserve">
     <value>No idempotence tracker has been specified.</value>
   </data>
   <data name="NoDeferredMessageQueue" xml:space="preserve">
     <value>No deferred message queue has been specified.</value>
+  </data>
+  <data name="InformationStateFolder" xml:space="preserve">
+    <value>[configuration] : state folder = '{0}'</value>
+    <comment>{0} = state folder path</comment>
+  </data>
+  <data name="TraceMessageAcknowledged" xml:space="preserve">
+    <value>[receive message state service] : transport message type '{0}' with id '{1}' has been handled and state has been removed.</value>
+    <comment>{0} = message type, {1} = message id</comment>
+  </data>
+  <data name="TraceMessageHandled" xml:space="preserve">
+    <value>[receive message state service] : transport message type '{0}' with id '{1}' has already been handled.</value>
+    <comment>{0} = message type, {1} = message id</comment>
   </data>
 </root>

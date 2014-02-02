@@ -68,13 +68,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Shuttle.Core.Data">
-      <HintPath>..\..\..\external-bin\shuttle.core\$(Framework)\Shuttle.Core.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Shuttle.Core.Domain">
-      <HintPath>..\..\..\external-bin\shuttle.core\$(Framework)\Shuttle.Core.Domain.dll</HintPath>
+      <HintPath>..\..\..\source\packages\shuttle-core-data.2.1.2.1\lib\net35-full\Shuttle.Core.Data.dll</HintPath>
     </Reference>
     <Reference Include="Shuttle.Core.Host">
-      <HintPath>..\..\..\external-bin\shuttle.core\$(Framework)\Shuttle.Core.Host.exe</HintPath>
+      <HintPath>..\..\..\source\packages\shuttle-core-host.2.1.2.0\lib\net35-full\Shuttle.Core.Host.exe</HintPath>
     </Reference>
     <Reference Include="Shuttle.Core.Infrastructure, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

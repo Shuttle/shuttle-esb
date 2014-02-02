@@ -51,17 +51,6 @@ namespace Shuttle.ESB.Core
                     scope = bus.Configuration.TransactionScopeFactory.Create();
                 }
 
-                if (bus.Configuration.HasIdempotenceTracker)
-                {
-                    bus.Configuration.IdempotenceTracker.Add(transportMessage);
-
-                    if (log.IsTraceEnabled)
-                    {
-                        log.Trace(string.Format(ESBResources.TraceIdempotenceTrackerAdd, transportMessage.MessageType,
-                                                transportMessage.MessageId));
-                    }
-                }
-
                 method.Invoke(handler, new[]
                     {
                         Activator.CreateInstance(contextType,
@@ -110,13 +99,12 @@ namespace Shuttle.ESB.Core
             var bus = pipelineEvent.GetServiceBus();
             var transportMessage = pipelineEvent.GetTransportMessage();
 
-            if (bus.Configuration.HasIdempotenceTracker &&
-                bus.Configuration.IdempotenceTracker.Contains(transportMessage))
+            if (bus.Configuration.HasReceiveMessageStateService &&
+                bus.Configuration.ReceiveMessageStateService.HasMessageBeenHandled(transportMessage))
             {
                 if (log.IsTraceEnabled)
                 {
-                    log.Trace(string.Format(ESBResources.TraceIdempotenceTrackerContains, transportMessage.MessageType,
-                                            transportMessage.MessageId));
+					log.Trace(string.Format(ESBResources.TraceMessageHandled, transportMessage.MessageType, transportMessage.MessageId));
                 }
 
                 return;
