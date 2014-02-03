@@ -1,7 +1,9 @@
-﻿namespace Shuttle.ESB.Core
+﻿using System;
+
+namespace Shuttle.ESB.Core
 {
 	public interface IAcknowledge
 	{
-		void Acknowledge();
+		void Acknowledge(Guid messageId);
 	}
 }

@@ -1,1 +1,0 @@
-delete from [dbo].[IdempotenceTracker] where MessageId = @MessageId

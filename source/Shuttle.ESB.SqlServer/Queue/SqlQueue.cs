@@ -2,21 +2,20 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using Shuttle.Core.Data;
 using Shuttle.Core.Infrastructure;
 using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.SqlServer
 {
-	public class SqlQueue : IQueue, ICreate, IDrop, IPurge, ICount, IQueueReader
+	public class SqlQueue : IQueue, ICreate, IDrop, IPurge, ICount, IQueueReader, IAcknowledge
 	{
-		[ThreadStatic] private static object _underlyingMessageData;
-
-		internal const string SCHEME = "sql";
 		private readonly DataSource _dataSource;
 		private readonly IDatabaseGateway _databaseGateway;
 
-		private static readonly object _padlock = new object();
+		private readonly object _padlock = new object();
+		private readonly List<Guid> _unacknowledgedMessageIds = new List<Guid>();
 
 		private readonly IScriptProvider _scriptProvider;
 
@@ -25,7 +24,6 @@ namespace Shuttle.ESB.SqlServer
 
 		private IQuery _countQuery;
 		private IQuery _createQuery;
-		private IQuery _dequeueQuery;
 		private IQuery _dropQuery;
 		private IQuery _existsQuery;
 		private IQuery _purgeQuery;
@@ -35,6 +33,8 @@ namespace Shuttle.ESB.SqlServer
 		private string _dequeueIdQueryStatement;
 
 		private readonly ILog _log;
+
+		private readonly SqlUriParser parser;
 
 		public SqlQueue(Uri uri)
 			: this(uri,
@@ -58,35 +58,12 @@ namespace Shuttle.ESB.SqlServer
 			_databaseConnectionFactory = databaseConnectionFactory;
 			_databaseGateway = databaseGateway;
 
-			if (!uri.Scheme.Equals(SCHEME, StringComparison.InvariantCultureIgnoreCase))
-			{
-				throw new InvalidSchemeException(SCHEME, uri.ToString());
-			}
-
-			var builder = new UriBuilder(uri);
-
-			if (uri.LocalPath == "/" || uri.Segments.Length != 2)
-			{
-				throw new UriFormatException(string.Format(ESBResources.UriFormatException,
-				                                           "sql://{{connection-name}}/{{table-name}}",
-				                                           uri));
-			}
-
 			_log = Log.For(this);
 
-			Uri = builder.Uri;
+			parser = new SqlUriParser(uri);
 
-			_dataSource = new DataSource(Uri.Host, new SqlDbDataParameterFactory());
-
-			using (databaseConnectionFactory.Create(_dataSource))
-			{
-				var host = databaseGateway.GetScalarUsing<string>(_dataSource,
-				                                                  RawQuery.Create("select host_name()"));
-
-				IsLocal = (host ?? string.Empty) == Environment.MachineName;
-			}
-
-			_tableName = Uri.Segments[1];
+			_dataSource = new DataSource(parser.ConnectionName, new SqlDbDataParameterFactory());
+			_tableName = parser.TableName;
 
 			BuildQueries();
 		}
@@ -142,9 +119,14 @@ namespace Shuttle.ESB.SqlServer
 
 			try
 			{
-				using (_databaseConnectionFactory.Create(_dataSource))
+				lock (_padlock)
 				{
-					_databaseGateway.ExecuteUsing(_dataSource, _dropQuery);
+					using (_databaseConnectionFactory.Create(_dataSource))
+					{
+						_databaseGateway.ExecuteUsing(_dataSource, _dropQuery);
+					}
+
+					ResetUnacknowledgedMessageIds();
 				}
 			}
 			catch (Exception ex)
@@ -164,9 +146,14 @@ namespace Shuttle.ESB.SqlServer
 
 			try
 			{
-				using (_databaseConnectionFactory.Create(_dataSource))
+				lock (_padlock)
 				{
-					_databaseGateway.ExecuteUsing(_dataSource, _purgeQuery);
+					using (_databaseConnectionFactory.Create(_dataSource))
+					{
+						_databaseGateway.ExecuteUsing(_dataSource, _purgeQuery);
+					}
+
+					ResetUnacknowledgedMessageIds();
 				}
 			}
 			catch (Exception ex)
@@ -224,31 +211,26 @@ namespace Shuttle.ESB.SqlServer
 			return Count == 0;
 		}
 
-		private void ResetUnderlyingMessageData()
-		{
-			_underlyingMessageData = null;
-		}
-
 		public Stream Dequeue()
 		{
-			ResetUnderlyingMessageData();
-
 			lock (_padlock)
 			{
 				try
 				{
 					using (_databaseConnectionFactory.Create(_dataSource))
 					{
-						var row = _databaseGateway.GetSingleRowUsing(_dataSource, _dequeueQuery);
+						var row = _databaseGateway.GetSingleRowUsing(_dataSource, RawQuery.Create(_scriptProvider.GetScript(Script.QueueDequeue, _tableName, string.Join(",", _unacknowledgedMessageIds.Select(messageId => string.Format("'{0}'", messageId)).ToArray()))));
 
 						if (row == null)
 						{
 							return null;
 						}
 
-						_underlyingMessageData = row;
+						var result = new MemoryStream((byte[]) row["MessageBody"]);
 
-						return new MemoryStream((byte[]) row["MessageBody"]);
+						MessageIdAcknowledgementRequired(new Guid(row["MessageId"].ToString()));
+
+						return result;
 					}
 				}
 				catch (Exception ex)
@@ -260,10 +242,13 @@ namespace Shuttle.ESB.SqlServer
 			}
 		}
 
+		private void MessageIdAcknowledgementRequired(Guid messageId)
+		{
+			_unacknowledgedMessageIds.Add(messageId);
+		}
+
 		public Stream Dequeue(Guid messageId)
 		{
-			ResetUnderlyingMessageData();
-
 			lock (_padlock)
 			{
 				try
@@ -280,14 +265,11 @@ namespace Shuttle.ESB.SqlServer
 							return null;
 						}
 
-						_underlyingMessageData = row;
+						var result = new MemoryStream((byte[]) row["MessageBody"]);
 
-						using (var stream = new MemoryStream((byte[]) row["MessageBody"]))
-						{
-							_underlyingMessageData = new MemoryStream(stream.ToBytes());
+						MessageIdAcknowledgementRequired(messageId);
 
-							return (Stream) _underlyingMessageData;
-						}
+						return result;
 					}
 				}
 				catch (Exception ex)
@@ -301,16 +283,18 @@ namespace Shuttle.ESB.SqlServer
 
 		public bool Remove(Guid messageId)
 		{
-			ResetUnderlyingMessageData();
-
 			try
 			{
-				using (_databaseConnectionFactory.Create(_dataSource))
+				lock (_padlock)
 				{
-					return _databaseGateway.ExecuteUsing(
-						_dataSource,
-						RawQuery.Create(_removeQueryStatement)
-						        .AddParameterValue(QueueColumns.MessageId, messageId)) > 0;
+					using (_databaseConnectionFactory.Create(_dataSource))
+					{
+						var result = _databaseGateway.ExecuteUsing(_dataSource, RawQuery.Create(_removeQueryStatement).AddParameterValue(QueueColumns.MessageId, messageId)) > 0;
+
+						MessageIdAcknowledged(messageId);
+
+						return result;
+					}
 				}
 			}
 			catch (Exception ex)
@@ -327,7 +311,6 @@ namespace Shuttle.ESB.SqlServer
 			_createQuery = RawQuery.Create(_scriptProvider.GetScript(Script.QueueCreate, _tableName));
 			_dropQuery = RawQuery.Create(_scriptProvider.GetScript(Script.QueueDrop, _tableName));
 			_purgeQuery = RawQuery.Create(_scriptProvider.GetScript(Script.QueuePurge, _tableName));
-			_dequeueQuery = RawQuery.Create(_scriptProvider.GetScript(Script.QueueDequeue, _tableName));
 			_countQuery = RawQuery.Create(_scriptProvider.GetScript(Script.QueueCount, _tableName));
 			_enqueueQueryStatement = _scriptProvider.GetScript(Script.QueueEnqueue, _tableName);
 			_removeQueryStatement = _scriptProvider.GetScript(Script.QueueRemove, _tableName);
@@ -362,6 +345,25 @@ namespace Shuttle.ESB.SqlServer
 
 				throw;
 			}
+		}
+
+		public void Acknowledge(Guid messageId)
+		{
+			lock (_padlock)
+			{
+				Remove(messageId);
+				MessageIdAcknowledged(messageId);
+			}
+		}
+
+		private void MessageIdAcknowledged(Guid messageId)
+		{
+			_unacknowledgedMessageIds.Remove(messageId);
+		}
+
+		private void ResetUnacknowledgedMessageIds()
+		{
+			_unacknowledgedMessageIds.Clear();
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 using System.Web;
 using Shuttle.Core.Infrastructure;
@@ -10,8 +11,8 @@ namespace Shuttle.ESB.Msmq
 	{
 		internal const string SCHEME = "msmq";
 
-		private readonly string host;
-		private readonly bool usesIPAddress;
+		private string host;
+		private bool usesIPAddress;
 
 		private readonly Regex regexIPAddress =
 			new Regex(
@@ -53,26 +54,57 @@ namespace Shuttle.ESB.Msmq
 							 ? string.Format(@"FormatName:DIRECT=TCP:{0}\private$\{1}", host, uri.Segments[1])
 							 : string.Format(@"FormatName:DIRECT=OS:{0}\private$\{1}", host, uri.Segments[1]);
 
+			JournalPath = string.Concat(Path, "$journal");
+
 			var parameters = HttpUtility.ParseQueryString(uri.Query);
 
-			Transactional = false;
+			SetJounal(parameters);
+			SetTransactional(parameters);
+		}
+
+		private void SetTransactional(NameValueCollection parameters)
+		{
+			Transactional = true;
 
 			var transactionalItem = parameters.Get("transactional");
 
-			if (transactionalItem != null)
+			if (transactionalItem == null)
 			{
-				bool transactional;
+				return;
+			}
 
-				if (bool.TryParse(transactionalItem, out transactional))
-				{
-					Transactional = transactional;
-				}
+			bool transactional;
+
+			if (bool.TryParse(transactionalItem, out transactional))
+			{
+				Transactional = transactional;
+			}
+		}
+
+		private void SetJounal(NameValueCollection parameters)
+		{
+			Journal = true;
+
+			var journalItem = parameters.Get("journal");
+
+			if (journalItem == null)
+			{
+				return;
+			}
+
+			bool journal;
+
+			if (bool.TryParse(journalItem, out journal))
+			{
+				Journal = journal;
 			}
 		}
 
 		public Uri Uri { get; private set; }
 		public bool Local { get; private set; }
 		public bool Transactional { get; private set; }
+		public bool Journal { get; private set; }
 		public string Path { get; private set; }
+		public string JournalPath { get; private set; }
 	}
 }

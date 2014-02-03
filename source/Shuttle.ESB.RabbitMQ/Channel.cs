@@ -41,7 +41,7 @@ namespace Shuttle.ESB.RabbitMQ
 				       : null;
 		}
 
-		public void Acknowledge()
+		public void Acknowledge(Guid messageId)
 		{
 			_subscription.Ack(_basicDeliverEventArgs);
 		}

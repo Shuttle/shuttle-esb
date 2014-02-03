@@ -12,26 +12,31 @@ namespace Shuttle.ESB.Msmq
 {
 	public class MsmqQueue : IQueue, ICreate, IDrop, IPurge, ICount, IQueueReader
 	{
-		private readonly TimeSpan timeout;
+		private readonly TimeSpan _timeout;
 
-		private readonly ILog log;
+		private readonly ILog _log;
 
 		private readonly MsmqUriParser parser;
+
+		private readonly MessagePropertyFilter _messagePropertyFilter;
 
 		public MsmqQueue(Uri uri, IMsmqConfiguration configuration)
 		{
 			Guard.AgainstNull(uri, "uri");
 			Guard.AgainstNull(configuration, "configuration");
 
-			log = Log.For(this);
+			_log = Log.For(this);
 
 			parser = new MsmqUriParser(uri);
 
-			timeout = parser.Local
-				          ? TimeSpan.FromMilliseconds(configuration.LocalQueueTimeoutMilliseconds )
-				          : TimeSpan.FromMilliseconds(configuration.RemoteQueueTimeoutMilliseconds);
+			_timeout = parser.Local
+						  ? TimeSpan.FromMilliseconds(configuration.LocalQueueTimeoutMilliseconds)
+						  : TimeSpan.FromMilliseconds(configuration.RemoteQueueTimeoutMilliseconds);
 
 			Uri = parser.Uri;
+
+			_messagePropertyFilter = new MessagePropertyFilter();
+			_messagePropertyFilter.SetAll();
 		}
 
 		public int Count
@@ -67,7 +72,12 @@ namespace Shuttle.ESB.Msmq
 
 			MessageQueue.Create(parser.Path, parser.Transactional).Dispose();
 
-			log.Information(string.Format(MsmqResources.QueueCreated, Uri));
+			if (parser.Journal)
+			{
+				MessageQueue.Create(parser.JournalPath, parser.Transactional).Dispose();
+			}
+
+			_log.Information(string.Format(MsmqResources.QueueCreated, Uri));
 		}
 
 		public void Drop()
@@ -84,7 +94,12 @@ namespace Shuttle.ESB.Msmq
 
 			MessageQueue.Delete(parser.Path);
 
-			log.Information(string.Format(MsmqResources.QueueDropped, Uri));
+			if (parser.Journal)
+			{
+				MessageQueue.Delete(parser.JournalPath);
+			}
+
+			_log.Information(string.Format(MsmqResources.QueueDropped, Uri));
 		}
 
 		public void Purge()
@@ -94,7 +109,7 @@ namespace Shuttle.ESB.Msmq
 				queue.Purge();
 			}
 
-			log.Information(string.Format(MsmqResources.QueuePurged, Uri));
+			_log.Information(string.Format(MsmqResources.QueuePurged, Uri));
 		}
 
 		public Uri Uri { get; private set; }
@@ -110,7 +125,7 @@ namespace Shuttle.ESB.Msmq
 			{
 				using (var queue = CreateGuardedQueue())
 				{
-					return queue.Peek(timeout) == null;
+					return queue.Peek(_timeout) == null;
 				}
 			}
 			catch (MessageQueueException ex)
@@ -153,13 +168,13 @@ namespace Shuttle.ESB.Msmq
 					AccessDenied();
 				}
 
-				log.Error(string.Format(MsmqResources.SendMessageIdError, messageId, Uri, ex.CompactMessages()));
+				_log.Error(string.Format(MsmqResources.SendMessageIdError, messageId, Uri, ex.CompactMessages()));
 
 				throw;
 			}
 			catch (Exception ex)
 			{
-				log.Error(string.Format(MsmqResources.SendMessageIdError, messageId, Uri, ex.CompactMessages()));
+				_log.Error(string.Format(MsmqResources.SendMessageIdError, messageId, Uri, ex.CompactMessages()));
 
 				throw;
 			}
@@ -171,9 +186,52 @@ namespace Shuttle.ESB.Msmq
 			{
 				Message message;
 
-				using (var queue = CreateGuardedQueue())
+				if (parser.Transactional)
 				{
-					message = queue.Receive(timeout, TransactionType());
+					using (var tx = new MessageQueueTransaction())
+					using (var queue = CreateGuardedQueue())
+					using (var journal = CreateGuardedJournalQueue())
+					{
+						tx.Begin();
+
+						message = queue.Receive(_timeout, tx);
+
+						if (message != null)
+						{
+							var journalMessage = new Message
+								{
+									Recoverable = true,
+									Label = message.Label,
+									CorrelationId = string.Format(@"{0}\1", message.Label),
+									BodyStream = message.BodyStream
+								};
+
+							journal.Send(journalMessage, tx);
+						}
+
+						tx.Commit();
+					}
+				}
+				else
+				{
+					using (var queue = CreateGuardedQueue())
+					using (var journal = CreateGuardedJournalQueue())
+					{
+						message = queue.Receive(_timeout, MessageQueueTransactionType.None);
+
+						if (message != null)
+						{
+							var journalMessage = new Message
+							{
+								Recoverable = true,
+								Label = message.Label,
+								CorrelationId = string.Format(@"{0}\1", message.Label),
+								BodyStream = message.BodyStream
+							};
+
+							journal.Send(journalMessage, MessageQueueTransactionType.None);
+						}
+					}
 				}
 
 				if (message == null)
@@ -195,13 +253,13 @@ namespace Shuttle.ESB.Msmq
 					AccessDenied();
 				}
 
-				log.Error(string.Format(MsmqResources.DequeueError, Uri, ex.Message));
+				_log.Error(string.Format(MsmqResources.DequeueError, Uri, ex.Message));
 
 				throw;
 			}
 			catch (Exception ex)
 			{
-				log.Error(string.Format(MsmqResources.DequeueError, Uri, ex.CompactMessages()));
+				_log.Error(string.Format(MsmqResources.DequeueError, Uri, ex.CompactMessages()));
 
 				throw;
 			}
@@ -232,13 +290,13 @@ namespace Shuttle.ESB.Msmq
 					AccessDenied();
 				}
 
-				log.Error(string.Format(MsmqResources.DequeueMessageIdError, messageId, Uri, ex.CompactMessages()));
+				_log.Error(string.Format(MsmqResources.DequeueMessageIdError, messageId, Uri, ex.CompactMessages()));
 
 				throw;
 			}
 			catch (Exception ex)
 			{
-				log.Error(string.Format(MsmqResources.DequeueMessageIdError, messageId, Uri, ex.CompactMessages()));
+				_log.Error(string.Format(MsmqResources.DequeueMessageIdError, messageId, Uri, ex.CompactMessages()));
 
 				throw;
 			}
@@ -248,6 +306,7 @@ namespace Shuttle.ESB.Msmq
 		{
 			try
 			{
+
 				using (var queue = CreateGuardedQueue())
 				{
 					return (queue.ReceiveByCorrelationId(string.Format(@"{0}\1", messageId), TransactionType()) != null);
@@ -260,13 +319,13 @@ namespace Shuttle.ESB.Msmq
 					AccessDenied();
 				}
 
-				log.Error(string.Format(MsmqResources.RemoveError, messageId, Uri, ex.CompactMessages()));
+				_log.Error(string.Format(MsmqResources.RemoveError, messageId, Uri, ex.CompactMessages()));
 
 				throw;
 			}
 			catch (Exception ex)
 			{
-				log.Error(string.Format(MsmqResources.RemoveError, messageId, Uri, ex.CompactMessages()));
+				_log.Error(string.Format(MsmqResources.RemoveError, messageId, Uri, ex.CompactMessages()));
 
 				throw;
 			}
@@ -307,11 +366,11 @@ namespace Shuttle.ESB.Msmq
 					AccessDenied();
 				}
 
-				log.Error(string.Format(MsmqResources.ReadError, top, Uri, ex.CompactMessages()));
+				_log.Error(string.Format(MsmqResources.ReadError, top, Uri, ex.CompactMessages()));
 			}
 			catch (Exception ex)
 			{
-				log.Error(string.Format(MsmqResources.ReadError, top, Uri, ex.CompactMessages()));
+				_log.Error(string.Format(MsmqResources.ReadError, top, Uri, ex.CompactMessages()));
 			}
 
 			return result;
@@ -319,20 +378,23 @@ namespace Shuttle.ESB.Msmq
 
 		private MessageQueue CreateGuardedQueue()
 		{
-			var messageQueue = new MessageQueue(parser.Path);
+			return new MessageQueue(parser.Path)
+				{
+					MessageReadPropertyFilter = _messagePropertyFilter
+				};
+		}
 
-			var messagePropertyFilter = new MessagePropertyFilter();
-
-			messagePropertyFilter.SetAll();
-
-			messageQueue.MessageReadPropertyFilter = messagePropertyFilter;
-
-			return messageQueue;
+		private MessageQueue CreateGuardedJournalQueue()
+		{
+			return new MessageQueue(parser.JournalPath)
+				{
+					MessageReadPropertyFilter = _messagePropertyFilter
+				};
 		}
 
 		private void AccessDenied()
 		{
-			log.Fatal(
+			_log.Fatal(
 				string.Format(
 					MsmqResources.AccessDenied,
 					WindowsIdentity.GetCurrent() != null
@@ -352,7 +414,7 @@ namespace Shuttle.ESB.Msmq
 		{
 			try
 			{
-				return queue.Peek(timeout, cursor, action);
+				return queue.Peek(_timeout, cursor, action);
 			}
 			catch
 			{
@@ -363,12 +425,17 @@ namespace Shuttle.ESB.Msmq
 		private MessageQueueTransactionType TransactionType()
 		{
 			return parser.Transactional
-				       ? Transaction.Current != null
-					         ? MessageQueueTransactionType.Automatic
-					         : parser.Transactional
-						           ? MessageQueueTransactionType.Single
-						           : MessageQueueTransactionType.None
-				       : MessageQueueTransactionType.None;
+					   ? InTransactionScope
+							 ? MessageQueueTransactionType.Automatic
+							 : parser.Transactional
+								   ? MessageQueueTransactionType.Single
+								   : MessageQueueTransactionType.None
+					   : MessageQueueTransactionType.None;
+		}
+
+		private static bool InTransactionScope
+		{
+			get { return Transaction.Current != null; }
 		}
 	}
 }

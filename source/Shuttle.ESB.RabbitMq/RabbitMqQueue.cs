@@ -164,7 +164,7 @@ namespace Shuttle.ESB.RabbitMQ
 
 							if (guid.Equals(messageId))
 							{
-								GetChannel().Acknowledge();
+								GetChannel().Acknowledge(messageId);
 
 								return true;
 							}
@@ -300,9 +300,9 @@ namespace Shuttle.ESB.RabbitMQ
 			}
 		}
 
-		public void Acknowledge()
+		public void Acknowledge(Guid messageId)
 		{
-			AccessQueue(() => GetChannel().Acknowledge());
+			AccessQueue(() => GetChannel().Acknowledge(messageId));
 		}
 
 		public void Purge()

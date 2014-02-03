@@ -20,7 +20,7 @@ namespace Shuttle.ESB.SqlServer
 
 		public string Scheme
 		{
-			get { return SqlQueue.SCHEME; }
+			get { return SqlUriParser.SCHEME; }
 		}
 
 		public IQueue Create(Uri uri)
