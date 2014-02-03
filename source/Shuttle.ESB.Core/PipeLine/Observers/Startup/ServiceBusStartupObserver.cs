@@ -79,14 +79,14 @@ namespace Shuttle.ESB.Core
 
 		public void Execute(OnInitializeIdempotenceTracker pipelineEvent)
 		{
-			if (!_bus.Configuration.HasIdempotenceTracker)
+			if (!_bus.Configuration.HasReceiveMessageStateService)
 			{
 				_log.Information(ESBResources.NoIdempotenceTracker);
 
 				return;
 			}
 
-			_bus.Configuration.IdempotenceTracker.AttemptInitialization(_bus);
+			_bus.Configuration.ReceiveMessageStateService.AttemptInitialization(_bus);
 		}
 
 		public void Execute(OnInitializeTransactionScopeFactory pipelineEvent)

@@ -60,8 +60,8 @@
             RegisterObserver(new HandleMessageObserver());
             RegisterObserver(new ReceiveExceptionObserver());
             RegisterObserver(new TransactionScopeObserver());
-            RegisterObserver(new IdempotenceTrackerObserver());
             RegisterObserver(new AcknowledgeMessageObserver());
-        }
+			RegisterObserver(new ReceiveMessageStateObserver());
+		}
     }
 }

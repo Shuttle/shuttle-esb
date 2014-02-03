@@ -384,6 +384,11 @@ namespace Shuttle.ESB.Core
 			result.EncryptionAlgorithm = Configuration.EncryptionAlgorithm;
 			result.CompressionAlgorithm = Configuration.CompressionAlgorithm;
 
+			if (TransportMessageReceived != null)
+			{
+				result.MessageReceivedId = transportMessageReceived.MessageId;
+			}
+
 			return result;
 		}
 

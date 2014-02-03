@@ -71,7 +71,7 @@ namespace Shuttle.ESB.Core
 		public ITransactionScopeConfiguration TransactionScope { get; set; }
 
 		public IQueueManager QueueManager { get; set; }
-		public IIdempotenceTracker IdempotenceTracker { get; set; }
+		public IReceiveMessageStateService ReceiveMessageStateService { get; set; }
 
 		public ModuleCollection Modules { get; private set; }
 
@@ -81,9 +81,9 @@ namespace Shuttle.ESB.Core
 		public IServiceBusPolicy Policy { get; set; }
 		public IThreadActivityFactory ThreadActivityFactory { get; set; }
 
-		public bool HasIdempotenceTracker
+		public bool HasReceiveMessageStateService
 		{
-			get { return IdempotenceTracker != null; }
+			get { return ReceiveMessageStateService != null; }
 		}
 
 		public bool HasSubscriptionManager

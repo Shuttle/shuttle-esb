@@ -7,7 +7,7 @@ namespace Shuttle.ESB.Core
 		bool HasInbox { get; }
 		bool HasControlInbox { get; }
 		bool HasOutbox { get; }
-		bool HasIdempotenceTracker { get; }
+		bool HasReceiveMessageStateService { get; }
 		bool HasSubscriptionManager { get; }
 		bool HasDeferredMessageQueue { get; }
 		bool IsWorker { get; }
@@ -25,7 +25,7 @@ namespace Shuttle.ESB.Core
 		IMessageHandlerFactory MessageHandlerFactory { get; }
 		IThreadActivityFactory ThreadActivityFactory { get; }
 
-		IIdempotenceTracker IdempotenceTracker { get; }
+		IReceiveMessageStateService ReceiveMessageStateService { get; }
 		ISubscriptionManager SubscriptionManager { get; }
 		IDeferredMessageConfiguration DeferredMessageConfiguration { get; }
 		IWorkerConfiguration Worker { get; }

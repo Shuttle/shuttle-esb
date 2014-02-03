@@ -18,6 +18,7 @@ namespace Shuttle.ESB.Core
 
 		public byte[] Message { get; set; }
 
+		public Guid MessageReceivedId { get; set; }
 		public Guid MessageId { get; set; }
 		public string CorrelationId { get; set; }
 		public string SenderInboxWorkQueueUri { get; set; }
