@@ -94,8 +94,6 @@
     </Compile>
     <Compile Include="DeferredMessageQueue.cs" />
     <Compile Include="Definitions\DeferredMessageColumns.cs" />
-    <Compile Include="Idempotence\IdempotenceTracker.cs" />
-    <Compile Include="Definitions\IdempotenceTrackerColumns.cs" />
     <Compile Include="IScriptProvider.cs" />
     <Compile Include="Queue\SqlUriParser.cs" />
     <Compile Include="ScriptProvider.cs" />

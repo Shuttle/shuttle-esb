@@ -17,6 +17,11 @@ namespace Shuttle.ESB.SqlServer
 		private readonly object _padlock = new object();
 		private readonly List<Guid> _unacknowledgedMessageIds = new List<Guid>();
 
+		private readonly List<Guid> _emptyMessageIds = new List<Guid>
+			{
+				Guid.Empty
+			};
+
 		private readonly IScriptProvider _scriptProvider;
 
 		private readonly string _tableName;
@@ -59,6 +64,8 @@ namespace Shuttle.ESB.SqlServer
 			_databaseGateway = databaseGateway;
 
 			_log = Log.For(this);
+
+			Uri = uri;
 
 			parser = new SqlUriParser(uri);
 
@@ -186,7 +193,6 @@ namespace Shuttle.ESB.SqlServer
 			}
 		}
 
-		public bool IsLocal { get; private set; }
 		public Uri Uri { get; private set; }
 
 		private bool Exists()
@@ -219,7 +225,19 @@ namespace Shuttle.ESB.SqlServer
 				{
 					using (_databaseConnectionFactory.Create(_dataSource))
 					{
-						var row = _databaseGateway.GetSingleRowUsing(_dataSource, RawQuery.Create(_scriptProvider.GetScript(Script.QueueDequeue, _tableName, string.Join(",", _unacknowledgedMessageIds.Select(messageId => string.Format("'{0}'", messageId)).ToArray()))));
+						var messageIds = _unacknowledgedMessageIds.Count > 0 ? _unacknowledgedMessageIds : _emptyMessageIds;
+
+						var row = _databaseGateway.GetSingleRowUsing(_dataSource,
+						                                             RawQuery.Create(_scriptProvider.GetScript(Script.QueueDequeue,
+						                                                                                       _tableName,
+						                                                                                       string.Join(",",
+						                                                                                                   messageIds
+							                                                                                                   .Select(
+								                                                                                                   messageId =>
+								                                                                                                   string.Format
+									                                                                                                   ("'{0}'",
+									                                                                                                    messageId))
+							                                                                                                   .ToArray()))));
 
 						if (row == null)
 						{
@@ -289,7 +307,10 @@ namespace Shuttle.ESB.SqlServer
 				{
 					using (_databaseConnectionFactory.Create(_dataSource))
 					{
-						var result = _databaseGateway.ExecuteUsing(_dataSource, RawQuery.Create(_removeQueryStatement).AddParameterValue(QueueColumns.MessageId, messageId)) > 0;
+						var result =
+							_databaseGateway.ExecuteUsing(_dataSource,
+							                              RawQuery.Create(_removeQueryStatement)
+							                                      .AddParameterValue(QueueColumns.MessageId, messageId)) > 0;
 
 						MessageIdAcknowledged(messageId);
 

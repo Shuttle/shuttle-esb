@@ -5,11 +5,11 @@ namespace Shuttle.ESB.Core
     public class AcknowledgeMessageObserver :
         IPipelineObserver<OnAcknowledgeMessage>
     {
-        private readonly ILog log;
+        private readonly ILog _log;
 
         public AcknowledgeMessageObserver()
         {
-            log = Log.For(this);
+            _log = Log.For(this);
         }
 
 		public void Execute(OnAcknowledgeMessage pipelineEvent)
@@ -26,7 +26,7 @@ namespace Shuttle.ESB.Core
 				return;
 			}
 
-			acknowledge.Acknowledge(TODO);
+			acknowledge.Acknowledge(pipelineEvent.GetTransportMessage().MessageId);
         }
     }
 }

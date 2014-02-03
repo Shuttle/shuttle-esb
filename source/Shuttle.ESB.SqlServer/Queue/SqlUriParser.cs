@@ -1,4 +1,5 @@
 ﻿using System;
+using Shuttle.Core.Infrastructure;
 using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.SqlServer
