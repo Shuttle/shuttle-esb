@@ -8,23 +8,21 @@ namespace Shuttle.ESB.Test.Integration
 		[TestCase(false)]
 		public void Should_be_able_handle_errors(bool isTransactionalEndpoint)
 		{
-			TestInboxError("rabbitmq://shuttle:shuttle!@localhost/{0}", false, isTransactionalEndpoint);
+			TestInboxError("rabbitmq://shuttle:shuttle!@localhost/{0}", isTransactionalEndpoint);
 		}
 
 		[TestCase(250, false)]
 		[TestCase(250, true)]
 		public void Should_be_able_to_process_messages_concurrently(int msToComplete, bool isTransactionalEndpoint)
 		{
-			TestInboxConcurrency("rabbitmq://shuttle:shuttle!@localhost/{0}", msToComplete, false, isTransactionalEndpoint);
+			TestInboxConcurrency("rabbitmq://shuttle:shuttle!@localhost/{0}", msToComplete, isTransactionalEndpoint);
 		}
 
-		[TestCase(350, true, true)]
-		[TestCase(350, true, true)]
-		[TestCase(350, false, true)]
-		[TestCase(350, false, false)]
-		public void Should_be_able_to_process_queue_timeously(int count, bool useIdempotenceTracker, bool isTransactionalEndpoint)
+		[TestCase(350, true)]
+		[TestCase(350, false)]
+		public void Should_be_able_to_process_queue_timeously(int count, bool isTransactionalEndpoint)
 		{
-			TestInboxThroughput("rabbitmq://shuttle:shuttle!@localhost/{0}", 1000, count, useIdempotenceTracker, false, isTransactionalEndpoint);
+			TestInboxThroughput("rabbitmq://shuttle:shuttle!@localhost/{0}", 1000, count, isTransactionalEndpoint);
 		}
 
 		[Test]

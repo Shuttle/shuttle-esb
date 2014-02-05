@@ -187,15 +187,6 @@ namespace Shuttle.ESB.Core
 			{
 				errorQueueConfiguration.ErrorQueue.AttemptCreate();
 			}
-
-			var journalQueueConfiguration = workQueueConfiguration as IJournalQueueConfiguration;
-
-			if (journalQueueConfiguration == null || journalQueueConfiguration.JournalQueue == null)
-			{
-				return;
-			}
-
-			journalQueueConfiguration.JournalQueue.AttemptCreate();
 		}
 
 		public void RegisterQueueFactory(IQueueFactory queueFactory)

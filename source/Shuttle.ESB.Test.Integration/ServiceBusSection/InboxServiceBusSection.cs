@@ -14,9 +14,8 @@ namespace Shuttle.ESB.Test.Integration
 
             Assert.IsNotNull(section);
 
-            Assert.AreEqual("msmq://./inbox_work", section.Inbox.WorkQueueUri);
-            Assert.AreEqual("msmq://./inbox_error", section.Inbox.ErrorQueueUri);
-            Assert.AreEqual("msmq://./inbox_journal", section.Inbox.JournalQueueUri);
+            Assert.AreEqual("msmq://./inbox-work", section.Inbox.WorkQueueUri);
+            Assert.AreEqual("msmq://./inbox-error", section.Inbox.ErrorQueueUri);
          
             Assert.AreEqual(QueueStartupAction.Purge, section.Inbox.WorkQueueStartupAction);
 
@@ -38,9 +37,8 @@ namespace Shuttle.ESB.Test.Integration
 
             Assert.IsNotNull(section);
 
-            Assert.AreEqual("msmq://./inbox_work", section.Inbox.WorkQueueUri);
-            Assert.AreEqual("msmq://./inbox_journal", section.Inbox.JournalQueueUri);
-            Assert.AreEqual("msmq://./inbox_error", section.Inbox.ErrorQueueUri);
+            Assert.AreEqual("msmq://./inbox-work", section.Inbox.WorkQueueUri);
+            Assert.AreEqual("msmq://./inbox-error", section.Inbox.ErrorQueueUri);
             Assert.AreEqual(QueueStartupAction.None, section.Inbox.WorkQueueStartupAction);
         }
     }

@@ -14,12 +14,16 @@ namespace Shuttle.ESB.Test.Integration
 	{
 		protected event EventHandler<ConfigurationAvailableEventArgs> ConfigurationAvailable = delegate { };
 
-		protected void TestInboxThroughput(string uriFormat, int timeoutMilliseconds, int count,
-										   bool useIdempotenceTracker, bool useJournal, bool isTransactional)
+		protected void TestInboxThroughput(string workQueueUriFormat, int timeoutMilliseconds, int count, bool isTransactional)
+		{
+			TestInboxThroughput(workQueueUriFormat, workQueueUriFormat, timeoutMilliseconds, count, isTransactional);
+		}
+
+		protected void TestInboxThroughput(string workQueueUriFormat, string errorQueueUriFormat, int timeoutMilliseconds, int count, bool isTransactional)
 		{
 			const int threadCount = 1;
 			var padlock = new object();
-			var configuration = GetTestInboxConfiguration(uriFormat, useJournal, threadCount, isTransactional);
+			var configuration = GetTestInboxConfiguration(workQueueUriFormat, errorQueueUriFormat, threadCount, isTransactional);
 
 			ConfigurationAvailable.Invoke(this, new ConfigurationAvailableEventArgs(configuration));
 
@@ -88,7 +92,7 @@ namespace Shuttle.ESB.Test.Integration
 				sw.Stop();
 			}
 
-			AttemptDropQueues(uriFormat, useJournal);
+			AttemptDropQueues(workQueueUriFormat, errorQueueUriFormat);
 
 			var ms = sw.ElapsedMilliseconds;
 
@@ -99,25 +103,24 @@ namespace Shuttle.ESB.Test.Integration
 						  count, timeoutMilliseconds, ms);
 		}
 
-		private void AttemptDropQueues(string uriFormat, bool useJournal)
+		private void AttemptDropQueues(string workQueueUriFormat, string errorQueueUriFormat)
 		{
 			using (var queueManager = QueueManager.Default())
 			{
-				queueManager.GetQueue(string.Format(uriFormat, "test-inbox-work")).AttemptDrop();
-
-				if (useJournal)
-				{
-					queueManager.GetQueue(string.Format(uriFormat, "test-inbox-journal")).AttemptDrop();
-				}
-
-				queueManager.GetQueue(string.Format(uriFormat, "test-error")).AttemptDrop();
+				queueManager.GetQueue(string.Format(workQueueUriFormat, "test-inbox-work")).AttemptDrop();
+				queueManager.GetQueue(string.Format(workQueueUriFormat, "test-error")).AttemptDrop();
 			}
 		}
 
-		protected void TestInboxError(string uriFormat, bool useJournal, bool isTransactional)
+		protected void TestInboxError(string workQueueUriFormat, bool isTransactional)
+		{
+			TestInboxError(workQueueUriFormat, workQueueUriFormat, isTransactional);
+		}
+
+		protected void TestInboxError(string workQueueUriFormat, string errorQueueUriFormat, bool isTransactional)
 		{
 			var padlock = new object();
-			var configuration = GetTestInboxConfiguration(uriFormat, useJournal, 1, isTransactional);
+			var configuration = GetTestInboxConfiguration(workQueueUriFormat, errorQueueUriFormat, 1, isTransactional);
 
 			ConfigurationAvailable.Invoke(this, new ConfigurationAvailableEventArgs(configuration));
 
@@ -152,51 +155,45 @@ namespace Shuttle.ESB.Test.Integration
 				Assert.NotNull(configuration.Inbox.ErrorQueue.Dequeue());
 			}
 
-			AttemptDropQueues(uriFormat, useJournal);
+			AttemptDropQueues(workQueueUriFormat, errorQueueUriFormat);
 		}
 
-		private IServiceBusConfiguration GetTestInboxConfiguration(string uriFormat, bool useJournal, int threadCount, bool isTransactional)
+		private IServiceBusConfiguration GetTestInboxConfiguration(string workQueueUriFormat, string errorQueueUriFormat, int threadCount, bool isTransactional)
 		{
 			var configuration = DefaultConfiguration(isTransactional);
 
 			ConfigurationAvailable.Invoke(this, new ConfigurationAvailableEventArgs(configuration));
 
 			var inboxWorkQueue =
-				configuration.QueueManager.GetQueue(string.Format(uriFormat, "test-inbox-work"));
-			var inboxJournalQueue = useJournal
-										? configuration.QueueManager.GetQueue(string.Format(uriFormat, "test-inbox-journal"))
-										: null;
-			var errorQueue = configuration.QueueManager.GetQueue(string.Format(uriFormat, "test-error"));
+				configuration.QueueManager.GetQueue(string.Format(workQueueUriFormat, "test-inbox-work"));
+			var errorQueue = configuration.QueueManager.GetQueue(string.Format(workQueueUriFormat, "test-error"));
 
 			configuration.Inbox =
 				new InboxQueueConfiguration
 					{
 						WorkQueue = inboxWorkQueue,
-						JournalQueue = inboxJournalQueue,
 						ErrorQueue = errorQueue,
 						DurationToSleepWhenIdle = new[] { TimeSpan.FromMilliseconds(5) },
 						ThreadCount = threadCount
 					};
 
 			inboxWorkQueue.AttemptDrop();
-			inboxJournalQueue.AttemptDrop();
 			errorQueue.AttemptDrop();
 
 			configuration.QueueManager.CreatePhysicalQueues(configuration);
 
 			inboxWorkQueue.AttemptPurge();
-			inboxJournalQueue.AttemptPurge();
 			errorQueue.AttemptPurge();
-
-			if (useJournal)
-			{
-				inboxJournalQueue.Purge();
-			}
 
 			return configuration;
 		}
 
-		protected void TestInboxConcurrency(string uriFormat, int msToComplete, bool useJournal, bool isTransactional)
+		protected void TestInboxConcurrency(string workQueueUriFormat, int msToComplete, bool isTransactional)
+		{
+			TestInboxConcurrency(workQueueUriFormat, workQueueUriFormat, msToComplete, isTransactional);
+		}
+
+		protected void TestInboxConcurrency(string workQueueUriFormat, string errorQueueUriFormat, int msToComplete, bool isTransactional)
 		{
 			const int COUNT = 1;
 
@@ -204,7 +201,7 @@ namespace Shuttle.ESB.Test.Integration
 			var afterDequeueDate = new List<DateTime>();
 			var offsetDate = DateTime.MinValue;
 
-			var configuration = GetTestInboxConfiguration(uriFormat, useJournal, COUNT, isTransactional);
+			var configuration = GetTestInboxConfiguration(workQueueUriFormat, errorQueueUriFormat, COUNT, isTransactional);
 
 			ConfigurationAvailable.Invoke(this, new ConfigurationAvailableEventArgs(configuration));
 
@@ -262,7 +259,7 @@ namespace Shuttle.ESB.Test.Integration
 				}
 			}
 
-			AttemptDropQueues(uriFormat, useJournal);
+			AttemptDropQueues(workQueueUriFormat, errorQueueUriFormat);
 
 			Assert.AreEqual(COUNT, afterDequeueDate.Count,
 							string.Format("Dequeued {0} messages but {1} were sent.", afterDequeueDate.Count, COUNT));
@@ -274,9 +271,14 @@ namespace Shuttle.ESB.Test.Integration
 			}
 		}
 
-		protected void TestInboxDeferred(string uriFormat)
+		protected void TestInboxDeferred(string workQueueUriFormat)
 		{
-			var configuration = GetTestInboxConfiguration(uriFormat, false, 1, false);
+			TestInboxDeferred(workQueueUriFormat, workQueueUriFormat);
+		}
+
+		protected void TestInboxDeferred(string workQueueUriFormat, string errorQueueUriFormat)
+		{
+			var configuration = GetTestInboxConfiguration(workQueueUriFormat, errorQueueUriFormat, 1, false);
 
 			ConfigurationAvailable.Invoke(this, new ConfigurationAvailableEventArgs(configuration));
 

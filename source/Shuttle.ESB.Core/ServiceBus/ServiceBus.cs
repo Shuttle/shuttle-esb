@@ -268,13 +268,6 @@ namespace Shuttle.ESB.Core
 				Guard.Against<QueueConfigurationException>(Configuration.Inbox.ErrorQueue == null,
 														   string.Format(ESBResources.RequiredQueueMissing,
 																		 "Inbox.ErrorQueue"));
-
-				Guard.Against<QueueConfigurationException>(
-					Configuration.Inbox.WorkQueue.Uri.Scheme != Configuration.Inbox.ErrorQueue.Uri.Scheme
-					||
-					(Configuration.Inbox.HasJournalQueue &&
-					 Configuration.Inbox.WorkQueue.Uri.Scheme != Configuration.Inbox.JournalQueue.Uri.Scheme),
-					string.Format(ESBResources.QueueConfigurationSchemeMismatch, "Inbox"));
 			}
 
 			if (Configuration.HasOutbox)
@@ -286,10 +279,6 @@ namespace Shuttle.ESB.Core
 				Guard.Against<QueueConfigurationException>(Configuration.Outbox.ErrorQueue == null,
 														   string.Format(ESBResources.RequiredQueueMissing,
 																		 "Outbox.ErrorQueue"));
-
-				Guard.Against<QueueConfigurationException>(
-					Configuration.Outbox.WorkQueue.Uri.Scheme != Configuration.Outbox.ErrorQueue.Uri.Scheme,
-					string.Format(ESBResources.QueueConfigurationSchemeMismatch, "Outbox"));
 			}
 
 			if (Configuration.HasControlInbox)
@@ -301,13 +290,6 @@ namespace Shuttle.ESB.Core
 				Guard.Against<QueueConfigurationException>(Configuration.ControlInbox.ErrorQueue == null,
 														   string.Format(ESBResources.RequiredQueueMissing,
 																		 "ControlInbox.ErrorQueue"));
-
-				Guard.Against<QueueConfigurationException>(
-					Configuration.ControlInbox.WorkQueue.Uri.Scheme != Configuration.ControlInbox.ErrorQueue.Uri.Scheme
-					||
-					(Configuration.ControlInbox.HasJournalQueue &&
-					 Configuration.ControlInbox.WorkQueue.Uri.Scheme != Configuration.ControlInbox.JournalQueue.Uri.Scheme),
-					string.Format(ESBResources.QueueConfigurationSchemeMismatch, "ControlInbox"));
 			}
 		}
 

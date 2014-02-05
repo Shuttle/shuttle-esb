@@ -145,10 +145,6 @@
     <value>Only scheme '{0}' is supported.  The given uri '{1}' is not supported.</value>
     <comment>{0} = the supported scheme, {1} = the given uri</comment>
   </data>
-  <data name="JournalQueueException" xml:space="preserve">
-    <value>A journal queue is required but no journal queue has been set.  This means that the queue for uri '{0}' requires journaling.</value>
-    <comment>{0} = uri of queue that requires journaling</comment>
-  </data>
   <data name="MessageHandlerExceptionFailure" xml:space="preserve">
     <value>Message handler type '{0}' raised exception '{1}'.  Message type '{2}' with id '{3}' has reached the maximum number of retries ({4}).  The message has been moved to error queue '{5}'</value>
     <comment>{0} = full type name of handler, {1} = exception message, {2} = full type name of message, {3} = message id, {4} = maximum retry count, {5} = error queue uri</comment>
@@ -274,10 +270,6 @@
   <data name="ReplyWithoutCurrentMessage" xml:space="preserve">
     <value>There is no current message.  Cannot reply.</value>
   </data>
-  <data name="QueueConfigurationSchemeMismatch" xml:space="preserve">
-    <value>Queues for configuration '{0}' do not all have the same scheme.</value>
-    <comment>{0} = configuration name e.g. Inbox, Outbox</comment>
-  </data>
   <data name="EnqueueMessageDataTypeMismatchException" xml:space="preserve">
     <value>Cannot enqueue data of type '{0}' on queue '{1}' since expected type is '{2}'.</value>
     <comment>{0} = given type full name (incorrect), {1} = uri, {2} = expected type full name</comment>
@@ -340,10 +332,6 @@
   </data>
   <data name="PurgingInboxWorkQueueComplete" xml:space="preserve">
     <value>Purging inbox work queue '{0}' complete.</value>
-  </data>
-  <data name="JournalRecoverCount" xml:space="preserve">
-    <value>A total of {0} messages have been recovered and returned to uri '{1}'.</value>
-    <comment>{0} = the number of messages recovered, {1} = inbox work queue uri</comment>
   </data>
   <data name="MessageDeserialized" xml:space="preserve">
     <value>Message type '{0}' with id '{1}' has been deserialized.</value>
@@ -448,11 +436,11 @@
     <value>Could not deserialize the transport message from queue '{0}'.  Exception reported: {1}</value>
     <comment>{0} = queue uri, {1} = exception</comment>
   </data>
-  <data name="NoIdempotenceTracker" xml:space="preserve">
-    <value>No idempotence tracker has been specified.</value>
+  <data name="NoReceiveMessageStateService" xml:space="preserve">
+    <value>No IReceiveMessageStateService implementation has been specified.</value>
   </data>
   <data name="NoDeferredMessageQueue" xml:space="preserve">
-    <value>No deferred message queue has been specified.</value>
+    <value>No IDeferredMessageQueue implementation has been specified.</value>
   </data>
   <data name="InformationStateFolder" xml:space="preserve">
     <value>[configuration] : state folder = '{0}'</value>

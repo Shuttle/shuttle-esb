@@ -32,7 +32,6 @@ namespace Shuttle.ESB.Test.Shared
 						new InboxQueueConfiguration
 							{
 								WorkQueue = CreateMemoryInboxWork(),
-								JournalQueue = CreateMemoryInboxJournal(),
 								ErrorQueue = CreateMemoryInboxError(),
 								DurationToSleepWhenIdle = new[] {TimeSpan.FromMilliseconds(5)},
 								ThreadCount = 1
@@ -41,7 +40,6 @@ namespace Shuttle.ESB.Test.Shared
 						new ControlInboxQueueConfiguration
 							{
 								WorkQueue = CreateMemoryControlInboxWork(),
-								JournalQueue = CreateMemoryControlInboxJournal(),
 								ErrorQueue = CreateMemoryControlInboxError(),
 								DurationToSleepWhenIdle = new[] {TimeSpan.FromMilliseconds(5)},
 								ThreadCount = 1
@@ -59,11 +57,6 @@ namespace Shuttle.ESB.Test.Shared
 			return MemoryQueue.From("memory://./inbox_work");
 		}
 
-		public IQueue CreateMemoryInboxJournal()
-		{
-			return MemoryQueue.From("memory://./inbox_journal");
-		}
-
 		public IQueue CreateMemoryInboxError()
 		{
 			return MemoryQueue.From("memory://./inbox_error");
@@ -72,11 +65,6 @@ namespace Shuttle.ESB.Test.Shared
 		public IQueue CreateMemoryControlInboxWork()
 		{
 			return MemoryQueue.From("memory://./control-inbox-work");
-		}
-
-		public IQueue CreateMemoryControlInboxJournal()
-		{
-			return MemoryQueue.From("memory://./control-inbox-journal");
 		}
 
 		public IQueue CreateMemoryControlInboxError()

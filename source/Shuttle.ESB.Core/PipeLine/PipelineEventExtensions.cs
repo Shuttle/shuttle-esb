@@ -21,11 +21,6 @@ namespace Shuttle.ESB.Core
 			return pipelineEvent.Pipeline.State.Get<IQueue>(StateKeys.WorkQueue);
 		}
 
-		public static IQueue GetJournalQueue(this PipelineEvent pipelineEvent)
-		{
-			return pipelineEvent.Pipeline.State.Get<IQueue>(StateKeys.JournalQueue);
-		}
-
 		public static IQueue GetErrorQueue(this PipelineEvent pipelineEvent)
 		{
 			return pipelineEvent.Pipeline.State.Get<IQueue>(StateKeys.ErrorQueue);
@@ -145,10 +140,5 @@ namespace Shuttle.ESB.Core
 		{
 			return pipelineEvent.Pipeline.State.Get<IMessageHandler>(StateKeys.MessageHandler);
 		}
-
-        public static bool GetHasJournalQueue(this PipelineEvent pipelineEvent)
-        {
-            return pipelineEvent.Pipeline.State.Get<bool>(StateKeys.HasJournalQueue);
-        }
 	}
 }

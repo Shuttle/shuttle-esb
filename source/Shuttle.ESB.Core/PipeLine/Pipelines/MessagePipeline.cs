@@ -26,12 +26,6 @@ namespace Shuttle.ESB.Core
 			set { State.Add(StateKeys.WorkQueue, value); }
 		}
 
-		public IQueue JournalQueue
-		{
-			get { return State.Get<IQueue>(StateKeys.JournalQueue); }
-			set { State.Add(StateKeys.JournalQueue, value); }
-		}
-
 		public IQueue ErrorQueue
 		{
 			get { return State.Get<IQueue>(StateKeys.ErrorQueue); }

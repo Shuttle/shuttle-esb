@@ -10,7 +10,7 @@ using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.Msmq
 {
-	public class MsmqQueue : IQueue, ICreate, IDrop, IPurge, ICount, IQueueReader
+	public class MsmqQueue : IQueue, ICreate, IDrop, IPurge, ICount, IQueueReader, IAcknowledge
 	{
 		private readonly TimeSpan _timeout;
 
@@ -60,6 +60,8 @@ namespace Shuttle.ESB.Msmq
 
 		public void Create()
 		{
+			CreateJournal();
+
 			if (Exists())
 			{
 				return;
@@ -72,16 +74,35 @@ namespace Shuttle.ESB.Msmq
 
 			MessageQueue.Create(parser.Path, parser.Transactional).Dispose();
 
-			if (parser.Journal)
+			_log.Information(string.Format(MsmqResources.QueueCreated, parser.Path));
+		}
+
+		private void CreateJournal()
+		{
+			if (!parser.Journal)
 			{
-				MessageQueue.Create(parser.JournalPath, parser.Transactional).Dispose();
+				return;
 			}
 
-			_log.Information(string.Format(MsmqResources.QueueCreated, Uri));
+			if (JournalExists())
+			{
+				return;
+			}
+
+			if (!parser.Local)
+			{
+				throw new InvalidOperationException(string.Format(MsmqResources.CannotCreateRemoteQueue, Uri));
+			}
+
+			MessageQueue.Create(parser.JournalPath, parser.Transactional).Dispose();
+
+			_log.Information(string.Format(MsmqResources.QueueCreated, parser.Path));
 		}
 
 		public void Drop()
 		{
+			DropJournal();
+
 			if (!Exists())
 			{
 				return;
@@ -94,10 +115,22 @@ namespace Shuttle.ESB.Msmq
 
 			MessageQueue.Delete(parser.Path);
 
-			if (parser.Journal)
+			_log.Information(string.Format(MsmqResources.QueueDropped, Uri));
+		}
+
+		private void DropJournal()
+		{
+			if (!JournalExists())
 			{
-				MessageQueue.Delete(parser.JournalPath);
+				return;
 			}
+
+			if (!parser.Local)
+			{
+				throw new InvalidOperationException(string.Format(MsmqResources.CannotDropRemoteQueue, Uri));
+			}
+
+			MessageQueue.Delete(parser.JournalPath);
 
 			_log.Information(string.Format(MsmqResources.QueueDropped, Uri));
 		}
@@ -117,6 +150,11 @@ namespace Shuttle.ESB.Msmq
 		private bool Exists()
 		{
 			return MessageQueue.Exists(parser.Path);
+		}
+
+		private bool JournalExists()
+		{
+			return MessageQueue.Exists(parser.JournalPath);
 		}
 
 		public bool IsEmpty()
@@ -306,7 +344,6 @@ namespace Shuttle.ESB.Msmq
 		{
 			try
 			{
-
 				using (var queue = CreateGuardedQueue())
 				{
 					return (queue.ReceiveByCorrelationId(string.Format(@"{0}\1", messageId), TransactionType()) != null);
@@ -436,6 +473,11 @@ namespace Shuttle.ESB.Msmq
 		private static bool InTransactionScope
 		{
 			get { return Transaction.Current != null; }
+		}
+
+		public void Acknowledge(Guid messageId)
+		{
+			Remove(messageId);
 		}
 	}
 }

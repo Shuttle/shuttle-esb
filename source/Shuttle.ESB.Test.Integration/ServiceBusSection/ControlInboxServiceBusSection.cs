@@ -14,9 +14,8 @@ namespace Shuttle.ESB.Test.Integration
 
             Assert.IsNotNull(section);
 
-			Assert.AreEqual("msmq://./control_inbox_work", section.ControlInbox.WorkQueueUri);
-			Assert.AreEqual("msmq://./control_inbox_error", section.ControlInbox.ErrorQueueUri);
-			Assert.AreEqual("msmq://./control_inbox_journal", section.ControlInbox.JournalQueueUri);
+			Assert.AreEqual("msmq://./control-inbox-work", section.ControlInbox.WorkQueueUri);
+			Assert.AreEqual("msmq://./control-inbox-error", section.ControlInbox.ErrorQueueUri);
          
 
             Assert.AreEqual(25, section.ControlInbox.ThreadCount);

@@ -2,7 +2,7 @@
 {
 	public class ControlInboxMessagePipeline : ReceiveMessagePipeline
 	{
-		public ControlInboxMessagePipeline(IServiceBus bus) : base(bus, bus.Configuration.ControlInbox.HasJournalQueue)
+		public ControlInboxMessagePipeline(IServiceBus bus) : base(bus)
 		{
         }
 
@@ -11,7 +11,6 @@
 			base.Obtained();
 
 			WorkQueue = _bus.Configuration.ControlInbox.WorkQueue;
-			JournalQueue = _bus.Configuration.ControlInbox.JournalQueue;
 			ErrorQueue = _bus.Configuration.ControlInbox.ErrorQueue;
 
 			DurationToIgnoreOnFailure = _bus.Configuration.ControlInbox.DurationToIgnoreOnFailure;

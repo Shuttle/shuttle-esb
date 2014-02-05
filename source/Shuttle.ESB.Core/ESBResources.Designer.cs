@@ -250,24 +250,6 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A journal queue is required but no journal queue has been set.  This means that the queue for uri &apos;{0}&apos; requires journaling..
-        /// </summary>
-        public static string JournalQueueException {
-            get {
-                return ResourceManager.GetString("JournalQueueException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A total of {0} messages have been recovered and returned to uri &apos;{1}&apos;..
-        /// </summary>
-        public static string JournalRecoverCount {
-            get {
-                return ResourceManager.GetString("JournalRecoverCount", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The provided xml is not of type Shuttle.ESB.Core.TransportMessage..
         /// </summary>
         public static string MessageDeserializationException {
@@ -367,20 +349,11 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No deferred message queue has been specified..
+        ///   Looks up a localized string similar to No IDeferredMessageQueue implementation has been specified..
         /// </summary>
         public static string NoDeferredMessageQueue {
             get {
                 return ResourceManager.GetString("NoDeferredMessageQueue", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No idempotence tracker has been specified..
-        /// </summary>
-        public static string NoIdempotenceTracker {
-            get {
-                return ResourceManager.GetString("NoIdempotenceTracker", resourceCulture);
             }
         }
         
@@ -399,6 +372,15 @@ namespace Shuttle.ESB.Core {
         public static string NoQueuesConfigurationException {
             get {
                 return ResourceManager.GetString("NoQueuesConfigurationException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No IReceiveMessageStateService implementation has been specified..
+        /// </summary>
+        public static string NoReceiveMessageStateService {
+            get {
+                return ResourceManager.GetString("NoReceiveMessageStateService", resourceCulture);
             }
         }
         
@@ -471,15 +453,6 @@ namespace Shuttle.ESB.Core {
         public static string QueueConfigurationException {
             get {
                 return ResourceManager.GetString("QueueConfigurationException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Queues for configuration &apos;{0}&apos; do not all have the same scheme..
-        /// </summary>
-        public static string QueueConfigurationSchemeMismatch {
-            get {
-                return ResourceManager.GetString("QueueConfigurationSchemeMismatch", resourceCulture);
             }
         }
         

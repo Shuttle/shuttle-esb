@@ -20,9 +20,6 @@ namespace Shuttle.ESB.Core
                 {
                     WorkQueue = configuration.QueueManager.GetQueue(ServiceBusConfiguration.ServiceBusSection.ControlInbox.WorkQueueUri),
                     ErrorQueue = configuration.QueueManager.GetQueue(ServiceBusConfiguration.ServiceBusSection.ControlInbox.ErrorQueueUri),
-                    JournalQueue = string.IsNullOrEmpty(ServiceBusConfiguration.ServiceBusSection.ControlInbox.JournalQueueUri)
-                                       ? null
-                                       : configuration.QueueManager.GetQueue(ServiceBusConfiguration.ServiceBusSection.ControlInbox.JournalQueueUri),
                     ThreadCount = ServiceBusConfiguration.ServiceBusSection.ControlInbox.ThreadCount,
                     MaximumFailureCount = ServiceBusConfiguration.ServiceBusSection.ControlInbox.MaximumFailureCount,
                     DurationToIgnoreOnFailure = DurationToIgnoreOnFailure(ServiceBusConfiguration.ServiceBusSection.ControlInbox.DurationToIgnoreOnFailure),

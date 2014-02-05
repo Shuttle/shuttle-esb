@@ -50,14 +50,6 @@ namespace Shuttle.ESB.Core
 
                     try
                     {
-                        if (pipelineEvent.GetHasJournalQueue())
-                        {
-                            pipelineEvent.GetTransactionScope().Dispose();
-                            pipelineEvent.SetTransactionScope(null);
-
-                            scope = bus.Configuration.TransactionScopeFactory.Create(pipelineEvent);
-                        }
-
                         var stream = bus.Configuration.Serializer.Serialize(transportMessage);
                         var handler = pipelineEvent.GetMessageHandler();
                         var handlerFullTypeName = handler != null ? handler.GetType().FullName : "(handler is null)";
@@ -98,23 +90,6 @@ namespace Shuttle.ESB.Core
                                                      pipelineEvent.GetErrorQueue().Uri));
 
                             pipelineEvent.GetErrorQueue().Enqueue(transportMessage.MessageId, stream);
-                        }
-
-                        if (pipelineEvent.GetHasJournalQueue())
-                        {
-                            if (pipelineEvent.Pipeline.StageName.Equals("Handle"))
-                            {
-                                var journal = pipelineEvent.GetJournalQueue();
-
-                                if (journal != null)
-                                {
-                                    journal.Remove(transportMessage.MessageId);
-                                }
-                            }
-                            else
-                            {
-                                pipelineEvent.GetWorkQueue().Remove(transportMessage.MessageId);
-                            }
                         }
 
 	                    if (scope != null)

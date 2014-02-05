@@ -28,7 +28,6 @@ namespace Shuttle.ESB.Core
         }
 
         public IQueue WorkQueue { get; set; }
-        public IQueue JournalQueue { get; set; }
         public IQueue ErrorQueue { get; set; }
         
         public int ThreadCount
@@ -45,10 +44,5 @@ namespace Shuttle.ESB.Core
         public int MaximumFailureCount { get; set; }
         public TimeSpan[] DurationToIgnoreOnFailure { get; set; }
         public TimeSpan[] DurationToSleepWhenIdle { get; set; }
-
-        public bool HasJournalQueue
-        {
-            get { return JournalQueue != null; }
-        }
     }
 }

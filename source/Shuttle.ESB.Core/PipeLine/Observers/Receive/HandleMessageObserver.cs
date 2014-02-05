@@ -42,15 +42,8 @@ namespace Shuttle.ESB.Core
                                         handler.GetType().FullName));
             }
 
-            IServiceBusTransactionScope scope = null;
-
             try
             {
-                if (!pipelineEvent.GetHasJournalQueue())
-                {
-                    scope = bus.Configuration.TransactionScopeFactory.Create();
-                }
-
                 method.Invoke(handler, new[]
                     {
                         Activator.CreateInstance(contextType,
@@ -62,11 +55,6 @@ namespace Shuttle.ESB.Core
                                                          pipelineEvent.GetActiveState()
                                                      })
                     });
-
-                if (scope != null)
-                {
-                    scope.Complete();
-                }
             }
             catch (Exception ex)
             {
@@ -84,13 +72,6 @@ namespace Shuttle.ESB.Core
                         exception));
 
                 throw exception;
-            }
-            finally
-            {
-                if (scope != null)
-                {
-                    scope.Dispose();
-                }
             }
         }
 

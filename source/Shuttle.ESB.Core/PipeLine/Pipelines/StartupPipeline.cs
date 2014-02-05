@@ -18,20 +18,8 @@ namespace Shuttle.ESB.Core
 				.WithEvent<OnInitializeForwardingRouteProvider>()
 				.WithEvent<OnInitializePipelineFactory>()
 				.WithEvent<OnInitializeSubscriptionManager>()
-				.WithEvent<OnInitializeIdempotenceTracker>()
+				.WithEvent<OnInitializeReceiveMessageStateService>()
 				.WithEvent<OnInitializeTransactionScopeFactory>();
-
-			RegisterStage("InboxJournalRecovery")
-				.WithEvent<OnStartTransactionScope>()
-				.WithEvent<OnRecoverInboxJournal>()
-				.WithEvent<OnCompleteTransactionScope>()
-				.WithEvent<OnDisposeTransactionScope>();
-
-			RegisterStage("ControlInboxJournalRecovery")
-				.WithEvent<OnStartTransactionScope>()
-				.WithEvent<OnRecoverControlInboxJournal>()
-				.WithEvent<OnCompleteTransactionScope>()
-				.WithEvent<OnDisposeTransactionScope>();
 
 			RegisterStage("Start")
 				.WithEvent<OnStartInboxProcessing>()

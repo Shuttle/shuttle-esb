@@ -105,6 +105,7 @@
     <EmbeddedResource Include="MsmqResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>MsmqResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

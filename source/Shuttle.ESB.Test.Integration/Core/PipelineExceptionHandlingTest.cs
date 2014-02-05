@@ -14,14 +14,12 @@ namespace Shuttle.ESB.Test.Integration.Core
 			var configuration = DefaultConfiguration(true);
 
 			var inboxWorkQueue = configuration.QueueManager.GetQueue("msmq://./test-inbox-work");
-			var inboxJournalQueue = configuration.QueueManager.GetQueue("msmq://./test-inbox-journal");
 			var inboxErrorQueue = configuration.QueueManager.GetQueue("msmq://./test-error");
 
 			configuration.Inbox =
 				new InboxQueueConfiguration
 					{
 						WorkQueue = inboxWorkQueue,
-						JournalQueue = inboxJournalQueue,
 						ErrorQueue = inboxErrorQueue,
 						DurationToSleepWhenIdle = new[] {TimeSpan.FromMilliseconds(5)},
 						DurationToIgnoreOnFailure = new[] {TimeSpan.FromMilliseconds(5)},
@@ -31,7 +29,6 @@ namespace Shuttle.ESB.Test.Integration.Core
 
 
 			inboxWorkQueue.Drop();
-			inboxJournalQueue.Drop();
 			inboxErrorQueue.Drop();
 
 			configuration.QueueManager.CreatePhysicalQueues(configuration);

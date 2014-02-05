@@ -12,15 +12,13 @@ namespace Shuttle.ESB.Core
 		IPipelineObserver<OnInitializePipelineFactory>,
 		IPipelineObserver<OnInitializeSubscriptionManager>,
 		IPipelineObserver<OnInitializeQueueManager>,
-		IPipelineObserver<OnInitializeIdempotenceTracker>,
+		IPipelineObserver<OnInitializeReceiveMessageStateService>,
 		IPipelineObserver<OnInitializeTransactionScopeFactory>,
 		IPipelineObserver<OnStartInboxProcessing>,
 		IPipelineObserver<OnStartControlInboxProcessing>,
 		IPipelineObserver<OnStartOutboxProcessing>,
 		IPipelineObserver<OnStartDeferredMessageProcessing>,
-		IPipelineObserver<OnStartWorker>,
-		IPipelineObserver<OnRecoverInboxJournal>,
-		IPipelineObserver<OnRecoverControlInboxJournal>
+		IPipelineObserver<OnStartWorker>
 	{
 		private readonly IServiceBus _bus;
 
@@ -77,11 +75,11 @@ namespace Shuttle.ESB.Core
 			_bus.Configuration.SubscriptionManager.AttemptInitialization(_bus);
 		}
 
-		public void Execute(OnInitializeIdempotenceTracker pipelineEvent)
+		public void Execute(OnInitializeReceiveMessageStateService pipelineEvent)
 		{
 			if (!_bus.Configuration.HasReceiveMessageStateService)
 			{
-				_log.Information(ESBResources.NoIdempotenceTracker);
+				_log.Information(ESBResources.NoReceiveMessageStateService);
 
 				return;
 			}
@@ -192,42 +190,6 @@ namespace Shuttle.ESB.Core
 		public void Execute(OnInitializeMessageRouteProvider pipelineEvent)
 		{
 			_bus.Configuration.MessageRouteProvider.AttemptInitialization(_bus);
-		}
-
-		public void Execute(OnRecoverInboxJournal pipelineEvent)
-		{
-			if (_bus.Configuration.HasInbox && _bus.Configuration.Inbox.HasJournalQueue)
-			{
-				RecoverJournal(_bus.Configuration.Inbox.WorkQueue, _bus.Configuration.Inbox.JournalQueue);
-			}
-		}
-
-		public void Execute(OnRecoverControlInboxJournal pipelineEvent)
-		{
-			if (_bus.Configuration.HasControlInbox && _bus.Configuration.ControlInbox.HasJournalQueue)
-			{
-				RecoverJournal(_bus.Configuration.ControlInbox.WorkQueue, _bus.Configuration.ControlInbox.JournalQueue);
-			}
-		}
-
-		private void RecoverJournal(IQueue workerQueue, IQueue journalQueue)
-		{
-			var recoverCount = 0;
-			var stream = journalQueue.Dequeue();
-
-			while (stream != null)
-			{
-				var transportMessage =
-					(TransportMessage)_bus.Configuration.Serializer.Deserialize(typeof(TransportMessage), stream);
-
-				workerQueue.Enqueue(transportMessage.MessageId, stream);
-
-				stream = journalQueue.Dequeue();
-
-				recoverCount++;
-			}
-
-			_log.Information(string.Format(ESBResources.JournalRecoverCount, recoverCount, workerQueue.Uri));
 		}
 
 		public void Execute(OnInitializeForwardingRouteProvider pipelineEvent1)

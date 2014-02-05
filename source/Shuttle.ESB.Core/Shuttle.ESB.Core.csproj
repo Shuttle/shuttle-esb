@@ -165,7 +165,6 @@
     <Compile Include="Pipeline\Observers\Shared\DeserializeTransportMessageObserver.cs" />
     <Compile Include="Pipeline\Observers\Shared\CompressMessageObserver.cs" />
     <Compile Include="Pipeline\Observers\Shared\DequeueObserver.cs" />
-    <Compile Include="Pipeline\Observers\Shared\EnqueueJournalObserver.cs" />
     <Compile Include="Pipeline\DefaultPipelineFactory.cs" />
     <Compile Include="Pipeline\Observers\Receive\HandleMessageObserver.cs" />
     <Compile Include="Pipeline\Observers\Shared\SerializeTransportMessageObserver.cs" />
@@ -177,7 +176,6 @@
     <Compile Include="Pipeline\IPipelineFactory.cs" />
     <Compile Include="Pipeline\Observers\Shared\DecryptMessageObserver.cs" />
     <Compile Include="Pipeline\Observers\Shared\DeserializeMessageObserver.cs" />
-    <Compile Include="Pipeline\Observers\Shared\RemoveJournalMessageObserver.cs" />
     <Compile Include="Pipeline\Observers\Shared\EncryptMessageObserver.cs" />
     <Compile Include="Pipeline\Observers\Shared\SerializeMessageObserver.cs" />
     <Compile Include="Pipeline\Observers\Send\FindMessageRouteObserver.cs" />
@@ -215,7 +213,6 @@
     <Compile Include="Configuration\Registration\RegisterOutboxQueueConfigurationTask.cs" />
     <Compile Include="Configuration\Registration\RegisterWorkerConfigurationTask.cs" />
     <Compile Include="Configuration\IErrorQueueConfiguration.cs" />
-    <Compile Include="Configuration\IJournalQueueConfiguration.cs" />
     <Compile Include="ServiceBusEvents\BeforeHandleMessageEventArgs.cs" />
     <Compile Include="ServiceBusEvents\DequeueExceptionEventArgs.cs" />
     <Compile Include="ServiceBusEvents\DeserializationExceptionEventArgs.cs" />
@@ -251,7 +248,6 @@
     <Compile Include="Security\TripleDesEncryptionAlgorithm.cs" />
     <Compile Include="Subscription\ISubscriptionManager.cs" />
     <Compile Include="Exceptions\CouldNotResolveKeyException.cs" />
-    <Compile Include="Exceptions\JournalQueueException.cs" />
     <Compile Include="Exceptions\MessageRouteSpecificationException.cs" />
     <Compile Include="Exceptions\QueueConfigurationException.cs" />
     <Compile Include="Exceptions\QueueFactoryTypeNotFoundException.cs" />
