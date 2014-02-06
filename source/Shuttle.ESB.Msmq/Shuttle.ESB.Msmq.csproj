@@ -88,6 +88,8 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Pipeline\MsmqDequeueObserver.cs" />
+    <Compile Include="Pipeline\MsmqDequeuePipeline.cs" />
     <Compile Include="MsmqSection.cs" />
     <Compile Include="IMsmqConfiguration.cs" />
     <Compile Include="MsmqConfiguration.cs" />
@@ -99,6 +101,7 @@
       <DependentUpon>MsmqResources.resx</DependentUpon>
     </Compile>
     <Compile Include="MsmqUriParser.cs" />
+    <Compile Include="Pipeline\MsmqDequeuePipelineEvents.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

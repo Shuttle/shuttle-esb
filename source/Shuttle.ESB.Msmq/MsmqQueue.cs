@@ -13,12 +13,12 @@ namespace Shuttle.ESB.Msmq
 	public class MsmqQueue : IQueue, ICreate, IDrop, IPurge, ICount, IQueueReader, IAcknowledge
 	{
 		private readonly TimeSpan _timeout;
+		private readonly MsmqUriParser parser;
+		private readonly MessagePropertyFilter _messagePropertyFilter;
+		private readonly Type _msmqDequeuePipelineType = typeof(MsmqDequeuePipeline);
+		private readonly ReusableObjectPool<MsmqDequeuePipeline> _dequeuePipelinePool;
 
 		private readonly ILog _log;
-
-		private readonly MsmqUriParser parser;
-
-		private readonly MessagePropertyFilter _messagePropertyFilter;
 
 		public MsmqQueue(Uri uri, IMsmqConfiguration configuration)
 		{
@@ -30,13 +30,15 @@ namespace Shuttle.ESB.Msmq
 			parser = new MsmqUriParser(uri);
 
 			_timeout = parser.Local
-						  ? TimeSpan.FromMilliseconds(configuration.LocalQueueTimeoutMilliseconds)
-						  : TimeSpan.FromMilliseconds(configuration.RemoteQueueTimeoutMilliseconds);
+				           ? TimeSpan.FromMilliseconds(configuration.LocalQueueTimeoutMilliseconds)
+				           : TimeSpan.FromMilliseconds(configuration.RemoteQueueTimeoutMilliseconds);
 
 			Uri = parser.Uri;
 
 			_messagePropertyFilter = new MessagePropertyFilter();
 			_messagePropertyFilter.SetAll();
+
+			_dequeuePipelinePool = new ReusableObjectPool<MsmqDequeuePipeline>();
 		}
 
 		public int Count
@@ -45,7 +47,7 @@ namespace Shuttle.ESB.Msmq
 			{
 				var count = 0;
 
-				using (var queue = CreateGuardedQueue())
+				using (var queue = CreateQueue())
 				using (var enumerator = queue.GetMessageEnumerator2())
 				{
 					while (enumerator.MoveNext(new TimeSpan(0, 0, 0)))
@@ -137,7 +139,7 @@ namespace Shuttle.ESB.Msmq
 
 		public void Purge()
 		{
-			using (var queue = CreateGuardedQueue())
+			using (var queue = CreateQueue())
 			{
 				queue.Purge();
 			}
@@ -161,7 +163,7 @@ namespace Shuttle.ESB.Msmq
 		{
 			try
 			{
-				using (var queue = CreateGuardedQueue())
+				using (var queue = CreateQueue())
 				{
 					return queue.Peek(_timeout) == null;
 				}
@@ -194,7 +196,7 @@ namespace Shuttle.ESB.Msmq
 
 			try
 			{
-				using (var queue = CreateGuardedQueue())
+				using (var queue = CreateQueue())
 				{
 					queue.Send(sendMessage, TransactionType());
 				}
@@ -222,78 +224,15 @@ namespace Shuttle.ESB.Msmq
 		{
 			try
 			{
-				Message message;
+				var pipeline = _dequeuePipelinePool.Get(_msmqDequeuePipelineType) ?? new MsmqDequeuePipeline();
 
-				if (parser.Transactional)
-				{
-					using (var tx = new MessageQueueTransaction())
-					using (var queue = CreateGuardedQueue())
-					using (var journal = CreateGuardedJournalQueue())
-					{
-						tx.Begin();
+				pipeline.Execute(parser, _timeout);
 
-						message = queue.Receive(_timeout, tx);
+				_dequeuePipelinePool.Release(pipeline);
 
-						if (message != null)
-						{
-							var journalMessage = new Message
-								{
-									Recoverable = true,
-									Label = message.Label,
-									CorrelationId = string.Format(@"{0}\1", message.Label),
-									BodyStream = message.BodyStream
-								};
+				var message = pipeline.State.Get<Message>();
 
-							journal.Send(journalMessage, tx);
-						}
-
-						tx.Commit();
-					}
-				}
-				else
-				{
-					using (var queue = CreateGuardedQueue())
-					using (var journal = CreateGuardedJournalQueue())
-					{
-						message = queue.Receive(_timeout, MessageQueueTransactionType.None);
-
-						if (message != null)
-						{
-							var journalMessage = new Message
-							{
-								Recoverable = true,
-								Label = message.Label,
-								CorrelationId = string.Format(@"{0}\1", message.Label),
-								BodyStream = message.BodyStream
-							};
-
-							journal.Send(journalMessage, MessageQueueTransactionType.None);
-						}
-					}
-				}
-
-				if (message == null)
-				{
-					return null;
-				}
-
-				return message.BodyStream;
-			}
-			catch (MessageQueueException ex)
-			{
-				if (ex.MessageQueueErrorCode == MessageQueueErrorCode.IOTimeout)
-				{
-					return null;
-				}
-
-				if (ex.MessageQueueErrorCode == MessageQueueErrorCode.AccessDenied)
-				{
-					AccessDenied();
-				}
-
-				_log.Error(string.Format(MsmqResources.DequeueError, Uri, ex.Message));
-
-				throw;
+				return message == null ? null : message.BodyStream;
 			}
 			catch (Exception ex)
 			{
@@ -309,7 +248,7 @@ namespace Shuttle.ESB.Msmq
 			{
 				Message message;
 
-				using (var queue = CreateGuardedQueue())
+				using (var queue = CreateQueue())
 				{
 					message = queue.ReceiveByCorrelationId(string.Format(@"{0}\1", messageId), TransactionType());
 				}
@@ -344,7 +283,7 @@ namespace Shuttle.ESB.Msmq
 		{
 			try
 			{
-				using (var queue = CreateGuardedQueue())
+				using (var queue = CreateQueue())
 				{
 					return (queue.ReceiveByCorrelationId(string.Format(@"{0}\1", messageId), TransactionType()) != null);
 				}
@@ -376,7 +315,7 @@ namespace Shuttle.ESB.Msmq
 
 			try
 			{
-				using (var queue = CreateGuardedQueue())
+				using (var queue = CreateQueue())
 				using (var cursor = queue.CreateCursor())
 				{
 					var peek = PeekMessage(queue, cursor, PeekAction.Current);
@@ -413,7 +352,7 @@ namespace Shuttle.ESB.Msmq
 			return result;
 		}
 
-		private MessageQueue CreateGuardedQueue()
+		private MessageQueue CreateQueue()
 		{
 			return new MessageQueue(parser.Path)
 				{
@@ -421,7 +360,7 @@ namespace Shuttle.ESB.Msmq
 				};
 		}
 
-		private MessageQueue CreateGuardedJournalQueue()
+		private MessageQueue CreateJournalQueue()
 		{
 			return new MessageQueue(parser.JournalPath)
 				{
@@ -462,12 +401,12 @@ namespace Shuttle.ESB.Msmq
 		private MessageQueueTransactionType TransactionType()
 		{
 			return parser.Transactional
-					   ? InTransactionScope
-							 ? MessageQueueTransactionType.Automatic
-							 : parser.Transactional
-								   ? MessageQueueTransactionType.Single
-								   : MessageQueueTransactionType.None
-					   : MessageQueueTransactionType.None;
+				       ? InTransactionScope
+					         ? MessageQueueTransactionType.Automatic
+					         : parser.Transactional
+						           ? MessageQueueTransactionType.Single
+						           : MessageQueueTransactionType.None
+				       : MessageQueueTransactionType.None;
 		}
 
 		private static bool InTransactionScope
@@ -477,7 +416,35 @@ namespace Shuttle.ESB.Msmq
 
 		public void Acknowledge(Guid messageId)
 		{
-			Remove(messageId);
+			if (!parser.Journal)
+			{
+				return;
+			}
+
+			try
+			{
+				using (var queue = CreateJournalQueue())
+				{
+					queue.ReceiveByCorrelationId(string.Format(@"{0}\1", messageId), TransactionType());
+				}
+			}
+			catch (MessageQueueException ex)
+			{
+				if (ex.MessageQueueErrorCode == MessageQueueErrorCode.AccessDenied)
+				{
+					AccessDenied();
+				}
+
+				_log.Error(string.Format(MsmqResources.RemoveError, messageId, Uri, ex.CompactMessages()));
+
+				throw;
+			}
+			catch (Exception ex)
+			{
+				_log.Error(string.Format(MsmqResources.RemoveError, messageId, Uri, ex.CompactMessages()));
+
+				throw;
+			}
 		}
 	}
 }
