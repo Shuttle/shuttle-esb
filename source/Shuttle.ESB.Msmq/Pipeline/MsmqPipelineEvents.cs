@@ -14,6 +14,9 @@ namespace Shuttle.ESB.Msmq
 	public class OnSendJournalMessage : PipelineEvent
 	{
 	}
+	public class OnReturnJournalMessages : PipelineEvent
+	{
+	}
 	public class OnCommitTransaction : PipelineEvent
 	{
 	}

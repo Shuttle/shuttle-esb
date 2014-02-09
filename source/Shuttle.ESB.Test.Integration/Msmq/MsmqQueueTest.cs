@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Transactions;
 using NUnit.Framework;
+using Shuttle.Core.Infrastructure;
 using Shuttle.ESB.Msmq;
 
 namespace Shuttle.ESB.Test.Integration.Msmq
@@ -22,8 +23,8 @@ namespace Shuttle.ESB.Test.Integration.Msmq
 		{
 			base.TestSetUp();
 
-			var inboxUri = new Uri("msmq://./sit-inbox?transactional=true");
-			var outboxUri = new Uri("msmq://./sit-outbox?transactional=true");
+			var inboxUri = new Uri("msmq://./sit-inbox?transactional=true&journal=true");
+			var outboxUri = new Uri("msmq://./sit-outbox?transactional=true&journal=true");
 
 			var configuration = new MsmqConfiguration();
 
@@ -73,6 +74,30 @@ namespace Shuttle.ESB.Test.Integration.Msmq
 			inboxQueue.Enqueue(Guid.NewGuid(), new MemoryStream());
 
 			Assert.AreEqual(1, inboxQueue.Count);
+		}
+
+		[Test]
+		public void Should_be_able_return_journal_messages_to_queue()
+		{
+			var queue = new MsmqQueue(new Uri("msmq://./sit-inbox?transactional=true&journal=true"), new MsmqConfiguration());
+			var messageId = Guid.NewGuid();
+			var stream = new MemoryStream();
+
+			queue.Enqueue(messageId, stream);
+
+			Assert.NotNull(queue.Dequeue());
+			Assert.Null(queue.Dequeue());
+
+			queue = new MsmqQueue(new Uri("msmq://./sit-inbox?transactional=true&journal=true"), new MsmqConfiguration());
+
+			Assert.NotNull(queue.Dequeue());
+			Assert.Null(queue.Dequeue());
+
+			queue.Acknowledge(messageId);
+
+			queue = new MsmqQueue(new Uri("msmq://./sit-inbox?transactional=true&journal=true"), new MsmqConfiguration());
+			
+			Assert.Null(queue.Dequeue());
 		}
 	}
 }

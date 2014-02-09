@@ -8,10 +8,8 @@ namespace Shuttle.ESB.Msmq
 {
 	public class MsmqDequeueObserver :
 		IPipelineObserver<OnStart>,
-		IPipelineObserver<OnBeginTransaction>,
 		IPipelineObserver<OnReceiveMessage>,
 		IPipelineObserver<OnSendJournalMessage>,
-		IPipelineObserver<OnCommitTransaction>,
 		IPipelineObserver<OnDispose>
 	{
 		private readonly MessagePropertyFilter _messagePropertyFilter;
@@ -29,11 +27,6 @@ namespace Shuttle.ESB.Msmq
 		{
 			var parser = pipelineEvent.Pipeline.State.Get<MsmqUriParser>();
 
-			if (parser.Transactional)
-			{
-				pipelineEvent.Pipeline.State.Add(new MessageQueueTransaction());
-			}
-
 			pipelineEvent.Pipeline.State.Add("queue", new MessageQueue(parser.Path)
 				{
 					MessageReadPropertyFilter = _messagePropertyFilter
@@ -48,36 +41,8 @@ namespace Shuttle.ESB.Msmq
 			}
 		}
 
-		public void Execute(OnBeginTransaction pipelineEvent)
-		{
-			var tx = pipelineEvent.Pipeline.State.Get<MessageQueueTransaction>();
-
-			if (tx != null)
-			{
-				tx.Begin();
-			}
-		}
-
-		public void Execute(OnCommitTransaction pipelineEvent)
-		{
-			var tx = pipelineEvent.Pipeline.State.Get<MessageQueueTransaction>();
-
-			if (tx != null)
-			{
-				tx.Commit();
-			}
-		}
-
 		public void Execute(OnDispose pipelineEvent)
 		{
-			var tx = pipelineEvent.Pipeline.State.Get<MessageQueueTransaction>();
-
-			if (tx != null)
-			{
-				tx.Dispose();
-				pipelineEvent.Pipeline.State.Replace<MessageQueueTransaction>(null);
-			}
-
 			var queue = pipelineEvent.Pipeline.State.Get<MessageQueue>("queue");
 
 			if (queue != null)
@@ -100,14 +65,12 @@ namespace Shuttle.ESB.Msmq
 
 			try
 			{
-				Message message = null;
-
-				message = tx != null
-					          ? pipelineEvent.Pipeline.State.Get<MessageQueue>("queue")
-					                         .Receive(pipelineEvent.Pipeline.State.Get<TimeSpan>("timeout"), tx)
-					          : pipelineEvent.Pipeline.State.Get<MessageQueue>("queue")
-					                         .Receive(pipelineEvent.Pipeline.State.Get<TimeSpan>("timeout"),
-					                                  MessageQueueTransactionType.None);
+				var message = tx != null
+					                  ? pipelineEvent.Pipeline.State.Get<MessageQueue>("queue")
+					                                 .Receive(pipelineEvent.Pipeline.State.Get<TimeSpan>("timeout"), tx)
+					                  : pipelineEvent.Pipeline.State.Get<MessageQueue>("queue")
+					                                 .Receive(pipelineEvent.Pipeline.State.Get<TimeSpan>("timeout"),
+					                                          MessageQueueTransactionType.None);
 
 				pipelineEvent.Pipeline.State.Add(message);
 			}
@@ -121,31 +84,13 @@ namespace Shuttle.ESB.Msmq
 
 				if (ex.MessageQueueErrorCode == MessageQueueErrorCode.AccessDenied)
 				{
-					AccessDenied(parser);
+					MsmqQueue.AccessDenied(_log, parser.Path);
 				}
 
 				_log.Error(string.Format(MsmqResources.DequeueError, parser.Uri, ex.Message));
 
 				throw;
 			}
-		}
-
-		private void AccessDenied(MsmqUriParser parser)
-		{
-			_log.Fatal(
-				string.Format(
-					MsmqResources.AccessDenied,
-					WindowsIdentity.GetCurrent() != null
-						? WindowsIdentity.GetCurrent().Name
-						: MsmqResources.Unknown,
-					parser.Path));
-
-			if (Environment.UserInteractive)
-			{
-				return;
-			}
-
-			Process.GetCurrentProcess().Kill();
 		}
 
 		public void Execute(OnSendJournalMessage pipelineEvent)

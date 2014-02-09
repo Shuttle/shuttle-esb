@@ -13,7 +13,7 @@ namespace Shuttle.ESB.Msmq
 	public class MsmqQueue : IQueue, ICreate, IDrop, IPurge, ICount, IQueueReader, IAcknowledge
 	{
 		private readonly TimeSpan _timeout;
-		private readonly MsmqUriParser parser;
+		private readonly MsmqUriParser _parser;
 		private readonly MessagePropertyFilter _messagePropertyFilter;
 		private readonly Type _msmqDequeuePipelineType = typeof(MsmqDequeuePipeline);
 		private readonly ReusableObjectPool<MsmqDequeuePipeline> _dequeuePipelinePool;
@@ -27,18 +27,34 @@ namespace Shuttle.ESB.Msmq
 
 			_log = Log.For(this);
 
-			parser = new MsmqUriParser(uri);
+			_parser = new MsmqUriParser(uri);
 
-			_timeout = parser.Local
-				           ? TimeSpan.FromMilliseconds(configuration.LocalQueueTimeoutMilliseconds)
-				           : TimeSpan.FromMilliseconds(configuration.RemoteQueueTimeoutMilliseconds);
+			_timeout = _parser.Local
+						   ? TimeSpan.FromMilliseconds(configuration.LocalQueueTimeoutMilliseconds)
+						   : TimeSpan.FromMilliseconds(configuration.RemoteQueueTimeoutMilliseconds);
 
-			Uri = parser.Uri;
+			Uri = _parser.Uri;
 
 			_messagePropertyFilter = new MessagePropertyFilter();
 			_messagePropertyFilter.SetAll();
 
 			_dequeuePipelinePool = new ReusableObjectPool<MsmqDequeuePipeline>();
+
+			ReturnJournalMessages();
+		}
+
+		private void ReturnJournalMessages()
+		{
+			if (!_parser.Journal
+				||
+				!Exists()
+				||
+				!JournalExists())
+			{
+				return;
+			}
+
+			new MsmqReturnJournalPipeline().Execute(_parser, _timeout);
 		}
 
 		public int Count
@@ -69,19 +85,19 @@ namespace Shuttle.ESB.Msmq
 				return;
 			}
 
-			if (!parser.Local)
+			if (!_parser.Local)
 			{
 				throw new InvalidOperationException(string.Format(MsmqResources.CannotCreateRemoteQueue, Uri));
 			}
 
-			MessageQueue.Create(parser.Path, parser.Transactional).Dispose();
+			MessageQueue.Create(_parser.Path, _parser.Transactional).Dispose();
 
-			_log.Information(string.Format(MsmqResources.QueueCreated, parser.Path));
+			_log.Information(string.Format(MsmqResources.QueueCreated, _parser.Path));
 		}
 
 		private void CreateJournal()
 		{
-			if (!parser.Journal)
+			if (!_parser.Journal)
 			{
 				return;
 			}
@@ -91,14 +107,14 @@ namespace Shuttle.ESB.Msmq
 				return;
 			}
 
-			if (!parser.Local)
+			if (!_parser.Local)
 			{
 				throw new InvalidOperationException(string.Format(MsmqResources.CannotCreateRemoteQueue, Uri));
 			}
 
-			MessageQueue.Create(parser.JournalPath, parser.Transactional).Dispose();
+			MessageQueue.Create(_parser.JournalPath, _parser.Transactional).Dispose();
 
-			_log.Information(string.Format(MsmqResources.QueueCreated, parser.Path));
+			_log.Information(string.Format(MsmqResources.QueueCreated, _parser.Path));
 		}
 
 		public void Drop()
@@ -110,12 +126,12 @@ namespace Shuttle.ESB.Msmq
 				return;
 			}
 
-			if (!parser.Local)
+			if (!_parser.Local)
 			{
 				throw new InvalidOperationException(string.Format(MsmqResources.CannotDropRemoteQueue, Uri));
 			}
 
-			MessageQueue.Delete(parser.Path);
+			MessageQueue.Delete(_parser.Path);
 
 			_log.Information(string.Format(MsmqResources.QueueDropped, Uri));
 		}
@@ -127,12 +143,12 @@ namespace Shuttle.ESB.Msmq
 				return;
 			}
 
-			if (!parser.Local)
+			if (!_parser.Local)
 			{
 				throw new InvalidOperationException(string.Format(MsmqResources.CannotDropRemoteQueue, Uri));
 			}
 
-			MessageQueue.Delete(parser.JournalPath);
+			MessageQueue.Delete(_parser.JournalPath);
 
 			_log.Information(string.Format(MsmqResources.QueueDropped, Uri));
 		}
@@ -151,12 +167,12 @@ namespace Shuttle.ESB.Msmq
 
 		private bool Exists()
 		{
-			return MessageQueue.Exists(parser.Path);
+			return MessageQueue.Exists(_parser.Path);
 		}
 
 		private bool JournalExists()
 		{
-			return MessageQueue.Exists(parser.JournalPath);
+			return MessageQueue.Exists(_parser.JournalPath);
 		}
 
 		public bool IsEmpty()
@@ -177,7 +193,7 @@ namespace Shuttle.ESB.Msmq
 
 				if (ex.MessageQueueErrorCode == MessageQueueErrorCode.AccessDenied)
 				{
-					AccessDenied();
+					AccessDenied(_log, _parser.Path);
 				}
 
 				throw;
@@ -205,7 +221,7 @@ namespace Shuttle.ESB.Msmq
 			{
 				if (ex.MessageQueueErrorCode == MessageQueueErrorCode.AccessDenied)
 				{
-					AccessDenied();
+					AccessDenied(_log, _parser.Path);
 				}
 
 				_log.Error(string.Format(MsmqResources.SendMessageIdError, messageId, Uri, ex.CompactMessages()));
@@ -226,7 +242,7 @@ namespace Shuttle.ESB.Msmq
 			{
 				var pipeline = _dequeuePipelinePool.Get(_msmqDequeuePipelineType) ?? new MsmqDequeuePipeline();
 
-				pipeline.Execute(parser, _timeout);
+				pipeline.Execute(_parser, _timeout);
 
 				_dequeuePipelinePool.Release(pipeline);
 
@@ -264,16 +280,16 @@ namespace Shuttle.ESB.Msmq
 			{
 				if (ex.MessageQueueErrorCode == MessageQueueErrorCode.AccessDenied)
 				{
-					AccessDenied();
+					AccessDenied(_log, _parser.Path);
 				}
 
-				_log.Error(string.Format(MsmqResources.DequeueMessageIdError, messageId, Uri, ex.CompactMessages()));
+				_log.Error(string.Format(MsmqResources.DequeueMessageIdError, messageId, _parser.Path, ex.CompactMessages()));
 
 				throw;
 			}
 			catch (Exception ex)
 			{
-				_log.Error(string.Format(MsmqResources.DequeueMessageIdError, messageId, Uri, ex.CompactMessages()));
+				_log.Error(string.Format(MsmqResources.DequeueMessageIdError, messageId, _parser.Path, ex.CompactMessages()));
 
 				throw;
 			}
@@ -292,16 +308,16 @@ namespace Shuttle.ESB.Msmq
 			{
 				if (ex.MessageQueueErrorCode == MessageQueueErrorCode.AccessDenied)
 				{
-					AccessDenied();
+					AccessDenied(_log, _parser.Path);
 				}
 
-				_log.Error(string.Format(MsmqResources.RemoveError, messageId, Uri, ex.CompactMessages()));
+				_log.Error(string.Format(MsmqResources.RemoveError, messageId, _parser.Path, ex.CompactMessages()));
 
 				throw;
 			}
 			catch (Exception ex)
 			{
-				_log.Error(string.Format(MsmqResources.RemoveError, messageId, Uri, ex.CompactMessages()));
+				_log.Error(string.Format(MsmqResources.RemoveError, messageId, _parser.Path, ex.CompactMessages()));
 
 				throw;
 			}
@@ -339,14 +355,14 @@ namespace Shuttle.ESB.Msmq
 
 				if (ex.MessageQueueErrorCode == MessageQueueErrorCode.AccessDenied)
 				{
-					AccessDenied();
+					AccessDenied(_log, _parser.Path);
 				}
 
-				_log.Error(string.Format(MsmqResources.ReadError, top, Uri, ex.CompactMessages()));
+				_log.Error(string.Format(MsmqResources.ReadError, top, _parser.Path, ex.CompactMessages()));
 			}
 			catch (Exception ex)
 			{
-				_log.Error(string.Format(MsmqResources.ReadError, top, Uri, ex.CompactMessages()));
+				_log.Error(string.Format(MsmqResources.ReadError, top, _parser.Path, ex.CompactMessages()));
 			}
 
 			return result;
@@ -354,7 +370,7 @@ namespace Shuttle.ESB.Msmq
 
 		private MessageQueue CreateQueue()
 		{
-			return new MessageQueue(parser.Path)
+			return new MessageQueue(_parser.Path)
 				{
 					MessageReadPropertyFilter = _messagePropertyFilter
 				};
@@ -362,28 +378,10 @@ namespace Shuttle.ESB.Msmq
 
 		private MessageQueue CreateJournalQueue()
 		{
-			return new MessageQueue(parser.JournalPath)
+			return new MessageQueue(_parser.JournalPath)
 				{
 					MessageReadPropertyFilter = _messagePropertyFilter
 				};
-		}
-
-		private void AccessDenied()
-		{
-			_log.Fatal(
-				string.Format(
-					MsmqResources.AccessDenied,
-					WindowsIdentity.GetCurrent() != null
-						? WindowsIdentity.GetCurrent().Name
-						: MsmqResources.Unknown,
-					parser.Path));
-
-			if (Environment.UserInteractive)
-			{
-				return;
-			}
-
-			Process.GetCurrentProcess().Kill();
 		}
 
 		private Message PeekMessage(MessageQueue queue, Cursor cursor, PeekAction action)
@@ -400,13 +398,13 @@ namespace Shuttle.ESB.Msmq
 
 		private MessageQueueTransactionType TransactionType()
 		{
-			return parser.Transactional
-				       ? InTransactionScope
-					         ? MessageQueueTransactionType.Automatic
-					         : parser.Transactional
-						           ? MessageQueueTransactionType.Single
-						           : MessageQueueTransactionType.None
-				       : MessageQueueTransactionType.None;
+			return _parser.Transactional
+					   ? InTransactionScope
+							 ? MessageQueueTransactionType.Automatic
+							 : _parser.Transactional
+								   ? MessageQueueTransactionType.Single
+								   : MessageQueueTransactionType.None
+					   : MessageQueueTransactionType.None;
 		}
 
 		private static bool InTransactionScope
@@ -416,7 +414,7 @@ namespace Shuttle.ESB.Msmq
 
 		public void Acknowledge(Guid messageId)
 		{
-			if (!parser.Journal)
+			if (!_parser.Journal)
 			{
 				return;
 			}
@@ -432,19 +430,40 @@ namespace Shuttle.ESB.Msmq
 			{
 				if (ex.MessageQueueErrorCode == MessageQueueErrorCode.AccessDenied)
 				{
-					AccessDenied();
+					AccessDenied(_log, _parser.Path);
 				}
 
-				_log.Error(string.Format(MsmqResources.RemoveError, messageId, Uri, ex.CompactMessages()));
+				_log.Error(string.Format(MsmqResources.RemoveError, messageId, _parser.Path, ex.CompactMessages()));
 
 				throw;
 			}
 			catch (Exception ex)
 			{
-				_log.Error(string.Format(MsmqResources.RemoveError, messageId, Uri, ex.CompactMessages()));
+				_log.Error(string.Format(MsmqResources.RemoveError, messageId, _parser.Path, ex.CompactMessages()));
 
 				throw;
 			}
+		}
+
+		public static void AccessDenied(ILog log, string path)
+		{
+			Guard.AgainstNull(log, "log");
+			Guard.AgainstNull(path, "path");
+
+			log.Fatal(
+				string.Format(
+					MsmqResources.AccessDenied,
+					WindowsIdentity.GetCurrent() != null
+						? WindowsIdentity.GetCurrent().Name
+						: MsmqResources.Unknown,
+					path));
+
+			if (Environment.UserInteractive)
+			{
+				return;
+			}
+
+			Process.GetCurrentProcess().Kill();
 		}
 	}
 }

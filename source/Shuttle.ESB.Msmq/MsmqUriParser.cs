@@ -83,7 +83,7 @@ namespace Shuttle.ESB.Msmq
 
 		private void SetJounal(NameValueCollection parameters)
 		{
-			Journal = true;
+			Journal = false;
 
 			var journalItem = parameters.Get("journal");
 

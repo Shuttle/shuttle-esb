@@ -3,24 +3,28 @@ using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ESB.Msmq
 {
-	public class MsmqDequeuePipeline : ObservablePipeline
+	public class MsmqReturnJournalPipeline : ObservablePipeline
 	{
-		public MsmqDequeuePipeline()
+		public MsmqReturnJournalPipeline()
 		{
-			RegisterStage("Dequeue")
+			RegisterStage("Return")
 				.WithEvent<OnStart>()
 				.WithEvent<OnBeginTransaction>()
-				.WithEvent<OnReceiveMessage>()
-				.WithEvent<OnSendJournalMessage>()
+				.WithEvent<OnReturnJournalMessages>()
 				.WithEvent<OnCommitTransaction>()
 				.WithEvent<OnDispose>();
 
 			RegisterObserver(new MsmqTransactionObserver());
-			RegisterObserver(new MsmqDequeueObserver());
+			RegisterObserver(new MsmqReturnJournalObserver());
 		}
 
 		public bool Execute(MsmqUriParser parser, TimeSpan timeout)
 		{
+			if (!parser.Journal)
+			{
+				return false;
+			}
+
 			State.Clear();
 
 			State.Add(parser);
