@@ -1,11 +1,9 @@
 shuttle-esb
 ===========
 
-[Have a look at our YouTube channel](http://www.youtube.com/user/shuttleservicebus)
-
 [Shuttle ESB Documentation](http://shuttle.github.io/shuttle-esb/)
 
-We still have a lot of information on our [old wiki](http://servicebus.co.za/) but we will be migrating that to the new documentation site in due course.
+[Have a look at our YouTube channel](http://www.youtube.com/user/shuttleservicebus)
 
 getting started with the source
 ===============================
