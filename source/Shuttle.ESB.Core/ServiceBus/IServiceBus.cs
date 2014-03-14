@@ -5,7 +5,8 @@ namespace Shuttle.ESB.Core
 {
 	public interface IServiceBus : IDisposable
 	{
-		TransportMessage TransportMessageReceived { get; set; }
+		void HandlingTransportMessage(TransportMessage transportMessage);
+		void TransportMessageHandled();
 
 		string OutgoingCorrelationId { get; set; }
 		List<TransportHeader> OutgoingHeaders { get; }
@@ -37,5 +38,7 @@ namespace Shuttle.ESB.Core
 
 		IServiceBusConfiguration Configuration { get; }
 		IServiceBusEvents Events { get; }
+		TransportMessage TransportMessageBeingHandled { get; }
+		bool IsHandlingTransportMessage { get; }
 	}
 }

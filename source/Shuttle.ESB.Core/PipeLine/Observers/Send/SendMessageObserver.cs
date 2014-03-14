@@ -1,4 +1,5 @@
-﻿using Shuttle.Core.Infrastructure;
+﻿using System;
+using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ESB.Core
 {
@@ -13,12 +14,27 @@ namespace Shuttle.ESB.Core
 
 		public void Execute(OnSendMessage pipelineEvent)
 		{
+			var bus = pipelineEvent.GetServiceBus();
+
+			if (bus.IsHandlingTransportMessage && bus.Configuration.HasIdempotenceService)
+			{
+				try
+				{
+					bus.Configuration.IdempotenceService.AddDeferredMessage(bus.TransportMessageBeingHandled, pipelineEvent.GetTransportMessageStream());
+				}
+				catch (Exception ex)
+				{
+					bus.Configuration.IdempotenceService.AccessException(_log, ex, pipelineEvent.Pipeline);
+				}
+
+				return;
+			}
+
 			var transportMessage = pipelineEvent.GetTransportMessage();
 
 			Guard.AgainstNull(transportMessage, "transportMessage");
 			Guard.AgainstNullOrEmptyString(transportMessage.RecipientInboxWorkQueueUri, "uri");
 
-			var bus = pipelineEvent.GetServiceBus();
 
 			if (transportMessage.IsIgnoring() && bus.Configuration.HasDeferredMessageQueue)
 			{

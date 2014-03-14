@@ -8,8 +8,10 @@ namespace Shuttle.ESB.Core
 			: base(bus)
 		{
 			RegisterStage("Send")
+				.WithEvent<OnSerializeTransportMessage>()
 				.WithEvent<OnSendMessage>();
 
+			RegisterObserver(new SerializeTransportMessageObserver());
 			RegisterObserver(new SendMessageObserver());
 		}
 

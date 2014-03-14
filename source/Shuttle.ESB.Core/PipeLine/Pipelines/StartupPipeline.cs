@@ -18,7 +18,7 @@ namespace Shuttle.ESB.Core
 				.WithEvent<OnInitializeForwardingRouteProvider>()
 				.WithEvent<OnInitializePipelineFactory>()
 				.WithEvent<OnInitializeSubscriptionManager>()
-				.WithEvent<OnInitializeReceiveMessageStateService>()
+				.WithEvent<OnInitializeIdempotenceService>()
 				.WithEvent<OnInitializeTransactionScopeFactory>();
 
 			RegisterStage("Start")

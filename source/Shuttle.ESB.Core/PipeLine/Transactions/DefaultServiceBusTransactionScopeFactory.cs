@@ -11,16 +11,6 @@ namespace Shuttle.ESB.Core
         private TimeSpan _timeout;
 		private readonly IServiceBusTransactionScope _nullServiceBusTransactionScope = new NullServiceBusTransactionScope();
 
-    	public IServiceBusTransactionScope Create()
-    	{
-			return _enabled ? new ServiceBusTransactionScope(_isolationLevel, _timeout) : _nullServiceBusTransactionScope;
-    	}
-
-	    public IServiceBusTransactionScope Create(object message)
-	    {
-		    return _enabled ? new ServiceBusTransactionScope(_isolationLevel, _timeout) : _nullServiceBusTransactionScope;
-	    }
-
 	    public IServiceBusTransactionScope Create(PipelineEvent pipelineEvent)
         {
 			return _enabled ? new ServiceBusTransactionScope(_isolationLevel, _timeout) : _nullServiceBusTransactionScope;

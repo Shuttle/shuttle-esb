@@ -15,7 +15,7 @@ namespace Shuttle.ESB.Core
 		private static string outgoingCorrelationId;
 
 		[ThreadStatic]
-		private static TransportMessage transportMessageReceived;
+		private static TransportMessage _transportMessageBeingHandled;
 
 		[ThreadStatic]
 		private static List<TransportHeader> outgoingHeaders;
@@ -43,26 +43,35 @@ namespace Shuttle.ESB.Core
 
 		public IServiceBusConfiguration Configuration { get; private set; }
 		public IServiceBusEvents Events { get; private set; }
+		
+		public TransportMessage TransportMessageBeingHandled {
+			get { return _transportMessageBeingHandled; }
+		}
 
-		public TransportMessage TransportMessageReceived
+		public bool IsHandlingTransportMessage {
+			get { return _transportMessageBeingHandled != null; }
+		}
+
+		public void TransportMessageHandled()
 		{
-			get { return transportMessageReceived; }
-			set
+			_transportMessageBeingHandled = null;
+		}
+
+		public void HandlingTransportMessage(TransportMessage transportMessage)
+		{
+			_transportMessageBeingHandled = transportMessage;
+
+			ResetOutgoingHeaders();
+
+			if (transportMessage == null)
 			{
-				transportMessageReceived = value;
+				outgoingCorrelationId = string.Empty;
 
-				ResetOutgoingHeaders();
-
-				if (value == null)
-				{
-					outgoingCorrelationId = string.Empty;
-
-					return;
-				}
-
-				outgoingCorrelationId = transportMessageReceived.CorrelationId;
-				outgoingHeaders.Merge(value.Headers);
+				return;
 			}
+
+			outgoingCorrelationId = _transportMessageBeingHandled.CorrelationId;
+			outgoingHeaders.Merge(transportMessage.Headers);
 		}
 
 		public void Send(TransportMessage transportMessage)
@@ -99,7 +108,7 @@ namespace Shuttle.ESB.Core
 			return SendDeferred(DateTime.MinValue, message, Configuration.QueueManager.GetQueue(uri));
 		}
 
-	public TransportMessage Send(object message, IQueue queue)
+		public TransportMessage Send(object message, IQueue queue)
 		{
 			return SendDeferred(DateTime.MinValue, message, queue);
 		}
@@ -111,7 +120,7 @@ namespace Shuttle.ESB.Core
 
 		public TransportMessage SendReply(object message)
 		{
-			return SendDeferred(DateTime.MinValue, message, Configuration.QueueManager.GetQueue(TransportMessageReceived.SenderInboxWorkQueueUri));
+			return SendDeferred(DateTime.MinValue, message, Configuration.QueueManager.GetQueue(_transportMessageBeingHandled.SenderInboxWorkQueueUri));
 		}
 
 		public TransportMessage SendDeferred(DateTime at, object message)
@@ -166,20 +175,20 @@ namespace Shuttle.ESB.Core
 		{
 			Guard.AgainstNull(message, "message");
 
-			if (TransportMessageReceived == null)
+			if (_transportMessageBeingHandled == null)
 			{
 				throw new InvalidOperationException(ESBResources.ReplyWithoutCurrentMessage);
 			}
 
-			if (!TransportMessageReceived.HasSenderInboxWorkQueueUri())
+			if (!_transportMessageBeingHandled.HasSenderInboxWorkQueueUri())
 			{
 				throw new InvalidOperationException(ESBResources.ReplyWithoutSenderInboxWorkQueueUri);
 			}
 
-			OutgoingCorrelationId = TransportMessageReceived.CorrelationId;
-			OutgoingHeaders.Merge(TransportMessageReceived.Headers);
+			OutgoingCorrelationId = _transportMessageBeingHandled.CorrelationId;
+			OutgoingHeaders.Merge(_transportMessageBeingHandled.Headers);
 
-			return SendDeferred(at, message, Configuration.QueueManager.GetQueue(TransportMessageReceived.SenderInboxWorkQueueUri));
+			return SendDeferred(at, message, Configuration.QueueManager.GetQueue(_transportMessageBeingHandled.SenderInboxWorkQueueUri));
 		}
 
 		public IEnumerable<string> Publish(object message)
@@ -194,16 +203,11 @@ namespace Shuttle.ESB.Core
 				{
 					var result = new List<string>();
 
-					using (var scope = Configuration.TransactionScopeFactory.Create(message))
+					foreach (var subscriber in subscribers)
 					{
-						foreach (var subscriber in subscribers)
-						{
-							Send(message, subscriber);
+						Send(message, subscriber);
 
-							result.Add(subscriber);
-						}
-
-						scope.Complete();
+						result.Add(subscriber);
 					}
 
 					return result;
@@ -366,9 +370,9 @@ namespace Shuttle.ESB.Core
 			result.EncryptionAlgorithm = Configuration.EncryptionAlgorithm;
 			result.CompressionAlgorithm = Configuration.CompressionAlgorithm;
 
-			if (TransportMessageReceived != null)
+			if (_transportMessageBeingHandled != null)
 			{
-				result.MessageReceivedId = transportMessageReceived.MessageId;
+				result.MessageReceivedId = _transportMessageBeingHandled.MessageId;
 			}
 
 			return result;

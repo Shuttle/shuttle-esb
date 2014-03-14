@@ -5,14 +5,13 @@ using Shuttle.Core.Infrastructure;
 namespace Shuttle.ESB.Core
 {
     public class HandleMessageObserver :
-        IPipelineObserver<OnHandleMessage>,
-        IPipelineObserver<OnMessageReceived>
+        IPipelineObserver<OnHandleMessage>
     {
-        private readonly ILog log;
+        private readonly ILog _log;
 
         public HandleMessageObserver()
         {
-            log = Log.For(this);
+            _log = Log.For(this);
         }
 
         private void InvokeHandler(IServiceBus bus, IMessageHandler handler, TransportMessage transportMessage,
@@ -27,16 +26,16 @@ namespace Shuttle.ESB.Core
                                                                     handler.GetType().FullName,
                                                                     transportMessage.MessageType));
 
-            if (log.IsTraceEnabled)
+            if (_log.IsTraceEnabled)
             {
-                log.Trace(string.Format(ESBResources.TraceCorrelationIdReceived, transportMessage.CorrelationId));
+                _log.Trace(string.Format(ESBResources.TraceCorrelationIdReceived, transportMessage.CorrelationId));
 
                 foreach (var header in transportMessage.Headers)
                 {
-                    log.Trace(string.Format(ESBResources.TraceTransportHeaderReceived, header.Key, header.Value));
+                    _log.Trace(string.Format(ESBResources.TraceTransportHeaderReceived, header.Key, header.Value));
                 }
 
-                log.Trace(string.Format(ESBResources.MessageHandlerInvoke,
+                _log.Trace(string.Format(ESBResources.MessageHandlerInvoke,
                                         transportMessage.MessageType,
                                         transportMessage.MessageId,
                                         handler.GetType().FullName));
@@ -80,85 +79,97 @@ namespace Shuttle.ESB.Core
             var bus = pipelineEvent.GetServiceBus();
             var transportMessage = pipelineEvent.GetTransportMessage();
 
-            if (bus.Configuration.HasReceiveMessageStateService &&
-                bus.Configuration.ReceiveMessageStateService.HasMessageBeenHandled(transportMessage))
-            {
-                if (log.IsTraceEnabled)
-                {
-					log.Trace(string.Format(ESBResources.TraceMessageHandled, transportMessage.MessageType, transportMessage.MessageId));
-                }
+	        if (bus.Configuration.HasIdempotenceService)
+	        {
+		        try
+		        {
+			        if (!bus.Configuration.IdempotenceService.ShouldProcess(transportMessage))
+			        {
+						_log.Trace(string.Format(ESBResources.TraceMessageHandled, transportMessage.MessageType, transportMessage.MessageId));
 
-                return;
-            }
+				        pipelineEvent.Pipeline.Abort();
 
-            var message = pipelineEvent.GetMessage();
+				        return;
+			        }
+		        }
+		        catch (Exception ex)
+		        {
+			        bus.Configuration.IdempotenceService.AccessException(_log, ex, pipelineEvent.Pipeline);
+		        }
+	        }
 
-            foreach (var uri in bus.Configuration.ForwardingRouteProvider.GetRouteUris(message))
-            {
-                if (log.IsTraceEnabled)
-                {
-                    log.Trace(string.Format(ESBResources.TraceForwarding, transportMessage.MessageType,
-                                            transportMessage.MessageId, uri));
-                }
+	        try
+	        {
+		        pipelineEvent.GetServiceBus().HandlingTransportMessage(pipelineEvent.GetTransportMessage());
+			
+		        var message = pipelineEvent.GetMessage();
 
-                bus.Send(message, uri);
-            }
+		        foreach (var uri in bus.Configuration.ForwardingRouteProvider.GetRouteUris(message))
+		        {
+			        if (_log.IsTraceEnabled)
+			        {
+				        _log.Trace(string.Format(ESBResources.TraceForwarding, transportMessage.MessageType,
+				                                transportMessage.MessageId, uri));
+			        }
 
-            var handler = bus.Configuration.MessageHandlerFactory.GetHandler(message);
+			        bus.Send(message, uri);
+		        }
 
-            pipelineEvent.SetMessageHandler(handler);
+		        var handler = bus.Configuration.MessageHandlerFactory.GetHandler(message);
 
-            if (handler == null)
-            {
-                bus.Events.OnMessageNotHandled(this,
-                                               new MessageNotHandledEventArgs(
-                                                   pipelineEvent,
-                                                   pipelineEvent.GetWorkQueue(),
-                                                   pipelineEvent.GetErrorQueue(),
-                                                   transportMessage,
-                                                   message));
+		        pipelineEvent.SetMessageHandler(handler);
 
-                if (!bus.Configuration.RemoveMessagesNotHandled)
-                {
-                    log.Error(string.Format(ESBResources.MessageNotHandledFailure,
-                                            message.GetType().FullName,
-                                            transportMessage.MessageId,
-                                            pipelineEvent.GetErrorQueue().Uri));
+		        if (handler == null)
+		        {
+			        bus.Events.OnMessageNotHandled(this,
+			                                       new MessageNotHandledEventArgs(
+				                                       pipelineEvent,
+				                                       pipelineEvent.GetWorkQueue(),
+				                                       pipelineEvent.GetErrorQueue(),
+				                                       transportMessage,
+				                                       message));
 
-                    using (var stream = pipelineEvent.GetTransportMessageStream().Copy())
-                    {
-                        pipelineEvent.GetErrorQueue().Enqueue(transportMessage.MessageId, stream);
-                    }
-                }
-                else
-                {
-                    log.Warning(string.Format(ESBResources.MessageNotHandledIgnored,
-                                              message.GetType().FullName,
-                                              transportMessage.MessageId));
-                }
-            }
-            else
-            {
-                bus.Events.OnBeforeHandleMessage(this,
-                                                 new BeforeHandleMessageEventArgs(
-                                                     pipelineEvent,
-                                                     transportMessage));
+			        if (!bus.Configuration.RemoveMessagesNotHandled)
+			        {
+				        _log.Error(string.Format(ESBResources.MessageNotHandledFailure,
+				                                message.GetType().FullName,
+				                                transportMessage.MessageId,
+				                                pipelineEvent.GetErrorQueue().Uri));
 
-                InvokeHandler(bus, handler, transportMessage, message, pipelineEvent, message.GetType());
+				        using (var stream = pipelineEvent.GetTransportMessageStream().Copy())
+				        {
+					        pipelineEvent.GetErrorQueue().Enqueue(transportMessage.MessageId, stream);
+				        }
+			        }
+			        else
+			        {
+				        _log.Warning(string.Format(ESBResources.MessageNotHandledIgnored,
+				                                  message.GetType().FullName,
+				                                  transportMessage.MessageId));
+			        }
+		        }
+		        else
+		        {
+			        bus.Events.OnBeforeHandleMessage(this,
+			                                         new BeforeHandleMessageEventArgs(
+				                                         pipelineEvent,
+				                                         transportMessage));
 
-                bus.Events.OnAfterHandleMessage(this,
-                                                new AfterHandleMessageEventArgs(
-                                                    pipelineEvent,
-                                                    pipelineEvent.GetWorkQueue(),
-                                                    transportMessage));
+			        InvokeHandler(bus, handler, transportMessage, message, pipelineEvent, message.GetType());
 
-                bus.Configuration.MessageHandlerFactory.ReleaseHandler(handler);
-            }
-        }
+			        bus.Events.OnAfterHandleMessage(this,
+			                                        new AfterHandleMessageEventArgs(
+				                                        pipelineEvent,
+				                                        pipelineEvent.GetWorkQueue(),
+				                                        transportMessage));
 
-        public void Execute(OnMessageReceived pipelineEvent)
-        {
-            pipelineEvent.GetServiceBus().TransportMessageReceived = pipelineEvent.GetTransportMessage();
+			        bus.Configuration.MessageHandlerFactory.ReleaseHandler(handler);
+		        }
+	        }
+	        finally
+	        {
+				pipelineEvent.GetServiceBus().TransportMessageHandled(); 
+	        }
         }
     }
 }

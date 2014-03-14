@@ -1,5 +1,3 @@
-using Shuttle.ESB.Core;
-
 namespace Shuttle.ESB.Test.Shared.Mocks
 {
     public class SimpleCommand : object

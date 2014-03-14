@@ -6,7 +6,6 @@
 			: base(bus)
 		{
 			RegisterStage("Read")
-				.WithEvent<OnStartTransactionScope>()
 				.WithEvent<OnDequeue>()
 				.WithEvent<OnDeserializeTransportMessage>()
 				.WithEvent<OnDecompressMessage>()
@@ -14,11 +13,11 @@
 				.WithEvent<OnDeserializeMessage>();
 
 			RegisterStage("Handle")
-				.WithEvent<OnMessageReceived>()
+				.WithEvent<OnStartTransactionScope>()
 				.WithEvent<OnHandleMessage>()
-				.WithEvent<OnMessageHandled>()
 				.WithEvent<OnCompleteTransactionScope>()
 				.WithEvent<OnDisposeTransactionScope>()
+				.WithEvent<OnSendDeferred>()
 				.WithEvent<OnAcknowledgeMessage>();
 
 			RegisterObserver(new DequeueObserver());
@@ -30,7 +29,7 @@
 			RegisterObserver(new ReceiveExceptionObserver());
 			RegisterObserver(new TransactionScopeObserver());
 			RegisterObserver(new AcknowledgeMessageObserver());
-			RegisterObserver(new ReceiveMessageStateObserver());
+			RegisterObserver(new SendDeferredObserver());
 		}
 	}
 }

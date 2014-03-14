@@ -20,10 +20,15 @@ namespace Shuttle.ESB.SqlServer
         public static readonly Script SubscriptionManagerExists = new Script("SubscriptionManagerExists");
         public static readonly Script SubscriptionManagerSubscribe = new Script("SubscriptionManagerSubscribe");
 
-        public static readonly Script IdempotenceTrackerExists = new Script("IdempotenceTrackerExists");
-        public static readonly Script IdempotenceTrackerAdd = new Script("IdempotenceTrackerAdd");
-        public static readonly Script IdempotenceTrackerRemove = new Script("IdempotenceTrackerRemove");
-        public static readonly Script IdempotenceTrackerContains = new Script("IdempotenceTrackerContains");
+        public static readonly Script IdempotenceServiceExists = new Script("IdempotenceServiceExists");
+        public static readonly Script IdempotenceInitialize = new Script("IdempotenceInitialize");
+        public static readonly Script IdempotenceProcessing = new Script("IdempotenceProcessing");
+        public static readonly Script IdempotenceComplete = new Script("IdempotenceComplete");
+        public static readonly Script IdempotenceIsProcessing = new Script("IdempotenceIsProcessing");
+        public static readonly Script IdempotenceHasCompleted = new Script("IdempotenceHasCompleted");
+        public static readonly Script IdempotenceSendDeferredMessage = new Script("IdempotenceSendDeferredMessage");
+		public static readonly Script IdempotenceDeferredMessageSent = new Script("IdempotenceDeferredMessageSent");
+		public static readonly Script IdempotenceGetDeferredMessages = new Script("IdempotenceGetDeferredMessages");
 
 		public static readonly Script DeferredMessageExists = new Script("DeferredMessageExists");
 		public static readonly Script DeferredMessageEnqueue = new Script("DeferredMessageEnqueue");

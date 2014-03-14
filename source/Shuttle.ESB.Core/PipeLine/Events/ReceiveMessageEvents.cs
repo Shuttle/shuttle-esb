@@ -22,19 +22,11 @@ namespace Shuttle.ESB.Core
 	{
 	}
 
-	public class OnMessageReceived : PipelineEvent
-	{
-	}
-
 	public class OnEnqueueJournal : PipelineEvent
 	{
 	}
 
 	public class OnHandleMessage : PipelineEvent
-	{
-	}
-
-	public class OnMessageHandled : PipelineEvent
 	{
 	}
 
@@ -59,6 +51,10 @@ namespace Shuttle.ESB.Core
 	}
 
 	public class OnCompressMessage : PipelineEvent
+	{
+	}
+
+	public class OnSendDeferred : PipelineEvent
 	{
 	}
 }

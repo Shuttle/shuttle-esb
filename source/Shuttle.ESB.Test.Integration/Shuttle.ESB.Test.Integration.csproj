@@ -99,6 +99,10 @@
     <Compile Include="ConcurrentHandler.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="ConfigurationAvailableEventArgs.cs" />
+    <Compile Include="Idempotence\IdempotenceFixture.cs" />
+    <Compile Include="Idempotence\IdempotenceMessageHandlerFactory.cs" />
+    <Compile Include="Idempotence\IdempotenceMessageRouteProvider.cs" />
+    <Compile Include="Idempotence\SqlServer\Msmq\IdempotenceTest.cs" />
     <Compile Include="RabbitMQ\RabbitMQInboxTest.cs" />
     <Compile Include="RabbitMQ\RabbitMQQueueTest.cs" />
     <Compile Include="Msmq\MsmqInboxTest.cs" />
@@ -203,6 +207,10 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Idempotence\SqlServer\RabbitMQQueue\" />
+    <Folder Include="Idempotence\SqlServer\SqlServerQueue\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

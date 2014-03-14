@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using NUnit.Framework;
-using Shuttle.Core.Infrastructure;
 using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.Test.Integration.Core
@@ -9,7 +8,8 @@ namespace Shuttle.ESB.Test.Integration.Core
 	public class PipelineExceptionHandlingTest : IntegrationFixture
 	{
 		[Test]
-		public void Should_be_able_to_roll_back_any_database_and_queue_changes_when_an_exception_occurs_in_the_receive_pipeline()
+		public void
+			Should_be_able_to_roll_back_any_database_and_queue_changes_when_an_exception_occurs_in_the_receive_pipeline()
 		{
 			var configuration = DefaultConfiguration(true);
 

@@ -1,0 +1,1 @@
+insert into [dbo].[Idempotence] (MessageId, InboxWorkQueueUri) values (@MessageId, @InboxWorkQueueUri);

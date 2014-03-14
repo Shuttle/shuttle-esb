@@ -176,8 +176,8 @@
     <value>Could not check whether queue '{0}' exists.  Exception: {1}.  Query: {2}</value>
     <comment>{0} = queue uri, {1} = exception message, {2} = query</comment>
   </data>
-  <data name="IdempotenceTrackerDatabaseNotConfigured" xml:space="preserve">
-    <value>The database has not been configured for the idempotence tracker.  Please run the IdempotenceTrackerCreate.sql script file against your database.</value>
+  <data name="IdempotenceDatabaseNotConfigured" xml:space="preserve">
+    <value>The database has not been configured for the idempotence service.  Please run the IdempotenceServiceCreate.sql script file against your database.</value>
   </data>
   <data name="InvalidSagaData" xml:space="preserve">
     <value>Saga data with id '{0}' for type '{1}' does not implement SagaData.</value>

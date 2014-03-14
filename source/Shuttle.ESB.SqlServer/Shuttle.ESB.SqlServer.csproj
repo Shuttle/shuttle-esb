@@ -94,6 +94,8 @@
     </Compile>
     <Compile Include="DeferredMessageQueue.cs" />
     <Compile Include="Definitions\DeferredMessageColumns.cs" />
+    <Compile Include="Definitions\IdempotenceColumns.cs" />
+    <Compile Include="Idempotence\IdempotenceService.cs" />
     <Compile Include="IScriptProvider.cs" />
     <Compile Include="Queue\SqlUriParser.cs" />
     <Compile Include="ScriptProvider.cs" />
@@ -124,6 +126,8 @@
     <EmbeddedResource Include="Scripts\QueueRemove.sql" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Scripts\2000\IdempotenceServiceCreate.sql" />
+    <Content Include="Scripts\2000\IdempotenceServiceExists.sql" />
     <Content Include="Scripts\2000\QueueCreate.sql" />
   </ItemGroup>
   <ItemGroup>
@@ -155,8 +159,18 @@
     <EmbeddedResource Include="Scripts\DeferredMessageEnqueue.sql" />
     <EmbeddedResource Include="Scripts\DeferredMessageCount.sql" />
     <EmbeddedResource Include="Scripts\DeferredMessagePurge.sql" />
+    <EmbeddedResource Include="Scripts\IdempotenceSendDeferredMessage.sql" />
+    <EmbeddedResource Include="Scripts\IdempotenceDeferredMessageSent.sql" />
+    <EmbeddedResource Include="Scripts\IdempotenceGetDeferredMessages.sql" />
+    <EmbeddedResource Include="Scripts\IdempotenceHasCompleted.sql" />
+    <EmbeddedResource Include="Scripts\IdempotenceInitialize.sql" />
     <Content Include="Scripts\DeferredMessageCreate.sql" />
     <EmbeddedResource Include="Scripts\DeferredMessageDequeue.sql" />
+    <EmbeddedResource Include="Scripts\IdempotenceProcessing.sql" />
+    <EmbeddedResource Include="Scripts\IdempotenceServiceCreate.sql" />
+    <EmbeddedResource Include="Scripts\IdempotenceServiceExists.sql" />
+    <EmbeddedResource Include="Scripts\IdempotenceComplete.sql" />
+    <EmbeddedResource Include="Scripts\IdempotenceIsProcessing.sql" />
     <Content Include="Scripts\SubscriptionManagerCreate.sql" />
   </ItemGroup>
   <ItemGroup>

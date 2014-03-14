@@ -133,7 +133,7 @@ namespace Shuttle.ESB.Msmq
 
 			MessageQueue.Delete(_parser.Path);
 
-			_log.Information(string.Format(MsmqResources.QueueDropped, Uri));
+			_log.Information(string.Format(MsmqResources.QueueDropped, _parser.Path));
 		}
 
 		private void DropJournal()
@@ -150,7 +150,7 @@ namespace Shuttle.ESB.Msmq
 
 			MessageQueue.Delete(_parser.JournalPath);
 
-			_log.Information(string.Format(MsmqResources.QueueDropped, Uri));
+			_log.Information(string.Format(MsmqResources.QueueDropped, _parser.JournalPath));
 		}
 
 		public void Purge()
@@ -160,7 +160,7 @@ namespace Shuttle.ESB.Msmq
 				queue.Purge();
 			}
 
-			_log.Information(string.Format(MsmqResources.QueuePurged, Uri));
+			_log.Information(string.Format(MsmqResources.QueuePurged, _parser.Path));
 		}
 
 		public Uri Uri { get; private set; }

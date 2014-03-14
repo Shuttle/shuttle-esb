@@ -79,14 +79,17 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Fixture.cs" />
-    <Compile Include="Mocks\ISimpleInterface.cs" />
-    <Compile Include="Mocks\NoHandlerCommand.cs" />
-    <Compile Include="Mocks\OtherNamespaceCommand.cs" />
-    <Compile Include="Mocks\SimpleCommand.cs" />
-    <Compile Include="Mocks\SimpleCommandHandler.cs" />
-    <Compile Include="Mocks\SimpleEvent.cs" />
-    <Compile Include="Mocks\SimpleInterface.cs" />
-    <Compile Include="Mocks\SimpleMessage.cs" />
+    <Compile Include="MessageHandling\IdempotenceCommand.cs" />
+    <Compile Include="MessageHandling\IdempotenceCounter.cs" />
+    <Compile Include="MessageHandling\IdempotenceHandler.cs" />
+    <Compile Include="MessageHandling\ISimpleInterface.cs" />
+    <Compile Include="MessageHandling\NoHandlerCommand.cs" />
+    <Compile Include="MessageHandling\OtherNamespaceCommand.cs" />
+    <Compile Include="MessageHandling\SimpleCommand.cs" />
+    <Compile Include="MessageHandling\SimpleCommandHandler.cs" />
+    <Compile Include="MessageHandling\SimpleEvent.cs" />
+    <Compile Include="MessageHandling\SimpleInterface.cs" />
+    <Compile Include="MessageHandling\SimpleMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

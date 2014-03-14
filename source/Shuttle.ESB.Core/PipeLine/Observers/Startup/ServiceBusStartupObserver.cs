@@ -12,7 +12,7 @@ namespace Shuttle.ESB.Core
 		IPipelineObserver<OnInitializePipelineFactory>,
 		IPipelineObserver<OnInitializeSubscriptionManager>,
 		IPipelineObserver<OnInitializeQueueManager>,
-		IPipelineObserver<OnInitializeReceiveMessageStateService>,
+		IPipelineObserver<OnInitializeIdempotenceService>,
 		IPipelineObserver<OnInitializeTransactionScopeFactory>,
 		IPipelineObserver<OnStartInboxProcessing>,
 		IPipelineObserver<OnStartControlInboxProcessing>,
@@ -75,16 +75,16 @@ namespace Shuttle.ESB.Core
 			_bus.Configuration.SubscriptionManager.AttemptInitialization(_bus);
 		}
 
-		public void Execute(OnInitializeReceiveMessageStateService pipelineEvent)
+		public void Execute(OnInitializeIdempotenceService pipelineEvent)
 		{
-			if (!_bus.Configuration.HasReceiveMessageStateService)
+			if (!_bus.Configuration.HasIdempotenceService)
 			{
-				_log.Information(ESBResources.NoReceiveMessageStateService);
+				_log.Information(ESBResources.NoIdempotenceService);
 
 				return;
 			}
 
-			_bus.Configuration.ReceiveMessageStateService.AttemptInitialization(_bus);
+			_bus.Configuration.IdempotenceService.AttemptInitialization(_bus);
 		}
 
 		public void Execute(OnInitializeTransactionScopeFactory pipelineEvent)

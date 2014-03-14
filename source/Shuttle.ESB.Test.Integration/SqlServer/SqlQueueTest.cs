@@ -70,5 +70,30 @@ namespace Shuttle.ESB.Test.Integration.SqlServer
 
 			Assert.AreEqual(100, dequeued.ReadByte());
 		}
+
+
+		[Test]
+		public void Should_be_able_journal_messages_until_acknowledged()
+		{
+			var queue = new SqlQueue(new Uri("sql://shuttle/queue-inbox"));
+			var messageId = Guid.NewGuid();
+			var stream = new MemoryStream();
+
+			queue.Enqueue(messageId, stream);
+
+			Assert.NotNull(queue.Dequeue());
+			Assert.Null(queue.Dequeue());
+
+			queue = new SqlQueue(new Uri("sql://shuttle/queue-inbox"));
+
+			Assert.NotNull(queue.Dequeue());
+			Assert.Null(queue.Dequeue());
+
+			queue.Acknowledge(messageId);
+
+			queue = new SqlQueue(new Uri("sql://shuttle/queue-inbox"));
+
+			Assert.Null(queue.Dequeue());
+		}
 	}
 }
