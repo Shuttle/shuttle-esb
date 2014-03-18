@@ -91,14 +91,10 @@
     <Compile Include="Compression\GZipCompressionAlgorithm.cs" />
     <Compile Include="Configuration\Builder\IServiceBusConfigurationBuilder.cs" />
     <Compile Include="Configuration\Builder\ServiceBusConfigurationBuilder.cs" />
-    <Compile Include="Configuration\DeferredMessageConfiguration.cs" />
     <Compile Include="Configuration\IControlInboxQueueConfiguration.cs" />
-    <Compile Include="Configuration\IDeferredMessageConfiguration.cs" />
     <Compile Include="Configuration\IOutboxQueueConfiguration.cs" />
     <Compile Include="Configuration\ITransactionScopeConfiguration.cs" />
     <Compile Include="Configuration\ModuleCollection.cs" />
-    <Compile Include="Configuration\Registration\RegisterDeferredMessageConfigurationTask.cs" />
-    <Compile Include="Configuration\Registration\RegisterSharedConfigurationTask.cs" />
     <Compile Include="Configuration\Section\DeferredMessageElement.cs" />
     <Compile Include="Configuration\Section\TransactionScopeElement.cs" />
     <Compile Include="Configuration\TransactionScopeConfiguration.cs" />
@@ -106,9 +102,6 @@
     <Compile Include="Exceptions\IdempotenceTrackerException.cs" />
     <Compile Include="Idempotence\IIdempotenceService.cs" />
     <Compile Include="Idempotence\IdempotenceServiceExtensions.cs" />
-    <Compile Include="MessageHandling\IDeferredMessageQueue.cs" />
-    <Compile Include="Pipeline\Observers\DeferredMessage\DeferredMessageDequeueObserver.cs" />
-    <Compile Include="Pipeline\Observers\DeferredMessage\DeferredMessageDeserializeTransportMessageObserver.cs" />
     <Compile Include="Pipeline\Observers\Receive\AcknowledgeMessageObserver.cs" />
     <Compile Include="Pipeline\Observers\Receive\SendDeferredObserver.cs" />
     <Compile Include="Pipeline\Pipelines\DeferredMessagePipeline.cs" />
@@ -131,7 +124,6 @@
     <Compile Include="Processing\Policies\IServiceBusPolicy.cs" />
     <Compile Include="Processing\Policies\MessageFailureAction.cs" />
     <Compile Include="Processing\Policies\DefaultServiceBusPolicy.cs" />
-    <Compile Include="Queues\IAcknowledge.cs" />
     <Compile Include="Queues\IPeek.cs" />
     <Compile Include="Queues\IQueueExtensions.cs" />
     <Compile Include="Queues\UriExtensions.cs" />
@@ -204,11 +196,6 @@
     <Compile Include="ServiceBusEvents\PipelineEventArgs.cs" />
     <Compile Include="ServiceBus\ServiceBusEvents.cs" />
     <Compile Include="Configuration\ControlInboxQueueConfiguration.cs" />
-    <Compile Include="Configuration\Registration\RegistrationTask.cs" />
-    <Compile Include="Configuration\Registration\RegisterControlInboxQueueConfigurationTask.cs" />
-    <Compile Include="Configuration\Registration\RegisterInboxQueueConfigurationTask.cs" />
-    <Compile Include="Configuration\Registration\RegisterOutboxQueueConfigurationTask.cs" />
-    <Compile Include="Configuration\Registration\RegisterWorkerConfigurationTask.cs" />
     <Compile Include="Configuration\IErrorQueueConfiguration.cs" />
     <Compile Include="ServiceBusEvents\BeforeHandleMessageEventArgs.cs" />
     <Compile Include="ServiceBusEvents\DequeueExceptionEventArgs.cs" />
@@ -240,7 +227,6 @@
     <Compile Include="Queues\IQueueReader.cs" />
     <Compile Include="Security\Section\TripleDESSection.cs" />
     <Compile Include="ServiceBusEvents\QueueStreamEventArgs.cs" />
-    <Compile Include="Configuration\Registration\ConfigurationBuilder.cs" />
     <Compile Include="Security\IEncryptionAlgorithm.cs" />
     <Compile Include="Security\TripleDesEncryptionAlgorithm.cs" />
     <Compile Include="Subscription\ISubscriptionManager.cs" />
@@ -265,8 +251,6 @@
     </Compile>
     <Compile Include="Processing\DeferredMessage\DeferredMessageProcessorFactory.cs" />
     <Compile Include="Processing\IMessageFailureConfiguration.cs" />
-    <Compile Include="Queues\MemoryQueue.cs" />
-    <Compile Include="Queues\MemoryQueueFactory.cs" />
     <Compile Include="MessageRoute\IMessageRoute.cs" />
     <Compile Include="MessageRoute\MessageRoute.cs" />
     <Compile Include="MessageRoute\MessageRouteCollection.cs" />
@@ -300,6 +284,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Pipeline\Observers\DeferredMessage\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

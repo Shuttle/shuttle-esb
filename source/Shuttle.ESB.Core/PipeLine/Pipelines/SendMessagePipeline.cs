@@ -30,9 +30,9 @@ namespace Shuttle.ESB.Core
 		{
 			Guard.AgainstNull(message, "message");
 
-			IgnoreTillDate = ignoreTillDate;
-			Message = message;
-			DestinationQueue = DestinationQueue ?? queue;
+			SetIgnoreTillDate(ignoreTillDate);
+			SetMessage(message);
+			SetDestinationQueue(queue);
 
 			return base.Execute();
 		}

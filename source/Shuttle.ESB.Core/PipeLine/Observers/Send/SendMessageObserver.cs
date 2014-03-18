@@ -36,9 +36,9 @@ namespace Shuttle.ESB.Core
 			Guard.AgainstNullOrEmptyString(transportMessage.RecipientInboxWorkQueueUri, "uri");
 
 
-			if (transportMessage.IsIgnoring() && bus.Configuration.HasDeferredMessageQueue)
+			if (transportMessage.IsIgnoring() && bus.Configuration.HasDeferredQueue)
 			{
-				bus.Configuration.DeferredMessageConfiguration.DeferredMessageQueue.Enqueue(transportMessage.IgnoreTillDate, pipelineEvent.GetTransportMessageStream());
+				bus.Configuration.Inbox.DeferredQueue.Enqueue(transportMessage.MessageId, pipelineEvent.GetTransportMessageStream());
 
 				return;
 			}

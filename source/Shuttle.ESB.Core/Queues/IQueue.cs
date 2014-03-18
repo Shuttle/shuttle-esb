@@ -12,6 +12,6 @@ namespace Shuttle.ESB.Core
 	    void Enqueue(Guid messageId, Stream stream);
         Stream Dequeue();
         Stream Dequeue(Guid messageId);
-    	bool Remove(Guid messageId);
-    }
+	    void Acknowledge(Guid messageId);
+	}
 }

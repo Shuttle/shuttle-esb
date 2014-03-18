@@ -20,52 +20,49 @@ namespace Shuttle.ESB.Core
 		{
 		}
 
-		public IQueue WorkQueue
+		public void SetWorkQueue(IQueue queue)
 		{
-			get { return State.Get<IQueue>(StateKeys.WorkQueue); }
-			set { State.Add(StateKeys.WorkQueue, value); }
+			State.Add(StateKeys.WorkQueue, queue);
 		}
 
-		public IQueue ErrorQueue
+		public void SetDeferredQueue(IQueue queue)
 		{
-			get { return State.Get<IQueue>(StateKeys.ErrorQueue); }
-			set { State.Add(StateKeys.ErrorQueue, value); }
+			State.Add(StateKeys.DeferredQueue, queue);
 		}
 
-		public IQueue DestinationQueue
+		public void SetErrorQueue(IQueue queue)
 		{
-			get { return State.Get<IQueue>(StateKeys.DestinationQueue); }
-			set { State.Add(StateKeys.DestinationQueue, value); }
+			State.Add(StateKeys.ErrorQueue, queue);
 		}
 
-		public DateTime IgnoreTillDate
+		public void SetDestinationQueue(IQueue queue)
 		{
-			get { return State.Get<DateTime>(StateKeys.IgnoreTillDate); }
-			set { State.Add(StateKeys.IgnoreTillDate, value); }
+			State.Add(StateKeys.DestinationQueue, queue);
 		}
 
-		public object Message
+		public void SetIgnoreTillDate(DateTime date)
 		{
-			get { return State.Get<object>(StateKeys.Message); }
-			set { State.Add(StateKeys.Message, value); }
+			State.Add(StateKeys.IgnoreTillDate, date);
 		}
 
-		public TransportMessage TransportMessage
+		public void SetMessage(object message)
 		{
-			get { return State.Get<TransportMessage>(StateKeys.TransportMessage); }
-			set { State.Add(StateKeys.TransportMessage, value); }
+			State.Add(StateKeys.Message, message);
 		}
 
-		public int MaximumFailureCount
+		public void SetTransportMessage(TransportMessage transportMessage)
 		{
-			get { return State.Get<int>(StateKeys.MaximumFailureCount); }
-			set { State.Add(StateKeys.MaximumFailureCount, value); }
+			State.Add(StateKeys.TransportMessage, transportMessage);
 		}
 
-		public TimeSpan[] DurationToIgnoreOnFailure
+		public void SetMaximumFailureCount(int count)
 		{
-			get { return State.Get<TimeSpan[]>(StateKeys.DurationToIgnoreOnFailure); }
-			set { State.Add(StateKeys.DurationToIgnoreOnFailure, value); }
+			State.Add(StateKeys.MaximumFailureCount, count);
+		}
+
+		public void SetDurationToIgnoreOnFailure(TimeSpan[] timeSpans)
+		{
+			State.Add(StateKeys.DurationToIgnoreOnFailure, timeSpans);
 		}
 
 		public virtual void Obtained()

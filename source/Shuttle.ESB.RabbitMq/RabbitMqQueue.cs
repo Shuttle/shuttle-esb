@@ -3,23 +3,38 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 using RabbitMQ.Client.MessagePatterns;
 using Shuttle.Core.Infrastructure;
 using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.RabbitMQ
 {
-	public class RabbitMQQueue : IQueue, ICount, ICreate, IDrop, IDisposable, IAcknowledge, IPurge
+	public class RabbitMQQueue : IQueue, ICount, ICreate, IDrop, IDisposable, IPurge
 	{
+		private class UnacknowledgedMessage
+		{
+			public UnacknowledgedMessage(Guid messageId, BasicDeliverEventArgs basicDeliverEventArgs)
+			{
+				BasicDeliverEventArgs = basicDeliverEventArgs;
+				MessageId = messageId;
+			}
+
+			public BasicDeliverEventArgs BasicDeliverEventArgs { get; private set; }
+			public Guid MessageId { get; private set; }
+		}
+
 		private readonly int _timeout;
 		private readonly IRabbitMQConfiguration _configuration;
+		private readonly List<UnacknowledgedMessage> _unacknowledgedMessages = new List<UnacknowledgedMessage>();
 
-		private readonly object connectionlock = new object();
-		private readonly object queuelock = new object();
-		private readonly object disposelock = new object();
+		private readonly object _connectionLock = new object();
+		private readonly object _queueLock = new object();
+		private readonly object _disposeLock = new object();
+		private readonly object _unacknowledgedMessageLock = new object();
 		private readonly int _operationRetryCount;
 
-		private readonly RabbitMQUriParser parser;
+		private readonly RabbitMQUriParser _parser;
 
 		private readonly ConnectionFactory _factory;
 		private IConnection _connection;
@@ -31,13 +46,13 @@ namespace Shuttle.ESB.RabbitMQ
 			Guard.AgainstNull(uri, "uri");
 			Guard.AgainstNull(configuration, "configuration");
 
-			parser = new RabbitMQUriParser(uri);
+			_parser = new RabbitMQUriParser(uri);
 
-			Uri = parser.Uri;
+			Uri = _parser.Uri;
 
 			_configuration = configuration;
 
-			_timeout = parser.Local
+			_timeout = _parser.Local
 				           ? configuration.LocalQueueTimeoutMilliseconds
 				           : configuration.RemoteQueueTimeoutMilliseconds;
 
@@ -50,11 +65,11 @@ namespace Shuttle.ESB.RabbitMQ
 
 			_factory = new ConnectionFactory
 				{
-					UserName = parser.Username,
-					Password = parser.Password,
-					HostName = parser.Host,
-					VirtualHost = parser.VirtualHost,
-					Port = parser.Port,
+					UserName = _parser.Username,
+					Password = _parser.Password,
+					HostName = _parser.Host,
+					VirtualHost = _parser.VirtualHost,
+					Port = _parser.Port,
 					RequestedHeartbeat = configuration.RequestedHeartbeat
 				};
 		}
@@ -68,7 +83,7 @@ namespace Shuttle.ESB.RabbitMQ
 
 		public bool HasUserInfo
 		{
-			get { return !string.IsNullOrEmpty(parser.Username) && !string.IsNullOrEmpty(parser.Password); }
+			get { return !string.IsNullOrEmpty(_parser.Username) && !string.IsNullOrEmpty(_parser.Password); }
 		}
 
 		public void Enqueue(Guid messageId, Stream stream)
@@ -85,7 +100,7 @@ namespace Shuttle.ESB.RabbitMQ
 					properties.SetPersistent(true);
 					properties.CorrelationId = messageId.ToString();
 
-					model.BasicPublish("", parser.Queue, false, false, properties, stream.ToBytes());
+					model.BasicPublish("", _parser.Queue, false, false, properties, stream.ToBytes());
 				});
 		}
 
@@ -95,9 +110,17 @@ namespace Shuttle.ESB.RabbitMQ
 				{
 					var result = GetChannel().Next();
 
-					return (result != null)
-						       ? new MemoryStream(result.Body)
-						       : null;
+					if (result == null)
+					{
+						return null;
+					}
+
+					lock (_unacknowledgedMessageLock)
+					{
+						_unacknowledgedMessages.Add(new UnacknowledgedMessage(new Guid(result.BasicProperties.CorrelationId), result));
+					}
+
+					return new MemoryStream(result.Body);
 				});
 		}
 
@@ -126,6 +149,11 @@ namespace Shuttle.ESB.RabbitMQ
 
 							if (guid.Equals(messageId))
 							{
+								lock (_unacknowledgedMessageLock)
+								{
+									_unacknowledgedMessages.Add(new UnacknowledgedMessage(guid, result));
+								}
+
 								return new MemoryStream(result.Body);
 							}
 						}
@@ -139,46 +167,6 @@ namespace Shuttle.ESB.RabbitMQ
 				});
 		}
 
-		public bool Remove(Guid messageId)
-		{
-			return AccessQueue(() =>
-				{
-					var read = true;
-
-					while (read)
-					{
-						var result = GetChannel().Next();
-
-						if (result != null)
-						{
-							Guid guid;
-
-							try
-							{
-								guid = new Guid(result.BasicProperties.CorrelationId);
-							}
-							catch
-							{
-								guid = Guid.Empty;
-							}
-
-							if (guid.Equals(messageId))
-							{
-								GetChannel().Acknowledge(messageId);
-
-								return true;
-							}
-						}
-						else
-						{
-							read = false;
-						}
-					}
-
-					return false;
-				});
-		}
-
 		public int Count
 		{
 			get { return AccessQueue(() => (int) QueueDeclare(GetChannel().Model).MessageCount); }
@@ -186,7 +174,7 @@ namespace Shuttle.ESB.RabbitMQ
 
 		public void Drop()
 		{
-			AccessQueue(() => { GetChannel().Model.QueueDelete(parser.Queue); });
+			AccessQueue(() => { GetChannel().Model.QueueDelete(_parser.Queue); });
 		}
 
 		public void Create()
@@ -196,7 +184,7 @@ namespace Shuttle.ESB.RabbitMQ
 
 		private QueueDeclareOk QueueDeclare(IModel model)
 		{
-			return model.QueueDeclare(parser.Queue, true, false, false, null);
+			return model.QueueDeclare(_parser.Queue, true, false, false, null);
 		}
 
 		private IConnection GetConnection()
@@ -206,7 +194,7 @@ namespace Shuttle.ESB.RabbitMQ
 				return _connection;
 			}
 
-			lock (connectionlock)
+			lock (_connectionLock)
 			{
 				if (_connection == null)
 				{
@@ -228,7 +216,7 @@ namespace Shuttle.ESB.RabbitMQ
 				return _channels[key];
 			}
 
-			lock (queuelock)
+			lock (_queueLock)
 			{
 				if (_channels.ContainsKey(key))
 				{
@@ -261,7 +249,7 @@ namespace Shuttle.ESB.RabbitMQ
 
 				QueueDeclare(model);
 
-				var channel = new Channel(model, new Subscription(model, parser.Queue, false), _timeout);
+				var channel = new Channel(model, new Subscription(model, _parser.Queue, false), _timeout);
 
 				_channels.Add(key, channel);
 
@@ -271,7 +259,7 @@ namespace Shuttle.ESB.RabbitMQ
 
 		public void Dispose()
 		{
-			lock (disposelock)
+			lock (_disposeLock)
 			{
 				_channels.Values.AttemptDispose();
 				_channels.Clear();
@@ -302,12 +290,30 @@ namespace Shuttle.ESB.RabbitMQ
 
 		public void Acknowledge(Guid messageId)
 		{
-			AccessQueue(() => GetChannel().Acknowledge(messageId));
+			AccessQueue(() =>
+				{
+					UnacknowledgedMessage unacknowledgedMessage;
+
+					lock (_unacknowledgedMessageLock)
+					{
+						unacknowledgedMessage = _unacknowledgedMessages.Find(candidate => candidate.MessageId.Equals(messageId));
+					}
+
+					if (unacknowledgedMessage != null)
+					{
+						GetChannel().Acknowledge(unacknowledgedMessage.BasicDeliverEventArgs);
+					}
+
+					lock (_unacknowledgedMessageLock)
+					{
+						_unacknowledgedMessages.RemoveAll(candidate => candidate.MessageId.Equals(messageId));
+					}
+				});
 		}
 
 		public void Purge()
 		{
-			AccessQueue(() => { GetChannel().Model.QueuePurge(parser.Queue); });
+			AccessQueue(() => { GetChannel().Model.QueuePurge(_parser.Queue); });
 		}
 
 		private void AccessQueue(Action action, int retry = 0)

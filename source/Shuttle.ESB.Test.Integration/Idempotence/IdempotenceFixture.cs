@@ -10,7 +10,7 @@ namespace Shuttle.ESB.Test.Integration.Idempotence.SqlServer.Msmq
 {
 	public class IdempotenceFixture : IntegrationFixture
 	{
-		protected void TestFullProcessing(string workQueueUriFormat, string errorQueueUriFormat, bool isTransactional, bool enqueueUniqueMessages)
+		protected void TestIdempotenceProcessing(string workQueueUriFormat, string errorQueueUriFormat, bool isTransactional, bool enqueueUniqueMessages)
 		{
 			const int messageCount = 200;
 

@@ -22,10 +22,6 @@ namespace Shuttle.ESB.Core
 	{
 	}
 
-	public class OnEnqueueJournal : PipelineEvent
-	{
-	}
-
 	public class OnHandleMessage : PipelineEvent
 	{
 	}

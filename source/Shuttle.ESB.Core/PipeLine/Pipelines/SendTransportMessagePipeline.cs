@@ -19,7 +19,7 @@ namespace Shuttle.ESB.Core
 		{
 			Guard.AgainstNull(transportMessage, "transportMessage");
 
-			TransportMessage = transportMessage;
+			SetTransportMessage(transportMessage);
 
 			return base.Execute();
 		}

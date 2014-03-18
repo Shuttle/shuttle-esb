@@ -3,13 +3,11 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.MessagePatterns;
 using Shuttle.Core.Infrastructure;
-using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.RabbitMQ
 {
-	internal class Channel : IAcknowledge, IDisposable
+	internal class Channel : IDisposable
 	{
-		private BasicDeliverEventArgs _basicDeliverEventArgs;
 		private readonly Subscription _subscription;
 		private readonly int _millisecondsTimeout;
 
@@ -27,23 +25,23 @@ namespace Shuttle.ESB.RabbitMQ
 
 		public BasicDeliverEventArgs Next()
 		{
-			_basicDeliverEventArgs = null;
+			BasicDeliverEventArgs basicDeliverEventArgs;
 
-			var next = _subscription.Next(_millisecondsTimeout, out _basicDeliverEventArgs);
+			var next = _subscription.Next(_millisecondsTimeout, out basicDeliverEventArgs);
 
-			if (next && _basicDeliverEventArgs == null)
+			if (next && basicDeliverEventArgs == null)
 			{
 				throw new ConnectionException(string.Format(RabbitMQResources.SubscriptionNextConnectionException, _subscription.QueueName));
 			}
 
 			return (next)
-				       ? _basicDeliverEventArgs
+				       ? basicDeliverEventArgs
 				       : null;
 		}
 
-		public void Acknowledge(Guid messageId)
+		public void Acknowledge(BasicDeliverEventArgs basicDeliverEventArgs)
 		{
-			_subscription.Ack(_basicDeliverEventArgs);
+			_subscription.Ack(basicDeliverEventArgs);
 		}
 
 		public void Dispose()

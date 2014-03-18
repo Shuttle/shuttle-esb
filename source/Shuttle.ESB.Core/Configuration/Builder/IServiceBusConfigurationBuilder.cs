@@ -13,7 +13,6 @@ namespace Shuttle.ESB.Core
 		IServiceBusConfigurationBuilder OutgoingEncryptionAlgorithm(string name);
 		IServiceBusConfigurationBuilder OutgoingCompressionAlgorithm(string name);
 		IServiceBusConfigurationBuilder SubscriptionManager(ISubscriptionManager manager);
-		IServiceBusConfigurationBuilder DeferredMessageQueue(IDeferredMessageQueue deferredMessageQueue);
 		IServiceBusConfigurationBuilder AddModule(IModule module);
 		IServiceBusConfigurationBuilder Policy(IServiceBusPolicy policy);
 		IServiceBusConfigurationBuilder ThreadActivityFactory(IThreadActivityFactory factory);

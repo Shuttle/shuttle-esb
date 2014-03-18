@@ -21,6 +21,11 @@ namespace Shuttle.ESB.Core
 			return pipelineEvent.Pipeline.State.Get<IQueue>(StateKeys.WorkQueue);
 		}
 
+		public static IQueue GetDeferredQueue(this PipelineEvent pipelineEvent)
+		{
+			return pipelineEvent.Pipeline.State.Get<IQueue>(StateKeys.DeferredQueue);
+		}
+
 		public static IQueue GetErrorQueue(this PipelineEvent pipelineEvent)
 		{
 			return pipelineEvent.Pipeline.State.Get<IQueue>(StateKeys.ErrorQueue);

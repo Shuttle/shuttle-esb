@@ -4,7 +4,8 @@ namespace Shuttle.ESB.Core
 {
     public class InboxQueueConfiguration : IInboxQueueConfiguration
     {
-        private int threadCount;
+	    private DateTime _nextDeferredProcessDate = DateTime.MinValue;
+        private int _threadCount;
 
         public InboxQueueConfiguration()
         {
@@ -31,13 +32,27 @@ namespace Shuttle.ESB.Core
         public IQueue WorkQueue { get; set; }
         public IQueue ErrorQueue { get; set; }
         public bool Distribute { get; set; }
+	    public IQueue DeferredQueue { get; set; }
+	    
+		public void MessageDeferred(DateTime ignoreTillDate)
+	    {
+			if (_nextDeferredProcessDate > ignoreTillDate)
+			{
+				_nextDeferredProcessDate = ignoreTillDate;
+			}
+	    }
 
-        public int ThreadCount
+	    public bool ShouldProcessDeferred()
+	    {
+		    return (DateTime.Now >= _nextDeferredProcessDate);
+	    }
+
+	    public int ThreadCount
         {
-            get { return threadCount; }
+            get { return _threadCount; }
             set
             {
-                threadCount = value > 0
+                _threadCount = value > 0
                                   ? value
                                   : 5;
             }

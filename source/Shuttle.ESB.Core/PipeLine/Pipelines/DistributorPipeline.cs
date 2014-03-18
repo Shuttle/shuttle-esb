@@ -28,8 +28,8 @@
 		{
 			base.Obtained();
 
-			WorkQueue = _bus.Configuration.Inbox.WorkQueue;
-			ErrorQueue = _bus.Configuration.Inbox.ErrorQueue;
+			SetWorkQueue(_bus.Configuration.Inbox.WorkQueue);
+			SetErrorQueue(_bus.Configuration.Inbox.ErrorQueue);
 		}
 	}
 }

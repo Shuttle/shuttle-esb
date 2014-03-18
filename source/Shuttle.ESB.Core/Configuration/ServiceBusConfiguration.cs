@@ -28,7 +28,6 @@ namespace Shuttle.ESB.Core
 			WorkerAvailabilityManager = new WorkerAvailabilityManager();
 			Modules = new ModuleCollection();
 			TransactionScope = new TransactionScopeConfiguration();
-			DeferredMessageConfiguration = new DeferredMessageConfiguration();
 			QueueManager = Core.QueueManager.Default();
 		}
 
@@ -105,12 +104,10 @@ namespace Shuttle.ESB.Core
 			set { _subscriptionManager = value; }
 		}
 
-		public bool HasDeferredMessageQueue
+		public bool HasDeferredQueue
 		{
-			get { return DeferredMessageConfiguration.DeferredMessageQueue != null; }
+			get { return HasInbox && Inbox.DeferredQueue != null; }
 		}
-
-		public IDeferredMessageConfiguration DeferredMessageConfiguration { get; set; }
 
 		public bool HasInbox
 		{

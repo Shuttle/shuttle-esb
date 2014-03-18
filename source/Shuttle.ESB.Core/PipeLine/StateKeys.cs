@@ -18,5 +18,6 @@ namespace Shuttle.ESB.Core
 		public const string TransportMessageStream = "TransportMessageStream";
 		public const string Working = "Working";
 		public const string WorkQueue = "WorkQueue";
+		public const string DeferredQueue = "DeferredQueue";
 	}
 }

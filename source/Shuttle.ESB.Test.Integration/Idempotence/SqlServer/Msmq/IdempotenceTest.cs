@@ -27,7 +27,7 @@ namespace Shuttle.ESB.Test.Integration.Idempotence.SqlServer.Msmq
 		{
 			var queueUriFormat = string.Concat("msmq://./{0}?transactional=", isTransactionalQueue);
 
-			TestFullProcessing(string.Concat(queueUriFormat, "&journal=", useJournal), queueUriFormat, isTransactionalEndpoint,
+			TestIdempotenceProcessing(string.Concat(queueUriFormat, "&journal=", useJournal), queueUriFormat, isTransactionalEndpoint,
 			                   enqueueUniqueMessages);
 		}
 	}

@@ -4,6 +4,11 @@ using Shuttle.Core.Infrastructure;
 namespace Shuttle.ESB.Core
 {
 	public class ServiceBusStartupObserver :
+		IPipelineObserver<OnRegisterSharedConfiguration>,
+		IPipelineObserver<OnRegisterControlInboxQueueConfiguration>,
+		IPipelineObserver<OnRegisterInboxQueueConfiguration>,
+		IPipelineObserver<OnRegisterOutboxQueueConfiguration>,
+		IPipelineObserver<OnRegisterWorkerConfiguration>,
 		IPipelineObserver<OnInitializeQueueFactories>,
 		IPipelineObserver<OnCreateQueues>,
 		IPipelineObserver<OnInitializeMessageHandlerFactory>,
@@ -20,6 +25,21 @@ namespace Shuttle.ESB.Core
 		IPipelineObserver<OnStartDeferredMessageProcessing>,
 		IPipelineObserver<OnStartWorker>
 	{
+		private readonly TimeSpan[] defaultDurationToIgnoreOnFailure =
+			new[]
+				{
+					TimeSpan.FromMinutes(5),
+					TimeSpan.FromMinutes(10),
+					TimeSpan.FromMinutes(15),
+					TimeSpan.FromMinutes(30),
+					TimeSpan.FromMinutes(60)
+				};
+
+		private readonly TimeSpan[] defaultDurationToSleepWhenIdle =
+			(TimeSpan[])
+			new StringDurationArrayConverter()
+				.ConvertFrom("250ms*4,500ms*2,1s");
+
 		private readonly IServiceBus _bus;
 
 		private readonly ILog _log;
@@ -35,7 +55,6 @@ namespace Shuttle.ESB.Core
 		public void Execute(OnInitializeQueueFactories pipelineEvent)
 		{
 			_bus.Configuration.QueueManager.AttemptInitialization(_bus);
-			_bus.Configuration.QueueManager.RegisterQueueFactory(new MemoryQueueFactory());
 
 			foreach (var factory in _bus.Configuration.QueueManager.GetQueueFactories())
 			{
@@ -45,7 +64,7 @@ namespace Shuttle.ESB.Core
 
 		public void Execute(OnCreateQueues pipelineEvent)
 		{
-			if (ServiceBusConfiguration.ServiceBusSection != null 
+			if (ServiceBusConfiguration.ServiceBusSection != null
 				&&
 				ServiceBusConfiguration.ServiceBusSection.CreateQueues)
 			{
@@ -159,7 +178,7 @@ namespace Shuttle.ESB.Core
 
 		public void Execute(OnStartDeferredMessageProcessing pipelineEvent)
 		{
-			if (!_bus.Configuration.HasDeferredMessageQueue || _bus.Configuration.IsWorker)
+			if (!_bus.Configuration.HasDeferredQueue || _bus.Configuration.IsWorker)
 			{
 				return;
 			}
@@ -192,14 +211,138 @@ namespace Shuttle.ESB.Core
 			_bus.Configuration.MessageRouteProvider.AttemptInitialization(_bus);
 		}
 
-		public void Execute(OnInitializeForwardingRouteProvider pipelineEvent1)
+		public void Execute(OnInitializeForwardingRouteProvider pipelineEvent)
 		{
 			_bus.Configuration.ForwardingRouteProvider.AttemptInitialization(_bus);
 		}
 
-		public void Execute(OnInitializeQueueManager pipelineEvent1)
+		public void Execute(OnInitializeQueueManager pipelineEvent)
 		{
 			_bus.Configuration.QueueManager.AttemptInitialization(_bus);
+		}
+
+		public void Execute(OnRegisterSharedConfiguration pipelineEvent)
+		{
+			var configuration = (ServiceBusConfiguration)pipelineEvent.GetServiceBus().Configuration;
+
+			if (ServiceBusConfiguration.ServiceBusSection == null)
+			{
+				configuration.RemoveMessagesNotHandled = false;
+
+				return;
+			}
+
+			configuration.RemoveMessagesNotHandled = ServiceBusConfiguration.ServiceBusSection.RemoveMessagesNotHandled;
+			configuration.CompressionAlgorithm = ServiceBusConfiguration.ServiceBusSection.CompressionAlgorithm;
+			configuration.EncryptionAlgorithm = ServiceBusConfiguration.ServiceBusSection.EncryptionAlgorithm;
+			configuration.TransactionScope = new TransactionScopeConfiguration
+			{
+				Enabled = ServiceBusConfiguration.ServiceBusSection.TransactionScope.Enabled,
+				IsolationLevel = ServiceBusConfiguration.ServiceBusSection.TransactionScope.IsolationLevel,
+				TimeoutSeconds = ServiceBusConfiguration.ServiceBusSection.TransactionScope.TimeoutSeconds
+			};
+		}
+
+		public void Execute(OnRegisterControlInboxQueueConfiguration pipelineEvent)
+		{
+			var configuration = (ServiceBusConfiguration)pipelineEvent.GetServiceBus().Configuration;
+
+			if (ServiceBusConfiguration.ServiceBusSection == null
+			||
+			ServiceBusConfiguration.ServiceBusSection.ControlInbox == null
+			||
+			string.IsNullOrEmpty(ServiceBusConfiguration.ServiceBusSection.ControlInbox.WorkQueueUri)
+			||
+			string.IsNullOrEmpty(ServiceBusConfiguration.ServiceBusSection.ControlInbox.ErrorQueueUri))
+			{
+				return;
+			}
+
+			configuration.ControlInbox =
+				new ControlInboxQueueConfiguration
+				{
+					WorkQueue = configuration.QueueManager.GetQueue(ServiceBusConfiguration.ServiceBusSection.ControlInbox.WorkQueueUri),
+					ErrorQueue = configuration.QueueManager.GetQueue(ServiceBusConfiguration.ServiceBusSection.ControlInbox.ErrorQueueUri),
+					ThreadCount = ServiceBusConfiguration.ServiceBusSection.ControlInbox.ThreadCount,
+					MaximumFailureCount = ServiceBusConfiguration.ServiceBusSection.ControlInbox.MaximumFailureCount,
+					DurationToIgnoreOnFailure = ServiceBusConfiguration.ServiceBusSection.ControlInbox.DurationToIgnoreOnFailure ?? defaultDurationToIgnoreOnFailure,
+					DurationToSleepWhenIdle = ServiceBusConfiguration.ServiceBusSection.ControlInbox.DurationToSleepWhenIdle ?? defaultDurationToSleepWhenIdle
+				};
+		}
+
+		public void Execute(OnRegisterInboxQueueConfiguration pipelineEvent)
+		{
+			var configuration = (ServiceBusConfiguration)pipelineEvent.GetServiceBus().Configuration;
+
+			if (ServiceBusConfiguration.ServiceBusSection == null
+			||
+			ServiceBusConfiguration.ServiceBusSection.Inbox == null
+			||
+			string.IsNullOrEmpty(ServiceBusConfiguration.ServiceBusSection.Inbox.WorkQueueUri))
+			{
+				return;
+			}
+
+			configuration.Inbox =
+				new InboxQueueConfiguration
+				{
+					WorkQueue = configuration.QueueManager.GetQueue(ServiceBusConfiguration.ServiceBusSection.Inbox.WorkQueueUri),
+					ErrorQueue = configuration.QueueManager.GetQueue(ServiceBusConfiguration.ServiceBusSection.Inbox.ErrorQueueUri),
+					WorkQueueStartupAction = ServiceBusConfiguration.ServiceBusSection.Inbox.WorkQueueStartupAction,
+					ThreadCount = ServiceBusConfiguration.ServiceBusSection.Inbox.ThreadCount,
+					MaximumFailureCount = ServiceBusConfiguration.ServiceBusSection.Inbox.MaximumFailureCount,
+					DurationToIgnoreOnFailure = ServiceBusConfiguration.ServiceBusSection.Inbox.DurationToIgnoreOnFailure ?? defaultDurationToIgnoreOnFailure,
+					DurationToSleepWhenIdle = ServiceBusConfiguration.ServiceBusSection.Inbox.DurationToSleepWhenIdle ?? defaultDurationToSleepWhenIdle,
+					Distribute = ServiceBusConfiguration.ServiceBusSection.Inbox.Distribute,
+					DeferredQueue =
+						string.IsNullOrEmpty(ServiceBusConfiguration.ServiceBusSection.Inbox.DeferredQueueUri)
+							? null
+							: configuration.QueueManager.GetQueue(ServiceBusConfiguration.ServiceBusSection.Inbox.DeferredQueueUri)
+				};
+		}
+
+		public void Execute(OnRegisterOutboxQueueConfiguration pipelineEvent)
+		{
+			var configuration = (ServiceBusConfiguration)pipelineEvent.GetServiceBus().Configuration;
+
+			if (ServiceBusConfiguration.ServiceBusSection == null
+		||
+		ServiceBusConfiguration.ServiceBusSection.Outbox == null
+		||
+		string.IsNullOrEmpty(ServiceBusConfiguration.ServiceBusSection.Outbox.WorkQueueUri))
+			{
+				return;
+			}
+
+			configuration.Outbox =
+				new OutboxQueueConfiguration
+				{
+					WorkQueue = configuration.QueueManager.GetQueue(ServiceBusConfiguration.ServiceBusSection.Outbox.WorkQueueUri),
+					ErrorQueue = configuration.QueueManager.GetQueue(ServiceBusConfiguration.ServiceBusSection.Outbox.ErrorQueueUri),
+					MaximumFailureCount = ServiceBusConfiguration.ServiceBusSection.Outbox.MaximumFailureCount,
+					DurationToIgnoreOnFailure = ServiceBusConfiguration.ServiceBusSection.Outbox.DurationToIgnoreOnFailure ?? defaultDurationToIgnoreOnFailure,
+					DurationToSleepWhenIdle = ServiceBusConfiguration.ServiceBusSection.Outbox.DurationToSleepWhenIdle ?? defaultDurationToSleepWhenIdle,
+					ThreadCount = ServiceBusConfiguration.ServiceBusSection.Inbox.ThreadCount
+				};
+		}
+
+		public void Execute(OnRegisterWorkerConfiguration pipelineEvent)
+		{
+			var configuration = (ServiceBusConfiguration)pipelineEvent.GetServiceBus().Configuration;
+
+			if (ServiceBusConfiguration.ServiceBusSection == null
+			||
+			ServiceBusConfiguration.ServiceBusSection.Worker == null
+			||
+			string.IsNullOrEmpty(ServiceBusConfiguration.ServiceBusSection.Worker.DistributorControlWorkQueueUri))
+			{
+				return;
+			}
+
+			configuration.Worker =
+				new WorkerConfiguration(configuration.QueueManager.CreateQueue(
+						ServiceBusConfiguration.ServiceBusSection.Worker.DistributorControlWorkQueueUri),
+						ServiceBusConfiguration.ServiceBusSection.Worker.ThreadAvailableNotificationIntervalSeconds);
 		}
 	}
 }

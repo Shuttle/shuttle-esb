@@ -35,14 +35,7 @@ namespace Shuttle.ESB.Core
 				}
 			}
 
-			var acknowledge = pipelineEvent.GetWorkQueue() as IAcknowledge;
-
-			if (acknowledge == null)
-			{
-				return;
-			}
-
-			acknowledge.Acknowledge(transportMessage.MessageId);
+			pipelineEvent.GetWorkQueue().Acknowledge(transportMessage.MessageId);
 
 			_log.Trace(string.Format(ESBResources.TraceAcknowledge, transportMessage.MessageType, transportMessage.MessageId));
 		}

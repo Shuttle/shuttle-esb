@@ -154,6 +154,11 @@ namespace Shuttle.ESB.Core
 			if (serviceBusConfiguration.HasInbox)
 			{
 				CreateQueues(serviceBusConfiguration.Inbox);
+
+				if (serviceBusConfiguration.HasDeferredQueue)
+				{
+					serviceBusConfiguration.Inbox.DeferredQueue.AttemptCreate();
+				}
 			}
 
 			if (serviceBusConfiguration.HasOutbox)

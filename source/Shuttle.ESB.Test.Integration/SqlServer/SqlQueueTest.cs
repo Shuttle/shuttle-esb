@@ -37,8 +37,6 @@ namespace Shuttle.ESB.Test.Integration.SqlServer
 
 			inboxQueue.Enqueue(messagId, new MemoryStream());
 
-			inboxQueue.Remove(messagId);
-
 			Assert.IsNull(inboxQueue.Dequeue());
 		}
 

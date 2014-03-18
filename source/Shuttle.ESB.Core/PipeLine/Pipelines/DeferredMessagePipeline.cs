@@ -5,8 +5,7 @@
 		public DeferredMessagePipeline(IServiceBus bus)
 			: base(bus)
 		{
-			RegisterStage("Read")
-				.WithEvent<OnStartTransactionScope>()
+			RegisterStage("Process")
 				.WithEvent<OnDequeue>()
 				.WithEvent<OnDeserializeTransportMessage>();
 
@@ -15,8 +14,8 @@
 				.WithEvent<OnCompleteTransactionScope>()
 				.WithEvent<OnDisposeTransactionScope>();
 
-			RegisterObserver(new DeferredMessageDequeueObserver());
-			RegisterObserver(new DeferredMessageDeserializeTransportMessageObserver());
+			//RegisterObserver(new DeferredMessageDequeueObserver());
+			//RegisterObserver(new DeferredMessageDeserializeTransportMessageObserver());
 			RegisterObserver(new SendMessageObserver());
 			RegisterObserver(new TransactionScopeObserver());
 		}

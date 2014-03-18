@@ -69,7 +69,16 @@ namespace Shuttle.ESB.Core
 
 			using (var stream = pipelineEvent.GetTransportMessageStream().Copy())
 			{
-				pipelineEvent.GetWorkQueue().Enqueue(transportMessage.MessageId, stream);
+				if (pipelineEvent.GetDeferredQueue() == null)
+				{
+					pipelineEvent.GetWorkQueue().Enqueue(transportMessage.MessageId, stream);
+				}
+				else
+				{
+					pipelineEvent.GetDeferredQueue().Enqueue(transportMessage.MessageId, stream);
+
+					pipelineEvent.GetServiceBus().Configuration.Inbox.MessageDeferred(transportMessage.IgnoreTillDate);
+				}
 			}
 
 			pipelineEvent.SetTransactionComplete();

@@ -2,6 +2,12 @@
 
 namespace Shuttle.ESB.Core
 {
+	public class OnRegisterSharedConfiguration : PipelineEvent { }
+	public class OnRegisterControlInboxQueueConfiguration : PipelineEvent { }
+	public class OnRegisterInboxQueueConfiguration : PipelineEvent { }
+	public class OnRegisterOutboxQueueConfiguration : PipelineEvent { }
+	public class OnRegisterWorkerConfiguration : PipelineEvent { }
+	
 	public class OnInitializeQueueFactories : PipelineEvent {}
 	public class OnCreateQueues : PipelineEvent {}
 	public class OnInitializeMessageHandlerFactory : PipelineEvent {}

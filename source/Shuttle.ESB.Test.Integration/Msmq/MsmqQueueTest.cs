@@ -42,8 +42,6 @@ namespace Shuttle.ESB.Test.Integration.Msmq
 
 			inboxQueue.Enqueue(messageId, new MemoryStream());
 
-			inboxQueue.Remove(messageId);
-
 			Assert.IsNull(inboxQueue.Dequeue());
 		}
 

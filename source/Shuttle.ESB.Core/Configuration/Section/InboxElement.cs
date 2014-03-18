@@ -4,68 +4,62 @@ using System.Configuration;
 
 namespace Shuttle.ESB.Core
 {
-    public class InboxElement : ConfigurationElement
-    {
-        [ConfigurationProperty("workQueueStartupAction", IsRequired = false, DefaultValue = QueueStartupAction.None)]
-        public QueueStartupAction WorkQueueStartupAction
-        {
-            get { return (QueueStartupAction) this["workQueueStartupAction"]; }
-        }
+	public class InboxElement : ConfigurationElement
+	{
+		[ConfigurationProperty("workQueueStartupAction", IsRequired = false, DefaultValue = QueueStartupAction.None)]
+		public QueueStartupAction WorkQueueStartupAction
+		{
+			get { return (QueueStartupAction) this["workQueueStartupAction"]; }
+		}
 
-        [ConfigurationProperty("workQueueUri", IsRequired = true, DefaultValue = "")]
-        public string WorkQueueUri
-        {
-            get { return (string) this["workQueueUri"]; }
-        }
+		[ConfigurationProperty("workQueueUri", IsRequired = true)]
+		public string WorkQueueUri
+		{
+			get { return (string) this["workQueueUri"]; }
+		}
 
-        [ConfigurationProperty("errorQueueUri", IsRequired = true, DefaultValue = "")]
-        public string ErrorQueueUri
-        {
-            get { return (string) this["errorQueueUri"]; }
-        }
+		[ConfigurationProperty("deferredQueueUri", IsRequired = false, DefaultValue = "")]
+		public string DeferredQueueUri
+		{
+			get { return (string) this["deferredQueueUri"]; }
+		}
 
-        [ConfigurationProperty("threadCount", IsRequired = false, DefaultValue = 5)]
-        public int ThreadCount
-        {
-            get { return (int)this["threadCount"]; }
-        }
+		[ConfigurationProperty("errorQueueUri", IsRequired = true)]
+		public string ErrorQueueUri
+		{
+			get { return (string) this["errorQueueUri"]; }
+		}
 
-        [TypeConverter(typeof(StringDurationArrayConverter))]
-        [ConfigurationProperty("durationToSleepWhenIdle", IsRequired = false, DefaultValue = null)]
-        public TimeSpan[] DurationToSleepWhenIdle
-        {
-            get
-            {
-                return (TimeSpan[])this["durationToSleepWhenIdle"];
-            }
-        }
+		[ConfigurationProperty("threadCount", IsRequired = false, DefaultValue = 5)]
+		public int ThreadCount
+		{
+			get { return (int) this["threadCount"]; }
+		}
 
-        [TypeConverter(typeof(StringDurationArrayConverter))]
-        [ConfigurationProperty("durationToIgnoreOnFailure", IsRequired = false, DefaultValue = null)]
-        public TimeSpan[] DurationToIgnoreOnFailure
-        {
-            get
-            {
-                return (TimeSpan[])this["durationToIgnoreOnFailure"];
-            }
-        }
+		[TypeConverter(typeof (StringDurationArrayConverter))]
+		[ConfigurationProperty("durationToSleepWhenIdle", IsRequired = false, DefaultValue = null)]
+		public TimeSpan[] DurationToSleepWhenIdle
+		{
+			get { return (TimeSpan[]) this["durationToSleepWhenIdle"]; }
+		}
 
-        [ConfigurationProperty("maximumFailureCount", IsRequired = false, DefaultValue = 5)]
-        public int MaximumFailureCount
-        {
-            get
-            {
-                return (int)this["maximumFailureCount"];
-            }
-        }
+		[TypeConverter(typeof (StringDurationArrayConverter))]
+		[ConfigurationProperty("durationToIgnoreOnFailure", IsRequired = false, DefaultValue = null)]
+		public TimeSpan[] DurationToIgnoreOnFailure
+		{
+			get { return (TimeSpan[]) this["durationToIgnoreOnFailure"]; }
+		}
 
-        [ConfigurationProperty("distribute", IsRequired = false, DefaultValue = false)]
-        public bool Distribute
-        {
-            get
-            {
-                return (bool)this["distribute"];
-            }
-        }
-    }
+		[ConfigurationProperty("maximumFailureCount", IsRequired = false, DefaultValue = 5)]
+		public int MaximumFailureCount
+		{
+			get { return (int) this["maximumFailureCount"]; }
+		}
+
+		[ConfigurationProperty("distribute", IsRequired = false, DefaultValue = false)]
+		public bool Distribute
+		{
+			get { return (bool) this["distribute"]; }
+		}
+	}
 }

@@ -99,6 +99,8 @@
     <Compile Include="ConcurrentHandler.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="ConfigurationAvailableEventArgs.cs" />
+    <Compile Include="Deferred\DeferredFixture.cs" />
+    <Compile Include="Deferred\Msmq\DeferredMessageTest.cs" />
     <Compile Include="Idempotence\IdempotenceFixture.cs" />
     <Compile Include="Idempotence\IdempotenceMessageHandlerFactory.cs" />
     <Compile Include="Idempotence\IdempotenceMessageRouteProvider.cs" />
@@ -128,7 +130,6 @@
     <Compile Include="Msmq\MsmqQueueTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MemoryInboxTest.cs" />
-    <Compile Include="SqlServer\DeferredMessageQueueTest.cs" />
     <Compile Include="SqlServer\SqlInboxTest.cs" />
     <Compile Include="IntegrationFixture.cs" />
     <Compile Include="SqlServer\SqlQueueTest.cs" />

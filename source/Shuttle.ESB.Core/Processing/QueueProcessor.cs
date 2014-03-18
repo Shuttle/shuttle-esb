@@ -6,21 +6,21 @@ namespace Shuttle.ESB.Core
     public abstract class QueueProcessor<TMessagePipeline> : IProcessor
         where TMessagePipeline : MessagePipeline
     {
-        protected readonly IServiceBus bus;
-        protected readonly IThreadActivity threadActivity;
+        protected readonly IServiceBus _bus;
+        protected readonly IThreadActivity _threadActivity;
 
         protected QueueProcessor(IServiceBus bus, IThreadActivity threadActivity)
         {
             Guard.AgainstNull(bus, "bus");
             Guard.AgainstNull(threadActivity, "threadActivity");
 
-            this.bus = bus;
-            this.threadActivity = threadActivity;
+            _bus = bus;
+            _threadActivity = threadActivity;
         }
 
         public virtual void Execute(IActiveState state)
         {
-            var messagePipeline = bus.Configuration.PipelineFactory.GetPipeline<TMessagePipeline>(bus);
+            var messagePipeline = _bus.Configuration.PipelineFactory.GetPipeline<TMessagePipeline>(_bus);
 
             try
             {
@@ -31,20 +31,20 @@ namespace Shuttle.ESB.Core
 
                 if (messagePipeline.State.Get<bool>(StateKeys.Working))
                 {
-                    bus.Events.OnThreadWorking(this, new ThreadStateEventArgs(typeof(TMessagePipeline)));
+                    _bus.Events.OnThreadWorking(this, new ThreadStateEventArgs(typeof(TMessagePipeline)));
 
-                    threadActivity.Working();
+                    _threadActivity.Working();
                 }
                 else
                 {
-                    bus.Events.OnThreadWaiting(this, new ThreadStateEventArgs(typeof(TMessagePipeline)));
+                    _bus.Events.OnThreadWaiting(this, new ThreadStateEventArgs(typeof(TMessagePipeline)));
 
-                    threadActivity.Waiting(state);
+                    _threadActivity.Waiting(state);
                 }
             }
             finally
             {
-                bus.Configuration.PipelineFactory.ReleasePipeline(messagePipeline);
+                _bus.Configuration.PipelineFactory.ReleasePipeline(messagePipeline);
             }
         }
 

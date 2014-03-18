@@ -10,6 +10,13 @@ namespace Shuttle.ESB.Core
 
 			State.Add(bus);
 
+			RegisterStage("Registration")
+				.WithEvent<OnRegisterSharedConfiguration>()
+				.WithEvent<OnRegisterControlInboxQueueConfiguration>()
+				.WithEvent<OnRegisterInboxQueueConfiguration>()
+				.WithEvent<OnRegisterOutboxQueueConfiguration>()
+				.WithEvent<OnRegisterWorkerConfiguration>();
+
 			RegisterStage("Initializing")
 				.WithEvent<OnInitializeQueueFactories>()
 				.WithEvent<OnCreateQueues>()

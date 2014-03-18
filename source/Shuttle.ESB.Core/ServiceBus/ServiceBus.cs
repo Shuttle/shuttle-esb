@@ -321,7 +321,7 @@ namespace Shuttle.ESB.Core
 				outboxThreadPool.Dispose();
 			}
 
-			if (Configuration.HasDeferredMessageQueue)
+			if (Configuration.HasDeferredQueue)
 			{
 				deferredMessageThreadPool.Dispose();
 			}

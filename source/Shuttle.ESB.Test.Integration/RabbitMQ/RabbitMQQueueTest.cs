@@ -31,27 +31,18 @@ namespace Shuttle.ESB.Test.Integration.RabbitMQ
 		}
 
 		[Test]
-		public void Should_be_able_to_remove_a_message()
+		public void Should_be_able_to_send_a_message_to_and_get_a_message_from_a_queue()
 		{
 			var messageId = Guid.NewGuid();
-
-			inboxQueue.Enqueue(messageId, new MemoryStream());
-
-			inboxQueue.Remove(messageId);
-
-			Assert.IsNull(inboxQueue.Dequeue());
-		}
-
-		[Test]
-		public void Should_be_able_to_send_a_message_to_and_receive_a_message_from_a_queue()
-		{
 			var stream = new MemoryStream();
 
 			stream.WriteByte(100);
 
-			inboxQueue.Enqueue(Guid.NewGuid(), stream);
+			inboxQueue.Enqueue(messageId, stream);
 
 			var dequeued = inboxQueue.Dequeue();
+
+			inboxQueue.Acknowledge(messageId);
 
 			Assert.AreEqual(100, dequeued.ReadByte());
 		}

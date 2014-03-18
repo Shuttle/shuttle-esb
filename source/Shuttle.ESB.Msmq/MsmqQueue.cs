@@ -10,7 +10,7 @@ using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.Msmq
 {
-	public class MsmqQueue : IQueue, ICreate, IDrop, IPurge, ICount, IQueueReader, IAcknowledge
+	public class MsmqQueue : IQueue, ICreate, IDrop, IPurge, ICount, IQueueReader
 	{
 		private readonly TimeSpan _timeout;
 		private readonly MsmqUriParser _parser;
@@ -290,34 +290,6 @@ namespace Shuttle.ESB.Msmq
 			catch (Exception ex)
 			{
 				_log.Error(string.Format(MsmqResources.DequeueMessageIdError, messageId, _parser.Path, ex.CompactMessages()));
-
-				throw;
-			}
-		}
-
-		public bool Remove(Guid messageId)
-		{
-			try
-			{
-				using (var queue = CreateQueue())
-				{
-					return (queue.ReceiveByCorrelationId(string.Format(@"{0}\1", messageId), TransactionType()) != null);
-				}
-			}
-			catch (MessageQueueException ex)
-			{
-				if (ex.MessageQueueErrorCode == MessageQueueErrorCode.AccessDenied)
-				{
-					AccessDenied(_log, _parser.Path);
-				}
-
-				_log.Error(string.Format(MsmqResources.RemoveError, messageId, _parser.Path, ex.CompactMessages()));
-
-				throw;
-			}
-			catch (Exception ex)
-			{
-				_log.Error(string.Format(MsmqResources.RemoveError, messageId, _parser.Path, ex.CompactMessages()));
 
 				throw;
 			}

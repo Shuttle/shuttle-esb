@@ -9,18 +9,6 @@ namespace Shuttle.ESB.Core
 
 		public ServiceBusConfigurationBuilder()
 		{
-			var tasks = new List<RegistrationTask>
-				{
-					new RegisterSharedConfigurationTask(),
-					new RegisterDeferredMessageConfigurationTask(),
-					new RegisterControlInboxQueueConfigurationTask(),
-					new RegisterInboxQueueConfigurationTask(),
-					new RegisterOutboxQueueConfigurationTask(),
-					new RegisterWorkerConfigurationTask()
-				};
-
-			tasks.ForEach(task => task.Execute(configuration));
-
 			DefaultMessageSerializer();
 			DefaultMessageHandlerFactory();
 			DefaultMessageRouteProvider();
@@ -104,15 +92,6 @@ namespace Shuttle.ESB.Core
 			Guard.AgainstNull(manager, "manager");
 
 			configuration.SubscriptionManager = manager;
-
-			return this;
-		}
-
-		public IServiceBusConfigurationBuilder DeferredMessageQueue(IDeferredMessageQueue deferredMessageQueue)
-		{
-			Guard.AgainstNull(deferredMessageQueue, "deferredMessageQueue");
-
-			configuration.DeferredMessageConfiguration.DeferredMessageQueue = deferredMessageQueue;
 
 			return this;
 		}
