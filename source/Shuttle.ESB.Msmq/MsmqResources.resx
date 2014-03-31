@@ -129,12 +129,12 @@
     <value>Only local queues can be dropped.  Remote queue '{0}' not dropped.</value>
     <comment>{0} = queue uri</comment>
   </data>
-  <data name="DequeueError" xml:space="preserve">
-    <value>Error trying to dequeue msmq queue '{0}'.  Exception: {1}</value>
+  <data name="GetMessageError" xml:space="preserve">
+    <value>Error trying to get  message from msmq queue '{0}'.  Exception: {1}</value>
     <comment>{0} = queue uri, {1} = exception</comment>
   </data>
-  <data name="DequeueMessageIdError" xml:space="preserve">
-    <value>Error trying to dequeue message with id '{0}' from msmq queue '{1}'.  Exception: {2}</value>
+  <data name="GetMessageByIdError" xml:space="preserve">
+    <value>Error trying to get message with id '{0}' from msmq queue '{1}'.  Exception: {2}</value>
     <comment>{0} = message id, {1} = queue uri, {2} = exception</comment>
   </data>
   <data name="ExistsError" xml:space="preserve">

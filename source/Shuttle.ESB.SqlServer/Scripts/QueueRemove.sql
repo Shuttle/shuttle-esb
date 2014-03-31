@@ -1,1 +1,1 @@
-delete from [dbo].[{0}] where MessageId = @MessageId
+delete from [dbo].[{0}] where SequenceId = @SequenceId

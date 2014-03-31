@@ -102,8 +102,11 @@
     <Compile Include="Exceptions\IdempotenceTrackerException.cs" />
     <Compile Include="Idempotence\IIdempotenceService.cs" />
     <Compile Include="Idempotence\IdempotenceServiceExtensions.cs" />
+    <Compile Include="Pipeline\Observers\DeferredMessage\ProcessDeferredMessageObserver.cs" />
     <Compile Include="Pipeline\Observers\Receive\AcknowledgeMessageObserver.cs" />
     <Compile Include="Pipeline\Observers\Receive\SendDeferredObserver.cs" />
+    <Compile Include="Pipeline\Observers\DeferredMessage\DequeueDeferredMessageObserver.cs" />
+    <Compile Include="Pipeline\Observers\Receive\DeferTransportMessageObserver.cs" />
     <Compile Include="Pipeline\Pipelines\DeferredMessagePipeline.cs" />
     <Compile Include="Pipeline\Pipelines\SendTransportMessagePipeline.cs" />
     <Compile Include="Pipeline\Transactions\DefaultServiceBusTransactionScopeFactory.cs" />
@@ -153,7 +156,7 @@
     <Compile Include="Pipeline\Pipelines\ReceiveMessagePipeline.cs" />
     <Compile Include="Pipeline\Observers\Shared\DeserializeTransportMessageObserver.cs" />
     <Compile Include="Pipeline\Observers\Shared\CompressMessageObserver.cs" />
-    <Compile Include="Pipeline\Observers\Shared\DequeueObserver.cs" />
+    <Compile Include="Pipeline\Observers\Shared\DequeueWorkMessageObserver.cs" />
     <Compile Include="Pipeline\DefaultPipelineFactory.cs" />
     <Compile Include="Pipeline\Observers\Receive\HandleMessageObserver.cs" />
     <Compile Include="Pipeline\Observers\Shared\SerializeTransportMessageObserver.cs" />
@@ -285,9 +288,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Pipeline\Observers\DeferredMessage\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -19,5 +19,6 @@ namespace Shuttle.ESB.Core
 		public const string Working = "Working";
 		public const string WorkQueue = "WorkQueue";
 		public const string DeferredQueue = "DeferredQueue";
+		public const string CheckpointMessageId = "CheckpointMessageId";
 	}
 }

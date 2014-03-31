@@ -88,11 +88,13 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Pipeline\MsmqReleaseMessageObserver.cs" />
+    <Compile Include="Pipeline\MsmqReleaseMessagePipeline.cs" />
     <Compile Include="Pipeline\MsmqReturnJournalObserver.cs" />
     <Compile Include="Pipeline\MsmqTransactionObserver.cs" />
     <Compile Include="Pipeline\MsmqReturnJournalPipeline.cs" />
-    <Compile Include="Pipeline\MsmqDequeueObserver.cs" />
-    <Compile Include="Pipeline\MsmqDequeuePipeline.cs" />
+    <Compile Include="Pipeline\MsmqGetMessageObserver.cs" />
+    <Compile Include="Pipeline\MsmqGetMessagePipeline.cs" />
     <Compile Include="MsmqSection.cs" />
     <Compile Include="IMsmqConfiguration.cs" />
     <Compile Include="MsmqConfiguration.cs" />

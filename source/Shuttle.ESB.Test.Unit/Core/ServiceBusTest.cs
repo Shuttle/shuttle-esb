@@ -85,10 +85,10 @@ namespace Shuttle.ESB.Test.Unit.Core
 											});
 			}
 
-			Assert.NotNull(subscriber1.Dequeue());
-			Assert.IsNull(subscriber1.Dequeue());
-			Assert.NotNull(subscriber2.Dequeue());
-			Assert.IsNull(subscriber2.Dequeue());
+			Assert.NotNull(subscriber1.GetMessage());
+			Assert.IsNull(subscriber1.GetMessage());
+			Assert.NotNull(subscriber2.GetMessage());
+			Assert.IsNull(subscriber2.GetMessage());
 		}
 	}
 }

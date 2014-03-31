@@ -6,8 +6,9 @@
 			: base(bus)
 		{
 			RegisterStage("Read")
-				.WithEvent<OnDequeue>()
+				.WithEvent<OnGetMessage>()
 				.WithEvent<OnDeserializeTransportMessage>()
+				.WithEvent<OnAfterDeserializeTransportMessage>()
 				.WithEvent<OnDecompressMessage>()
 				.WithEvent<OnDecryptMessage>()
 				.WithEvent<OnDeserializeMessage>();
@@ -20,8 +21,9 @@
 				.WithEvent<OnSendDeferred>()
 				.WithEvent<OnAcknowledgeMessage>();
 
-			RegisterObserver(new DequeueObserver());
+			RegisterObserver(new DequeueWorkMessageObserver());
 			RegisterObserver(new DeserializeTransportMessageObserver());
+			RegisterObserver(new DeferTransportMessageObserver());
 			RegisterObserver(new DeserializeMessageObserver());
 			RegisterObserver(new DecryptMessageObserver());
 			RegisterObserver(new DecompressMessageObserver());

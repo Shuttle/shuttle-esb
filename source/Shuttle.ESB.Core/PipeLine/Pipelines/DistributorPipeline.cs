@@ -6,22 +6,18 @@
 			: base(bus)
 		{
 			RegisterStage("Distribute")
-				.WithEvent<OnStartTransactionScope>()
-				.WithEvent<OnDequeue>()
+				.WithEvent<OnGetMessage>()
 				.WithEvent<OnDeserializeTransportMessage>()
 				.WithEvent<OnHandleDistributeMessage>()
 				.WithEvent<OnSerializeTransportMessage>()
-				.WithEvent<OnSendMessage>()
-				.WithEvent<OnCompleteTransactionScope>()
-				.WithEvent<OnDisposeTransactionScope>();
+				.WithEvent<OnSendMessage>();
 
-			RegisterObserver(new DequeueObserver());
+			RegisterObserver(new DequeueWorkMessageObserver());
 			RegisterObserver(new DeserializeTransportMessageObserver());
 			RegisterObserver(new DistributorMessageObserver());
 			RegisterObserver(new SerializeTransportMessageObserver());
 			RegisterObserver(new SendMessageObserver());
 			RegisterObserver(new DistributorExceptionObserver());
-			RegisterObserver(new TransactionScopeObserver());
 		}
 
 		public override sealed void Obtained()

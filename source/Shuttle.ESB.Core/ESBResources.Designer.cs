@@ -772,6 +772,15 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Transport message with id &apos;{0}&apos; will be deferred until &apos;{1}&apos;..
+        /// </summary>
+        public static string TransportMessageDeferred {
+            get {
+                return ResourceManager.GetString("TransportMessageDeferred", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not deserialize the transport message from queue &apos;{0}&apos;.  Exception reported: {1}.
         /// </summary>
         public static string TransportMessageDeserializationException {
@@ -786,15 +795,6 @@ namespace Shuttle.ESB.Core {
         public static string TransportMessageDeserialized {
             get {
                 return ResourceManager.GetString("TransportMessageDeserialized", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Transport message with id &apos;{0}&apos; will be deferred until &apos;{1}&apos;..
-        /// </summary>
-        public static string TransportMessageIgnored {
-            get {
-                return ResourceManager.GetString("TransportMessageIgnored", resourceCulture);
             }
         }
         

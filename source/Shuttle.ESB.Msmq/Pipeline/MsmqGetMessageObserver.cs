@@ -6,7 +6,7 @@ using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ESB.Msmq
 {
-	public class MsmqDequeueObserver :
+	public class MsmqGetMessageObserver :
 		IPipelineObserver<OnStart>,
 		IPipelineObserver<OnReceiveMessage>,
 		IPipelineObserver<OnSendJournalMessage>,
@@ -15,7 +15,7 @@ namespace Shuttle.ESB.Msmq
 		private readonly MessagePropertyFilter _messagePropertyFilter;
 		private readonly ILog _log;
 
-		public MsmqDequeueObserver()
+		public MsmqGetMessageObserver()
 		{
 			_messagePropertyFilter = new MessagePropertyFilter();
 			_messagePropertyFilter.SetAll();
@@ -62,15 +62,31 @@ namespace Shuttle.ESB.Msmq
 		{
 			var parser = pipelineEvent.Pipeline.State.Get<MsmqUriParser>();
 			var tx = pipelineEvent.Pipeline.State.Get<MessageQueueTransaction>();
+			var messageId = pipelineEvent.Pipeline.State.Get<Guid>();
 
 			try
 			{
-				var message = tx != null
-					                  ? pipelineEvent.Pipeline.State.Get<MessageQueue>("queue")
-					                                 .Receive(pipelineEvent.Pipeline.State.Get<TimeSpan>("timeout"), tx)
-					                  : pipelineEvent.Pipeline.State.Get<MessageQueue>("queue")
-					                                 .Receive(pipelineEvent.Pipeline.State.Get<TimeSpan>("timeout"),
-					                                          MessageQueueTransactionType.None);
+				Message message;
+
+				if (Guid.Empty.Equals(messageId))
+				{
+					message = tx != null
+								  ? pipelineEvent.Pipeline.State.Get<MessageQueue>("queue")
+												 .Receive(pipelineEvent.Pipeline.State.Get<TimeSpan>("timeout"), tx)
+								  : pipelineEvent.Pipeline.State.Get<MessageQueue>("queue")
+												 .Receive(pipelineEvent.Pipeline.State.Get<TimeSpan>("timeout"),
+														  MessageQueueTransactionType.None);
+				}
+				else
+				{
+					message = tx != null
+								  ? pipelineEvent.Pipeline.State.Get<MessageQueue>("queue")
+												 .ReceiveByCorrelationId(string.Format(@"{0}\1", messageId), pipelineEvent.Pipeline.State.Get<TimeSpan>("timeout"), tx)
+								  : pipelineEvent.Pipeline.State.Get<MessageQueue>("queue")
+												 .ReceiveByCorrelationId(string.Format(@"{0}\1", messageId), pipelineEvent.Pipeline.State.Get<TimeSpan>("timeout"),
+														  MessageQueueTransactionType.None);
+					
+				}
 
 				pipelineEvent.Pipeline.State.Add(message);
 			}
@@ -87,7 +103,7 @@ namespace Shuttle.ESB.Msmq
 					MsmqQueue.AccessDenied(_log, parser.Path);
 				}
 
-				_log.Error(string.Format(MsmqResources.DequeueError, parser.Uri, ex.Message));
+				_log.Error(string.Format(MsmqResources.GetMessageError, parser.Uri, ex.Message));
 
 				throw;
 			}

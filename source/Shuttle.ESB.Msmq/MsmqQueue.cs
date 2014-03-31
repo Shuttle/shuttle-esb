@@ -15,8 +15,8 @@ namespace Shuttle.ESB.Msmq
 		private readonly TimeSpan _timeout;
 		private readonly MsmqUriParser _parser;
 		private readonly MessagePropertyFilter _messagePropertyFilter;
-		private readonly Type _msmqDequeuePipelineType = typeof(MsmqDequeuePipeline);
-		private readonly ReusableObjectPool<MsmqDequeuePipeline> _dequeuePipelinePool;
+		private readonly Type _msmqDequeuePipelineType = typeof(MsmqGetMessagePipeline);
+		private readonly ReusableObjectPool<MsmqGetMessagePipeline> _dequeuePipelinePool;
 
 		private readonly ILog _log;
 
@@ -38,7 +38,7 @@ namespace Shuttle.ESB.Msmq
 			_messagePropertyFilter = new MessagePropertyFilter();
 			_messagePropertyFilter.SetAll();
 
-			_dequeuePipelinePool = new ReusableObjectPool<MsmqDequeuePipeline>();
+			_dequeuePipelinePool = new ReusableObjectPool<MsmqGetMessagePipeline>();
 
 			ReturnJournalMessages();
 		}
@@ -236,13 +236,18 @@ namespace Shuttle.ESB.Msmq
 			}
 		}
 
-		public Stream Dequeue()
+		public Stream GetMessage()
+		{
+			return GetMessage(Guid.Empty);
+		}
+
+		public Stream GetMessage(Guid messageId)
 		{
 			try
 			{
-				var pipeline = _dequeuePipelinePool.Get(_msmqDequeuePipelineType) ?? new MsmqDequeuePipeline();
+				var pipeline = _dequeuePipelinePool.Get(_msmqDequeuePipelineType) ?? new MsmqGetMessagePipeline();
 
-				pipeline.Execute(_parser, _timeout);
+				pipeline.Execute(_parser, messageId, _timeout);
 
 				_dequeuePipelinePool.Release(pipeline);
 
@@ -252,44 +257,9 @@ namespace Shuttle.ESB.Msmq
 			}
 			catch (Exception ex)
 			{
-				_log.Error(string.Format(MsmqResources.DequeueError, Uri, ex.CompactMessages()));
-
-				throw;
-			}
-		}
-
-		public Stream Dequeue(Guid messageId)
-		{
-			try
-			{
-				Message message;
-
-				using (var queue = CreateQueue())
-				{
-					message = queue.ReceiveByCorrelationId(string.Format(@"{0}\1", messageId), TransactionType());
-				}
-
-				if (message == null)
-				{
-					return null;
-				}
-
-				return message.BodyStream;
-			}
-			catch (MessageQueueException ex)
-			{
-				if (ex.MessageQueueErrorCode == MessageQueueErrorCode.AccessDenied)
-				{
-					AccessDenied(_log, _parser.Path);
-				}
-
-				_log.Error(string.Format(MsmqResources.DequeueMessageIdError, messageId, _parser.Path, ex.CompactMessages()));
-
-				throw;
-			}
-			catch (Exception ex)
-			{
-				_log.Error(string.Format(MsmqResources.DequeueMessageIdError, messageId, _parser.Path, ex.CompactMessages()));
+				_log.Error(!Guid.Empty.Equals(messageId)
+					           ? string.Format(MsmqResources.GetMessageError, _parser.Path, ex.CompactMessages())
+					           : string.Format(MsmqResources.GetMessageByIdError, messageId, _parser.Path, ex.CompactMessages()));
 
 				throw;
 			}
@@ -415,6 +385,20 @@ namespace Shuttle.ESB.Msmq
 
 				throw;
 			}
+		}
+
+		public void Release(Guid messageId)
+		{
+			if (!_parser.Journal
+				||
+				!Exists()
+				||
+				!JournalExists())
+			{
+				return;
+			}
+
+			new MsmqReleaseMessagePipeline().Execute(messageId, _parser, _timeout);
 		}
 
 		public static void AccessDenied(ILog log, string path)

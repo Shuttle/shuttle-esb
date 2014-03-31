@@ -30,11 +30,21 @@ namespace Shuttle.ESB.Test.Unit.Msmq
 		}
 
 		[Test]
-		public void Should_be_able_determine_transactional_parameter()
+		public void Should_be_able_create_with_default_parameter_values()
 		{
-			var parser = new MsmqUriParser(new Uri("msmq://./work-queue?transactional=true"));
+			var parser = new MsmqUriParser(new Uri("msmq://./work-queue"));
 
 			Assert.IsTrue(parser.Transactional);
+			Assert.IsTrue(parser.Journal);
+		}
+
+		[Test]
+		public void Should_be_able_to_set_parameter_values()
+		{
+			var parser = new MsmqUriParser(new Uri("msmq://./work-queue?transactional=false&journal=false"));
+
+			Assert.IsFalse(parser.Transactional);
+			Assert.IsFalse(parser.Journal);
 		}
 	}
 }

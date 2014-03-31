@@ -30,6 +30,11 @@ namespace Shuttle.ESB.Core
 			State.Add(StateKeys.DeferredQueue, queue);
 		}
 
+		public void SetCheckpointMessageId(Guid checkpointMessageId)
+		{
+			State.Add(StateKeys.CheckpointMessageId, checkpointMessageId);
+		}
+
 		public void SetErrorQueue(IQueue queue)
 		{
 			State.Add(StateKeys.ErrorQueue, queue);

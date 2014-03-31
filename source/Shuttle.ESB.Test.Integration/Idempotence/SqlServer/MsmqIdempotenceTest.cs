@@ -3,7 +3,7 @@
 namespace Shuttle.ESB.Test.Integration.Idempotence.SqlServer.Msmq
 {
 	[TestFixture]
-	public class IdempotenceTest : IdempotenceFixture
+	public class MsmqIdempotenceTest : IdempotenceFixture
 	{
 		[Test]
 		[TestCase(false, false, false, false)]

@@ -128,7 +128,7 @@ namespace Shuttle.ESB.Core
 
 		public static IServiceBusTransactionScope GetTransactionScope(this PipelineEvent pipelineEvent)
 		{
-            return pipelineEvent.Pipeline.State.Get<IServiceBusTransactionScope>(StateKeys.TransactionScope);
+			return pipelineEvent.Pipeline.State.Get<IServiceBusTransactionScope>(StateKeys.TransactionScope);
 		}
 
 		public static void SetTransactionScope(this PipelineEvent pipelineEvent, IServiceBusTransactionScope scope)
@@ -144,6 +144,16 @@ namespace Shuttle.ESB.Core
 		public static IMessageHandler GetMessageHandler(this PipelineEvent pipelineEvent)
 		{
 			return pipelineEvent.Pipeline.State.Get<IMessageHandler>(StateKeys.MessageHandler);
+		}
+
+		public static Guid GetCheckpointMessageId(this PipelineEvent pipelineEvent)
+		{
+			return pipelineEvent.Pipeline.State.Get<Guid>(StateKeys.CheckpointMessageId);
+		}
+
+		public static void SetCheckpointMessageId(this PipelineEvent pipelineEvent, Guid checkpointMessageId)
+		{
+			pipelineEvent.Pipeline.State.Replace<Guid>(StateKeys.CheckpointMessageId, checkpointMessageId);
 		}
 	}
 }

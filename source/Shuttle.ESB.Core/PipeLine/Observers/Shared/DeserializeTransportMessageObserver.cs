@@ -63,32 +63,7 @@ namespace Shuttle.ESB.Core
 		    if (!transportMessage.IsIgnoring())
 			{
 				pipelineEvent.SetWorking();
-
-				return;
 			}
-
-			using (var stream = pipelineEvent.GetTransportMessageStream().Copy())
-			{
-				if (pipelineEvent.GetDeferredQueue() == null)
-				{
-					pipelineEvent.GetWorkQueue().Enqueue(transportMessage.MessageId, stream);
-				}
-				else
-				{
-					pipelineEvent.GetDeferredQueue().Enqueue(transportMessage.MessageId, stream);
-
-					pipelineEvent.GetServiceBus().Configuration.Inbox.MessageDeferred(transportMessage.IgnoreTillDate);
-				}
-			}
-
-			pipelineEvent.SetTransactionComplete();
-			pipelineEvent.Pipeline.Abort();
-
-            if (_log.IsVerboseEnabled)
-            {
-                _log.Verbose(string.Format(ESBResources.TransportMessageIgnored, transportMessage.MessageId,
-                                          transportMessage.IgnoreTillDate.ToString(ESBResources.FormatDateFull)));
-            }
 		}
 	}
 }

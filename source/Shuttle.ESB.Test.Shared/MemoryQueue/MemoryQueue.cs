@@ -73,7 +73,7 @@ namespace Shuttle.ESB.Core
 			}
 		}
 
-		public Stream Dequeue()
+		public Stream GetMessage()
 		{
 			lock (_padlock)
 			{
@@ -91,13 +91,15 @@ namespace Shuttle.ESB.Core
 
 						return pair.Value;
 					}
+					
+					index++;
 				}
 
 				return null;
 			}
 		}
 
-		public Stream Dequeue(Guid messageId)
+		public Stream GetMessage(Guid messageId)
 		{
 			lock (_padlock)
 			{
@@ -131,6 +133,30 @@ namespace Shuttle.ESB.Core
 				if (queue.ContainsKey(messageId))
 				{
 					queue.Remove(messageId);
+				}
+
+				_unacknowledgedMessageIds.Remove(messageId);
+			}
+		}
+
+		public void Release(Guid messageId)
+		{
+			lock (_padlock)
+			{
+				var queue = _queues[Uri.ToString()];
+
+				if (!queue.ContainsKey(messageId) || !_unacknowledgedMessageIds.Contains(messageId))
+				{
+					return;
+				}
+
+				if (queue.ContainsKey(messageId))
+				{
+					var message = queue[messageId];
+					
+					queue.Remove(messageId);
+
+					queue.Add(messageId, message);
 				}
 
 				_unacknowledgedMessageIds.Remove(messageId);

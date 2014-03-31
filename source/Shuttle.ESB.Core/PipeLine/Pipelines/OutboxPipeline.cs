@@ -6,14 +6,14 @@
 			: base(bus)
 		{
 			RegisterStage("Read")
-				.WithEvent<OnDequeue>()
+				.WithEvent<OnGetMessage>()
 				.WithEvent<OnDeserializeTransportMessage>();
 
 			RegisterStage("Send")
 				.WithEvent<OnSendMessage>()
 				.WithEvent<OnAcknowledgeMessage>();
 
-			RegisterObserver(new DequeueObserver());
+			RegisterObserver(new DequeueWorkMessageObserver());
 			RegisterObserver(new DeserializeTransportMessageObserver());
 			RegisterObserver(new SendOutboxMessageObserver());
 

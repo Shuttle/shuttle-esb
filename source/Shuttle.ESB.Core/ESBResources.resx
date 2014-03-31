@@ -351,7 +351,7 @@
   <data name="FormatDateFull" xml:space="preserve">
     <value>dd MMM yyyy HH:mm:ss</value>
   </data>
-  <data name="TransportMessageIgnored" xml:space="preserve">
+  <data name="TransportMessageDeferred" xml:space="preserve">
     <value>Transport message with id '{0}' will be deferred until '{1}'.</value>
     <comment>{0} = transport message id, {1} = deferred till date</comment>
   </data>

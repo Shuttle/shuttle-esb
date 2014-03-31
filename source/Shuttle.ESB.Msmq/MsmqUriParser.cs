@@ -58,7 +58,7 @@ namespace Shuttle.ESB.Msmq
 
 			var parameters = HttpUtility.ParseQueryString(uri.Query);
 
-			SetJounal(parameters);
+			SetJournal(parameters);
 			SetTransactional(parameters);
 		}
 
@@ -81,9 +81,9 @@ namespace Shuttle.ESB.Msmq
 			}
 		}
 
-		private void SetJounal(NameValueCollection parameters)
+		private void SetJournal(NameValueCollection parameters)
 		{
-			Journal = false;
+			Journal = true;
 
 			var journalItem = parameters.Get("journal");
 

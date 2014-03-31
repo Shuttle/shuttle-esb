@@ -64,8 +64,8 @@ namespace Shuttle.ESB.Test.Integration.Idempotence.SqlServer.Msmq
 					Thread.Sleep(5);
 				}
 
-				Assert.IsNull(configuration.Inbox.ErrorQueue.Dequeue());
-				Assert.IsNull(configuration.Inbox.WorkQueue.Dequeue());
+				Assert.IsNull(configuration.Inbox.ErrorQueue.GetMessage());
+				Assert.IsNull(configuration.Inbox.WorkQueue.GetMessage());
 
 				if (enqueueUniqueMessages)
 				{

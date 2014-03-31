@@ -1,5 +1,3 @@
-using System;
-using System.Threading;
 using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ESB.Core
@@ -26,7 +24,7 @@ namespace Shuttle.ESB.Core
 
 			var pipeline = _bus.Configuration.PipelineFactory.GetPipeline<DeferredMessagePipeline>(_bus);
 
-
+			pipeline.Execute();
 		}
 	}
 }

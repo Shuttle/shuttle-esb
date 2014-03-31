@@ -104,7 +104,7 @@ namespace Shuttle.ESB.RabbitMQ
 				});
 		}
 
-		public Stream Dequeue()
+		public Stream GetMessage()
 		{
 			return AccessQueue<Stream>(() =>
 				{
@@ -124,7 +124,7 @@ namespace Shuttle.ESB.RabbitMQ
 				});
 		}
 
-		public Stream Dequeue(Guid messageId)
+		public Stream GetMessage(Guid messageId)
 		{
 			return AccessQueue<Stream>(() =>
 				{
@@ -301,6 +301,30 @@ namespace Shuttle.ESB.RabbitMQ
 
 					if (unacknowledgedMessage != null)
 					{
+						GetChannel().Acknowledge(unacknowledgedMessage.BasicDeliverEventArgs);
+					}
+
+					lock (_unacknowledgedMessageLock)
+					{
+						_unacknowledgedMessages.RemoveAll(candidate => candidate.MessageId.Equals(messageId));
+					}
+				});
+		}
+
+		public void Release(Guid messageId)
+		{
+			AccessQueue(() =>
+				{
+					UnacknowledgedMessage unacknowledgedMessage;
+
+					lock (_unacknowledgedMessageLock)
+					{
+						unacknowledgedMessage = _unacknowledgedMessages.Find(candidate => candidate.MessageId.Equals(messageId));
+					}
+
+					if (unacknowledgedMessage != null)
+					{
+						GetChannel().Model.BasicPublish("", _parser.Queue, false, false, unacknowledgedMessage.BasicDeliverEventArgs.BasicProperties, unacknowledgedMessage.BasicDeliverEventArgs.Body);
 						GetChannel().Acknowledge(unacknowledgedMessage.BasicDeliverEventArgs);
 					}
 

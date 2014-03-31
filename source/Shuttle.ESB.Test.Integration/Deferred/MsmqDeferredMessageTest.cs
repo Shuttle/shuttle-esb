@@ -3,7 +3,7 @@ using Shuttle.ESB.Test.Integration.Idempotence.SqlServer.Msmq;
 
 namespace Shuttle.ESB.Test.Integration.Deferred.Msmq
 {
-	public class DeferredMessageTest : DeferredFixture
+	public class MsmqDeferredMessageTest : DeferredFixture
 	{
 		[Test]
 		[TestCase(false, false, false)]

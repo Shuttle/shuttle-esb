@@ -1,4 +1,6 @@
-﻿namespace Shuttle.ESB.Core
+﻿using System;
+
+namespace Shuttle.ESB.Core
 {
 	public class DeferredMessagePipeline : MessagePipeline
 	{
@@ -6,18 +8,29 @@
 			: base(bus)
 		{
 			RegisterStage("Process")
-				.WithEvent<OnDequeue>()
-				.WithEvent<OnDeserializeTransportMessage>();
+				.WithEvent<OnGetMessage>()
+				.WithEvent<OnDeserializeTransportMessage>()
+				.WithEvent<OnProcessDeferredMessage>();
 
-			RegisterStage("Send")
-				.WithEvent<OnSendMessage>()
-				.WithEvent<OnCompleteTransactionScope>()
-				.WithEvent<OnDisposeTransactionScope>();
+			RegisterObserver(new DequeueDeferredMessageObserver());
+			RegisterObserver(new DeserializeTransportMessageObserver());
+			RegisterObserver(new ProcessDeferredMessageObserver());
+		}
 
-			//RegisterObserver(new DeferredMessageDequeueObserver());
-			//RegisterObserver(new DeferredMessageDeserializeTransportMessageObserver());
-			RegisterObserver(new SendMessageObserver());
-			RegisterObserver(new TransactionScopeObserver());
+		public override void Obtained()
+		{
+			base.Obtained();
+
+			SetWorkQueue(_bus.Configuration.Inbox.WorkQueue);
+			SetErrorQueue(_bus.Configuration.Inbox.ErrorQueue);
+			SetDeferredQueue(_bus.Configuration.Inbox.DeferredQueue);
+		}
+
+		public bool Execute(Guid checkpointMessageId)
+		{
+			SetCheckpointMessageId(checkpointMessageId);
+
+			return Execute();
 		}
 	}
 }

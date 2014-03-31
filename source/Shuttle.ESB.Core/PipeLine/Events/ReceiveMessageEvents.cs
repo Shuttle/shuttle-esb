@@ -2,15 +2,15 @@
 
 namespace Shuttle.ESB.Core
 {
-	public class OnPeek : PipelineEvent
-	{
-	}
-
-	public class OnDequeue : PipelineEvent
+	public class OnGetMessage : PipelineEvent
 	{
 	}
 
 	public class OnDeserializeTransportMessage : PipelineEvent
+	{
+	}
+
+	public class OnAfterDeserializeTransportMessage : PipelineEvent
 	{
 	}
 
@@ -51,6 +51,10 @@ namespace Shuttle.ESB.Core
 	}
 
 	public class OnSendDeferred : PipelineEvent
+	{
+	}
+
+	public class OnProcessDeferredMessage : PipelineEvent
 	{
 	}
 }

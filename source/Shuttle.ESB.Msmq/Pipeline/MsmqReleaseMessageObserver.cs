@@ -4,14 +4,14 @@ using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ESB.Msmq
 {
-	public class MsmqReturnJournalObserver :
-		IPipelineObserver<OnReturnJournalMessages>,
+	public class MsmqReleaseMessageObserver :
+		IPipelineObserver<OnReleaseMessage>,
 		IPipelineObserver<OnStart>
 	{
 		private readonly MessagePropertyFilter _messagePropertyFilter;
 		private readonly ILog _log;
 
-		public MsmqReturnJournalObserver()
+		public MsmqReleaseMessageObserver()
 		{
 			_log = Log.For(this);
 
@@ -37,44 +37,38 @@ namespace Shuttle.ESB.Msmq
 			}
 		}
 
-		public void Execute(OnReturnJournalMessages pipelineEvent)
+		public void Execute(OnReleaseMessage pipelineEvent)
 		{
 			var parser = pipelineEvent.Pipeline.State.Get<MsmqUriParser>();
 			var tx = pipelineEvent.Pipeline.State.Get<MessageQueueTransaction>();
 			var queue = pipelineEvent.Pipeline.State.Get<MessageQueue>("queue");
 			var journalQueue = pipelineEvent.Pipeline.State.Get<MessageQueue>("journalQueue");
 			var timeout = pipelineEvent.Pipeline.State.Get<TimeSpan>("timeout");
-			var done = false;
 
 			try
 			{
-				while (!done)
+				var journalMessage = ReceiveMessage(pipelineEvent.Pipeline.State.Get<Guid>("messageId"), tx, journalQueue, timeout);
+
+				if (journalMessage == null)
 				{
-					var journalMessage = DequeueJournalMessage(tx, journalQueue, timeout);
+					return;
+				}
 
-					if (journalMessage != null)
+				var message = new Message
 					{
-						var message = new Message
-							{
-								Recoverable = true,
-								Label = journalMessage.Label,
-								CorrelationId = string.Format(@"{0}\1", journalMessage.Label),
-								BodyStream = journalMessage.BodyStream.Copy()
-							};
+						Recoverable = true,
+						Label = journalMessage.Label,
+						CorrelationId = string.Format(@"{0}\1", journalMessage.Label),
+						BodyStream = journalMessage.BodyStream.Copy()
+					};
 
-						if (tx != null)
-						{
-							queue.Send(message, tx);
-						}
-						else
-						{
-							queue.Send(message, MessageQueueTransactionType.None);
-						}
-					}
-					else
-					{
-						done = true;
-					}
+				if (tx != null)
+				{
+					queue.Send(message, tx);
+				}
+				else
+				{
+					queue.Send(message, MessageQueueTransactionType.None);
 				}
 			}
 			catch (MessageQueueException ex)
@@ -90,13 +84,15 @@ namespace Shuttle.ESB.Msmq
 			}
 		}
 
-		private Message DequeueJournalMessage(MessageQueueTransaction tx, MessageQueue journalQueue, TimeSpan timeout)
+		private Message ReceiveMessage(Guid messageId, MessageQueueTransaction tx, MessageQueue journalQueue, TimeSpan timeout)
 		{
 			try
 			{
+				var correlationId = string.Format(@"{0}\1", messageId);
+
 				return tx != null
-					       ? journalQueue.Receive(timeout, tx)
-					       : journalQueue.Receive(timeout, MessageQueueTransactionType.None);
+					       ? journalQueue.ReceiveByCorrelationId(correlationId, timeout, tx)
+					       : journalQueue.ReceiveByCorrelationId(correlationId, timeout, MessageQueueTransactionType.None);
 			}
 			catch (MessageQueueException ex)
 			{

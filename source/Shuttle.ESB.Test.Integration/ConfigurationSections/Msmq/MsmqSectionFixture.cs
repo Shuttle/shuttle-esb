@@ -6,7 +6,7 @@ namespace Shuttle.ESB.Test.Integration.Msmq
 	{
 		protected MsmqSection GetMsmqSection(string file)
 		{
-			return MsmqSection.Open(string.Format(@".\Msmq\files\{0}", file));
+			return MsmqSection.Open(string.Format(@".\ConfigurationSections\Msmq\files\{0}", file));
 		}
 	}
 }
