@@ -28,5 +28,21 @@ namespace Shuttle.ESB.Test.Unit.RabbitMQ
 		{
 			Assert.Throws<InvalidSchemeException>(() => new RabbitMQUriParser(new Uri("sql://./work-queue")));
 		}
+
+		[Test]
+		public void Should_be_able_to_create_with_default_parameters()
+		{
+			var parser = new RabbitMQUriParser(new Uri("rabbitmq://./work-queue"));
+
+			Assert.IsTrue(parser.Consume);
+		}
+
+		[Test]
+		public void Should_be_able_to_create_with_set_parameters()
+		{
+			var parser = new RabbitMQUriParser(new Uri("rabbitmq://./work-queue?consume=false"));
+
+			Assert.IsFalse(parser.Consume);
+		}
 	}
 }

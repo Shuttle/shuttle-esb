@@ -50,7 +50,7 @@ namespace Shuttle.ESB.Msmq
 			{
 				while (!done)
 				{
-					var journalMessage = DequeueJournalMessage(tx, journalQueue, timeout);
+					var journalMessage = DequeueJournalMessage(parser.Transactional, tx, journalQueue, timeout);
 
 					if (journalMessage != null)
 					{
@@ -68,7 +68,7 @@ namespace Shuttle.ESB.Msmq
 						}
 						else
 						{
-							queue.Send(message, MessageQueueTransactionType.None);
+							queue.Send(message, MsmqQueue.TransactionType(parser.Transactional));
 						}
 					}
 					else
@@ -90,13 +90,13 @@ namespace Shuttle.ESB.Msmq
 			}
 		}
 
-		private Message DequeueJournalMessage(MessageQueueTransaction tx, MessageQueue journalQueue, TimeSpan timeout)
+		private Message DequeueJournalMessage(bool transactional, MessageQueueTransaction tx, MessageQueue journalQueue, TimeSpan timeout)
 		{
 			try
 			{
 				return tx != null
 					       ? journalQueue.Receive(timeout, tx)
-					       : journalQueue.Receive(timeout, MessageQueueTransactionType.None);
+						   : journalQueue.Receive(timeout, MsmqQueue.TransactionType(transactional));
 			}
 			catch (MessageQueueException ex)
 			{

@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
-using Shuttle.ESB.Test.Integration.Idempotence.SqlServer.Msmq;
 
-namespace Shuttle.ESB.Test.Integration.Deferred.Msmq
+namespace Shuttle.ESB.Test.Integration.Deferred
 {
 	public class MsmqDeferredMessageTest : DeferredFixture
 	{
@@ -18,7 +17,7 @@ namespace Shuttle.ESB.Test.Integration.Deferred.Msmq
 		{
 			var queueUriFormat = string.Concat("msmq://./{0}?transactional=", isTransactionalQueue);
 
-			TestDeferredProcessing(string.Concat(queueUriFormat, "&journal=", useJournal), queueUriFormat, queueUriFormat, isTransactionalEndpoint);
+			TestDeferredProcessing(string.Concat(queueUriFormat, "&journal=", useJournal), string.Concat(queueUriFormat, "&journal=", useJournal), string.Concat(queueUriFormat, "&journal=false"), isTransactionalEndpoint);
 		}
 	}
 }

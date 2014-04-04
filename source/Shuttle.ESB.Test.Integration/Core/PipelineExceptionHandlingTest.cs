@@ -43,7 +43,7 @@ namespace Shuttle.ESB.Test.Integration.Core
 
 				inboxWorkQueue.Enqueue(message.MessageId, configuration.Serializer.Serialize(message));
 
-				Assert.AreEqual(1, inboxWorkQueue.Count());
+				Assert.IsFalse(inboxWorkQueue.IsEmpty());
 
 				bus.Start();
 

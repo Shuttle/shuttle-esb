@@ -351,7 +351,7 @@
   <data name="FormatDateFull" xml:space="preserve">
     <value>dd MMM yyyy HH:mm:ss</value>
   </data>
-  <data name="TransportMessageDeferred" xml:space="preserve">
+  <data name="TraceTransportMessageDeferred" xml:space="preserve">
     <value>Transport message with id '{0}' will be deferred until '{1}'.</value>
     <comment>{0} = transport message id, {1} = deferred till date</comment>
   </data>
@@ -461,5 +461,9 @@
   <data name="FatalIdempotenceServiceException" xml:space="preserve">
     <value>Encountered a fatal exception accessing the idempotence service type '{0}'.  Without the idempotence service operational the integrity of the message processing cannot be guaranteed.  The pipeline has been aborted.  Exception: {1}</value>
     <comment>{0} = full type name of the idempotence service, {1} = compact exception message</comment>
+  </data>
+  <data name="TraceDeferredTransportMessageReturned" xml:space="preserve">
+    <value>Deferred transport message with id '{0}' has been returned to the inbox work queue.</value>
+    <comment>{0} = message id</comment>
   </data>
 </root>

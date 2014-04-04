@@ -36,46 +36,48 @@ namespace Shuttle.ESB.Core
 						return;
 					}
 
-					var stream = bus.Configuration.Serializer.Serialize(transportMessage);
-					var handler = pipelineEvent.GetMessageHandler();
-					var handlerFullTypeName = handler != null ? handler.GetType().FullName : "(handler is null)";
-					var currentRetryCount = transportMessage.FailureMessages.Count;
-
 					var action = bus.Configuration.Policy.EvaluateMessageHandlingFailure(pipelineEvent);
 
 					transportMessage.RegisterFailure(pipelineEvent.Pipeline.Exception.CompactMessages(), action.TimeSpanToIgnoreRetriedMessage);
 
-					var retry = pipelineEvent.Pipeline.StageName.Equals("Handle")
-								&&
-								!(pipelineEvent.Pipeline.Exception is UnrecoverableHandlerException)
-								&&
-								action.Retry;
-
-					if (retry)
+					using (var stream = bus.Configuration.Serializer.Serialize(transportMessage))
 					{
-						Log.For(this)
-							.Warning(string.Format(ESBResources.MessageHandlerExceptionWillRetry,
-												   handlerFullTypeName,
-												   pipelineEvent.Pipeline.Exception.CompactMessages(),
-												   transportMessage.MessageType,
-												   transportMessage.MessageId,
-												   currentRetryCount,
-												   pipelineEvent.GetMaximumFailureCount()));
+						var handler = pipelineEvent.GetMessageHandler();
+						var handlerFullTypeName = handler != null ? handler.GetType().FullName : "(handler is null)";
+						var currentRetryCount = transportMessage.FailureMessages.Count;
 
-						pipelineEvent.GetWorkQueue().Enqueue(transportMessage.MessageId, stream);
-					}
-					else
-					{
-						Log.For(this)
-							.Error(string.Format(ESBResources.MessageHandlerExceptionFailure,
-												 handlerFullTypeName,
-												 pipelineEvent.Pipeline.Exception.CompactMessages(),
-												 transportMessage.MessageType,
-												 transportMessage.MessageId,
-												 pipelineEvent.GetMaximumFailureCount(),
-												 pipelineEvent.GetErrorQueue().Uri));
+						var retry = pipelineEvent.Pipeline.StageName.Equals("Handle")
+						            &&
+						            !(pipelineEvent.Pipeline.Exception is UnrecoverableHandlerException)
+						            &&
+						            action.Retry;
 
-						pipelineEvent.GetErrorQueue().Enqueue(transportMessage.MessageId, stream);
+						if (retry)
+						{
+							Log.For(this)
+							   .Warning(string.Format(ESBResources.MessageHandlerExceptionWillRetry,
+							                          handlerFullTypeName,
+							                          pipelineEvent.Pipeline.Exception.CompactMessages(),
+							                          transportMessage.MessageType,
+							                          transportMessage.MessageId,
+							                          currentRetryCount,
+							                          pipelineEvent.GetMaximumFailureCount()));
+
+							pipelineEvent.GetWorkQueue().Enqueue(transportMessage.MessageId, stream);
+						}
+						else
+						{
+							Log.For(this)
+							   .Error(string.Format(ESBResources.MessageHandlerExceptionFailure,
+							                        handlerFullTypeName,
+							                        pipelineEvent.Pipeline.Exception.CompactMessages(),
+							                        transportMessage.MessageType,
+							                        transportMessage.MessageId,
+							                        pipelineEvent.GetMaximumFailureCount(),
+							                        pipelineEvent.GetErrorQueue().Uri));
+
+							pipelineEvent.GetErrorQueue().Enqueue(transportMessage.MessageId, stream);
+						}
 					}
 
 					pipelineEvent.GetWorkQueue().Acknowledge(transportMessage.MessageId);

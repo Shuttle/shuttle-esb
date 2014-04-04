@@ -1,66 +1,93 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using NUnit.Framework;
+using Shuttle.Core.Infrastructure;
 using Shuttle.ESB.Core;
 using Shuttle.ESB.Test.Shared.Mocks;
+using Guard = Shuttle.Core.Infrastructure.Guard;
 
-namespace Shuttle.ESB.Test.Integration.Idempotence.SqlServer.Msmq
+namespace Shuttle.ESB.Test.Integration.Deferred
 {
 	public class DeferredFixture : IntegrationFixture
 	{
-		protected void TestDeferredProcessing(string workQueueUriFormat, string deferredQueueUriFormat, string errorQueueUriFormat, bool isTransactional)
+		private class DeferredMessageModule :
+			IModule,
+			IPipelineObserver<OnAfterHandleMessage>,
+			IPipelineObserver<OnAfterProcessDeferredMessage>
 		{
-			var configuration = GetInboxConfiguration(workQueueUriFormat, deferredQueueUriFormat, errorQueueUriFormat, 1, isTransactional);
-			var padlock = new object();
+			private readonly string inboxMessagePipelineName = typeof (InboxMessagePipeline).FullName;
+			private readonly string deferredMessagePipelineName = typeof (DeferredMessagePipeline).FullName;
+
+			public bool MessageHandled { get; private set; }
+			public bool DeferredMessageReturned { get; private set; }
+
+			public void Initialize(IServiceBus bus)
+			{
+				Guard.AgainstNull(bus, "bus");
+
+				bus.Events.PipelineCreated += PipelineCreated;
+			}
+
+			private void PipelineCreated(object sender, PipelineEventArgs e)
+			{
+				if (!e.Pipeline.GetType().FullName.Equals(inboxMessagePipelineName, StringComparison.InvariantCultureIgnoreCase)
+				    &&
+				    !e.Pipeline.GetType().FullName.Equals(deferredMessagePipelineName, StringComparison.InvariantCultureIgnoreCase))
+				{
+					return;
+				}
+
+				e.Pipeline.RegisterObserver(this);
+			}
+
+			public void Execute(OnAfterHandleMessage pipelineEvent)
+			{
+				MessageHandled = true;
+			}
+
+			public void Execute(OnAfterProcessDeferredMessage pipelineEvent)
+			{
+				DeferredMessageReturned = pipelineEvent.GetDeferredMessageReturned();
+			}
+		}
+
+		private const int MillisecondsToDefer = 1000; // give the service bus enough time to start up
+
+		protected void TestDeferredProcessing(string workQueueUriFormat, string deferredQueueUriFormat,
+		                                      string errorQueueUriFormat, bool isTransactional)
+		{
+			var configuration = GetInboxConfiguration(workQueueUriFormat, deferredQueueUriFormat, errorQueueUriFormat, 1,
+			                                          isTransactional);
+
+			var module = new DeferredMessageModule();
+
+			configuration.Modules.Add(module);
 
 			using (var bus = new ServiceBus(configuration))
 			{
-				var message = bus.CreateTransportMessage(new NoHandlerCommand());
+				bus.Start();
 
-				message.IgnoreTillDate = DateTime.Now.AddMilliseconds(500);
+				var message = bus.CreateTransportMessage(new SimpleCommand());
+
+				message.IgnoreTillDate = DateTime.Now.AddMilliseconds(MillisecondsToDefer);
 				message.RecipientInboxWorkQueueUri = configuration.Inbox.WorkQueue.Uri.ToString();
 
 				configuration.Inbox.WorkQueue.Enqueue(message.MessageId, configuration.Serializer.Serialize(message));
 
-				var idleThreads = new List<int>();
+				var timeout = DateTime.Now.AddMilliseconds(5000);
 
-				bus.Events.ThreadWaiting += (sender, args) =>
-					{
-						lock (padlock)
-						{
-							if (idleThreads.Contains(Thread.CurrentThread.ManagedThreadId))
-							{
-								return;
-							}
-
-							idleThreads.Add(Thread.CurrentThread.ManagedThreadId);
-						}
-					};
-
-				bus.Start();
-
-				while (idleThreads.Count < 1)
+				// wait for the message to be returned from the deferred queue
+				while ((!module.DeferredMessageReturned || !module.MessageHandled)
+				       &&
+				       timeout > DateTime.Now)
 				{
 					Thread.Sleep(5);
 				}
 
-				lock (padlock)
-				{
-					while (configuration.Inbox.DeferredQueue.Count() > 0)
-					{
-						Thread.Sleep(5);
-					}
+				Assert.IsTrue(module.DeferredMessageReturned, "Deferred message was never returned.");
+				Assert.IsTrue(module.MessageHandled, "Deferred message was never handled.");
 
-					idleThreads.Clear();
-				}
-
-				while (idleThreads.Count < 1)
-				{
-					Thread.Sleep(5);
-				}
-
-				Assert.IsNull(configuration.Inbox.ErrorQueue.GetMessage());
+				Assert.IsTrue(configuration.Inbox.ErrorQueue.IsEmpty());
 				Assert.IsNull(configuration.Inbox.DeferredQueue.GetMessage());
 				Assert.IsNull(configuration.Inbox.WorkQueue.GetMessage());
 			}
@@ -68,7 +95,9 @@ namespace Shuttle.ESB.Test.Integration.Idempotence.SqlServer.Msmq
 			AttemptDropQueues(workQueueUriFormat, errorQueueUriFormat);
 		}
 
-		private static ServiceBusConfiguration GetInboxConfiguration(string workQueueUriFormat, string deferredQueueUriFormat, string errorQueueUriFormat, int threadCount, bool isTransactional)
+		private static ServiceBusConfiguration GetInboxConfiguration(string workQueueUriFormat, string deferredQueueUriFormat,
+		                                                             string errorQueueUriFormat, int threadCount,
+		                                                             bool isTransactional)
 		{
 			var configuration = DefaultConfiguration(isTransactional);
 

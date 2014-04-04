@@ -10,7 +10,9 @@ namespace Shuttle.ESB.Core
 			RegisterStage("Process")
 				.WithEvent<OnGetMessage>()
 				.WithEvent<OnDeserializeTransportMessage>()
-				.WithEvent<OnProcessDeferredMessage>();
+				.WithEvent<OnAfterDeserializeTransportMessage>()
+				.WithEvent<OnProcessDeferredMessage>()
+				.WithEvent<OnAfterProcessDeferredMessage>();
 
 			RegisterObserver(new DequeueDeferredMessageObserver());
 			RegisterObserver(new DeserializeTransportMessageObserver());
@@ -26,9 +28,11 @@ namespace Shuttle.ESB.Core
 			SetDeferredQueue(_bus.Configuration.Inbox.DeferredQueue);
 		}
 
-		public bool Execute(Guid checkpointMessageId)
+		public bool Execute(Guid checkpointMessageId, DateTime nextDeferredProcessDate)
 		{
 			SetCheckpointMessageId(checkpointMessageId);
+			SetNextDeferredProcessDate(nextDeferredProcessDate);
+			SetDeferredMessageReturned(false);
 
 			return Execute();
 		}

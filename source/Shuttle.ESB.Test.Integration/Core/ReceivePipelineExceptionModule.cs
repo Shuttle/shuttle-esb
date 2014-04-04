@@ -110,7 +110,7 @@ namespace Shuttle.ESB.Test.Integration.Core
 
 		private void Assertion()
 		{
-			RunAssertion(() => Assert.AreEqual(1, inboxWorkQueue.Count()));
+			RunAssertion(() => Assert.IsFalse(inboxWorkQueue.IsEmpty()));
 		}
 
 		private void RunAssertion(Action action)

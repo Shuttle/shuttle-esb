@@ -691,6 +691,15 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Deferred transport message with id &apos;{0}&apos; has been returned to the inbox work queue..
+        /// </summary>
+        public static string TraceDeferredTransportMessageReturned {
+            get {
+                return ResourceManager.GetString("TraceDeferredTransportMessageReturned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Forwarding transport message type &apos;{0}&apos; with id &apos;{1}&apos; to &apos;{2}&apos;..
         /// </summary>
         public static string TraceForwarding {
@@ -754,6 +763,15 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Transport message with id &apos;{0}&apos; will be deferred until &apos;{1}&apos;..
+        /// </summary>
+        public static string TraceTransportMessageDeferred {
+            get {
+                return ResourceManager.GetString("TraceTransportMessageDeferred", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Call to &apos;{0}.{1}&apos; already contains an active TransactionScope..
         /// </summary>
         public static string TransactionAlreadyStarted {
@@ -768,15 +786,6 @@ namespace Shuttle.ESB.Core {
         public static string TransactionRequired {
             get {
                 return ResourceManager.GetString("TransactionRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Transport message with id &apos;{0}&apos; will be deferred until &apos;{1}&apos;..
-        /// </summary>
-        public static string TransportMessageDeferred {
-            get {
-                return ResourceManager.GetString("TransportMessageDeferred", resourceCulture);
             }
         }
         

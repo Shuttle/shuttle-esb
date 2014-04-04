@@ -155,5 +155,25 @@ namespace Shuttle.ESB.Core
 		{
 			pipelineEvent.Pipeline.State.Replace<Guid>(StateKeys.CheckpointMessageId, checkpointMessageId);
 		}
+
+		public static DateTime GetNextDeferredProcessDate(this PipelineEvent pipelineEvent)
+		{
+			return pipelineEvent.Pipeline.State.Get<DateTime>(StateKeys.NextDeferredProcessDate);
+		}
+
+		public static void SetNextDeferredProcessDate(this PipelineEvent pipelineEvent, DateTime nextDeferredProcessDate)
+		{
+			pipelineEvent.Pipeline.State.Replace<DateTime>(StateKeys.NextDeferredProcessDate, nextDeferredProcessDate);
+		}
+
+		public static bool GetDeferredMessageReturned(this PipelineEvent pipelineEvent)
+		{
+			return pipelineEvent.Pipeline.State.Get<bool>(StateKeys.DeferredMessageReturned);
+		}
+
+		public static void SetDeferredMessageReturned(this PipelineEvent pipelineEvent, bool deferredMessageReturned)
+		{
+			pipelineEvent.Pipeline.State.Replace<bool>(StateKeys.DeferredMessageReturned, deferredMessageReturned);
+		}
 	}
 }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Linq;
+using System.Web;
 using Shuttle.Core.Infrastructure;
 using Shuttle.ESB.Core;
 
@@ -70,8 +72,32 @@ namespace Shuttle.ESB.RabbitMQ
 			Uri = builder.Uri;
 
 			Local = Uri.Host.Equals("localhost", StringComparison.OrdinalIgnoreCase) || Uri.Host.Equals("127.0.0.1");
+
+			var parameters = HttpUtility.ParseQueryString(uri.Query);
+
+			SetConsume(parameters);
 		}
 
+		private void SetConsume(NameValueCollection parameters)
+		{
+			Consume = true;
+
+			var parameter = parameters.Get("consume");
+
+			if (parameter == null)
+			{
+				return;
+			}
+
+			bool consume;
+
+			if (bool.TryParse(parameter, out consume))
+			{
+				Consume = consume;
+			}
+		}
+
+		public bool Consume { get; private set; }
 		public string Username { get; private set; }
 		public string Password { get; private set; }
 		public string Host { get; private set; }

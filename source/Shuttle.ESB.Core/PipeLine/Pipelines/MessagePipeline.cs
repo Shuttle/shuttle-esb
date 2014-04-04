@@ -35,6 +35,16 @@ namespace Shuttle.ESB.Core
 			State.Add(StateKeys.CheckpointMessageId, checkpointMessageId);
 		}
 
+		public void SetNextDeferredProcessDate(DateTime nextDeferredProcessDate)
+		{
+			State.Add(StateKeys.NextDeferredProcessDate, nextDeferredProcessDate);
+		}
+
+		public void SetDeferredMessageReturned(bool deferredMessageReturned)
+		{
+			State.Add(StateKeys.DeferredMessageReturned, deferredMessageReturned);
+		}
+
 		public void SetErrorQueue(IQueue queue)
 		{
 			State.Add(StateKeys.ErrorQueue, queue);

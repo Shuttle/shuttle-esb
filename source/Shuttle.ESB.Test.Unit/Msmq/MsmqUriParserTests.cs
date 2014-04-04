@@ -30,7 +30,7 @@ namespace Shuttle.ESB.Test.Unit.Msmq
 		}
 
 		[Test]
-		public void Should_be_able_create_with_default_parameter_values()
+		public void Should_be_able_to_create_with_default_parameter_values()
 		{
 			var parser = new MsmqUriParser(new Uri("msmq://./work-queue"));
 

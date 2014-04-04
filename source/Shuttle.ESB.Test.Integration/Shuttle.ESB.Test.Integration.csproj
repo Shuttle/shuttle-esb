@@ -101,6 +101,8 @@
     <Compile Include="ConcurrentHandler.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="ConfigurationAvailableEventArgs.cs" />
+    <Compile Include="Deferred\RabbitMQDeferredMessageTest.cs" />
+    <Compile Include="Deferred\SqlDeferredMessageTest.cs" />
     <Compile Include="Deferred\DeferredFixture.cs" />
     <Compile Include="Deferred\MsmqDeferredMessageTest.cs" />
     <Compile Include="Idempotence\IdempotenceFixture.cs" />

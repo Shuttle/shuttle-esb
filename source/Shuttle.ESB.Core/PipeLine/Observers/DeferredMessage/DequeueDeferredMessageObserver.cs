@@ -1,3 +1,4 @@
+using System;
 using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ESB.Core
@@ -24,6 +25,7 @@ namespace Shuttle.ESB.Core
             // Abort the pipeline if there is no message on the queue
             if (stream == null)
             {
+				pipelineEvent.SetNextDeferredProcessDate(DateTime.MaxValue);
 				pipelineEvent.GetServiceBus().Events.OnQueueEmpty(this, new QueueEmptyEventArgs(pipelineEvent, queue));
                 pipelineEvent.Pipeline.Abort();
             }

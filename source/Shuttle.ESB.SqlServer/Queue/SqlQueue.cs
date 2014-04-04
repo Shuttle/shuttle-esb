@@ -9,7 +9,7 @@ using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.SqlServer
 {
-	public class SqlQueue : IQueue, ICreate, IDrop, IPurge, ICount, IQueueReader
+	public class SqlQueue : IQueue, ICreate, IDrop, IPurge,  IQueueReader
 	{
 		private class UnacknowledgedMessage
 		{
@@ -85,26 +85,6 @@ namespace Shuttle.ESB.SqlServer
 			_tableName = parser.TableName;
 
 			BuildQueries();
-		}
-
-		public int Count
-		{
-			get
-			{
-				try
-				{
-					using (_databaseConnectionFactory.Create(_dataSource))
-					{
-						return _databaseGateway.GetScalarUsing<int>(_dataSource, _countQuery);
-					}
-				}
-				catch (Exception ex)
-				{
-					_log.Error(string.Format(SqlResources.CountError, Uri, ex.Message, _countQuery));
-
-					return 0;
-				}
-			}
 		}
 
 		public void Create()
@@ -226,7 +206,19 @@ namespace Shuttle.ESB.SqlServer
 
 		public bool IsEmpty()
 		{
-			return Count == 0;
+			try
+			{
+				using (_databaseConnectionFactory.Create(_dataSource))
+				{
+					return _databaseGateway.GetScalarUsing<int>(_dataSource, _countQuery) == 0;
+				}
+			}
+			catch (Exception ex)
+			{
+				_log.Error(string.Format(SqlResources.CountError, Uri, ex.Message, _countQuery));
+
+				return true;
+			}
 		}
 
 		public Stream GetMessage()

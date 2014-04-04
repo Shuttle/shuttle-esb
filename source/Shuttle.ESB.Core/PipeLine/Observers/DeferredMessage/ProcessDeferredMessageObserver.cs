@@ -27,7 +27,13 @@ namespace Shuttle.ESB.Core
 				if (Guid.Empty.Equals(checkpointMessageId))
 				{
 					pipelineEvent.SetCheckpointMessageId(transportMessage.MessageId);
+					pipelineEvent.SetNextDeferredProcessDate(transportMessage.IgnoreTillDate);
 				}
+
+				pipelineEvent.GetDeferredQueue().Release(transportMessage.MessageId);
+				pipelineEvent.GetServiceBus().Configuration.Inbox.MessageDeferred(transportMessage.IgnoreTillDate);
+
+				pipelineEvent.SetDeferredMessageReturned(false);
 
 				return;
 			}
@@ -38,6 +44,13 @@ namespace Shuttle.ESB.Core
 			if (checkpointMessageId.Equals(transportMessage.MessageId))
 			{
 				pipelineEvent.SetCheckpointMessageId(Guid.Empty);
+			}
+
+			pipelineEvent.SetDeferredMessageReturned(true);
+
+			if (_log.IsTraceEnabled)
+			{
+				_log.Trace(string.Format(ESBResources.TraceDeferredTransportMessageReturned, transportMessage.MessageId));
 			}
 		}
     }

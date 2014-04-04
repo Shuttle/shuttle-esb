@@ -109,7 +109,7 @@ namespace Shuttle.ESB.Core
 			        if (_log.IsTraceEnabled)
 			        {
 				        _log.Trace(string.Format(ESBResources.TraceForwarding, transportMessage.MessageType,
-				                                transportMessage.MessageId, uri));
+				                                transportMessage.MessageId, new Uri(uri).Secured()));
 			        }
 
 			        bus.Send(message, uri);
@@ -131,12 +131,13 @@ namespace Shuttle.ESB.Core
 
 			        if (!bus.Configuration.RemoveMessagesNotHandled)
 			        {
-				        _log.Error(string.Format(ESBResources.MessageNotHandledFailure,
-				                                message.GetType().FullName,
-				                                transportMessage.MessageId,
-				                                pipelineEvent.GetErrorQueue().Uri));
+				        var error = string.Format(ESBResources.MessageNotHandledFailure, message.GetType().FullName, transportMessage.MessageId, pipelineEvent.GetErrorQueue().Uri.Secured());
 
-				        using (var stream = pipelineEvent.GetTransportMessageStream().Copy())
+				        _log.Error(error);
+
+						transportMessage.RegisterFailure(error);
+
+				        using (var stream = bus.Configuration.Serializer.Serialize(transportMessage))
 				        {
 					        pipelineEvent.GetErrorQueue().Enqueue(transportMessage.MessageId, stream);
 				        }

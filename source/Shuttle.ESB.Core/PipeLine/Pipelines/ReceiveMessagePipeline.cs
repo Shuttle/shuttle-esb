@@ -16,6 +16,7 @@
 			RegisterStage("Handle")
 				.WithEvent<OnStartTransactionScope>()
 				.WithEvent<OnHandleMessage>()
+				.WithEvent<OnAfterHandleMessage>()
 				.WithEvent<OnCompleteTransactionScope>()
 				.WithEvent<OnDisposeTransactionScope>()
 				.WithEvent<OnSendDeferred>()

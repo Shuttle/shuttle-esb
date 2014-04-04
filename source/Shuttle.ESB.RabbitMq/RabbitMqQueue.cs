@@ -4,13 +4,12 @@ using System.IO;
 using System.Threading;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using RabbitMQ.Client.MessagePatterns;
 using Shuttle.Core.Infrastructure;
 using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.RabbitMQ
 {
-	public class RabbitMQQueue : IQueue, ICount, ICreate, IDrop, IDisposable, IPurge
+	public class RabbitMQQueue : IQueue, ICreate, IDrop, IDisposable, IPurge
 	{
 		private class UnacknowledgedMessage
 		{
@@ -24,7 +23,6 @@ namespace Shuttle.ESB.RabbitMQ
 			public Guid MessageId { get; private set; }
 		}
 
-		private readonly int _timeout;
 		private readonly IRabbitMQConfiguration _configuration;
 		private readonly List<UnacknowledgedMessage> _unacknowledgedMessages = new List<UnacknowledgedMessage>();
 
@@ -52,10 +50,6 @@ namespace Shuttle.ESB.RabbitMQ
 
 			_configuration = configuration;
 
-			_timeout = _parser.Local
-				           ? configuration.LocalQueueTimeoutMilliseconds
-				           : configuration.RemoteQueueTimeoutMilliseconds;
-
 			_operationRetryCount = _configuration.OperationRetryCount;
 
 			if (_operationRetryCount < 1)
@@ -78,7 +72,19 @@ namespace Shuttle.ESB.RabbitMQ
 
 		public bool IsEmpty()
 		{
-			return Count == 0;
+			return AccessQueue(() =>
+			{
+				var result = GetChannel().Model.BasicGet(_parser.Queue, false);
+
+				if (result == null)
+				{
+					return true;
+				}
+
+				GetChannel().Model.BasicReject(result.DeliveryTag, true);
+
+				return false;
+			});
 		}
 
 		public bool HasUserInfo
@@ -167,11 +173,6 @@ namespace Shuttle.ESB.RabbitMQ
 				});
 		}
 
-		public int Count
-		{
-			get { return AccessQueue(() => (int) QueueDeclare(GetChannel().Model).MessageCount); }
-		}
-
 		public void Drop()
 		{
 			AccessQueue(() => { GetChannel().Model.QueueDelete(_parser.Queue); });
@@ -249,7 +250,7 @@ namespace Shuttle.ESB.RabbitMQ
 
 				QueueDeclare(model);
 
-				var channel = new Channel(model, new Subscription(model, _parser.Queue, false), _timeout);
+				var channel = new Channel(model, _parser, _configuration);
 
 				_channels.Add(key, channel);
 

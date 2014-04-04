@@ -20,7 +20,7 @@ namespace Shuttle.ESB.Core
 
 			var transportMessage = pipelineEvent.GetTransportMessage();
 
-		    if (!transportMessage.IsIgnoring())
+			if (!transportMessage.IsIgnoring())
 			{
 				return;
 			}
@@ -39,13 +39,15 @@ namespace Shuttle.ESB.Core
 				}
 			}
 
-			pipelineEvent.Pipeline.Abort();
+			pipelineEvent.GetWorkQueue().Acknowledge(transportMessage.MessageId);
 
-            if (_log.IsVerboseEnabled)
-            {
-                _log.Verbose(string.Format(ESBResources.TransportMessageDeferred, transportMessage.MessageId,
-                                          transportMessage.IgnoreTillDate.ToString(ESBResources.FormatDateFull)));
-            }
+			if (_log.IsTraceEnabled)
+			{
+				_log.Trace(string.Format(ESBResources.TraceTransportMessageDeferred, transportMessage.MessageId,
+										  transportMessage.IgnoreTillDate.ToString(ESBResources.FormatDateFull)));
+			}
+
+			pipelineEvent.Pipeline.Abort();
 		}
 	}
 }

@@ -10,7 +10,7 @@ using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.Msmq
 {
-	public class MsmqQueue : IQueue, ICreate, IDrop, IPurge, ICount, IQueueReader
+	public class MsmqQueue : IQueue, ICreate, IDrop, IPurge, IQueueReader
 	{
 		private readonly TimeSpan _timeout;
 		private readonly MsmqUriParser _parser;
@@ -55,25 +55,6 @@ namespace Shuttle.ESB.Msmq
 			}
 
 			new MsmqReturnJournalPipeline().Execute(_parser, _timeout);
-		}
-
-		public int Count
-		{
-			get
-			{
-				var count = 0;
-
-				using (var queue = CreateQueue())
-				using (var enumerator = queue.GetMessageEnumerator2())
-				{
-					while (enumerator.MoveNext(new TimeSpan(0, 0, 0)))
-					{
-						count++;
-					}
-				}
-
-				return count;
-			}
 		}
 
 		public void Create()
@@ -214,7 +195,7 @@ namespace Shuttle.ESB.Msmq
 			{
 				using (var queue = CreateQueue())
 				{
-					queue.Send(sendMessage, TransactionType());
+					queue.Send(sendMessage, TransactionType(_parser.Transactional));
 				}
 			}
 			catch (MessageQueueException ex)
@@ -338,12 +319,12 @@ namespace Shuttle.ESB.Msmq
 			}
 		}
 
-		private MessageQueueTransactionType TransactionType()
+		public static MessageQueueTransactionType TransactionType(bool transactional)
 		{
-			return _parser.Transactional
+			return transactional
 					   ? InTransactionScope
 							 ? MessageQueueTransactionType.Automatic
-							 : _parser.Transactional
+							 : transactional
 								   ? MessageQueueTransactionType.Single
 								   : MessageQueueTransactionType.None
 					   : MessageQueueTransactionType.None;
@@ -365,7 +346,7 @@ namespace Shuttle.ESB.Msmq
 			{
 				using (var queue = CreateJournalQueue())
 				{
-					queue.ReceiveByCorrelationId(string.Format(@"{0}\1", messageId), TransactionType());
+					queue.ReceiveByCorrelationId(string.Format(@"{0}\1", messageId), TransactionType(_parser.Transactional));
 				}
 			}
 			catch (MessageQueueException ex)

@@ -7,11 +7,11 @@ namespace Shuttle.ESB.Modules
 	public class ActiveTimeRangeModule : IModule, IDisposable, IActiveState
 	{
 		private volatile bool active;
-		private readonly string startupPipelineName = typeof (StartupPipeline).FullName;
-		
+		private readonly string startupPipelineName = typeof(StartupPipeline).FullName;
+
 		public void Initialize(IServiceBus bus)
 		{
-			Guard.AgainstNull(bus,"bus");
+			Guard.AgainstNull(bus, "bus");
 
 			bus.Events.PipelineCreated += PipelineCreated;
 		}

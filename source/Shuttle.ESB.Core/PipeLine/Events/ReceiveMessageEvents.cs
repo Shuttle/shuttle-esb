@@ -26,6 +26,10 @@ namespace Shuttle.ESB.Core
 	{
 	}
 
+	public class OnAfterHandleMessage : PipelineEvent
+	{
+	}
+
 	public class OnRemoveJournalMessage : PipelineEvent
 	{
 	}
@@ -55,6 +59,10 @@ namespace Shuttle.ESB.Core
 	}
 
 	public class OnProcessDeferredMessage : PipelineEvent
+	{
+	}
+
+	public class OnAfterProcessDeferredMessage : PipelineEvent
 	{
 	}
 }

@@ -7,6 +7,7 @@ namespace Shuttle.ESB.Core
         QueueStartupAction WorkQueueStartupAction { get; set; }
         bool Distribute { get; set; }
 		IQueue DeferredQueue { get; set; }
+	    void ResetDeferredProcessing(DateTime nextDeferredProcessDate);
 	    void MessageDeferred(DateTime ignoreTillDate);
 	    bool ShouldProcessDeferred();
     }
