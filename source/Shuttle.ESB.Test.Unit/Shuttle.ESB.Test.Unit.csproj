@@ -84,8 +84,8 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Core\UriExtensionsTest.cs" />
-    <Compile Include="RabbitMq\RabbitMQQueueFactoryTest.cs" />
-    <Compile Include="RabbitMq\RabbitMQUriParserTests.cs" />
+    <Compile Include="RabbitMQ\RabbitMQQueueFactoryTest.cs" />
+    <Compile Include="RabbitMQ\RabbitMQUriParserTests.cs" />
     <Compile Include="Core\AssemblyMessageRouteSpecificationTest.cs" />
     <Compile Include="Core\CompressionAlgorithmTest.cs" />
     <Compile Include="Core\MockModule.cs" />

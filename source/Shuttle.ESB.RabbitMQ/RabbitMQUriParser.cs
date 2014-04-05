@@ -75,35 +75,35 @@ namespace Shuttle.ESB.RabbitMQ
 
 			var parameters = HttpUtility.ParseQueryString(uri.Query);
 
-			SetConsume(parameters);
+			SetPrefetchCount(parameters);
 		}
 
-		private void SetConsume(NameValueCollection parameters)
+		private void SetPrefetchCount(NameValueCollection parameters)
 		{
-			Consume = true;
+			PrefetchCount = 25;
 
-			var parameter = parameters.Get("consume");
+			var parameter = parameters.Get("prefetchCount");
 
 			if (parameter == null)
 			{
 				return;
 			}
 
-			bool consume;
+			ushort result;
 
-			if (bool.TryParse(parameter, out consume))
+			if (ushort.TryParse(parameter, out result))
 			{
-				Consume = consume;
+				PrefetchCount = result;
 			}
 		}
 
-		public bool Consume { get; private set; }
+		public ushort PrefetchCount { get; private set; }
 		public string Username { get; private set; }
 		public string Password { get; private set; }
 		public string Host { get; private set; }
 		public int Port { get; private set; }
 		public string VirtualHost { get; private set; }
 		public string Queue { get; private set; }
- 
+
 	}
 }

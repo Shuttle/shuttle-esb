@@ -12,8 +12,6 @@ namespace Shuttle.ESB.RabbitMQ
 		private readonly string _queue;
 		private Subscription _subscription;
 		private readonly int _millisecondsTimeout;
-		private readonly bool _consume;
-		private readonly Uri _uri;
 
 		public Channel(IModel model, RabbitMQUriParser parser, IRabbitMQConfiguration configuration)
 		{
@@ -23,8 +21,6 @@ namespace Shuttle.ESB.RabbitMQ
 
 			Model = model;
 
-			_consume = parser.Consume;
-			_uri = parser.Uri.Secured();
 			_queue = parser.Queue;
 
 			_millisecondsTimeout = parser.Local
@@ -36,11 +32,6 @@ namespace Shuttle.ESB.RabbitMQ
 
 		public BasicDeliverEventArgs Next()
 		{
-			if (!_consume)
-			{
-				throw new RabbitMQQueueException(string.Format(RabbitMQResources.ConsumeException, _uri));
-			}
-
 			BasicDeliverEventArgs basicDeliverEventArgs;
 
 			var next = GetSubscription().Next(_millisecondsTimeout, out basicDeliverEventArgs);
@@ -62,11 +53,6 @@ namespace Shuttle.ESB.RabbitMQ
 
 		public void Acknowledge(BasicDeliverEventArgs basicDeliverEventArgs)
 		{
-			if (!_consume)
-			{
-				throw new RabbitMQQueueException(string.Format(RabbitMQResources.ConsumeException, _uri));
-			}
-
 			GetSubscription().Ack(basicDeliverEventArgs);
 		}
 

@@ -121,10 +121,6 @@
     <value>Could not obtain connection for uri '{0}'.</value>
     <comment>{0} = queue uri</comment>
   </data>
-  <data name="ConsumeException" xml:space="preserve">
-    <value>Queue uri '{0}' has been set to not consume messages.</value>
-    <comment>{0} = queue uri</comment>
-  </data>
   <data name="SubscriptionNextConnectionException" xml:space="preserve">
     <value>The connection/model appears to have been closed for queue '{0}'.</value>
     <comment>{0} = queue name</comment>

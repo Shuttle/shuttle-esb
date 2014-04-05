@@ -34,15 +34,15 @@ namespace Shuttle.ESB.Test.Unit.RabbitMQ
 		{
 			var parser = new RabbitMQUriParser(new Uri("rabbitmq://./work-queue"));
 
-			Assert.IsTrue(parser.Consume);
+			Assert.AreEqual(25, parser.PrefetchCount);
 		}
 
 		[Test]
 		public void Should_be_able_to_create_with_set_parameters()
 		{
-			var parser = new RabbitMQUriParser(new Uri("rabbitmq://./work-queue?consume=false"));
+			var parser = new RabbitMQUriParser(new Uri("rabbitmq://./work-queue?prefetchCount=1"));
 
-			Assert.IsFalse(parser.Consume);
+			Assert.AreEqual(1, parser.PrefetchCount);
 		}
 	}
 }

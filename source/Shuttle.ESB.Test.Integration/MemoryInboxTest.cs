@@ -19,13 +19,13 @@ namespace Shuttle.ESB.Test.Integration
 		[Test]
 		public void Should_be_able_to_process_queue_timeously_without_journal()
 		{
-			TestInboxThroughput("memory://./{0}", 1000, 2500, false);
+			TestInboxThroughput("memory://./{0}", 1000, 1000, false);
 		}
 
 		[Test]
 		public void Should_be_able_to_process_queue_timeously_with_journal()
 		{
-			TestInboxThroughput("memory://./{0}", 1000, 2000, false);
+			TestInboxThroughput("memory://./{0}", 1000, 1000, false);
 		}
 
 		[Test]

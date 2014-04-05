@@ -70,15 +70,6 @@ namespace Shuttle.ESB.RabbitMQ {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Queue uri &apos;{0}&apos; has been set to not consume messages..
-        /// </summary>
-        internal static string ConsumeException {
-            get {
-                return ResourceManager.GetString("ConsumeException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The connection/model appears to have been closed for queue &apos;{0}&apos;..
         /// </summary>
         internal static string SubscriptionNextConnectionException {
