@@ -74,7 +74,7 @@ namespace Shuttle.ESB.Test.Integration.Deferred
 
 				configuration.Inbox.WorkQueue.Enqueue(message.MessageId, configuration.Serializer.Serialize(message));
 
-				var timeout = DateTime.Now.AddMilliseconds(5000);
+				var timeout = DateTime.Now.AddMilliseconds(MillisecondsToDefer + 5000);
 
 				// wait for the message to be returned from the deferred queue
 				while ((!module.DeferredMessageReturned || !module.MessageHandled)

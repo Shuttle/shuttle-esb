@@ -31,7 +31,6 @@ namespace Shuttle.ESB.Core
 				}
 
 				pipelineEvent.GetDeferredQueue().Release(transportMessage.MessageId);
-				pipelineEvent.GetServiceBus().Configuration.Inbox.MessageDeferred(transportMessage.IgnoreTillDate);
 
 				pipelineEvent.SetDeferredMessageReturned(false);
 

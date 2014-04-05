@@ -9,7 +9,8 @@ namespace Shuttle.ESB.RabbitMQ
 {
 	internal class Channel : IDisposable
 	{
-		private readonly Subscription _subscription;
+		private readonly string _queue;
+		private Subscription _subscription;
 		private readonly int _millisecondsTimeout;
 		private readonly bool _consume;
 		private readonly Uri _uri;
@@ -24,15 +25,11 @@ namespace Shuttle.ESB.RabbitMQ
 
 			_consume = parser.Consume;
 			_uri = parser.Uri.Secured();
+			_queue = parser.Queue;
 
 			_millisecondsTimeout = parser.Local
 						   ? configuration.LocalQueueTimeoutMilliseconds
 						   : configuration.RemoteQueueTimeoutMilliseconds;
-
-			if (_consume)
-			{
-				_subscription = new Subscription(model, parser.Queue, false);
-			}
 		}
 
 		public IModel Model { get; private set; }
@@ -46,7 +43,7 @@ namespace Shuttle.ESB.RabbitMQ
 
 			BasicDeliverEventArgs basicDeliverEventArgs;
 
-			var next = _subscription.Next(_millisecondsTimeout, out basicDeliverEventArgs);
+			var next = GetSubscription().Next(_millisecondsTimeout, out basicDeliverEventArgs);
 
 			if (next && basicDeliverEventArgs == null)
 			{
@@ -58,6 +55,11 @@ namespace Shuttle.ESB.RabbitMQ
 					   : null;
 		}
 
+		private Subscription GetSubscription()
+		{
+			return _subscription ?? (_subscription = new Subscription(Model, _queue, false));
+		}
+
 		public void Acknowledge(BasicDeliverEventArgs basicDeliverEventArgs)
 		{
 			if (!_consume)
@@ -65,7 +67,7 @@ namespace Shuttle.ESB.RabbitMQ
 				throw new RabbitMQQueueException(string.Format(RabbitMQResources.ConsumeException, _uri));
 			}
 
-			_subscription.Ack(basicDeliverEventArgs);
+			GetSubscription().Ack(basicDeliverEventArgs);
 		}
 
 		public void Dispose()

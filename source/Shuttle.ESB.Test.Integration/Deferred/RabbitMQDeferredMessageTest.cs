@@ -11,7 +11,7 @@ namespace Shuttle.ESB.Test.Integration.Deferred
 		{
 			var queueUriFormat = "rabbitmq://shuttle:shuttle!@localhost/{0}";
 
-			TestDeferredProcessing(queueUriFormat, queueUriFormat, string.Concat(queueUriFormat, "?consume=false"), isTransactionalEndpoint);
+			TestDeferredProcessing(queueUriFormat, queueUriFormat, queueUriFormat, isTransactionalEndpoint);
 		}
 	}
 }

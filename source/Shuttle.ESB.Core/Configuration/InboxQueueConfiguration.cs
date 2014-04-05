@@ -1,4 +1,5 @@
 using System;
+using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ESB.Core
 {
@@ -47,6 +48,8 @@ namespace Shuttle.ESB.Core
 			    }
 
 			    _nextDeferredProcessDate = nextDeferredProcessDate;
+
+				Log.Trace("[DEFERRED] - ResetDeferredProcessing : nextDeferredProcessDate = " + nextDeferredProcessDate);
 		    }
 	    }
 
@@ -60,7 +63,9 @@ namespace Shuttle.ESB.Core
 			    {
 				    _nextDeferredProcessDate = ignoreTillDate;
 			    }
-		    }
+
+				Log.Trace("[DEFERRED] - MessageDeferred : ignoreTillDate = " + ignoreTillDate);
+			}
 	    }
 
 	    public bool ShouldProcessDeferred()
