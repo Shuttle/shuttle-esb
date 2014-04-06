@@ -14,13 +14,14 @@ namespace Shuttle.ESB.Core
 
 		public void Execute(OnSendMessage pipelineEvent)
 		{
-			var bus = pipelineEvent.GetServiceBus();
+			var state = pipelineEvent.Pipeline.State;
+			var bus = state.GetServiceBus();
 
 			if (bus.IsHandlingTransportMessage && bus.Configuration.HasIdempotenceService)
 			{
 				try
 				{
-					bus.Configuration.IdempotenceService.AddDeferredMessage(bus.TransportMessageBeingHandled, pipelineEvent.GetTransportMessageStream());
+					bus.Configuration.IdempotenceService.AddDeferredMessage(bus.TransportMessageBeingHandled, state.GetTransportMessageStream());
 				}
 				catch (Exception ex)
 				{
@@ -30,7 +31,7 @@ namespace Shuttle.ESB.Core
 				return;
 			}
 
-			var transportMessage = pipelineEvent.GetTransportMessage();
+			var transportMessage = state.GetTransportMessage();
 
 			Guard.AgainstNull(transportMessage, "transportMessage");
 			Guard.AgainstNullOrEmptyString(transportMessage.RecipientInboxWorkQueueUri, "uri");
@@ -38,7 +39,7 @@ namespace Shuttle.ESB.Core
 
 			if (transportMessage.IsIgnoring() && bus.Configuration.HasDeferredQueue)
 			{
-				bus.Configuration.Inbox.DeferredQueue.Enqueue(transportMessage.MessageId, pipelineEvent.GetTransportMessageStream());
+				bus.Configuration.Inbox.DeferredQueue.Enqueue(transportMessage.MessageId, state.GetTransportMessageStream());
 
 				return;
 			}
@@ -64,7 +65,7 @@ namespace Shuttle.ESB.Core
 
 			bus.Events.OnBeforeEnqueueStream(this, new QueueMessageEventArgs(pipelineEvent, queue, transportMessage));
 
-			using (var stream = pipelineEvent.GetTransportMessageStream().Copy())
+			using (var stream = state.GetTransportMessageStream().Copy())
 			{
 				queue.Enqueue(transportMessage.MessageId, stream);
 			}

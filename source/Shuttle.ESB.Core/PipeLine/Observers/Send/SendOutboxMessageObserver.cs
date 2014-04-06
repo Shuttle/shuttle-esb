@@ -4,41 +4,42 @@ namespace Shuttle.ESB.Core
 {
 	public class SendOutboxMessageObserver : IPipelineObserver<OnSendMessage>
 	{
-		private readonly ILog log;
+		private readonly ILog _log;
 
 		public SendOutboxMessageObserver()
 		{
-			log = Log.For(this);
+			_log = Log.For(this);
 		}
 
 		public void Execute(OnSendMessage pipelineEvent)
 		{
-			var transportMessage = pipelineEvent.GetTransportMessage();
+			var state = pipelineEvent.Pipeline.State;
+			var transportMessage = state.GetTransportMessage();
 
 			Guard.AgainstNull(transportMessage, "transportMessage");
 			Guard.AgainstNullOrEmptyString(transportMessage.RecipientInboxWorkQueueUri, "uri");
 
 			var queue =
-				pipelineEvent.GetServiceBus().Configuration.QueueManager.GetQueue(transportMessage.RecipientInboxWorkQueueUri);
+				state.GetServiceBus().Configuration.QueueManager.GetQueue(transportMessage.RecipientInboxWorkQueueUri);
 
-			if (log.IsVerboseEnabled)
+			if (_log.IsVerboseEnabled)
 			{
-				log.Verbose(string.Format(ESBResources.EnqueueMessage,
+				_log.Verbose(string.Format(ESBResources.EnqueueMessage,
 				                          transportMessage.MessageType,
 				                          transportMessage.MessageId,
 				                          queue.Uri));
 			}
 
-			pipelineEvent.GetServiceBus().Events.OnBeforeEnqueueStream(
+			state.GetServiceBus().Events.OnBeforeEnqueueStream(
 				this,
 				new QueueMessageEventArgs(pipelineEvent, queue, transportMessage));
 
-			using (var stream = pipelineEvent.GetTransportMessageStream().Copy())
+			using (var stream = state.GetTransportMessageStream().Copy())
 			{
 				queue.Enqueue(transportMessage.MessageId, stream);
 			}
 
-			pipelineEvent.GetServiceBus().Events.OnAfterEnqueueStream(
+			state.GetServiceBus().Events.OnAfterEnqueueStream(
 				this,
 				new QueueMessageEventArgs(pipelineEvent, queue, transportMessage));
 		}

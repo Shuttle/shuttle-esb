@@ -39,7 +39,8 @@ namespace Shuttle.ESB.Core
 		IServiceBusTransactionScopeFactory TransactionScopeFactory { get; }
 		string EncryptionAlgorithm { get; }
 		string CompressionAlgorithm { get; }
-		ITransactionScopeConfiguration TransactionScope { get; set; }
+		ITransactionScopeConfiguration TransactionScope { get; }
+		DeferredMessageProcessor DeferredMessageProcessor { get; }
 
 		IEncryptionAlgorithm FindEncryptionAlgorithm(string name);
 		void AddEncryptionAlgorithm(IEncryptionAlgorithm algorithm);

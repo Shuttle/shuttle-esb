@@ -1,39 +1,41 @@
+using System;
 using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ESB.Core
 {
-    public class DequeueWorkMessageObserver : IPipelineObserver<OnGetMessage>
+    public class GetDeferredMessageObserver : IPipelineObserver<OnGetMessage>
     {
 		private readonly ILog _log;
 
-		public DequeueWorkMessageObserver()
+		public GetDeferredMessageObserver()
 		{
 			_log = Log.For(this);
 		}
 
         public void Execute(OnGetMessage pipelineEvent)
         {
-            var queue = pipelineEvent.GetWorkQueue();
+			var state = pipelineEvent.Pipeline.State;
+			var queue = state.GetDeferredQueue();
 
-			Guard.AgainstNull(queue, "workQueue");
+			Guard.AgainstNull(queue, "deferredQueue");
 
-        	var bus = pipelineEvent.GetServiceBus();
-
-			bus.Events.OnBeforeDequeueMessage(this, new BeforeDequeueEventArgs(pipelineEvent, queue));
+        	var bus = state.GetServiceBus();
 
             var stream = queue.GetMessage();
 
             // Abort the pipeline if there is no message on the queue
             if (stream == null)
             {
-				pipelineEvent.GetServiceBus().Events.OnQueueEmpty(this, new QueueEmptyEventArgs(pipelineEvent, queue));
+				state.SetNextDeferredProcessDate(DateTime.MaxValue);
+				state.GetServiceBus().Events.OnQueueEmpty(this, new QueueEmptyEventArgs(pipelineEvent, queue));
                 pipelineEvent.Pipeline.Abort();
             }
             else
             {
 				bus.Events.OnAfterDequeueStream(this, new QueueStreamEventArgs(pipelineEvent, queue, stream.Copy()));
 
-				pipelineEvent.SetTransportMessageStream(stream);
+				state.SetWorking();
+				state.SetTransportMessageStream(stream);
 
                 if (_log.IsVerboseEnabled)
                 {

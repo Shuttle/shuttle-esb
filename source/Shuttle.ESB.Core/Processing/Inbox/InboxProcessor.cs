@@ -40,9 +40,9 @@ namespace Shuttle.ESB.Core
 
             try
             {
-                messagePipeline.State.Replace(StateKeys.AvailableWorker, availableWorker);
-                messagePipeline.State.Replace(StateKeys.Working, false);
-                messagePipeline.State.Replace(StateKeys.ActiveState, state);
+                messagePipeline.State.SetAvailableWorker(availableWorker);
+                messagePipeline.State.ResetWorking();
+                messagePipeline.State.SetActiveState(state);
 
 	            if (!state.Active)
 	            {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Shuttle.ESB.Core
+﻿namespace Shuttle.ESB.Core
 {
 	public class DeferredMessagePipeline : MessagePipeline
 	{
@@ -14,7 +12,7 @@ namespace Shuttle.ESB.Core
 				.WithEvent<OnProcessDeferredMessage>()
 				.WithEvent<OnAfterProcessDeferredMessage>();
 
-			RegisterObserver(new DequeueDeferredMessageObserver());
+			RegisterObserver(new GetDeferredMessageObserver());
 			RegisterObserver(new DeserializeTransportMessageObserver());
 			RegisterObserver(new ProcessDeferredMessageObserver());
 		}
@@ -23,18 +21,9 @@ namespace Shuttle.ESB.Core
 		{
 			base.Obtained();
 
-			SetWorkQueue(_bus.Configuration.Inbox.WorkQueue);
-			SetErrorQueue(_bus.Configuration.Inbox.ErrorQueue);
-			SetDeferredQueue(_bus.Configuration.Inbox.DeferredQueue);
-		}
-
-		public bool Execute(Guid checkpointMessageId, DateTime nextDeferredProcessDate)
-		{
-			SetCheckpointMessageId(checkpointMessageId);
-			SetNextDeferredProcessDate(nextDeferredProcessDate);
-			SetDeferredMessageReturned(false);
-
-			return Execute();
+			State.SetWorkQueue(_bus.Configuration.Inbox.WorkQueue);
+			State.SetErrorQueue(_bus.Configuration.Inbox.ErrorQueue);
+			State.SetDeferredQueue(_bus.Configuration.Inbox.DeferredQueue);
 		}
 	}
 }

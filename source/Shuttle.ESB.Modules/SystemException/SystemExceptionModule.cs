@@ -61,7 +61,7 @@ namespace Shuttle.ESB.Modules
 			@event.WorkQueueUri = e.WorkQueue != null ? e.WorkQueue.Uri.ToString() : string.Empty;
 			@event.ErrorQueueUri = e.ErrorQueue != null ? e.ErrorQueue.Uri.ToString() : string.Empty;
 			@event.RetryCount = e.TransportMessage.FailureMessages.Count() + 1;
-			@event.MaximumFailureCount = e.PipelineEvent.GetServiceBus().Configuration.Inbox.MaximumFailureCount;
+			@event.MaximumFailureCount = e.PipelineEvent.Pipeline.State.GetServiceBus().Configuration.Inbox.MaximumFailureCount;
 
 			// cannot publish here since handler is wrapped in a transaction scope
 			// will always also result in pipeline exception so publish there

@@ -1,6 +1,4 @@
-﻿using Shuttle.Core.Infrastructure;
-
-namespace Shuttle.ESB.Core
+﻿namespace Shuttle.ESB.Core
 {
 	public class SendTransportMessagePipeline : MessagePipeline
 	{
@@ -13,15 +11,6 @@ namespace Shuttle.ESB.Core
 
 			RegisterObserver(new SerializeTransportMessageObserver());
 			RegisterObserver(new SendMessageObserver());
-		}
-
-		public bool Execute(TransportMessage transportMessage)
-		{
-			Guard.AgainstNull(transportMessage, "transportMessage");
-
-			SetTransportMessage(transportMessage);
-
-			return base.Execute();
 		}
 	}
 }

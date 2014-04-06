@@ -10,11 +10,11 @@
 		{
 			base.Obtained();
 
-			SetWorkQueue(_bus.Configuration.ControlInbox.WorkQueue);
-			SetErrorQueue(_bus.Configuration.ControlInbox.ErrorQueue);
+			State.SetWorkQueue(_bus.Configuration.ControlInbox.WorkQueue);
+			State.SetErrorQueue(_bus.Configuration.ControlInbox.ErrorQueue);
 
-			SetDurationToIgnoreOnFailure(_bus.Configuration.ControlInbox.DurationToIgnoreOnFailure);
-			SetMaximumFailureCount(_bus.Configuration.ControlInbox.MaximumFailureCount);
+			State.SetDurationToIgnoreOnFailure(_bus.Configuration.ControlInbox.DurationToIgnoreOnFailure);
+			State.SetMaximumFailureCount(_bus.Configuration.ControlInbox.MaximumFailureCount);
 		}
 	}
 }

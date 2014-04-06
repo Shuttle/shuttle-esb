@@ -20,66 +20,6 @@ namespace Shuttle.ESB.Core
 		{
 		}
 
-		public void SetWorkQueue(IQueue queue)
-		{
-			State.Add(StateKeys.WorkQueue, queue);
-		}
-
-		public void SetDeferredQueue(IQueue queue)
-		{
-			State.Add(StateKeys.DeferredQueue, queue);
-		}
-
-		public void SetCheckpointMessageId(Guid checkpointMessageId)
-		{
-			State.Add(StateKeys.CheckpointMessageId, checkpointMessageId);
-		}
-
-		public void SetNextDeferredProcessDate(DateTime nextDeferredProcessDate)
-		{
-			State.Add(StateKeys.NextDeferredProcessDate, nextDeferredProcessDate);
-		}
-
-		public void SetDeferredMessageReturned(bool deferredMessageReturned)
-		{
-			State.Add(StateKeys.DeferredMessageReturned, deferredMessageReturned);
-		}
-
-		public void SetErrorQueue(IQueue queue)
-		{
-			State.Add(StateKeys.ErrorQueue, queue);
-		}
-
-		public void SetDestinationQueue(IQueue queue)
-		{
-			State.Add(StateKeys.DestinationQueue, queue);
-		}
-
-		public void SetIgnoreTillDate(DateTime date)
-		{
-			State.Add(StateKeys.IgnoreTillDate, date);
-		}
-
-		public void SetMessage(object message)
-		{
-			State.Add(StateKeys.Message, message);
-		}
-
-		public void SetTransportMessage(TransportMessage transportMessage)
-		{
-			State.Add(StateKeys.TransportMessage, transportMessage);
-		}
-
-		public void SetMaximumFailureCount(int count)
-		{
-			State.Add(StateKeys.MaximumFailureCount, count);
-		}
-
-		public void SetDurationToIgnoreOnFailure(TimeSpan[] timeSpans)
-		{
-			State.Add(StateKeys.DurationToIgnoreOnFailure, timeSpans);
-		}
-
 		public virtual void Obtained()
 		{
 			State.Clear();

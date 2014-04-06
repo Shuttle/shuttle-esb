@@ -8,11 +8,12 @@ namespace Shuttle.ESB.Core
 	{
 		public void Execute(OnFindRouteForMessage pipelineEvent)
 		{
-			var queueUri = pipelineEvent.GetDestinationQueue() != null
-			               	? pipelineEvent.GetDestinationQueue().Uri.ToString()
-			               	: FindRoute(pipelineEvent.GetServiceBus(), pipelineEvent.GetMessage());
+			var state = pipelineEvent.Pipeline.State;
+			var queueUri = state.GetDestinationQueue() != null
+			               	? state.GetDestinationQueue().Uri.ToString()
+			               	: FindRoute(state.GetServiceBus(), state.GetMessage());
 
-			pipelineEvent.GetTransportMessage().RecipientInboxWorkQueueUri = queueUri;
+			state.GetTransportMessage().RecipientInboxWorkQueueUri = queueUri;
 		}
 
 		private static string FindRoute(IServiceBus bus, object message)

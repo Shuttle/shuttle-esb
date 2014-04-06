@@ -15,13 +15,14 @@ namespace Shuttle.ESB.Core
 
 		public void Execute(OnAcknowledgeMessage pipelineEvent)
 		{
-			if (pipelineEvent.Pipeline.Exception != null && !pipelineEvent.GetTransactionComplete())
+			var state = pipelineEvent.Pipeline.State;
+			if (pipelineEvent.Pipeline.Exception != null && !state.GetTransactionComplete())
 			{
 				return;
 			}
 
-			var bus = pipelineEvent.GetServiceBus();
-			var transportMessage = pipelineEvent.GetTransportMessage();
+			var bus = state.GetServiceBus();
+			var transportMessage = state.GetTransportMessage();
 
 			if (bus.Configuration.HasIdempotenceService)
 			{
@@ -35,7 +36,7 @@ namespace Shuttle.ESB.Core
 				}
 			}
 
-			pipelineEvent.GetWorkQueue().Acknowledge(transportMessage.MessageId);
+			state.GetWorkQueue().Acknowledge(transportMessage.MessageId);
 
 			_log.Trace(string.Format(ESBResources.TraceAcknowledge, transportMessage.MessageType, transportMessage.MessageId));
 		}

@@ -133,6 +133,15 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Only one instance of the DeferredMessageProcessor should be created.  Check that the ProcessorThreadPool for the DeferredMessageProcessorFactory is not using more than 1 thread..
+        /// </summary>
+        public static string DeferredMessageProcessorInstanceException {
+            get {
+                return ResourceManager.GetString("DeferredMessageProcessorInstanceException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Stream dequeued from queue &apos;{0}&apos;..
         /// </summary>
         public static string DequeueStream {

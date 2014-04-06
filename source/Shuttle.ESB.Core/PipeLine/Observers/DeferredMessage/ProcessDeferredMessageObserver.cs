@@ -14,38 +14,39 @@ namespace Shuttle.ESB.Core
 
 		public void Execute(OnProcessDeferredMessage pipelineEvent)
 		{
-			var transportMessage = pipelineEvent.GetTransportMessage();
-			var checkpointMessageId = pipelineEvent.GetCheckpointMessageId();
+			var state = pipelineEvent.Pipeline.State;
+			var transportMessage = state.GetTransportMessage();
+			var checkpointMessageId = state.GetCheckpointMessageId();
 
 			Guard.AgainstNull(transportMessage, "transportMessage");
-			Guard.AgainstNull(pipelineEvent.GetTransportMessageStream(), "transportMessageStream");
-			Guard.AgainstNull(pipelineEvent.GetWorkQueue(), "workQueue");
-			Guard.AgainstNull(pipelineEvent.GetDeferredQueue(), "deferredQueue");
+			Guard.AgainstNull(state.GetTransportMessageStream(), "transportMessageStream");
+			Guard.AgainstNull(state.GetWorkQueue(), "workQueue");
+			Guard.AgainstNull(state.GetDeferredQueue(), "deferredQueue");
 
 			if (transportMessage.IsIgnoring())
 			{
 				if (Guid.Empty.Equals(checkpointMessageId))
 				{
-					pipelineEvent.SetCheckpointMessageId(transportMessage.MessageId);
-					pipelineEvent.SetNextDeferredProcessDate(transportMessage.IgnoreTillDate);
+					state.SetCheckpointMessageId(transportMessage.MessageId);
+					state.SetNextDeferredProcessDate(transportMessage.IgnoreTillDate);
 				}
 
-				pipelineEvent.GetDeferredQueue().Release(transportMessage.MessageId);
+				state.GetDeferredQueue().Release(transportMessage.MessageId);
 
-				pipelineEvent.SetDeferredMessageReturned(false);
+				state.SetDeferredMessageReturned(false);
 
 				return;
 			}
 
-			pipelineEvent.GetWorkQueue().Enqueue(transportMessage.MessageId, pipelineEvent.GetTransportMessageStream());			
-			pipelineEvent.GetDeferredQueue().Acknowledge(transportMessage.MessageId);
+			state.GetWorkQueue().Enqueue(transportMessage.MessageId, state.GetTransportMessageStream());			
+			state.GetDeferredQueue().Acknowledge(transportMessage.MessageId);
 
 			if (checkpointMessageId.Equals(transportMessage.MessageId))
 			{
-				pipelineEvent.SetCheckpointMessageId(Guid.Empty);
+				state.SetCheckpointMessageId(Guid.Empty);
 			}
 
-			pipelineEvent.SetDeferredMessageReturned(true);
+			state.SetDeferredMessageReturned(true);
 
 			if (_log.IsTraceEnabled)
 			{

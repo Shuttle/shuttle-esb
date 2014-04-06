@@ -39,13 +39,13 @@ namespace Shuttle.ESB.Test.Integration
 		}
 
 		[Test]
-		[TestCase(350, false, false, false)]
+		[TestCase(200, false, false, false)]
 		[TestCase(35, false, false, false)]
-		[TestCase(350, false, true, true)]
+		[TestCase(200, false, true, true)]
 		[TestCase(35, false, true, true)]
-		[TestCase(350, false, true, false)]
+		[TestCase(200, false, true, false)]
 		[TestCase(35, false, true, false)]
-		[TestCase(350, false, false, true)]
+		[TestCase(200, false, false, true)]
 		[TestCase(35, false, false, true)]
 		[TestCase(35, true, false, false)]
 		[TestCase(20, true, false, false)]

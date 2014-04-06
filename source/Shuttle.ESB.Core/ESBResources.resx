@@ -466,4 +466,7 @@
     <value>Deferred transport message with id '{0}' has been returned to the inbox work queue.</value>
     <comment>{0} = message id</comment>
   </data>
+  <data name="DeferredMessageProcessorInstanceException" xml:space="preserve">
+    <value>Only one instance of the DeferredMessageProcessor should be created.  Check that the ProcessorThreadPool for the DeferredMessageProcessorFactory is not using more than 1 thread.</value>
+  </data>
 </root>

@@ -15,11 +15,12 @@ namespace Shuttle.ESB.Core
 
 		public void Execute(OnDeserializeMessage pipelineEvent)
 		{
-			Guard.AgainstNull(pipelineEvent.GetTransportMessage(), "transportMessage");
-			Guard.AgainstNull(pipelineEvent.GetWorkQueue(), "workQueue");
-			Guard.AgainstNull(pipelineEvent.GetErrorQueue(), "errorQueue");
+			var state = pipelineEvent.Pipeline.State;
+			Guard.AgainstNull(state.GetTransportMessage(), "transportMessage");
+			Guard.AgainstNull(state.GetWorkQueue(), "workQueue");
+			Guard.AgainstNull(state.GetErrorQueue(), "errorQueue");
 
-			var transportMessage = pipelineEvent.GetTransportMessage();
+			var transportMessage = state.GetTransportMessage();
 
 			object message;
 
@@ -27,31 +28,31 @@ namespace Shuttle.ESB.Core
 		    {
 		        using (var stream = new MemoryStream(transportMessage.Message))
 		        {
-		            message = pipelineEvent.GetServiceBus().Configuration.Serializer.Deserialize(Type.GetType(transportMessage.AssemblyQualifiedName, true, true), stream);
+		            message = state.GetServiceBus().Configuration.Serializer.Deserialize(Type.GetType(transportMessage.AssemblyQualifiedName, true, true), stream);
 		        }
 		    }
             catch (Exception ex)
             {
 				transportMessage.RegisterFailure(ex.CompactMessages(), new TimeSpan());
 
-				pipelineEvent.GetErrorQueue().Enqueue(transportMessage.MessageId, pipelineEvent.GetServiceBus().Configuration.Serializer.Serialize(transportMessage));
+				state.GetErrorQueue().Enqueue(transportMessage.MessageId, state.GetServiceBus().Configuration.Serializer.Serialize(transportMessage));
 				
-				pipelineEvent.SetTransactionComplete();
+				state.SetTransactionComplete();
 				pipelineEvent.Pipeline.Abort();
 
-                pipelineEvent.GetServiceBus().Events.OnMessageDeserializationException(this,
+                state.GetServiceBus().Events.OnMessageDeserializationException(this,
                     new DeserializationExceptionEventArgs(
 						pipelineEvent, 
-                        pipelineEvent.GetWorkQueue(),
-                        pipelineEvent.GetErrorQueue(),
+                        state.GetWorkQueue(),
+                        state.GetErrorQueue(),
                         ex));
 
                 return;
             }
             
-            pipelineEvent.SetMessage(message);
+            state.SetMessage(message);
 			
-			pipelineEvent.GetServiceBus().Events.OnAfterMessageDeserialization(
+			state.GetServiceBus().Events.OnAfterMessageDeserialization(
 					this,
 					new MessageSerializationEventArgs(pipelineEvent, transportMessage, message));
 

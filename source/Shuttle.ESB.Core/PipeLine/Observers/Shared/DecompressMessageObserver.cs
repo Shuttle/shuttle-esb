@@ -7,7 +7,8 @@ namespace Shuttle.ESB.Core
 	{
 		public void Execute(OnDecompressMessage pipelineEvent)
 		{
-			var transportMessage = pipelineEvent.GetTransportMessage();
+			var state = pipelineEvent.Pipeline.State;
+			var transportMessage = state.GetTransportMessage();
 
 			if (!transportMessage.CompressionEnabled())
 			{
@@ -15,7 +16,7 @@ namespace Shuttle.ESB.Core
 			}
 
 			var algorithm =
-				pipelineEvent.GetServiceBus().Configuration.FindCompressionAlgorithm(transportMessage.CompressionAlgorithm);
+				state.GetServiceBus().Configuration.FindCompressionAlgorithm(transportMessage.CompressionAlgorithm);
 
 			Guard.Against<InvalidOperationException>(algorithm == null, string.Format(ESBResources.CompressionAlgorithmException, transportMessage.CompressionAlgorithm));
 

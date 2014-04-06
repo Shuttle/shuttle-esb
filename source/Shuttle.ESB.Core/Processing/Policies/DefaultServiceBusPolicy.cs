@@ -22,13 +22,14 @@ namespace Shuttle.ESB.Core
 
         private MessageFailureAction DefaultEvaluation(OnPipelineException pipelineEvent)
         {
-            var transportMessage = pipelineEvent.GetTransportMessage();
-            var durationToIgnoreOnFailure = pipelineEvent.GetDurationToIgnoreOnFailure();
+			var state = pipelineEvent.Pipeline.State;
+			var transportMessage = state.GetTransportMessage();
+            var durationToIgnoreOnFailure = state.GetDurationToIgnoreOnFailure();
 
             TimeSpan timeSpanToIgnoreRetriedMessage;
 
             var failureIndex = transportMessage.FailureMessages.Count + 1;
-            var retry = failureIndex < pipelineEvent.GetMaximumFailureCount();
+            var retry = failureIndex < state.GetMaximumFailureCount();
             
             if (!retry || durationToIgnoreOnFailure == null || durationToIgnoreOnFailure.Length == 0)
             {

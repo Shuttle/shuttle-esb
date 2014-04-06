@@ -80,6 +80,8 @@ namespace Shuttle.ESB.Core
 
 			var messagePipeline = Configuration.PipelineFactory.GetPipeline<SendTransportMessagePipeline>(this);
 
+			messagePipeline.State.SetTransportMessage(transportMessage);
+
 			if (log.IsTraceEnabled)
 			{
 				log.Trace(string.Format(ESBResources.TraceSend, transportMessage.MessageType,
@@ -88,7 +90,7 @@ namespace Shuttle.ESB.Core
 
 			try
 			{
-				((SendTransportMessagePipeline)messagePipeline).Execute(transportMessage);
+				messagePipeline.Execute();
 			}
 			finally
 			{

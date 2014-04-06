@@ -12,7 +12,7 @@
 				.WithEvent<OnSerializeTransportMessage>()
 				.WithEvent<OnSendMessage>();
 
-			RegisterObserver(new DequeueWorkMessageObserver());
+			RegisterObserver(new GetWorkMessageObserver());
 			RegisterObserver(new DeserializeTransportMessageObserver());
 			RegisterObserver(new DistributorMessageObserver());
 			RegisterObserver(new SerializeTransportMessageObserver());
@@ -24,8 +24,8 @@
 		{
 			base.Obtained();
 
-			SetWorkQueue(_bus.Configuration.Inbox.WorkQueue);
-			SetErrorQueue(_bus.Configuration.Inbox.ErrorQueue);
+			State.SetWorkQueue(_bus.Configuration.Inbox.WorkQueue);
+			State.SetErrorQueue(_bus.Configuration.Inbox.ErrorQueue);
 		}
 	}
 }

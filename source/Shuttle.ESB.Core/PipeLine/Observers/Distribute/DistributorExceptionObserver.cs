@@ -7,7 +7,8 @@ namespace Shuttle.ESB.Core
     {
         public void Execute(OnPipelineException pipelineEvent)
         {
-            var bus = pipelineEvent.GetServiceBus();
+			var state = pipelineEvent.Pipeline.State;
+			var bus = state.GetServiceBus();
 
             bus.Events.OnBeforePipelineExceptionHandled(this, new PipelineExceptionEventArgs(pipelineEvent.Pipeline));
 
@@ -18,7 +19,7 @@ namespace Shuttle.ESB.Core
                     return;
                 }
 
-                var transportMessage = pipelineEvent.GetTransportMessage();
+                var transportMessage = state.GetTransportMessage();
 
                 if (transportMessage == null)
                 {
@@ -31,19 +32,19 @@ namespace Shuttle.ESB.Core
 
                 if (action.Retry)
                 {
-                    pipelineEvent.GetWorkQueue().Enqueue(
+                    state.GetWorkQueue().Enqueue(
                         transportMessage.MessageId,
-                        pipelineEvent.GetServiceBus().Configuration.Serializer.Serialize(transportMessage));
+                        state.GetServiceBus().Configuration.Serializer.Serialize(transportMessage));
                 }
                 else
                 {
-                    pipelineEvent.GetErrorQueue().Enqueue(
+                    state.GetErrorQueue().Enqueue(
                         transportMessage.MessageId,
-                        pipelineEvent.GetServiceBus().Configuration.Serializer.Serialize(transportMessage));
+                        state.GetServiceBus().Configuration.Serializer.Serialize(transportMessage));
                 }
 
-                pipelineEvent.GetTransactionScope().Complete();
-                pipelineEvent.GetTransactionScope().Dispose();
+                state.GetTransactionScope().Complete();
+                state.GetTransactionScope().Dispose();
 
                 pipelineEvent.Pipeline.MarkExceptionHandled();
                 bus.Events.OnAfterPipelineExceptionHandled(this, new PipelineExceptionEventArgs(pipelineEvent.Pipeline));

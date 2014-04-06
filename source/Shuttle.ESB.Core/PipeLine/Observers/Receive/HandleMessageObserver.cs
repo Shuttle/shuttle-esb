@@ -17,7 +17,8 @@ namespace Shuttle.ESB.Core
         private void InvokeHandler(IServiceBus bus, IMessageHandler handler, TransportMessage transportMessage,
                                    object message, PipelineEvent pipelineEvent, Type messageType)
         {
-            var contextType = typeof (HandlerContext<>).MakeGenericType(new[] {messageType});
+			var state = pipelineEvent.Pipeline.State;
+			var contextType = typeof(HandlerContext<>).MakeGenericType(new[] { messageType });
             var method = handler.GetType().GetMethod("ProcessMessage", new[] {contextType});
 
             Guard.Against<ProcessMessageMethodMissingException>(method == null,
@@ -51,7 +52,7 @@ namespace Shuttle.ESB.Core
                                                          bus,
                                                          transportMessage,
                                                          message,
-                                                         pipelineEvent.GetActiveState()
+                                                         state.GetActiveState()
                                                      })
                     });
             }
@@ -66,8 +67,8 @@ namespace Shuttle.ESB.Core
                         handler,
                         transportMessage,
                         message,
-                        pipelineEvent.GetWorkQueue(),
-                        pipelineEvent.GetErrorQueue(),
+                        state.GetWorkQueue(),
+                        state.GetErrorQueue(),
                         exception));
 
                 throw exception;
@@ -76,8 +77,9 @@ namespace Shuttle.ESB.Core
 
         public void Execute(OnHandleMessage pipelineEvent)
         {
-            var bus = pipelineEvent.GetServiceBus();
-            var transportMessage = pipelineEvent.GetTransportMessage();
+			var state = pipelineEvent.Pipeline.State;
+			var bus = state.GetServiceBus();
+            var transportMessage = state.GetTransportMessage();
 
 	        if (bus.Configuration.HasIdempotenceService)
 	        {
@@ -100,9 +102,9 @@ namespace Shuttle.ESB.Core
 
 	        try
 	        {
-		        pipelineEvent.GetServiceBus().HandlingTransportMessage(pipelineEvent.GetTransportMessage());
+		        state.GetServiceBus().HandlingTransportMessage(state.GetTransportMessage());
 			
-		        var message = pipelineEvent.GetMessage();
+		        var message = state.GetMessage();
 
 		        foreach (var uri in bus.Configuration.ForwardingRouteProvider.GetRouteUris(message))
 		        {
@@ -117,21 +119,21 @@ namespace Shuttle.ESB.Core
 
 		        var handler = bus.Configuration.MessageHandlerFactory.GetHandler(message);
 
-		        pipelineEvent.SetMessageHandler(handler);
+		        state.SetMessageHandler(handler);
 
 		        if (handler == null)
 		        {
 			        bus.Events.OnMessageNotHandled(this,
 			                                       new MessageNotHandledEventArgs(
 				                                       pipelineEvent,
-				                                       pipelineEvent.GetWorkQueue(),
-				                                       pipelineEvent.GetErrorQueue(),
+				                                       state.GetWorkQueue(),
+				                                       state.GetErrorQueue(),
 				                                       transportMessage,
 				                                       message));
 
 			        if (!bus.Configuration.RemoveMessagesNotHandled)
 			        {
-				        var error = string.Format(ESBResources.MessageNotHandledFailure, message.GetType().FullName, transportMessage.MessageId, pipelineEvent.GetErrorQueue().Uri.Secured());
+				        var error = string.Format(ESBResources.MessageNotHandledFailure, message.GetType().FullName, transportMessage.MessageId, state.GetErrorQueue().Uri.Secured());
 
 				        _log.Error(error);
 
@@ -139,7 +141,7 @@ namespace Shuttle.ESB.Core
 
 				        using (var stream = bus.Configuration.Serializer.Serialize(transportMessage))
 				        {
-					        pipelineEvent.GetErrorQueue().Enqueue(transportMessage.MessageId, stream);
+					        state.GetErrorQueue().Enqueue(transportMessage.MessageId, stream);
 				        }
 			        }
 			        else
@@ -161,7 +163,7 @@ namespace Shuttle.ESB.Core
 			        bus.Events.OnAfterHandleMessage(this,
 			                                        new AfterHandleMessageEventArgs(
 				                                        pipelineEvent,
-				                                        pipelineEvent.GetWorkQueue(),
+				                                        state.GetWorkQueue(),
 				                                        transportMessage));
 
 			        bus.Configuration.MessageHandlerFactory.ReleaseHandler(handler);
@@ -169,7 +171,7 @@ namespace Shuttle.ESB.Core
 	        }
 	        finally
 	        {
-				pipelineEvent.GetServiceBus().TransportMessageHandled(); 
+				state.GetServiceBus().TransportMessageHandled(); 
 	        }
         }
     }

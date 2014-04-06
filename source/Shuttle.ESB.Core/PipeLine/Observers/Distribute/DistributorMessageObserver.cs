@@ -8,15 +8,16 @@ namespace Shuttle.ESB.Core
     {
         public void Execute(OnHandleDistributeMessage pipelineEvent)
         {
-            var bus = pipelineEvent.GetServiceBus();
-            var destinationQueue = pipelineEvent.GetServiceBus().Configuration.QueueManager.GetQueue(pipelineEvent.GetAvailableWorker().InboxWorkQueueUri);
-            var transportMessage = pipelineEvent.GetTransportMessage();
+			var state = pipelineEvent.Pipeline.State;
+			var bus = state.GetServiceBus();
+            var destinationQueue = state.GetServiceBus().Configuration.QueueManager.GetQueue(state.GetAvailableWorker().InboxWorkQueueUri);
+            var transportMessage = state.GetTransportMessage();
 
             bus.Events.OnBeforeDistributeMessage(
                 this,
 				new DistributeMessageEventArgs(pipelineEvent, destinationQueue, transportMessage));
 
-            transportMessage.RecipientInboxWorkQueueUri = pipelineEvent.GetAvailableWorker().InboxWorkQueueUri;
+            transportMessage.RecipientInboxWorkQueueUri = state.GetAvailableWorker().InboxWorkQueueUri;
 
             bus.Events.OnAfterDistributeMessage(
                 this,
@@ -25,8 +26,10 @@ namespace Shuttle.ESB.Core
 
         public void Execute(OnAbortPipeline pipelineEvent)
         {
-            pipelineEvent.GetServiceBus().Configuration.WorkerAvailabilityManager
-                .ReturnAvailableWorker(pipelineEvent.GetAvailableWorker());
+			var state = pipelineEvent.Pipeline.State;
+
+            state.GetServiceBus().Configuration
+				.WorkerAvailabilityManager.ReturnAvailableWorker(state.GetAvailableWorker());
         }
     }
 }

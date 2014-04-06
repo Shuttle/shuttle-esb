@@ -4,18 +4,26 @@ namespace Shuttle.ESB.Core
 {
     public class DeferredMessageProcessorFactory : IProcessorFactory
     {
-		private readonly IServiceBus bus;
+		private readonly IServiceBus _bus;
+	    private bool _instanced;
 
 		public DeferredMessageProcessorFactory(IServiceBus bus)
 		{
-			Guard.AgainstNull(bus, "bus");
+			Guard.AgainstNull(bus, "_bus");
 
-			this.bus = bus;
+			_bus = bus;
 		}
 
         public IProcessor Create()
         {
-			return new DeferredMessageProcessor(bus);
+	        if (_instanced)
+	        {
+				throw new ProcessorException(ESBResources.DeferredMessageProcessorInstanceException);
+	        }
+
+	        _instanced = true;
+
+	        return _bus.Configuration.DeferredMessageProcessor;
         }
     }
 }

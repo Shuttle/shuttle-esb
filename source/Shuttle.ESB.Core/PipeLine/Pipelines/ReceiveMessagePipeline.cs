@@ -22,7 +22,7 @@
 				.WithEvent<OnSendDeferred>()
 				.WithEvent<OnAcknowledgeMessage>();
 
-			RegisterObserver(new DequeueWorkMessageObserver());
+			RegisterObserver(new GetWorkMessageObserver());
 			RegisterObserver(new DeserializeTransportMessageObserver());
 			RegisterObserver(new DeferTransportMessageObserver());
 			RegisterObserver(new DeserializeMessageObserver());

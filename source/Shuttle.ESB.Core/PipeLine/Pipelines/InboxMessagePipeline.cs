@@ -10,12 +10,12 @@
 		{
 			base.Obtained();
 
-			SetWorkQueue(_bus.Configuration.Inbox.WorkQueue);
-			SetDeferredQueue(_bus.Configuration.Inbox.DeferredQueue);
-			SetErrorQueue(_bus.Configuration.Inbox.ErrorQueue);
+			State.SetWorkQueue(_bus.Configuration.Inbox.WorkQueue);
+			State.SetDeferredQueue(_bus.Configuration.Inbox.DeferredQueue);
+			State.SetErrorQueue(_bus.Configuration.Inbox.ErrorQueue);
 
-			SetDurationToIgnoreOnFailure(_bus.Configuration.Inbox.DurationToIgnoreOnFailure);
-			SetMaximumFailureCount(_bus.Configuration.Inbox.MaximumFailureCount);
+			State.SetDurationToIgnoreOnFailure(_bus.Configuration.Inbox.DurationToIgnoreOnFailure);
+			State.SetMaximumFailureCount(_bus.Configuration.Inbox.MaximumFailureCount);
 		}
 	}
 }

@@ -6,10 +6,11 @@ namespace Shuttle.ESB.Core
     {
         public void Execute(OnSerializeMessage pipelineEvent)
         {
-            var message = pipelineEvent.GetMessage();
-            var transportMessage = pipelineEvent.GetTransportMessage();
-            var bus = pipelineEvent.GetServiceBus();
-            var bytes = pipelineEvent.GetServiceBus()
+	        var state = pipelineEvent.Pipeline.State;
+            var message = state.GetMessage();
+            var transportMessage = state.GetTransportMessage();
+            var bus = state.GetServiceBus();
+            var bytes = state.GetServiceBus()
                 .Configuration.Serializer
                 .Serialize(message).ToBytes();
 
@@ -17,7 +18,7 @@ namespace Shuttle.ESB.Core
                 this,
                 new MessageSerializationEventArgs(pipelineEvent, transportMessage, message));
 
-            pipelineEvent.SetMessageBytes(bytes);
+            state.SetMessageBytes(bytes);
 
             transportMessage.Message = bytes;
         }

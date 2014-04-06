@@ -15,14 +15,15 @@ namespace Shuttle.ESB.Core
 
 		public void Execute(OnSendDeferred pipelineEvent)
 		{
-			var configuration = pipelineEvent.GetServiceBus().Configuration;
+			var state = pipelineEvent.Pipeline.State;
+			var configuration = state.GetServiceBus().Configuration;
 
 			if (!configuration.HasIdempotenceService)
 			{
 				return;
 			}
 
-			var transportMessage = pipelineEvent.GetTransportMessage();
+			var transportMessage = state.GetTransportMessage();
 			var idempotenceService = configuration.IdempotenceService;
 
 			try
@@ -31,7 +32,7 @@ namespace Shuttle.ESB.Core
 				{
 					var deferredTransportMessage = (TransportMessage)configuration.Serializer.Deserialize(typeof (TransportMessage), stream);
 
-					pipelineEvent.GetServiceBus().Send(deferredTransportMessage);
+					state.GetServiceBus().Send(deferredTransportMessage);
 				
 					idempotenceService.DeferredMessageSent(transportMessage, deferredTransportMessage);
 				}

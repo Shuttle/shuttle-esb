@@ -7,7 +7,8 @@ namespace Shuttle.ESB.Core
 	{
 		public void Execute(OnEncryptMessage pipelineEvent)
 		{
-			var transportMessage = pipelineEvent.GetTransportMessage();
+			var state = pipelineEvent.Pipeline.State;
+			var transportMessage = state.GetTransportMessage();
 
 			if (!transportMessage.EncryptionEnabled())
 			{
@@ -15,7 +16,7 @@ namespace Shuttle.ESB.Core
 			}
 
 			var algorithm =
-				pipelineEvent.GetServiceBus().Configuration.FindEncryptionAlgorithm(transportMessage.EncryptionAlgorithm);
+				state.GetServiceBus().Configuration.FindEncryptionAlgorithm(transportMessage.EncryptionAlgorithm);
 
 			Guard.Against<InvalidOperationException>(algorithm == null, string.Format(ESBResources.EncryptionAlgorithmException, transportMessage.CompressionAlgorithm));
 

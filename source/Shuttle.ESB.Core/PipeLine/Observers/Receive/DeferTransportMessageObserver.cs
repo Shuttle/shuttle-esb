@@ -1,5 +1,4 @@
-﻿using System;
-using Shuttle.Core.Infrastructure;
+﻿using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ESB.Core
 {
@@ -14,37 +13,38 @@ namespace Shuttle.ESB.Core
 
 		public void Execute(OnAfterDeserializeTransportMessage pipelineEvent)
 		{
-			Guard.AgainstNull(pipelineEvent.GetTransportMessageStream(), "transportMessage");
-			Guard.AgainstNull(pipelineEvent.GetTransportMessage(), "transportMessage");
-			Guard.AgainstNull(pipelineEvent.GetWorkQueue(), "workQueue");
+			var state = pipelineEvent.Pipeline.State;
+			Guard.AgainstNull(state.GetTransportMessageStream(), "transportMessage");
+			Guard.AgainstNull(state.GetTransportMessage(), "transportMessage");
+			Guard.AgainstNull(state.GetWorkQueue(), "workQueue");
 
-			var transportMessage = pipelineEvent.GetTransportMessage();
+			var transportMessage = state.GetTransportMessage();
 
 			if (!transportMessage.IsIgnoring())
 			{
 				return;
 			}
 
-			using (var stream = pipelineEvent.GetTransportMessageStream().Copy())
+			using (var stream = state.GetTransportMessageStream().Copy())
 			{
-				if (pipelineEvent.GetDeferredQueue() == null)
+				if (state.GetDeferredQueue() == null)
 				{
-					pipelineEvent.GetWorkQueue().Enqueue(transportMessage.MessageId, stream);
+					state.GetWorkQueue().Enqueue(transportMessage.MessageId, stream);
 				}
 				else
 				{
-					pipelineEvent.GetDeferredQueue().Enqueue(transportMessage.MessageId, stream);
+					state.GetDeferredQueue().Enqueue(transportMessage.MessageId, stream);
 
-					pipelineEvent.GetServiceBus().Configuration.Inbox.MessageDeferred(transportMessage.IgnoreTillDate);
+					state.GetServiceBus().Configuration.DeferredMessageProcessor.MessageDeferred(transportMessage.IgnoreTillDate);
 				}
 			}
 
-			pipelineEvent.GetWorkQueue().Acknowledge(transportMessage.MessageId);
+			state.GetWorkQueue().Acknowledge(transportMessage.MessageId);
 
 			if (_log.IsTraceEnabled)
 			{
 				_log.Trace(string.Format(ESBResources.TraceTransportMessageDeferred, transportMessage.MessageId,
-										  transportMessage.IgnoreTillDate.ToString(ESBResources.FormatDateFull)));
+				                         transportMessage.IgnoreTillDate.ToString(ESBResources.FormatDateFull)));
 			}
 
 			pipelineEvent.Pipeline.Abort();

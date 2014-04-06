@@ -16,7 +16,8 @@ namespace Shuttle.ESB.Core
 		 */
 		public void Execute(OnPipelineException pipelineEvent)
 		{
-			var bus = pipelineEvent.GetServiceBus();
+			var state = pipelineEvent.Pipeline.State;
+			var bus = state.GetServiceBus();
 
 			bus.Events.OnBeforePipelineExceptionHandled(this, new PipelineExceptionEventArgs(pipelineEvent.Pipeline));
 
@@ -29,7 +30,7 @@ namespace Shuttle.ESB.Core
 
 				try
 				{
-					var transportMessage = pipelineEvent.GetTransportMessage();
+					var transportMessage = state.GetTransportMessage();
 
 					if (transportMessage == null)
 					{
@@ -42,7 +43,7 @@ namespace Shuttle.ESB.Core
 
 					using (var stream = bus.Configuration.Serializer.Serialize(transportMessage))
 					{
-						var handler = pipelineEvent.GetMessageHandler();
+						var handler = state.GetMessageHandler();
 						var handlerFullTypeName = handler != null ? handler.GetType().FullName : "(handler is null)";
 						var currentRetryCount = transportMessage.FailureMessages.Count;
 
@@ -61,9 +62,9 @@ namespace Shuttle.ESB.Core
 							                          transportMessage.MessageType,
 							                          transportMessage.MessageId,
 							                          currentRetryCount,
-							                          pipelineEvent.GetMaximumFailureCount()));
+							                          state.GetMaximumFailureCount()));
 
-							pipelineEvent.GetWorkQueue().Enqueue(transportMessage.MessageId, stream);
+							state.GetWorkQueue().Enqueue(transportMessage.MessageId, stream);
 						}
 						else
 						{
@@ -73,14 +74,14 @@ namespace Shuttle.ESB.Core
 							                        pipelineEvent.Pipeline.Exception.CompactMessages(),
 							                        transportMessage.MessageType,
 							                        transportMessage.MessageId,
-							                        pipelineEvent.GetMaximumFailureCount(),
-							                        pipelineEvent.GetErrorQueue().Uri));
+							                        state.GetMaximumFailureCount(),
+							                        state.GetErrorQueue().Uri));
 
-							pipelineEvent.GetErrorQueue().Enqueue(transportMessage.MessageId, stream);
+							state.GetErrorQueue().Enqueue(transportMessage.MessageId, stream);
 						}
 					}
 
-					pipelineEvent.GetWorkQueue().Acknowledge(transportMessage.MessageId);
+					state.GetWorkQueue().Acknowledge(transportMessage.MessageId);
 				}
 				finally
 				{

@@ -79,6 +79,7 @@ namespace Shuttle.ESB.Core
 		public IMessageRouteProvider ForwardingRouteProvider { get; set; }
 		public IServiceBusPolicy Policy { get; set; }
 		public IThreadActivityFactory ThreadActivityFactory { get; set; }
+		public DeferredMessageProcessor DeferredMessageProcessor { get; set; }
 
 		public bool HasIdempotenceService
 		{

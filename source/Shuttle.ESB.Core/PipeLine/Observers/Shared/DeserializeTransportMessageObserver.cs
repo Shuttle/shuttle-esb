@@ -14,43 +14,44 @@ namespace Shuttle.ESB.Core
 
 		public void Execute(OnDeserializeTransportMessage pipelineEvent)
 		{
-			Guard.AgainstNull(pipelineEvent.GetTransportMessageStream(), "transportMessageStream");
-			Guard.AgainstNull(pipelineEvent.GetWorkQueue(), "workQueue");
-			Guard.AgainstNull(pipelineEvent.GetErrorQueue(), "errorQueue");
+			var state = pipelineEvent.Pipeline.State;
+			Guard.AgainstNull(state.GetTransportMessageStream(), "transportMessageStream");
+			Guard.AgainstNull(state.GetWorkQueue(), "workQueue");
+			Guard.AgainstNull(state.GetErrorQueue(), "errorQueue");
 
 			TransportMessage transportMessage;
 
 			try
 			{
-				using (var stream = pipelineEvent.GetTransportMessageStream().Copy())
+				using (var stream = state.GetTransportMessageStream().Copy())
 				{
-					transportMessage = (TransportMessage)pipelineEvent.GetServiceBus().Configuration.Serializer.Deserialize(typeof(TransportMessage), stream);
+					transportMessage = (TransportMessage)state.GetServiceBus().Configuration.Serializer.Deserialize(typeof(TransportMessage), stream);
 				}
 			}
 			catch (Exception ex)
 			{
                 _log.Error(ex.ToString());
-                _log.Error(string.Format(ESBResources.TransportMessageDeserializationException, pipelineEvent.GetWorkQueue().Uri, ex));
+                _log.Error(string.Format(ESBResources.TransportMessageDeserializationException, state.GetWorkQueue().Uri, ex));
 
-				pipelineEvent.SetTransactionComplete();
+				state.SetTransactionComplete();
 				pipelineEvent.Pipeline.Abort();
 
-				pipelineEvent.GetServiceBus().Events.OnTransportMessageDeserializationException(this,
+				state.GetServiceBus().Events.OnTransportMessageDeserializationException(this,
 					new DeserializationExceptionEventArgs(
 						pipelineEvent, 
-						pipelineEvent.GetWorkQueue(),
-						pipelineEvent.GetErrorQueue(),
+						state.GetWorkQueue(),
+						state.GetErrorQueue(),
 						ex));
 
 				return;
 			}
 
-			pipelineEvent.SetTransportMessage(transportMessage);
-			pipelineEvent.SetMessageBytes(transportMessage.Message);
+			state.SetTransportMessage(transportMessage);
+			state.SetMessageBytes(transportMessage.Message);
 
 			transportMessage.AcceptInvariants();
 
-			pipelineEvent.GetServiceBus().Events.OnAfterTransportMessageDeserialization(
+			state.GetServiceBus().Events.OnAfterTransportMessageDeserialization(
 					this,
 					new TransportMessageSerializationEventArgs(pipelineEvent, transportMessage));
 
@@ -59,11 +60,6 @@ namespace Shuttle.ESB.Core
                 _log.Verbose(string.Format(ESBResources.TransportMessageDeserialized, transportMessage.MessageType,
                                           transportMessage.MessageId));
             }
-
-		    if (!transportMessage.IsIgnoring())
-			{
-				pipelineEvent.SetWorking();
-			}
 		}
 	}
 }

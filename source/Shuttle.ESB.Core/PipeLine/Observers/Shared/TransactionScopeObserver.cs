@@ -13,33 +13,35 @@ namespace Shuttle.ESB.Core
 	{
 		public void Execute(OnAbortPipeline pipelineEvent)
 		{
-			var scope = pipelineEvent.GetTransactionScope();
+			var state = pipelineEvent.Pipeline.State;
+			var scope = state.GetTransactionScope();
 
 			if (scope == null)
 			{
 				return;
 			}
 
-			if (pipelineEvent.GetTransactionComplete())
+			if (state.GetTransactionComplete())
 			{
 				scope.Complete();
 			}
 
             scope.Dispose();
 
-			pipelineEvent.SetTransactionScope(null);
+			state.SetTransactionScope(null);
 		}
 
 		public void Execute(OnCompleteTransactionScope pipelineEvent)
 		{
-			var scope = pipelineEvent.GetTransactionScope();
+			var state = pipelineEvent.Pipeline.State;
+			var scope = state.GetTransactionScope();
 
 			if (scope == null)
 			{
 				return;
 			}
 
-			if (pipelineEvent.Pipeline.Exception == null || pipelineEvent.GetTransactionComplete())
+			if (pipelineEvent.Pipeline.Exception == null || state.GetTransactionComplete())
 			{
 				scope.Complete();
 			}
@@ -47,7 +49,8 @@ namespace Shuttle.ESB.Core
 
 		public void Execute(OnDisposeTransactionScope pipelineEvent)
 		{
-			var scope = pipelineEvent.GetTransactionScope();
+			var state = pipelineEvent.Pipeline.State;
+			var scope = state.GetTransactionScope();
 
 			if (scope == null)
 			{
@@ -56,12 +59,13 @@ namespace Shuttle.ESB.Core
 
 			scope.Dispose();
 
-			pipelineEvent.SetTransactionScope(null);
+			state.SetTransactionScope(null);
 		}
 
 		public void Execute(OnStartTransactionScope pipelineEvent)
 		{
-			var scope = pipelineEvent.GetTransactionScope();
+			var state = pipelineEvent.Pipeline.State;
+			var scope = state.GetTransactionScope();
 
 			if (scope != null)
 			{
@@ -69,28 +73,29 @@ namespace Shuttle.ESB.Core
 					(string.Format(ESBResources.TransactionAlreadyStarted, GetType().FullName, MethodBase.GetCurrentMethod().Name)));
 			}
 
-			scope = pipelineEvent.GetServiceBus().Configuration.TransactionScopeFactory.Create(pipelineEvent);
+			scope = state.GetServiceBus().Configuration.TransactionScopeFactory.Create(pipelineEvent);
 
-			pipelineEvent.SetTransactionScope(scope);
+			state.SetTransactionScope(scope);
 		}
 
 		public void Execute(OnPipelineException pipelineEvent)
 		{
-			var scope = pipelineEvent.GetTransactionScope();
+			var state = pipelineEvent.Pipeline.State;
+			var scope = state.GetTransactionScope();
 
 			if (scope == null)
 			{
 				return;
 			}
 
-			if (pipelineEvent.GetTransactionComplete())
+			if (state.GetTransactionComplete())
 			{
 				scope.Complete();
 			}
 
 			scope.Dispose();
 
-			pipelineEvent.SetTransactionScope(null);
+			state.SetTransactionScope(null);
 		}
 	}
 }

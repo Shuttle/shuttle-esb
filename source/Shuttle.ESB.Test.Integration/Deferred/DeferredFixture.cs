@@ -47,7 +47,7 @@ namespace Shuttle.ESB.Test.Integration.Deferred
 
 			public void Execute(OnAfterProcessDeferredMessage pipelineEvent)
 			{
-				DeferredMessageReturned = pipelineEvent.GetDeferredMessageReturned();
+				DeferredMessageReturned = pipelineEvent.Pipeline.State.GetDeferredMessageReturned();
 			}
 		}
 

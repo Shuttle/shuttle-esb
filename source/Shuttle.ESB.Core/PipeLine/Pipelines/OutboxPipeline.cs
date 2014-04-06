@@ -13,7 +13,7 @@
 				.WithEvent<OnSendMessage>()
 				.WithEvent<OnAcknowledgeMessage>();
 
-			RegisterObserver(new DequeueWorkMessageObserver());
+			RegisterObserver(new GetWorkMessageObserver());
 			RegisterObserver(new DeserializeTransportMessageObserver());
 			RegisterObserver(new SendOutboxMessageObserver());
 
@@ -25,11 +25,11 @@
 		{
 			base.Obtained();
 
-			SetWorkQueue(_bus.Configuration.Outbox.WorkQueue);
-			SetErrorQueue(_bus.Configuration.Outbox.ErrorQueue);
+			State.SetWorkQueue(_bus.Configuration.Outbox.WorkQueue);
+			State.SetErrorQueue(_bus.Configuration.Outbox.ErrorQueue);
 
-			SetDurationToIgnoreOnFailure(_bus.Configuration.Outbox.DurationToIgnoreOnFailure);
-			SetMaximumFailureCount(_bus.Configuration.Outbox.MaximumFailureCount);
+			State.SetDurationToIgnoreOnFailure(_bus.Configuration.Outbox.DurationToIgnoreOnFailure);
+			State.SetMaximumFailureCount(_bus.Configuration.Outbox.MaximumFailureCount);
 		}
 	}
 }
