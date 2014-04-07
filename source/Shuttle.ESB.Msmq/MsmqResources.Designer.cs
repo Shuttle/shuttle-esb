@@ -95,17 +95,8 @@ namespace Shuttle.ESB.Msmq {
                 return ResourceManager.GetString("ExistsError", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Error trying to get message with id &apos;{0}&apos; from msmq queue &apos;{1}&apos;.  Exception: {2}.
-        /// </summary>
-        internal static string GetMessageByIdError {
-            get {
-                return ResourceManager.GetString("GetMessageByIdError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
+
+	    /// <summary>
         ///   Looks up a localized string similar to Error trying to get  message from msmq queue &apos;{0}&apos;.  Exception: {1}.
         /// </summary>
         internal static string GetMessageError {

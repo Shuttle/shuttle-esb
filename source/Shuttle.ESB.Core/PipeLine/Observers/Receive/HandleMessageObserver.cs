@@ -153,11 +153,6 @@ namespace Shuttle.ESB.Core
 		        }
 		        else
 		        {
-			        bus.Events.OnBeforeHandleMessage(this,
-			                                         new BeforeHandleMessageEventArgs(
-				                                         pipelineEvent,
-				                                         transportMessage));
-
 			        InvokeHandler(bus, handler, transportMessage, message, pipelineEvent, message.GetType());
 
 			        bus.Events.OnAfterHandleMessage(this,

@@ -7,6 +7,7 @@
 		{
 			RegisterStage("Read")
 				.WithEvent<OnGetMessage>()
+				.WithEvent<OnAfterGetMessage>()
 				.WithEvent<OnDeserializeTransportMessage>()
 				.WithEvent<OnAfterDeserializeTransportMessage>()
 				.WithEvent<OnDecompressMessage>()

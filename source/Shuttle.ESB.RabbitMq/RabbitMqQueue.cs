@@ -11,20 +11,7 @@ namespace Shuttle.ESB.RabbitMQ
 {
 	public class RabbitMQQueue : IQueue, ICreate, IDrop, IDisposable, IPurge
 	{
-		private class UnacknowledgedMessage
-		{
-			public UnacknowledgedMessage(Guid messageId, BasicDeliverEventArgs basicDeliverEventArgs)
-			{
-				BasicDeliverEventArgs = basicDeliverEventArgs;
-				MessageId = messageId;
-			}
-
-			public BasicDeliverEventArgs BasicDeliverEventArgs { get; private set; }
-			public Guid MessageId { get; private set; }
-		}
-
 		private readonly IRabbitMQConfiguration _configuration;
-		private readonly List<UnacknowledgedMessage> _unacknowledgedMessages = new List<UnacknowledgedMessage>();
 
 		private readonly object _connectionLock = new object();
 		private readonly object _queueLock = new object();
@@ -110,9 +97,9 @@ namespace Shuttle.ESB.RabbitMQ
 				});
 		}
 
-		public Stream GetMessage()
+		public ReceivedMessage GetMessage()
 		{
-			return AccessQueue<Stream>(() =>
+			return AccessQueue(() =>
 				{
 					var result = GetChannel().Next();
 
@@ -121,55 +108,7 @@ namespace Shuttle.ESB.RabbitMQ
 						return null;
 					}
 
-					lock (_unacknowledgedMessageLock)
-					{
-						_unacknowledgedMessages.Add(new UnacknowledgedMessage(new Guid(result.BasicProperties.CorrelationId), result));
-					}
-
-					return new MemoryStream(result.Body);
-				});
-		}
-
-		public Stream GetMessage(Guid messageId)
-		{
-			return AccessQueue<Stream>(() =>
-				{
-					var read = true;
-
-					while (read)
-					{
-						var result = GetChannel().Next();
-
-						if (result != null)
-						{
-							Guid guid;
-
-							try
-							{
-								guid = new Guid(result.BasicProperties.CorrelationId);
-							}
-							catch
-							{
-								guid = Guid.Empty;
-							}
-
-							if (guid.Equals(messageId))
-							{
-								lock (_unacknowledgedMessageLock)
-								{
-									_unacknowledgedMessages.Add(new UnacknowledgedMessage(guid, result));
-								}
-
-								return new MemoryStream(result.Body);
-							}
-						}
-						else
-						{
-							read = false;
-						}
-					}
-
-					return null;
+					return new ReceivedMessage(new MemoryStream(result.Body), result);
 				});
 		}
 
@@ -289,50 +228,19 @@ namespace Shuttle.ESB.RabbitMQ
 			}
 		}
 
-		public void Acknowledge(Guid messageId)
+		public void Acknowledge(object acknowledgementToken)
 		{
-			AccessQueue(() =>
-				{
-					UnacknowledgedMessage unacknowledgedMessage;
-
-					lock (_unacknowledgedMessageLock)
-					{
-						unacknowledgedMessage = _unacknowledgedMessages.Find(candidate => candidate.MessageId.Equals(messageId));
-					}
-
-					if (unacknowledgedMessage != null)
-					{
-						GetChannel().Acknowledge(unacknowledgedMessage.BasicDeliverEventArgs);
-					}
-
-					lock (_unacknowledgedMessageLock)
-					{
-						_unacknowledgedMessages.RemoveAll(candidate => candidate.MessageId.Equals(messageId));
-					}
-				});
+			AccessQueue(() => GetChannel().Acknowledge((BasicDeliverEventArgs)acknowledgementToken));
 		}
 
-		public void Release(Guid messageId)
+		public void Release(object acknowledgementToken)
 		{
 			AccessQueue(() =>
 				{
-					UnacknowledgedMessage unacknowledgedMessage;
+					var basicDeliverEventArgs = (BasicDeliverEventArgs)acknowledgementToken;
 
-					lock (_unacknowledgedMessageLock)
-					{
-						unacknowledgedMessage = _unacknowledgedMessages.Find(candidate => candidate.MessageId.Equals(messageId));
-					}
-
-					if (unacknowledgedMessage != null)
-					{
-						GetChannel().Model.BasicPublish("", _parser.Queue, false, false, unacknowledgedMessage.BasicDeliverEventArgs.BasicProperties, unacknowledgedMessage.BasicDeliverEventArgs.Body);
-						GetChannel().Acknowledge(unacknowledgedMessage.BasicDeliverEventArgs);
-					}
-
-					lock (_unacknowledgedMessageLock)
-					{
-						_unacknowledgedMessages.RemoveAll(candidate => candidate.MessageId.Equals(messageId));
-					}
+					GetChannel().Model.BasicPublish("", _parser.Queue, false, false, basicDeliverEventArgs.BasicProperties, basicDeliverEventArgs.Body);
+					GetChannel().Acknowledge(basicDeliverEventArgs);
 				});
 		}
 

@@ -103,6 +103,7 @@
     <Compile Include="Exceptions\ProcessorException.cs" />
     <Compile Include="Idempotence\IIdempotenceService.cs" />
     <Compile Include="Idempotence\IdempotenceServiceExtensions.cs" />
+    <Compile Include="Messages\ReceivedMessage.cs" />
     <Compile Include="Pipeline\Observers\DeferredMessage\ProcessDeferredMessageObserver.cs" />
     <Compile Include="Pipeline\Observers\Receive\AcknowledgeMessageObserver.cs" />
     <Compile Include="Pipeline\Observers\Receive\SendDeferredObserver.cs" />

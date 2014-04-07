@@ -538,6 +538,24 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There has been an exception in the ReceiveMessagePipeline.  No message has been received.  Exception: {0}.
+        /// </summary>
+        public static string ReceivePipelineExceptionMessageNotReceived {
+            get {
+                return ResourceManager.GetString("ReceivePipelineExceptionMessageNotReceived", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There has been an exception in the ReceiveMessagePipeline.  The message has been released.  Exception: {0}.
+        /// </summary>
+        public static string ReceivePipelineExceptionMessageReleased {
+            get {
+                return ResourceManager.GetString("ReceivePipelineExceptionMessageReleased", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Attempt to register event type &apos;{0}&apos; on pipeline type &apos;{1}&apos;.  The vent type is not compatible with the supported pipeline event type &apos;{2}&apos;..
         /// </summary>
         public static string RegisteredIncompatiblePipelineEvent {

@@ -20,10 +20,12 @@ namespace Shuttle.ESB.Test.Integration
 
 			workQueue.Enqueue(messageId, stream);
 
-			Assert.AreEqual(100, workQueue.GetMessage().ReadByte());
+			var receivedMessage = workQueue.GetMessage();
+
+			Assert.AreEqual(100, receivedMessage.Stream.ReadByte());
 			Assert.IsNull(workQueue.GetMessage());
 
-			workQueue.Acknowledge(messageId);
+			workQueue.Acknowledge(receivedMessage.AcknowledgementToken);
 
 			Assert.IsNull(workQueue.GetMessage());
 
@@ -38,15 +40,19 @@ namespace Shuttle.ESB.Test.Integration
 
 			workQueue.Enqueue(messageId, new MemoryStream());
 
-			Assert.IsNotNull(workQueue.GetMessage());
+			var receivedMessage = workQueue.GetMessage();
+
+			Assert.IsNotNull(receivedMessage);
 			Assert.IsNull(workQueue.GetMessage());
 
-			workQueue.Release(messageId);
+			workQueue.Release(receivedMessage.AcknowledgementToken);
 
-			Assert.IsNotNull(workQueue.GetMessage());
+			receivedMessage = workQueue.GetMessage();
+
+			Assert.IsNotNull(receivedMessage);
 			Assert.IsNull(workQueue.GetMessage());
 
-			workQueue.Acknowledge(messageId);
+			workQueue.Acknowledge(receivedMessage.AcknowledgementToken);
 
 			Assert.IsNull(workQueue.GetMessage());
 
@@ -68,10 +74,12 @@ namespace Shuttle.ESB.Test.Integration
 
 			workQueue = GetWorkQueue(workQueueUriFormat, false);
 
-			Assert.IsNotNull(workQueue.GetMessage());
+			var receivedMessage = workQueue.GetMessage();
+
+			Assert.IsNotNull(receivedMessage);
 			Assert.IsNull(workQueue.GetMessage());
 
-			workQueue.Acknowledge(messageId);
+			workQueue.Acknowledge(receivedMessage.AcknowledgementToken);
 			workQueue.AttemptDispose();
 
 			workQueue = GetWorkQueue(workQueueUriFormat, false);

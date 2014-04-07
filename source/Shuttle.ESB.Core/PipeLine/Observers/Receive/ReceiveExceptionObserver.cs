@@ -5,15 +5,13 @@ namespace Shuttle.ESB.Core
 	public class ReceiveExceptionObserver :
 		IPipelineObserver<OnPipelineException>
 	{
-		/* 
-		 * 
-		 * If in the 'Read' stage
-		 * - enqueue in error queue
-		 * 
-		 * If in the 'Handle' stage 
-		 * - for retry enqueue in work queue; else enqueue in error queue
-		 * 
-		 */
+		private readonly ILog _log;
+
+		public ReceiveExceptionObserver()
+		{
+			_log = Log.For(this);
+		}
+
 		public void Execute(OnPipelineException pipelineEvent)
 		{
 			var state = pipelineEvent.Pipeline.State;
@@ -31,15 +29,28 @@ namespace Shuttle.ESB.Core
 				try
 				{
 					var transportMessage = state.GetTransportMessage();
+					var receivedMessage = state.GetReceivedMessage();
 
 					if (transportMessage == null)
 					{
+						if (receivedMessage != null)
+						{
+							state.GetWorkQueue().Release(receivedMessage.AcknowledgementToken);
+
+							_log.Error(string.Format(ESBResources.ReceivePipelineExceptionMessageReleased, pipelineEvent.Pipeline.Exception.CompactMessages()));
+						}
+						else
+						{
+							_log.Error(string.Format(ESBResources.ReceivePipelineExceptionMessageNotReceived, pipelineEvent.Pipeline.Exception.CompactMessages()));
+						}
+
 						return;
 					}
 
 					var action = bus.Configuration.Policy.EvaluateMessageHandlingFailure(pipelineEvent);
 
-					transportMessage.RegisterFailure(pipelineEvent.Pipeline.Exception.CompactMessages(), action.TimeSpanToIgnoreRetriedMessage);
+					transportMessage.RegisterFailure(pipelineEvent.Pipeline.Exception.CompactMessages(),
+					                                 action.TimeSpanToIgnoreRetriedMessage);
 
 					using (var stream = bus.Configuration.Serializer.Serialize(transportMessage))
 					{
@@ -47,47 +58,43 @@ namespace Shuttle.ESB.Core
 						var handlerFullTypeName = handler != null ? handler.GetType().FullName : "(handler is null)";
 						var currentRetryCount = transportMessage.FailureMessages.Count;
 
-						var retry = pipelineEvent.Pipeline.StageName.Equals("Handle")
-						            &&
-						            !(pipelineEvent.Pipeline.Exception is UnrecoverableHandlerException)
+						var retry = !(pipelineEvent.Pipeline.Exception is UnrecoverableHandlerException)
 						            &&
 						            action.Retry;
 
 						if (retry)
 						{
-							Log.For(this)
-							   .Warning(string.Format(ESBResources.MessageHandlerExceptionWillRetry,
-							                          handlerFullTypeName,
-							                          pipelineEvent.Pipeline.Exception.CompactMessages(),
-							                          transportMessage.MessageType,
-							                          transportMessage.MessageId,
-							                          currentRetryCount,
-							                          state.GetMaximumFailureCount()));
+							_log.Warning(string.Format(ESBResources.MessageHandlerExceptionWillRetry,
+							                           handlerFullTypeName,
+							                           pipelineEvent.Pipeline.Exception.CompactMessages(),
+							                           transportMessage.MessageType,
+							                           transportMessage.MessageId,
+							                           currentRetryCount,
+							                           state.GetMaximumFailureCount()));
 
 							state.GetWorkQueue().Enqueue(transportMessage.MessageId, stream);
 						}
 						else
 						{
-							Log.For(this)
-							   .Error(string.Format(ESBResources.MessageHandlerExceptionFailure,
-							                        handlerFullTypeName,
-							                        pipelineEvent.Pipeline.Exception.CompactMessages(),
-							                        transportMessage.MessageType,
-							                        transportMessage.MessageId,
-							                        state.GetMaximumFailureCount(),
-							                        state.GetErrorQueue().Uri));
+							_log.Error(string.Format(ESBResources.MessageHandlerExceptionFailure,
+							                         handlerFullTypeName,
+							                         pipelineEvent.Pipeline.Exception.CompactMessages(),
+							                         transportMessage.MessageType,
+							                         transportMessage.MessageId,
+							                         state.GetMaximumFailureCount(),
+							                         state.GetErrorQueue().Uri));
 
 							state.GetErrorQueue().Enqueue(transportMessage.MessageId, stream);
 						}
 					}
 
-					state.GetWorkQueue().Acknowledge(transportMessage.MessageId);
+					state.GetWorkQueue().Acknowledge(receivedMessage.AcknowledgementToken);
 				}
 				finally
 				{
 					pipelineEvent.Pipeline.MarkExceptionHandled();
 					bus.Events.OnAfterPipelineExceptionHandled(this,
-															   new PipelineExceptionEventArgs(pipelineEvent.Pipeline));
+					                                           new PipelineExceptionEventArgs(pipelineEvent.Pipeline));
 				}
 			}
 			finally

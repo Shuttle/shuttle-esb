@@ -68,25 +68,12 @@ namespace Shuttle.ESB.Msmq
 			{
 				Message message;
 
-				if (Guid.Empty.Equals(messageId))
-				{
-					message = tx != null
-								  ? pipelineEvent.Pipeline.State.Get<MessageQueue>("queue")
-												 .Receive(pipelineEvent.Pipeline.State.Get<TimeSpan>("timeout"), tx)
-								  : pipelineEvent.Pipeline.State.Get<MessageQueue>("queue")
-												 .Receive(pipelineEvent.Pipeline.State.Get<TimeSpan>("timeout"),
-														  MsmqQueue.TransactionType(parser.Transactional));
-				}
-				else
-				{
-					message = tx != null
-								  ? pipelineEvent.Pipeline.State.Get<MessageQueue>("queue")
-												 .ReceiveByCorrelationId(string.Format(@"{0}\1", messageId), pipelineEvent.Pipeline.State.Get<TimeSpan>("timeout"), tx)
-								  : pipelineEvent.Pipeline.State.Get<MessageQueue>("queue")
-												 .ReceiveByCorrelationId(string.Format(@"{0}\1", messageId), pipelineEvent.Pipeline.State.Get<TimeSpan>("timeout"),
-														  MsmqQueue.TransactionType(parser.Transactional));
-					
-				}
+				message = tx != null
+							  ? pipelineEvent.Pipeline.State.Get<MessageQueue>("queue")
+											 .Receive(pipelineEvent.Pipeline.State.Get<TimeSpan>("timeout"), tx)
+							  : pipelineEvent.Pipeline.State.Get<MessageQueue>("queue")
+											 .Receive(pipelineEvent.Pipeline.State.Get<TimeSpan>("timeout"),
+													  MsmqQueue.TransactionType(parser.Transactional));
 
 				pipelineEvent.Pipeline.State.Add(message);
 			}
@@ -111,7 +98,7 @@ namespace Shuttle.ESB.Msmq
 
 		public void Execute(OnSendJournalMessage pipelineEvent)
 		{
-			var parser = pipelineEvent.Pipeline.State.Get<MsmqUriParser>(); 
+			var parser = pipelineEvent.Pipeline.State.Get<MsmqUriParser>();
 			var journalQueue = pipelineEvent.Pipeline.State.Get<MessageQueue>("journalQueue");
 			var message = pipelineEvent.Pipeline.State.Get<Message>();
 

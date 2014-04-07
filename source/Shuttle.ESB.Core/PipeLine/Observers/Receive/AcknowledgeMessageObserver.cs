@@ -36,7 +36,7 @@ namespace Shuttle.ESB.Core
 				}
 			}
 
-			state.GetWorkQueue().Acknowledge(transportMessage.MessageId);
+			state.GetWorkQueue().Acknowledge(state.GetReceivedMessage().AcknowledgementToken);
 
 			_log.Trace(string.Format(ESBResources.TraceAcknowledge, transportMessage.MessageType, transportMessage.MessageId));
 		}

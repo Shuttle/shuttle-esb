@@ -36,7 +36,6 @@ namespace Shuttle.ESB.Core
 			Guard.AgainstNull(transportMessage, "transportMessage");
 			Guard.AgainstNullOrEmptyString(transportMessage.RecipientInboxWorkQueueUri, "uri");
 
-
 			if (transportMessage.IsIgnoring() && bus.Configuration.HasDeferredQueue)
 			{
 				bus.Configuration.Inbox.DeferredQueue.Enqueue(transportMessage.MessageId, state.GetTransportMessageStream());
@@ -62,8 +61,6 @@ namespace Shuttle.ESB.Core
 										  transportMessage.MessageId,
 										  queue.Uri));
 			}
-
-			bus.Events.OnBeforeEnqueueStream(this, new QueueMessageEventArgs(pipelineEvent, queue, transportMessage));
 
 			using (var stream = state.GetTransportMessageStream().Copy())
 			{

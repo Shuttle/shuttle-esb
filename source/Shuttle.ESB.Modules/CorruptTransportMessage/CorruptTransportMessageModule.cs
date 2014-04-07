@@ -23,7 +23,7 @@ namespace Shuttle.ESB.Modules
 			var filePath = Path.Combine(_corruptTransportMessageFolder, string.Format("{0}.stm", Guid.NewGuid().ToString()));
 
 			using (Stream file = File.OpenWrite(filePath))
-			using (var stream = deserializationExceptionEventArgs.PipelineEvent.Pipeline.State.GetTransportMessageStream().Copy())
+			using (var stream = deserializationExceptionEventArgs.PipelineEvent.Pipeline.State.GetReceivedMessage().Stream.Copy())
 			{
 				stream.CopyTo(file);
 			}

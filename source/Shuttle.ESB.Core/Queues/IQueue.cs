@@ -10,9 +10,8 @@ namespace Shuttle.ESB.Core
 		bool IsEmpty();
 
 	    void Enqueue(Guid messageId, Stream stream);
-        Stream GetMessage();
-        Stream GetMessage(Guid messageId);
-	    void Acknowledge(Guid messageId);
-	    void Release(Guid messageId);
+        ReceivedMessage GetMessage();
+	    void Acknowledge(object acknowledgementToken);
+	    void Release(object acknowledgementToken);
     }
 }

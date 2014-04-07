@@ -15,15 +15,19 @@ namespace Shuttle.ESB.Core
 		public void Execute(OnDeserializeTransportMessage pipelineEvent)
 		{
 			var state = pipelineEvent.Pipeline.State;
-			Guard.AgainstNull(state.GetTransportMessageStream(), "transportMessageStream");
-			Guard.AgainstNull(state.GetWorkQueue(), "workQueue");
-			Guard.AgainstNull(state.GetErrorQueue(), "errorQueue");
+			var receivedMessage = state.GetReceivedMessage();
+			var workQueue = state.GetWorkQueue();
+			var errorQueue = state.GetErrorQueue();
+
+			Guard.AgainstNull(receivedMessage, "receivedMessage");
+			Guard.AgainstNull(workQueue, "workQueue");
+			Guard.AgainstNull(errorQueue, "errorQueue");
 
 			TransportMessage transportMessage;
 
 			try
 			{
-				using (var stream = state.GetTransportMessageStream().Copy())
+				using (var stream = receivedMessage.Stream.Copy())
 				{
 					transportMessage = (TransportMessage)state.GetServiceBus().Configuration.Serializer.Deserialize(typeof(TransportMessage), stream);
 				}
@@ -31,7 +35,7 @@ namespace Shuttle.ESB.Core
 			catch (Exception ex)
 			{
                 _log.Error(ex.ToString());
-                _log.Error(string.Format(ESBResources.TransportMessageDeserializationException, state.GetWorkQueue().Uri, ex));
+                _log.Error(string.Format(ESBResources.TransportMessageDeserializationException, workQueue.Uri, ex));
 
 				state.SetTransactionComplete();
 				pipelineEvent.Pipeline.Abort();
@@ -39,8 +43,8 @@ namespace Shuttle.ESB.Core
 				state.GetServiceBus().Events.OnTransportMessageDeserializationException(this,
 					new DeserializationExceptionEventArgs(
 						pipelineEvent, 
-						state.GetWorkQueue(),
-						state.GetErrorQueue(),
+						workQueue,
+						errorQueue,
 						ex));
 
 				return;

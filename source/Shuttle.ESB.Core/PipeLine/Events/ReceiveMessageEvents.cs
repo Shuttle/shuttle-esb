@@ -6,6 +6,10 @@ namespace Shuttle.ESB.Core
 	{
 	}
 
+	public class OnAfterGetMessage : PipelineEvent
+	{
+	}
+
 	public class OnDeserializeTransportMessage : PipelineEvent
 	{
 	}

@@ -73,7 +73,7 @@ namespace Shuttle.ESB.Core
 			}
 		}
 
-		public Stream GetMessage()
+		public ReceivedMessage GetMessage()
 		{
 			lock (_padlock)
 			{
@@ -89,7 +89,7 @@ namespace Shuttle.ESB.Core
 					{
 						_unacknowledgedMessageIds.Add(pair.Key);
 
-						return pair.Value;
+						return new ReceivedMessage(pair.Value, pair.Key);
 					}
 					
 					index++;
@@ -99,28 +99,10 @@ namespace Shuttle.ESB.Core
 			}
 		}
 
-		public Stream GetMessage(Guid messageId)
+		public void Acknowledge(object acknowledgementToken)
 		{
-			lock (_padlock)
-			{
-				var queue = _queues[Uri.ToString()];
+			var messageId = (Guid)acknowledgementToken;
 
-				if (queue.ContainsKey(messageId))
-				{
-					if (!_unacknowledgedMessageIds.Contains(messageId))
-					{
-						_unacknowledgedMessageIds.Add(messageId);
-					}
-
-					return queue[messageId];
-				}
-
-				return null;
-			}
-		}
-
-		public void Acknowledge(Guid messageId)
-		{
 			lock (_padlock)
 			{
 				var queue = _queues[Uri.ToString()];
@@ -139,8 +121,10 @@ namespace Shuttle.ESB.Core
 			}
 		}
 
-		public void Release(Guid messageId)
+		public void Release(object acknowledgementToken)
 		{
+			var messageId = (Guid) acknowledgementToken;
+
 			lock (_padlock)
 			{
 				var queue = _queues[Uri.ToString()];
@@ -153,7 +137,7 @@ namespace Shuttle.ESB.Core
 				if (queue.ContainsKey(messageId))
 				{
 					var message = queue[messageId];
-					
+
 					queue.Remove(messageId);
 
 					queue.Add(messageId, message);

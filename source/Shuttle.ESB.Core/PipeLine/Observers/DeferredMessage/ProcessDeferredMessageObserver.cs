@@ -17,11 +17,14 @@ namespace Shuttle.ESB.Core
 			var state = pipelineEvent.Pipeline.State;
 			var transportMessage = state.GetTransportMessage();
 			var checkpointMessageId = state.GetCheckpointMessageId();
+			var receivedMessage = state.GetReceivedMessage();
+			var workQueue = state.GetWorkQueue();
+			var deferredQueue = state.GetDeferredQueue();
 
 			Guard.AgainstNull(transportMessage, "transportMessage");
-			Guard.AgainstNull(state.GetTransportMessageStream(), "transportMessageStream");
-			Guard.AgainstNull(state.GetWorkQueue(), "workQueue");
-			Guard.AgainstNull(state.GetDeferredQueue(), "deferredQueue");
+			Guard.AgainstNull(receivedMessage, "receivedMessage");
+			Guard.AgainstNull(workQueue, "workQueue");
+			Guard.AgainstNull(deferredQueue, "deferredQueue");
 
 			if (transportMessage.IsIgnoring())
 			{
@@ -31,15 +34,15 @@ namespace Shuttle.ESB.Core
 					state.SetNextDeferredProcessDate(transportMessage.IgnoreTillDate);
 				}
 
-				state.GetDeferredQueue().Release(transportMessage.MessageId);
+				deferredQueue.Release(receivedMessage.AcknowledgementToken);
 
 				state.SetDeferredMessageReturned(false);
 
 				return;
 			}
 
-			state.GetWorkQueue().Enqueue(transportMessage.MessageId, state.GetTransportMessageStream());			
-			state.GetDeferredQueue().Acknowledge(transportMessage.MessageId);
+			workQueue.Enqueue(transportMessage.MessageId, receivedMessage.Stream);			
+			deferredQueue.Acknowledge(receivedMessage.AcknowledgementToken);
 
 			if (checkpointMessageId.Equals(transportMessage.MessageId))
 			{

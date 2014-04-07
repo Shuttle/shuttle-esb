@@ -469,4 +469,12 @@
   <data name="DeferredMessageProcessorInstanceException" xml:space="preserve">
     <value>Only one instance of the DeferredMessageProcessor should be created.  Check that the ProcessorThreadPool for the DeferredMessageProcessorFactory is not using more than 1 thread.</value>
   </data>
+  <data name="ReceivePipelineExceptionMessageNotReceived" xml:space="preserve">
+    <value>There has been an exception in the ReceiveMessagePipeline.  No message has been received.  Exception: {0}</value>
+    <comment>{0} = exception</comment>
+  </data>
+  <data name="ReceivePipelineExceptionMessageReleased" xml:space="preserve">
+    <value>There has been an exception in the ReceiveMessagePipeline.  The message has been released.  Exception: {0}</value>
+    <comment>{0} = exception</comment>
+  </data>
 </root>

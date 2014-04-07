@@ -16,6 +16,7 @@ namespace Shuttle.ESB.Core
 		public const string TransactionScope = "TransactionScope";
 		public const string TransportMessage = "TransportMessage";
 		public const string TransportMessageStream = "TransportMessageStream";
+		public const string ReceivedMessage = "ReceivedMessage";
 		public const string Working = "Working";
 		public const string WorkQueue = "WorkQueue";
 		public const string DeferredQueue = "DeferredQueue";

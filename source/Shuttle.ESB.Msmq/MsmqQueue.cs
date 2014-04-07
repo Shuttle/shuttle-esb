@@ -10,7 +10,7 @@ using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.Msmq
 {
-	public class MsmqQueue : IQueue, ICreate, IDrop, IPurge, IQueueReader
+	public class MsmqQueue : IQueue, ICreate, IDrop, IPurge, IQueueReader, IRequireInitialization
 	{
 		private readonly TimeSpan _timeout;
 		private readonly MsmqUriParser _parser;
@@ -39,8 +39,6 @@ namespace Shuttle.ESB.Msmq
 			_messagePropertyFilter.SetAll();
 
 			_dequeuePipelinePool = new ReusableObjectPool<MsmqGetMessagePipeline>();
-
-			ReturnJournalMessages();
 		}
 
 		private void ReturnJournalMessages()
@@ -217,30 +215,28 @@ namespace Shuttle.ESB.Msmq
 			}
 		}
 
-		public Stream GetMessage()
-		{
-			return GetMessage(Guid.Empty);
-		}
-
-		public Stream GetMessage(Guid messageId)
+		public ReceivedMessage GetMessage()
 		{
 			try
 			{
 				var pipeline = _dequeuePipelinePool.Get(_msmqDequeuePipelineType) ?? new MsmqGetMessagePipeline();
 
-				pipeline.Execute(_parser, messageId, _timeout);
+				pipeline.Execute(_parser, _timeout);
 
 				_dequeuePipelinePool.Release(pipeline);
 
 				var message = pipeline.State.Get<Message>();
 
-				return message == null ? null : message.BodyStream;
+				if (message == null)
+				{
+					return null;
+				}
+
+				return new ReceivedMessage(message.BodyStream, new Guid(message.Label));
 			}
 			catch (Exception ex)
 			{
-				_log.Error(!Guid.Empty.Equals(messageId)
-					           ? string.Format(MsmqResources.GetMessageError, _parser.Path, ex.CompactMessages())
-					           : string.Format(MsmqResources.GetMessageByIdError, messageId, _parser.Path, ex.CompactMessages()));
+				_log.Error(string.Format(MsmqResources.GetMessageError, _parser.Path, ex.CompactMessages()));
 
 				throw;
 			}
@@ -335,12 +331,14 @@ namespace Shuttle.ESB.Msmq
 			get { return Transaction.Current != null; }
 		}
 
-		public void Acknowledge(Guid messageId)
+		public void Acknowledge(object acknowledgementToken)
 		{
 			if (!_parser.Journal)
 			{
 				return;
 			}
+
+			var messageId = (Guid) acknowledgementToken;
 
 			try
 			{
@@ -368,7 +366,7 @@ namespace Shuttle.ESB.Msmq
 			}
 		}
 
-		public void Release(Guid messageId)
+		public void Release(object acknowledgementToken)
 		{
 			if (!_parser.Journal
 				||
@@ -379,7 +377,7 @@ namespace Shuttle.ESB.Msmq
 				return;
 			}
 
-			new MsmqReleaseMessagePipeline().Execute(messageId, _parser, _timeout);
+			new MsmqReleaseMessagePipeline().Execute((Guid)acknowledgementToken, _parser, _timeout);
 		}
 
 		public static void AccessDenied(ILog log, string path)
@@ -401,6 +399,11 @@ namespace Shuttle.ESB.Msmq
 			}
 
 			Process.GetCurrentProcess().Kill();
+		}
+
+		public void Initialize(IServiceBus bus)
+		{
+			ReturnJournalMessages();
 		}
 	}
 }

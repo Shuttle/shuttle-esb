@@ -21,10 +21,10 @@ namespace Shuttle.ESB.Core
 
         	var bus = state.GetServiceBus();
 
-            var stream = queue.GetMessage();
+            var receivedMessage = queue.GetMessage();
 
             // Abort the pipeline if there is no message on the queue
-            if (stream == null)
+            if (receivedMessage == null)
             {
 				state.SetNextDeferredProcessDate(DateTime.MaxValue);
 				state.GetServiceBus().Events.OnQueueEmpty(this, new QueueEmptyEventArgs(pipelineEvent, queue));
@@ -32,10 +32,8 @@ namespace Shuttle.ESB.Core
             }
             else
             {
-				bus.Events.OnAfterDequeueStream(this, new QueueStreamEventArgs(pipelineEvent, queue, stream.Copy()));
-
 				state.SetWorking();
-				state.SetTransportMessageStream(stream);
+				state.SetReceivedMessage(receivedMessage);
 
                 if (_log.IsVerboseEnabled)
                 {

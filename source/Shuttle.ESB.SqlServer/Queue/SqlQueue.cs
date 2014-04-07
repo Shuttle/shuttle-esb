@@ -9,7 +9,7 @@ using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.SqlServer
 {
-	public class SqlQueue : IQueue, ICreate, IDrop, IPurge,  IQueueReader
+	public class SqlQueue : IQueue, ICreate, IDrop, IPurge, IQueueReader
 	{
 		private class UnacknowledgedMessage
 		{
@@ -221,7 +221,7 @@ namespace Shuttle.ESB.SqlServer
 			}
 		}
 
-		public Stream GetMessage()
+		public ReceivedMessage GetMessage()
 		{
 			lock (_padlock)
 			{
@@ -239,7 +239,7 @@ namespace Shuttle.ESB.SqlServer
 								_scriptProvider.GetScript(
 									Script.QueueDequeue,
 									_tableName,
-									string.Join(",", messageIds.Select(messageId => string.Format("'{0}'", messageId)).ToArray()))));
+									string.Join(",", messageIds.Select(id => string.Format("'{0}'", id)).ToArray()))));
 
 						if (row == null)
 						{
@@ -247,10 +247,11 @@ namespace Shuttle.ESB.SqlServer
 						}
 
 						var result = new MemoryStream((byte[])row["MessageBody"]);
+						var messageId = new Guid(row["MessageId"].ToString());
 
-						MessageIdAcknowledgementRequired((int)row["SequenceId"], new Guid(row["MessageId"].ToString()));
+						MessageIdAcknowledgementRequired((int)row["SequenceId"], messageId);
 
-						return result;
+						return new ReceivedMessage(result, messageId);
 					}
 				}
 				catch (Exception ex)
@@ -265,39 +266,6 @@ namespace Shuttle.ESB.SqlServer
 		private void MessageIdAcknowledgementRequired(int sequenceId, Guid messageId)
 		{
 			_unacknowledgedMessages.Add(new UnacknowledgedMessage(messageId, sequenceId));
-		}
-
-		public Stream GetMessage(Guid messageId)
-		{
-			lock (_padlock)
-			{
-				try
-				{
-					using (_databaseConnectionFactory.Create(_dataSource))
-					{
-						var row = _databaseGateway.GetSingleRowUsing(
-							_dataSource,
-							RawQuery.Create(_dequeueIdQueryStatement).AddParameterValue(QueueColumns.MessageId, messageId));
-
-						if (row == null)
-						{
-							return null;
-						}
-
-						var result = new MemoryStream((byte[])row["MessageBody"]);
-
-						MessageIdAcknowledgementRequired((int)row["SequenceId"], messageId);
-
-						return result;
-					}
-				}
-				catch (Exception ex)
-				{
-					_log.Error(string.Format(SqlResources.DequeueIdError, Uri, ex.Message, _dequeueIdQueryStatement));
-
-					throw;
-				}
-			}
 		}
 
 		private void BuildQueries()
@@ -342,10 +310,12 @@ namespace Shuttle.ESB.SqlServer
 			}
 		}
 
-		public void Acknowledge(Guid messageId)
+		public void Acknowledge(object acknowledgementToken)
 		{
 			try
 			{
+				var messageId = (Guid) acknowledgementToken;
+
 				lock (_padlock)
 				{
 					using (_databaseConnectionFactory.Create(_dataSource))
@@ -366,10 +336,12 @@ namespace Shuttle.ESB.SqlServer
 			}
 		}
 
-		public void Release(Guid messageId)
+		public void Release(object acknowledgementToken)
 		{
 			try
 			{
+				var messageId = (Guid) acknowledgementToken;
+
 				lock (_padlock)
 				{
 					using (var connection = _databaseConnectionFactory.Create(_dataSource))

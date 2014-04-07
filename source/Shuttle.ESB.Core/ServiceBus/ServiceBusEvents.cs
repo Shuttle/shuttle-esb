@@ -1,13 +1,7 @@
-using System;
-
 namespace Shuttle.ESB.Core
 {
 	internal class ServiceBusEvents : IServiceBusEvents
 	{
-		public event BeforeEnqueueStreamDelegate BeforeEnqueueStream = delegate { };
-		public event BeforeDequeueStreamDelegate BeforeDequeueStream = delegate { };
-		public event BeforeHandleMessageDelegate BeforeHandleMessage = delegate { };
-		public event BeforeRemoveMessageDelegate BeforeRemoveMessage = delegate { };
 		public event BeforeDistributeMessageDelegate BeforeDistributeMessage = delegate { };
 		public event AfterEnqueueStreamDelegate AfterEnqueueStream = delegate { };
 		public event AfterDequeueStreamDelegate AfterDequeueStream = delegate { };
@@ -32,26 +26,6 @@ namespace Shuttle.ESB.Core
         
         public event ThreadWorkingDelegate ThreadWorking = delegate { };
         public event ThreadWaitingDelegate ThreadWaiting = delegate { };
-
-		public void OnBeforeEnqueueStream(object sender, QueueMessageEventArgs args)
-		{
-			BeforeEnqueueStream.Invoke(sender, args);
-		}
-
-		public void OnBeforeDequeueMessage(object sender, BeforeDequeueEventArgs args)
-		{
-			BeforeDequeueStream.Invoke(sender, args);
-		}
-
-		public void OnBeforeHandleMessage(object sender, BeforeHandleMessageEventArgs args)
-		{
-			BeforeHandleMessage.Invoke(sender, args);
-		}
-
-		public void OnBeforeRemoveMessage(object sender, QueueMessageEventArgs args)
-		{
-			BeforeRemoveMessage.Invoke(sender, args);
-		}
 
 		public void OnBeforeDistributeMessage(object sender, DistributeMessageEventArgs args)
 		{

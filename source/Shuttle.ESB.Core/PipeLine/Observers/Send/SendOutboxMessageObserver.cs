@@ -30,10 +30,6 @@ namespace Shuttle.ESB.Core
 				                          queue.Uri));
 			}
 
-			state.GetServiceBus().Events.OnBeforeEnqueueStream(
-				this,
-				new QueueMessageEventArgs(pipelineEvent, queue, transportMessage));
-
 			using (var stream = state.GetTransportMessageStream().Copy())
 			{
 				queue.Enqueue(transportMessage.MessageId, stream);

@@ -1,13 +1,5 @@
 namespace Shuttle.ESB.Core
 {
-	public delegate void BeforeDequeueStreamDelegate(object sender, BeforeDequeueEventArgs e);
-
-	public delegate void BeforeEnqueueStreamDelegate(object sender, QueueMessageEventArgs e);
-
-	public delegate void BeforeHandleMessageDelegate(object sender, BeforeHandleMessageEventArgs e);
-
-	public delegate void BeforeRemoveMessageDelegate(object sender, QueueMessageEventArgs e);
-
 	public delegate void BeforeDistributeMessageDelegate(object sender, DistributeMessageEventArgs e);
 
 	public delegate void AfterEnqueueStreamDelegate(object sender, QueueMessageEventArgs e);
@@ -58,10 +50,6 @@ namespace Shuttle.ESB.Core
 
 	public interface IServiceBusEvents
 	{
-		event BeforeEnqueueStreamDelegate BeforeEnqueueStream;
-		event BeforeDequeueStreamDelegate BeforeDequeueStream;
-		event BeforeHandleMessageDelegate BeforeHandleMessage;
-		event BeforeRemoveMessageDelegate BeforeRemoveMessage;
 		event BeforeDistributeMessageDelegate BeforeDistributeMessage;
 		event AfterEnqueueStreamDelegate AfterEnqueueStream;
 		event AfterDequeueStreamDelegate AfterDequeueStream;
@@ -88,10 +76,6 @@ namespace Shuttle.ESB.Core
         event ThreadWorkingDelegate ThreadWorking;
         event ThreadWaitingDelegate ThreadWaiting;
 
-		void OnBeforeEnqueueStream(object sender, QueueMessageEventArgs args);
-		void OnBeforeDequeueMessage(object sender, BeforeDequeueEventArgs args);
-		void OnBeforeHandleMessage(object sender, BeforeHandleMessageEventArgs args);
-		void OnBeforeRemoveMessage(object sender, QueueMessageEventArgs args);
 		void OnBeforeDistributeMessage(object sender, DistributeMessageEventArgs args);
 		void OnAfterEnqueueStream(object sender, QueueMessageEventArgs args);
 		void OnAfterDequeueStream(object sender, QueueStreamEventArgs args);

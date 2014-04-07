@@ -113,6 +113,9 @@
     <Compile Include="BasicQueue\RabbitMQQueueTest.cs" />
     <Compile Include="Inbox\MsmqInboxTest.cs" />
     <Compile Include="ConfigurationSections\Msmq\MsmqSectionFixture.cs" />
+    <Compile Include="PipelineExceptionHandling\SqlPipelineExceptionHandlingTest.cs" />
+    <Compile Include="PipelineExceptionHandling\RabbitMQPipelineExceptionHandlingTest.cs" />
+    <Compile Include="PipelineExceptionHandling\PipelineExceptionFixture.cs" />
     <Compile Include="ServiceBusSection\ControlInboxServiceBusSection.cs" />
     <Compile Include="ServiceBusSection\TransactionScopeServiceBusSection.cs" />
     <Compile Include="ServiceBusSection\DeferredMessageServiceBusSection.cs" />
@@ -124,10 +127,10 @@
     <Compile Include="ServiceBusSection\InboxServiceBusSection.cs" />
     <Compile Include="ServiceBusSection\MessageRoutesServiceBusSection.cs" />
     <Compile Include="Core\ExceptionAssertion.cs" />
-    <Compile Include="Core\PipelineExceptionHandlingTest.cs" />
-    <Compile Include="Core\ReceivePipelineExceptionModule.cs" />
-    <Compile Include="Core\ReceivePipelineCommand.cs" />
-    <Compile Include="Core\ReceivePipelineHandler.cs" />
+    <Compile Include="PipelineExceptionHandling\MsmqPipelineExceptionHandlingTest.cs" />
+    <Compile Include="PipelineExceptionHandling\ReceivePipelineExceptionModule.cs" />
+    <Compile Include="PipelineExceptionHandling\ReceivePipelineCommand.cs" />
+    <Compile Include="PipelineExceptionHandling\ReceivePipelineHandler.cs" />
     <Compile Include="Core\ThreadActivityTest.cs" />
     <Compile Include="Inbox\InboxFixture.cs" />
     <Compile Include="ConfigurationSections\Msmq\MsmqSectionTest.cs" />

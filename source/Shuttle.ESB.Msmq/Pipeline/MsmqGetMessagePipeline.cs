@@ -19,12 +19,11 @@ namespace Shuttle.ESB.Msmq
 			RegisterObserver(new MsmqGetMessageObserver());
 		}
 
-		public bool Execute(MsmqUriParser parser, Guid messageId, TimeSpan timeout)
+		public bool Execute(MsmqUriParser parser, TimeSpan timeout)
 		{
 			State.Clear();
 
 			State.Add(parser);
-			State.Add("messageId", messageId);
 			State.Add("timeout", timeout);
 
 			return base.Execute();

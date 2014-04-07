@@ -18,24 +18,18 @@ namespace Shuttle.ESB.Core
 
 			Guard.AgainstNull(queue, "workQueue");
 
-        	var bus = state.GetServiceBus();
-
-			bus.Events.OnBeforeDequeueMessage(this, new BeforeDequeueEventArgs(pipelineEvent, queue));
-
-            var stream = queue.GetMessage();
+	        var receivedMessage = queue.GetMessage();
 
             // Abort the pipeline if there is no message on the queue
-            if (stream == null)
+            if (receivedMessage == null)
             {
 				state.GetServiceBus().Events.OnQueueEmpty(this, new QueueEmptyEventArgs(pipelineEvent, queue));
                 pipelineEvent.Pipeline.Abort();
             }
             else
             {
-				bus.Events.OnAfterDequeueStream(this, new QueueStreamEventArgs(pipelineEvent, queue, stream.Copy()));
-
 				state.SetWorking();
-				state.SetTransportMessageStream(stream);
+				state.SetReceivedMessage(receivedMessage);
 
                 if (_log.IsVerboseEnabled)
                 {

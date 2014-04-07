@@ -14,22 +14,24 @@ namespace Shuttle.ESB.Core
 		public void Execute(OnAfterDeserializeTransportMessage pipelineEvent)
 		{
 			var state = pipelineEvent.Pipeline.State;
-			Guard.AgainstNull(state.GetTransportMessageStream(), "transportMessage");
-			Guard.AgainstNull(state.GetTransportMessage(), "transportMessage");
-			Guard.AgainstNull(state.GetWorkQueue(), "workQueue");
-
+			var receivedMessage = state.GetReceivedMessage();
 			var transportMessage = state.GetTransportMessage();
+			var workQueue = state.GetWorkQueue();
+
+			Guard.AgainstNull(receivedMessage, "receivedMessage");
+			Guard.AgainstNull(transportMessage, "transportMessage");
+			Guard.AgainstNull(workQueue, "workQueue");
 
 			if (!transportMessage.IsIgnoring())
 			{
 				return;
 			}
 
-			using (var stream = state.GetTransportMessageStream().Copy())
+			using (var stream = receivedMessage.Stream.Copy())
 			{
 				if (state.GetDeferredQueue() == null)
 				{
-					state.GetWorkQueue().Enqueue(transportMessage.MessageId, stream);
+					workQueue.Enqueue(transportMessage.MessageId, stream);
 				}
 				else
 				{
@@ -39,7 +41,7 @@ namespace Shuttle.ESB.Core
 				}
 			}
 
-			state.GetWorkQueue().Acknowledge(transportMessage.MessageId);
+			workQueue.Acknowledge(receivedMessage.AcknowledgementToken);
 
 			if (_log.IsTraceEnabled)
 			{
