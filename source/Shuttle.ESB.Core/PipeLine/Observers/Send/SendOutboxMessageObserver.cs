@@ -34,10 +34,6 @@ namespace Shuttle.ESB.Core
 			{
 				queue.Enqueue(transportMessage.MessageId, stream);
 			}
-
-			state.GetServiceBus().Events.OnAfterEnqueueStream(
-				this,
-				new QueueMessageEventArgs(pipelineEvent, queue, transportMessage));
 		}
 	}
 }

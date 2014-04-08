@@ -10,10 +10,6 @@ namespace Shuttle.ESB.Core
 			var transportMessage = state.GetTransportMessage();
 
 			state.SetTransportMessageStream(state.GetServiceBus().Configuration.Serializer.Serialize(transportMessage));
-
-			state.GetServiceBus().Events.OnAfterTransportMessageSerialization(
-				this,
-				new TransportMessageSerializationEventArgs(pipelineEvent, transportMessage));
 		}
 	}
 }

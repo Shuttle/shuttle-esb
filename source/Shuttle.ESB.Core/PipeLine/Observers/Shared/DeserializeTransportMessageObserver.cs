@@ -55,11 +55,7 @@ namespace Shuttle.ESB.Core
 
 			transportMessage.AcceptInvariants();
 
-			state.GetServiceBus().Events.OnAfterTransportMessageDeserialization(
-					this,
-					new TransportMessageSerializationEventArgs(pipelineEvent, transportMessage));
-
-            if (_log.IsVerboseEnabled)
+			if (_log.IsVerboseEnabled)
             {
                 _log.Verbose(string.Format(ESBResources.TransportMessageDeserialized, transportMessage.MessageType,
                                           transportMessage.MessageId));

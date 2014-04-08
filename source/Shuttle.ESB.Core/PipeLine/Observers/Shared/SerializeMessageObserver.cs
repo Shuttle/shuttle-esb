@@ -14,11 +14,7 @@ namespace Shuttle.ESB.Core
                 .Configuration.Serializer
                 .Serialize(message).ToBytes();
 
-            bus.Events.OnAfterMessageSerialization(
-                this,
-                new MessageSerializationEventArgs(pipelineEvent, transportMessage, message));
-
-            state.SetMessageBytes(bytes);
+	        state.SetMessageBytes(bytes);
 
             transportMessage.Message = bytes;
         }

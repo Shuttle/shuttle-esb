@@ -11,8 +11,11 @@
 				.WithEvent<OnDeserializeTransportMessage>()
 				.WithEvent<OnAfterDeserializeTransportMessage>()
 				.WithEvent<OnDecompressMessage>()
+				.WithEvent<OnAfterDecompressMessage>()
 				.WithEvent<OnDecryptMessage>()
-				.WithEvent<OnDeserializeMessage>();
+				.WithEvent<OnAfterDecryptMessage>()
+				.WithEvent<OnDeserializeMessage>()
+				.WithEvent<OnAfterDeserializeMessage>();
 
 			RegisterStage("Handle")
 				.WithEvent<OnStartTransactionScope>()
@@ -21,7 +24,9 @@
 				.WithEvent<OnCompleteTransactionScope>()
 				.WithEvent<OnDisposeTransactionScope>()
 				.WithEvent<OnSendDeferred>()
-				.WithEvent<OnAcknowledgeMessage>();
+				.WithEvent<OnAfterSendDeferred>()
+				.WithEvent<OnAcknowledgeMessage>()
+				.WithEvent<OnAfterAcknowledgeMessage>();
 
 			RegisterObserver(new GetWorkMessageObserver());
 			RegisterObserver(new DeserializeTransportMessageObserver());

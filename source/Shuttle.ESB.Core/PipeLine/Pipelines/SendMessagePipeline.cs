@@ -10,12 +10,19 @@ namespace Shuttle.ESB.Core
 		{
 			RegisterStage("Send")
 				.WithEvent<OnPrepareMessage>()
+				.WithEvent<OnAfterPrepareMessage>()
 				.WithEvent<OnFindRouteForMessage>()
+				.WithEvent<OnAfterFindRouteForMessage>()
 				.WithEvent<OnSerializeMessage>()
+				.WithEvent<OnAfterSerializeMessage>()
                 .WithEvent<OnEncryptMessage>()
+				.WithEvent<OnAfterEncryptMessage>()
                 .WithEvent<OnCompressMessage>()
+				.WithEvent<OnAfterCompressMessage>()
 				.WithEvent<OnSerializeTransportMessage>()
-				.WithEvent<OnSendMessage>();
+				.WithEvent<OnAfterSerializeTransportMessage>()
+				.WithEvent<OnSendMessage>()
+				.WithEvent<OnAfterSendMessage>();
 
 			RegisterObserver(new PrepareMessageObserver());
 			RegisterObserver(new FindMessageRouteObserver());

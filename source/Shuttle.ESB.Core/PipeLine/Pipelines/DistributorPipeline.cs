@@ -8,9 +8,13 @@
 			RegisterStage("Distribute")
 				.WithEvent<OnGetMessage>()
 				.WithEvent<OnDeserializeTransportMessage>()
+				.WithEvent<OnAfterDeserializeTransportMessage>()
 				.WithEvent<OnHandleDistributeMessage>()
+				.WithEvent<OnAfterHandleDistributeMessage>()
 				.WithEvent<OnSerializeTransportMessage>()
-				.WithEvent<OnSendMessage>();
+				.WithEvent<OnAfterSerializeTransportMessage>()
+				.WithEvent<OnSendMessage>()
+				.WithEvent<OnAfterSendMessage>();
 
 			RegisterObserver(new GetWorkMessageObserver());
 			RegisterObserver(new DeserializeTransportMessageObserver());

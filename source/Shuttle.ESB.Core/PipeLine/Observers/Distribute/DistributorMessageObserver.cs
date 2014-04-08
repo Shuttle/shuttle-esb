@@ -13,15 +13,7 @@ namespace Shuttle.ESB.Core
             var destinationQueue = state.GetServiceBus().Configuration.QueueManager.GetQueue(state.GetAvailableWorker().InboxWorkQueueUri);
             var transportMessage = state.GetTransportMessage();
 
-            bus.Events.OnBeforeDistributeMessage(
-                this,
-				new DistributeMessageEventArgs(pipelineEvent, destinationQueue, transportMessage));
-
-            transportMessage.RecipientInboxWorkQueueUri = state.GetAvailableWorker().InboxWorkQueueUri;
-
-            bus.Events.OnAfterDistributeMessage(
-                this,
-				new DistributeMessageEventArgs(pipelineEvent, destinationQueue, transportMessage));
+	        transportMessage.RecipientInboxWorkQueueUri = state.GetAvailableWorker().InboxWorkQueueUri;
         }
 
         public void Execute(OnAbortPipeline pipelineEvent)

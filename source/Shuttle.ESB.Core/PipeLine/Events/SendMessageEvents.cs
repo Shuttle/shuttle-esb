@@ -6,7 +6,15 @@ namespace Shuttle.ESB.Core
 	{
 	}
 
+	public class OnAfterPrepareMessage : PipelineEvent
+	{
+	}
+
 	public class OnFindRouteForMessage : PipelineEvent
+	{
+	}
+
+	public class OnAfterFindRouteForMessage : PipelineEvent
 	{
 	}
 
@@ -14,7 +22,23 @@ namespace Shuttle.ESB.Core
 	{
 	}
 
+	public class OnAfterSerializeMessage : PipelineEvent
+	{
+	}
+
 	public class OnSerializeTransportMessage : PipelineEvent
+	{
+	}
+
+	public class OnAfterSerializeTransportMessage : PipelineEvent
+	{
+	}
+
+	public class OnCompressMessage : PipelineEvent
+	{
+	}
+
+	public class OnAfterCompressMessage : PipelineEvent
 	{
 	}
 
@@ -22,16 +46,15 @@ namespace Shuttle.ESB.Core
 	{
 	}
 
+	public class OnAfterEncryptMessage : PipelineEvent
+	{
+	}
+
 	public class OnSendMessage : PipelineEvent
 	{
 	}
 
-	public class OnDeliverMessage : PipelineEvent
+	public class OnAfterSendMessage : PipelineEvent
 	{
 	}
-
-	public class OnDecompressMessage : PipelineEvent
-	{
-	}
-
 }

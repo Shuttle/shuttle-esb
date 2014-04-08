@@ -7,7 +7,9 @@
 		{
 			RegisterStage("Send")
 				.WithEvent<OnSerializeTransportMessage>()
-				.WithEvent<OnSendMessage>();
+				.WithEvent<OnAfterSerializeTransportMessage>()
+				.WithEvent<OnSendMessage>()
+				.WithEvent<OnAfterSendMessage>();
 
 			RegisterObserver(new SerializeTransportMessageObserver());
 			RegisterObserver(new SendMessageObserver());

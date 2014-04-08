@@ -11,8 +11,6 @@ namespace Shuttle.ESB.Test.Unit.Core
 {
 	public class ServiceBusTest : UnitFixture
 	{
-		public TransportMessage TransportMessage { get; set; }
-
 		[Test]
 		public void Should_be_able_to_send_a_message_to_a_routed_queue()
 		{
@@ -22,6 +20,10 @@ namespace Shuttle.ESB.Test.Unit.Core
 											};
 
 			var configuration = CreateMemoryConfiguration();
+
+			var module = new ServiceBusRoutingModule();
+
+			configuration.Modules.Add(module);
 
 			var mockMessageRouteProvider = new Mock<IMessageRouteProvider>();
 
@@ -34,21 +36,19 @@ namespace Shuttle.ESB.Test.Unit.Core
 
 			using (var bus = new ServiceBus(configuration))
 			{
-				bus.Configuration.Modules.Add(new MockModule(this));
-	
 				bus.Start();
 
 				bus.Send(command);
 
-				var waitTill = DateTime.Now.AddMilliseconds(15000);
+				var timeout = DateTime.Now.AddMilliseconds(5000);
 
-				while (DateTime.Now < waitTill && TransportMessage == null)
+				while (DateTime.Now < timeout && module.SimpleCommand == null)
 				{
 					Thread.Sleep(50);
 				}
 
-				Assert.IsNotNull(TransportMessage);
-				Assert.AreEqual(command.Name, ((SimpleCommand)bus.Configuration.Serializer.Deserialize(typeof(SimpleCommand), new MemoryStream(TransportMessage.Message))).Name);
+				Assert.IsNotNull(module.SimpleCommand);
+				Assert.AreEqual(command.Name, module.SimpleCommand.Name);
 			}
 		}
 

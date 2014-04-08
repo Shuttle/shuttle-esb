@@ -22,7 +22,15 @@ namespace Shuttle.ESB.Core
 	{
 	}
 
+	public class OnAfterDecryptMessage : PipelineEvent
+	{
+	}
+
 	public class OnDeserializeMessage : PipelineEvent
+	{
+	}
+
+	public class OnAfterDeserializeMessage : PipelineEvent
 	{
 	}
 
@@ -54,11 +62,15 @@ namespace Shuttle.ESB.Core
 	{
 	}
 
-	public class OnCompressMessage : PipelineEvent
+	public class OnAfterAcknowledgeMessage : PipelineEvent
 	{
 	}
 
 	public class OnSendDeferred : PipelineEvent
+	{
+	}
+
+	public class OnAfterSendDeferred : PipelineEvent
 	{
 	}
 
@@ -67,6 +79,14 @@ namespace Shuttle.ESB.Core
 	}
 
 	public class OnAfterProcessDeferredMessage : PipelineEvent
+	{
+	}
+
+	public class OnDecompressMessage : PipelineEvent
+	{
+	}
+
+	public class OnAfterDecompressMessage : PipelineEvent
 	{
 	}
 }

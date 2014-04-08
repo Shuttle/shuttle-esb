@@ -7,11 +7,15 @@
 		{
 			RegisterStage("Read")
 				.WithEvent<OnGetMessage>()
-				.WithEvent<OnDeserializeTransportMessage>();
+				.WithEvent<OnAfterGetMessage>()
+				.WithEvent<OnDeserializeTransportMessage>()
+				.WithEvent<OnAfterDeserializeTransportMessage>();
 
 			RegisterStage("Send")
 				.WithEvent<OnSendMessage>()
-				.WithEvent<OnAcknowledgeMessage>();
+				.WithEvent<OnAfterSendMessage>()
+				.WithEvent<OnAcknowledgeMessage>()
+				.WithEvent<OnAfterAcknowledgeMessage>();
 
 			RegisterObserver(new GetWorkMessageObserver());
 			RegisterObserver(new DeserializeTransportMessageObserver());

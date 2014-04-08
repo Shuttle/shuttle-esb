@@ -51,12 +51,8 @@ namespace Shuttle.ESB.Core
             }
             
             state.SetMessage(message);
-			
-			state.GetServiceBus().Events.OnAfterMessageDeserialization(
-					this,
-					new MessageSerializationEventArgs(pipelineEvent, transportMessage, message));
 
-            if (log.IsVerboseEnabled)
+			if (log.IsVerboseEnabled)
             {
                 log.Verbose(string.Format(ESBResources.MessageDeserialized, message.GetType(), transportMessage.MessageId));
             }

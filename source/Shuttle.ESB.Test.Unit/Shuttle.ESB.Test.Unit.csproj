@@ -88,7 +88,7 @@
     <Compile Include="RabbitMQ\RabbitMQUriParserTests.cs" />
     <Compile Include="Core\AssemblyMessageRouteSpecificationTest.cs" />
     <Compile Include="Core\CompressionAlgorithmTest.cs" />
-    <Compile Include="Core\MockModule.cs" />
+    <Compile Include="Core\ServiceBusRoutingModule.cs" />
     <Compile Include="Core\TranportMessageTest.cs" />
     <Compile Include="Core\MemoryQueueFactoryTest.cs" />
     <Compile Include="Core\MemoryQueueTest.cs" />

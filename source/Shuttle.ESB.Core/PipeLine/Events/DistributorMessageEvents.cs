@@ -2,11 +2,11 @@
 
 namespace Shuttle.ESB.Core
 {
-	public class OnGetAvailableWorker : PipelineEvent
+	public class OnHandleDistributeMessage : PipelineEvent
 	{
 	}
 
-	public class OnHandleDistributeMessage : PipelineEvent
+	public class OnAfterHandleDistributeMessage : PipelineEvent
 	{
 	}
 }
