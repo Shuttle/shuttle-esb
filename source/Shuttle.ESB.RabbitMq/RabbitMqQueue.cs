@@ -16,7 +16,6 @@ namespace Shuttle.ESB.RabbitMQ
 		private readonly object _connectionLock = new object();
 		private readonly object _queueLock = new object();
 		private readonly object _disposeLock = new object();
-		private readonly object _unacknowledgedMessageLock = new object();
 		private readonly int _operationRetryCount;
 
 		private readonly RabbitMQUriParser _parser;
