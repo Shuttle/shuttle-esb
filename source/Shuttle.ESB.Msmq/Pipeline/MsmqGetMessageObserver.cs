@@ -1,7 +1,5 @@
 using System;
-using System.Diagnostics;
 using System.Messaging;
-using System.Security.Principal;
 using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ESB.Msmq
@@ -62,18 +60,15 @@ namespace Shuttle.ESB.Msmq
 		{
 			var parser = pipelineEvent.Pipeline.State.Get<MsmqUriParser>();
 			var tx = pipelineEvent.Pipeline.State.Get<MessageQueueTransaction>();
-			var messageId = pipelineEvent.Pipeline.State.Get<Guid>();
 
 			try
 			{
-				Message message;
-
-				message = tx != null
-							  ? pipelineEvent.Pipeline.State.Get<MessageQueue>("queue")
-											 .Receive(pipelineEvent.Pipeline.State.Get<TimeSpan>("timeout"), tx)
-							  : pipelineEvent.Pipeline.State.Get<MessageQueue>("queue")
-											 .Receive(pipelineEvent.Pipeline.State.Get<TimeSpan>("timeout"),
-													  MsmqQueue.TransactionType(parser.Transactional));
+				var message = tx != null
+					              ? pipelineEvent.Pipeline.State.Get<MessageQueue>("queue")
+					                             .Receive(pipelineEvent.Pipeline.State.Get<TimeSpan>("timeout"), tx)
+					              : pipelineEvent.Pipeline.State.Get<MessageQueue>("queue")
+					                             .Receive(pipelineEvent.Pipeline.State.Get<TimeSpan>("timeout"),
+					                                      MsmqQueue.TransactionType(parser.Transactional));
 
 				pipelineEvent.Pipeline.State.Add(message);
 			}

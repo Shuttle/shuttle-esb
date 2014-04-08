@@ -17,6 +17,8 @@ namespace Shuttle.ESB.Msmq
 		private readonly MessagePropertyFilter _messagePropertyFilter;
 		private readonly Type _msmqDequeuePipelineType = typeof(MsmqGetMessagePipeline);
 		private readonly ReusableObjectPool<MsmqGetMessagePipeline> _dequeuePipelinePool;
+		private readonly object _padlock = new object();
+		private bool _journalMessagesReturned;
 
 		private readonly ILog _log;
 
@@ -43,16 +45,23 @@ namespace Shuttle.ESB.Msmq
 
 		private void ReturnJournalMessages()
 		{
-			if (!_parser.Journal
-				||
-				!Exists()
-				||
-				!JournalExists())
+			lock (_padlock)
 			{
-				return;
-			}
+				if (_journalMessagesReturned
+					||
+					!_parser.Journal
+					||
+					!Exists()
+					||
+					!JournalExists())
+				{
+					return;
+				}
 
-			new MsmqReturnJournalPipeline().Execute(_parser, _timeout);
+				new MsmqReturnJournalPipeline().Execute(_parser, _timeout);
+
+				_journalMessagesReturned = true;
+			}
 		}
 
 		public void Create()
@@ -217,6 +226,11 @@ namespace Shuttle.ESB.Msmq
 
 		public ReceivedMessage GetMessage()
 		{
+			if (!_journalMessagesReturned)
+			{
+				ReturnJournalMessages();
+			}
+
 			try
 			{
 				var pipeline = _dequeuePipelinePool.Get(_msmqDequeuePipelineType) ?? new MsmqGetMessagePipeline();
@@ -227,12 +241,7 @@ namespace Shuttle.ESB.Msmq
 
 				var message = pipeline.State.Get<Message>();
 
-				if (message == null)
-				{
-					return null;
-				}
-
-				return new ReceivedMessage(message.BodyStream, new Guid(message.Label));
+				return message == null ? null : new ReceivedMessage(message.BodyStream, new Guid(message.Label));
 			}
 			catch (Exception ex)
 			{
@@ -338,7 +347,7 @@ namespace Shuttle.ESB.Msmq
 				return;
 			}
 
-			var messageId = (Guid) acknowledgementToken;
+			var messageId = (Guid)acknowledgementToken;
 
 			try
 			{
