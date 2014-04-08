@@ -2,16 +2,6 @@ namespace Shuttle.ESB.Core
 {
 	internal class ServiceBusEvents : IServiceBusEvents
 	{
-		public event BeforeDistributeMessageDelegate BeforeDistributeMessage = delegate { };
-		public event AfterEnqueueStreamDelegate AfterEnqueueStream = delegate { };
-		public event AfterDequeueStreamDelegate AfterDequeueStream = delegate { };
-		public event AfterHandleMessageDelegate AfterHandleMessage = delegate { };
-		public event AfterRemoveMessageDelegate AfterRemoveMessage = delegate { };
-		public event AfterDistributeMessageDelegate AfterDistributeMessage = delegate { };
-		public event AfterMessageSerializationDelegate AfterMessageSerialization = delegate { };
-		public event AfterMessageDeserializationDelegate AfterMessageDeserialization = delegate { };
-        public event AfterTransportMessageSerializationDelegate AfterTransportMessageSerialization = delegate { };
-        public event AfterTransportMessageDeserializationDelegate AfterTransportMessageDeserialization = delegate { };
 		public event BeforePipelineExceptionHandledDelegate BeforePipelineExceptionHandled = delegate { };
 		public event AfterPipelineExceptionHandledDelegate AfterPipelineExceptionHandled = delegate { };
 		public event TransportMessageDeserializationExceptionDelegate TransportMessageDeserializationException = delegate { };
@@ -27,57 +17,7 @@ namespace Shuttle.ESB.Core
         public event ThreadWorkingDelegate ThreadWorking = delegate { };
         public event ThreadWaitingDelegate ThreadWaiting = delegate { };
 
-		public void OnBeforeDistributeMessage(object sender, DistributeMessageEventArgs args)
-		{
-			BeforeDistributeMessage.Invoke(sender, args);
-		}
-
-		public void OnAfterEnqueueStream(object sender, QueueMessageEventArgs args)
-		{
-			AfterEnqueueStream.Invoke(sender, args);
-		}
-
-		public void OnAfterDequeueStream(object sender, QueueStreamEventArgs args)
-		{
-			AfterDequeueStream.Invoke(sender, args);
-		}
-
-		public void OnAfterHandleMessage(object sender, AfterHandleMessageEventArgs args)
-		{
-			AfterHandleMessage.Invoke(sender, args);
-		}
-
-		public void OnAfterRemoveMessage(object sender, QueueMessageEventArgs args)
-		{
-			AfterRemoveMessage.Invoke(sender, args);
-		}
-
-		public void OnAfterDistributeMessage(object sender, DistributeMessageEventArgs args)
-		{
-			AfterDistributeMessage.Invoke(sender, args);
-		}
-
-		public void OnAfterMessageSerialization(object sender, MessageSerializationEventArgs args)
-		{
-			AfterMessageSerialization.Invoke(sender, args);
-		}
-
-		public void OnAfterMessageDeserialization(object sender, MessageSerializationEventArgs args)
-		{
-			AfterMessageDeserialization.Invoke(sender, args);
-		}
-
-        public void OnAfterTransportMessageSerialization(object sender, TransportMessageSerializationEventArgs args)
-		{
-            AfterTransportMessageSerialization.Invoke(sender, args);
-		}
-
-        public void OnAfterTransportMessageDeserialization(object sender, TransportMessageSerializationEventArgs args)
-		{
-            AfterTransportMessageDeserialization.Invoke(sender, args);
-		}
-
-        public void OnBeforePipelineExceptionHandled(object sender, PipelineExceptionEventArgs args)
+		public void OnBeforePipelineExceptionHandled(object sender, PipelineExceptionEventArgs args)
 		{
             BeforePipelineExceptionHandled.Invoke(sender, args);
 		}

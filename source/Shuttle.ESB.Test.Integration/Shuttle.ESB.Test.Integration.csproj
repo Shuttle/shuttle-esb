@@ -101,6 +101,7 @@
     <Compile Include="ConcurrentHandler.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="ConfigurationAvailableEventArgs.cs" />
+    <Compile Include="Deferred\DeferredMessageModule.cs" />
     <Compile Include="Deferred\RabbitMQDeferredMessageTest.cs" />
     <Compile Include="Deferred\SqlDeferredMessageTest.cs" />
     <Compile Include="Deferred\DeferredFixture.cs" />
@@ -109,6 +110,8 @@
     <Compile Include="Idempotence\IdempotenceMessageHandlerFactory.cs" />
     <Compile Include="Idempotence\IdempotenceMessageRouteProvider.cs" />
     <Compile Include="Idempotence\SqlServer\MsmqIdempotenceTest.cs" />
+    <Compile Include="Inbox\InboxDeferredModule.cs" />
+    <Compile Include="Inbox\InboxConcurrencyModule.cs" />
     <Compile Include="Inbox\RabbitMQInboxTest.cs" />
     <Compile Include="BasicQueue\RabbitMQQueueTest.cs" />
     <Compile Include="Inbox\MsmqInboxTest.cs" />

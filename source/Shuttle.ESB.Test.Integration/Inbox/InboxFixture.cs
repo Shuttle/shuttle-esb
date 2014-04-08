@@ -17,7 +17,7 @@ namespace Shuttle.ESB.Test.Integration
 		}
 
 		protected void TestInboxThroughput(string workQueueUriFormat, string errorQueueUriFormat, int timeoutMilliseconds,
-		                                   int count, bool isTransactional)
+										   int count, bool isTransactional)
 		{
 			const int threadCount = 1;
 			var padlock = new object();
@@ -72,7 +72,7 @@ namespace Shuttle.ESB.Test.Integration
 				sw.Stop();
 
 				Console.WriteLine("Took {0} ms to send {1} messages.  Starting processing.", sw.ElapsedMilliseconds,
-				                  count);
+								  count);
 
 				idleThreads.Clear();
 				bus.Start();
@@ -95,8 +95,8 @@ namespace Shuttle.ESB.Test.Integration
 			Console.WriteLine("Processed {0} messages in {1} ms", count, ms);
 
 			Assert.IsTrue(ms < timeoutMilliseconds,
-			              "Should be able to process at least {0} messages in {1} ms but it ook {2} ms.",
-			              count, timeoutMilliseconds, ms);
+						  "Should be able to process at least {0} messages in {1} ms but it ook {2} ms.",
+						  count, timeoutMilliseconds, ms);
 		}
 
 		protected void TestInboxError(string workQueueUriFormat, bool isTransactional)
@@ -144,7 +144,7 @@ namespace Shuttle.ESB.Test.Integration
 		}
 
 		private static IServiceBusConfiguration GetInboxConfiguration(string workQueueUriFormat, string errorQueueUriFormat,
-		                                                           int threadCount, bool isTransactional)
+																	  int threadCount, bool isTransactional)
 		{
 			var configuration = DefaultConfiguration(isTransactional);
 
@@ -157,7 +157,7 @@ namespace Shuttle.ESB.Test.Integration
 					{
 						WorkQueue = inboxWorkQueue,
 						ErrorQueue = errorQueue,
-						DurationToSleepWhenIdle = new[] {TimeSpan.FromMilliseconds(5)},
+						DurationToSleepWhenIdle = new[] { TimeSpan.FromMilliseconds(5) },
 						ThreadCount = threadCount
 					};
 
@@ -178,15 +178,15 @@ namespace Shuttle.ESB.Test.Integration
 		}
 
 		protected void TestInboxConcurrency(string workQueueUriFormat, string errorQueueUriFormat, int msToComplete,
-		                                    bool isTransactional)
+											bool isTransactional)
 		{
 			const int threadCount = 1;
 
 			var padlock = new object();
-			var afterDequeueDate = new List<DateTime>();
-			var offsetDate = DateTime.MinValue;
-
 			var configuration = GetInboxConfiguration(workQueueUriFormat, errorQueueUriFormat, threadCount, isTransactional);
+			var module = new InboxConcurrencyModule();
+
+			configuration.Modules.Add(module);
 
 			using (var bus = new ServiceBus(configuration))
 			{
@@ -215,25 +215,6 @@ namespace Shuttle.ESB.Test.Integration
 						}
 					};
 
-				bus.Events.AfterDequeueStream += (sender, args) =>
-					{
-						lock (padlock)
-						{
-							if (offsetDate == DateTime.MinValue)
-							{
-								offsetDate = DateTime.Now;
-
-								Console.WriteLine("Offset date: {0}", offsetDate.ToString("yyyy-MM-dd HH:mm:ss.fff"));
-							}
-
-							var dateTime = DateTime.Now;
-
-							afterDequeueDate.Add(dateTime);
-
-							Console.WriteLine("Dequeued date: {0}", dateTime.ToString("yyyy-MM-dd HH:mm:ss.fff"));
-						}
-					};
-
 				bus.Start();
 
 				while (idleThreads.Count < threadCount)
@@ -244,14 +225,11 @@ namespace Shuttle.ESB.Test.Integration
 
 			AttemptDropQueues(workQueueUriFormat, errorQueueUriFormat);
 
-			Assert.AreEqual(threadCount, afterDequeueDate.Count,
-			                string.Format("Dequeued {0} messages but {1} were sent.", afterDequeueDate.Count, threadCount));
+			Assert.AreEqual(threadCount, module.OnAfterGetMessageCount,
+							string.Format("Got {0} messages but {1} were sent.", module.OnAfterGetMessageCount, threadCount));
 
-			foreach (var dateTime in afterDequeueDate)
-			{
-				Assert.IsTrue(dateTime.Subtract(offsetDate) < TimeSpan.FromMilliseconds(msToComplete),
-				              "All dequeued messages have to be within {0} ms of first dequeue.", msToComplete);
-			}
+			Assert.IsTrue(module.AllMessagesReceivedWithinTimespan(msToComplete),
+						  "All dequeued messages have to be within {0} ms of first get message.", msToComplete);
 		}
 
 		protected void TestInboxDeferred(string workQueueUriFormat)
@@ -263,38 +241,34 @@ namespace Shuttle.ESB.Test.Integration
 		{
 			var configuration = GetInboxConfiguration(workQueueUriFormat, errorQueueUriFormat, 1, false);
 
-			var messageId = Guid.Empty;
-			var messageType = typeof (ReceivePipelineCommand).FullName;
+			var module = new InboxDeferredModule();
+
+			configuration.Modules.Add(module);
+
+			Guid messageId;
+			var messageType = typeof(ReceivePipelineCommand).FullName;
 
 			using (var bus = new ServiceBus(configuration))
 			{
-				var received = false;
-
-				bus.Events.AfterTransportMessageDeserialization +=
-					(sender, eventArgs) =>
-						{
-							Assert.True(messageId.Equals(eventArgs.TransportMessage.MessageId));
-							Assert.True(messageType.Equals(eventArgs.TransportMessage.MessageType, StringComparison.OrdinalIgnoreCase));
-							received = true;
-						};
-
 				bus.Start();
 
 				var transportMessage = bus.SendDeferred(DateTime.Now.AddMilliseconds(500), new ReceivePipelineCommand(),
-				                                        configuration.Inbox.WorkQueue);
+														configuration.Inbox.WorkQueue);
 				var timeout = DateTime.Now.AddMilliseconds(1000);
 
 				Assert.IsNotNull(transportMessage);
 
 				messageId = transportMessage.MessageId;
 
-				while (!received && DateTime.Now < timeout)
+				while (module.TransportMessage == null && DateTime.Now < timeout)
 				{
 					Thread.Sleep(5);
 				}
-
-				Assert.IsTrue(received);
 			}
+
+			Assert.IsNotNull(module.TransportMessage);
+			Assert.True(messageId.Equals(module.TransportMessage.MessageId));
+			Assert.True(messageType.Equals(module.TransportMessage.MessageType, StringComparison.OrdinalIgnoreCase));
 		}
 	}
 }

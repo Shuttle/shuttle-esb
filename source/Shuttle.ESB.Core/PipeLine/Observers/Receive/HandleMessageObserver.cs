@@ -155,12 +155,6 @@ namespace Shuttle.ESB.Core
 		        {
 			        InvokeHandler(bus, handler, transportMessage, message, pipelineEvent, message.GetType());
 
-			        bus.Events.OnAfterHandleMessage(this,
-			                                        new AfterHandleMessageEventArgs(
-				                                        pipelineEvent,
-				                                        state.GetWorkQueue(),
-				                                        transportMessage));
-
 			        bus.Configuration.MessageHandlerFactory.ReleaseHandler(handler);
 		        }
 	        }
