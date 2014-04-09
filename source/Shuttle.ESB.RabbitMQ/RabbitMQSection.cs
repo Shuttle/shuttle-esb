@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
 
-namespace Shuttle.ESB.Msmq
+namespace Shuttle.ESB.RabbitMQ
 {
 	public class RabbitMQSection : ConfigurationSection
 	{
@@ -11,72 +11,57 @@ namespace Shuttle.ESB.Msmq
 					   .GetSection("rabbitmq") as RabbitMQSection;
 		}
 
-		private static readonly ConfigurationProperty requestedHeartbeat =
-			new ConfigurationProperty("requestedHeartbeat", typeof(ushort), 30, ConfigurationPropertyOptions.None);
-
-		private static readonly ConfigurationProperty localQueueTimeoutMilliseconds =
-			new ConfigurationProperty("localQueueTimeoutMilliseconds", typeof(int), 0, ConfigurationPropertyOptions.None);
-
-		private static readonly ConfigurationProperty remoteQueueTimeoutMilliseconds =
-			new ConfigurationProperty("remoteQueueTimeoutMilliseconds", typeof(int), 2000, ConfigurationPropertyOptions.None);
-
-		private static readonly ConfigurationProperty connectionCloseTimeoutMilliseconds =
-			new ConfigurationProperty("connectionCloseTimeoutMilliseconds", typeof(int), 1000, ConfigurationPropertyOptions.None);
-
-		private static readonly ConfigurationProperty operationRetryCount =
-			new ConfigurationProperty("operationRetryCount", typeof(int), 3, ConfigurationPropertyOptions.None);
-
-        public RabbitMQSection()
-        {
-			base.Properties.Add(requestedHeartbeat);
-			base.Properties.Add(localQueueTimeoutMilliseconds);
-			base.Properties.Add(remoteQueueTimeoutMilliseconds);
-			base.Properties.Add(connectionCloseTimeoutMilliseconds);
-			base.Properties.Add(operationRetryCount);
-        }
-
-		[ConfigurationProperty("requestedHeartbeat", IsRequired = false)]
+		[ConfigurationProperty("requestedHeartbeat", IsRequired = false, DefaultValue = (ushort)30)]
 		public ushort RequestedHeartbeat
 		{
 			get
 			{
-				return (ushort)this[requestedHeartbeat];
+				return (ushort)this["requestedHeartbeat"];
 			}
 		}
 
-		[ConfigurationProperty("localQueueTimeoutMilliseconds", IsRequired = false)]
+		[ConfigurationProperty("localQueueTimeoutMilliseconds", IsRequired = false, DefaultValue = 250)]
 		public int LocalQueueTimeoutMilliseconds
 		{
 			get
 			{
-				return (int)this[localQueueTimeoutMilliseconds];
+				return (int)this["localQueueTimeoutMilliseconds"];
 			}
 		}
 
-		[ConfigurationProperty("remoteQueueTimeoutMilliseconds", IsRequired = false)]
+		[ConfigurationProperty("remoteQueueTimeoutMilliseconds", IsRequired = false, DefaultValue = 1000)]
 		public int RemoteQueueTimeoutMilliseconds
 		{
 			get
 			{
-				return (int)this[remoteQueueTimeoutMilliseconds];
+				return (int)this["remoteQueueTimeoutMilliseconds"];
 			}
 		}
 
-		[ConfigurationProperty("connectionCloseTimeoutMilliseconds", IsRequired = false)]
+		[ConfigurationProperty("connectionCloseTimeoutMilliseconds", IsRequired = false, DefaultValue = 1000)]
 		public int ConnectionCloseTimeoutMilliseconds
 		{
 			get
 			{
-				return (int)this[connectionCloseTimeoutMilliseconds];
+				return (int)this["connectionCloseTimeoutMilliseconds"];
 			}
 		}
 
-		[ConfigurationProperty("operationRetryCount", IsRequired = false)]
+		[ConfigurationProperty("operationRetryCount", IsRequired = false, DefaultValue = 3)]
 		public int OperationRetryCount
 		{
 			get
 			{
-				return (int)this[operationRetryCount];
+				return (int)this["operationRetryCount"];
+			}
+		}
+
+		[ConfigurationProperty("defaultPrefetchCount", IsRequired = false, DefaultValue = 25)]
+		public int DefaultPrefetchCount
+		{
+			get
+			{
+				return (int)this["defaultPrefetchCount"];
 			}
 		}
 	}

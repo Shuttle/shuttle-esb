@@ -6,6 +6,12 @@ namespace Shuttle.ESB.Msmq
 	{
 		private static MsmqSection section;
 
+		public MsmqConfiguration()
+		{
+			LocalQueueTimeoutMilliseconds = 0;
+			RemoteQueueTimeoutMilliseconds = 2000;
+		}
+
 		public static MsmqSection MsmqSection
 		{
 			get

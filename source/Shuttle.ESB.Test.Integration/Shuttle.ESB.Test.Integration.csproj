@@ -101,6 +101,8 @@
     <Compile Include="ConcurrentHandler.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="ConfigurationAvailableEventArgs.cs" />
+    <Compile Include="ConfigurationSections\RabbitMQ\RabbitMQSectionFixture.cs" />
+    <Compile Include="ConfigurationSections\RabbitMQ\RabbitMQSectionTest.cs" />
     <Compile Include="Deferred\DeferredMessageModule.cs" />
     <Compile Include="Deferred\RabbitMQDeferredMessageTest.cs" />
     <Compile Include="Deferred\SqlDeferredMessageTest.cs" />
@@ -167,6 +169,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="ConfigurationSections\RabbitMQ\files\RabbitMQ.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="ConfigurationSections\Msmq\files\Msmq.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

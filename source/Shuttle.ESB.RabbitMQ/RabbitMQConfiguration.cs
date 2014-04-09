@@ -1,5 +1,4 @@
 using System.Configuration;
-using Shuttle.ESB.Msmq;
 
 namespace Shuttle.ESB.RabbitMQ
 {
@@ -14,6 +13,7 @@ namespace Shuttle.ESB.RabbitMQ
 			RemoteQueueTimeoutMilliseconds = 1000;
 			ConnectionCloseTimeoutMilliseconds = 1000;
 			OperationRetryCount = 3;
+			DefaultPrefetchCount = 25;
 		}
 
 		public static RabbitMQSection RabbitMQSection
@@ -30,6 +30,7 @@ namespace Shuttle.ESB.RabbitMQ
 		public int RemoteQueueTimeoutMilliseconds { get; set; }
 		public int ConnectionCloseTimeoutMilliseconds { get; set; }
 		public int OperationRetryCount { get; set; }
+		public int DefaultPrefetchCount { get; set; }
 
 		public static RabbitMQConfiguration Default()
 		{
@@ -42,6 +43,7 @@ namespace Shuttle.ESB.RabbitMQ
 				configuration.RemoteQueueTimeoutMilliseconds = section.RemoteQueueTimeoutMilliseconds;
 				configuration.ConnectionCloseTimeoutMilliseconds = section.ConnectionCloseTimeoutMilliseconds;
 				configuration.OperationRetryCount = section.OperationRetryCount;
+				configuration.DefaultPrefetchCount = section.DefaultPrefetchCount;
 			}
 
 			return configuration;

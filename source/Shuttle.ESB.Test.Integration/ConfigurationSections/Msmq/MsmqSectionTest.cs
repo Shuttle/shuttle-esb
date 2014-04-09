@@ -1,8 +1,6 @@
-using System.Linq;
 using NUnit.Framework;
-using Shuttle.ESB.Msmq;
 
-namespace Shuttle.ESB.Test.Integration.Msmq
+namespace Shuttle.ESB.Test.Integration
 {
 	[TestFixture]
 	public class MsmqSectionTest : MsmqSectionFixture

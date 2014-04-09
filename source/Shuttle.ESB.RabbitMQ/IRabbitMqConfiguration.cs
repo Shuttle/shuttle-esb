@@ -7,5 +7,6 @@ namespace Shuttle.ESB.RabbitMQ
 		int RemoteQueueTimeoutMilliseconds { get; set; }
 		int ConnectionCloseTimeoutMilliseconds { get; set; }
 		int OperationRetryCount { get; set;  }
+		int DefaultPrefetchCount { get; set;  }
 	}
 }

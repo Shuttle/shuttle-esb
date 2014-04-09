@@ -1,6 +1,6 @@
 using Shuttle.ESB.Msmq;
 
-namespace Shuttle.ESB.Test.Integration.Msmq
+namespace Shuttle.ESB.Test.Integration
 {
 	public class MsmqSectionFixture
 	{
