@@ -34,7 +34,7 @@ namespace Shuttle.ESB.Test.Unit.RabbitMQ
 		{
 			var parser = new RabbitMQUriParser(new Uri("rabbitmq://./work-queue"));
 
-			Assert.AreEqual(25, parser.PrefetchCount);
+			Assert.AreEqual(0, parser.PrefetchCount);
 		}
 
 		[Test]
