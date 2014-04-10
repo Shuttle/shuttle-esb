@@ -80,7 +80,7 @@ namespace Shuttle.ESB.RabbitMQ
 
 		private void SetPrefetchCount(NameValueCollection parameters)
 		{
-			PrefetchCount = 25;
+			PrefetchCount = 0;
 
 			var parameter = parameters.Get("prefetchCount");
 

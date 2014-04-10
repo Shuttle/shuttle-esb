@@ -56,12 +56,12 @@ namespace Shuttle.ESB.RabbitMQ
 			}
 		}
 
-		[ConfigurationProperty("defaultPrefetchCount", IsRequired = false, DefaultValue = 25)]
-		public int DefaultPrefetchCount
+		[ConfigurationProperty("defaultPrefetchCount", IsRequired = false, DefaultValue = (ushort)25)]
+		public ushort DefaultPrefetchCount
 		{
 			get
 			{
-				return (int)this["defaultPrefetchCount"];
+				return (ushort)this["defaultPrefetchCount"];
 			}
 		}
 	}

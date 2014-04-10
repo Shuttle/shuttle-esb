@@ -184,7 +184,7 @@ namespace Shuttle.ESB.RabbitMQ
 
 				var model = connection.CreateModel();
 
-				model.BasicQos(0, _parser.PrefetchCount, false);
+				model.BasicQos(0, _parser.PrefetchCount == 0 ? _configuration.DefaultPrefetchCount : _parser.PrefetchCount, false);
 
 				QueueDeclare(model);
 
