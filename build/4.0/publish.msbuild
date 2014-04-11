@@ -1,5 +1,6 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="PerformRelease" ToolsVersion="4.0">
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="PerformRelease" ToolsVersion="4.0">
 	<UsingTask AssemblyFile="MSBuildCommunityTasks\MSBuild.Community.Tasks.dll" TaskName="MSBuild.Community.Tasks.FileUpdate" />
+	<UsingTask AssemblyFile="MSBuildCommunityTasks\MSBuild.Community.Tasks.dll" TaskName="MSBuild.Community.Tasks.Prompt" />
 
 	<PropertyGroup>
 		<DeploymentFolder>..\deployment</DeploymentFolder>
@@ -11,12 +12,49 @@
 	</ItemGroup>
 
 	<Target Name="PerformRelease">
+		<Prompt Text="Enter new version number:" Condition="$(DeploymentVersionNumber) == ''">
+			<Output TaskParameter="UserInput" PropertyName="DeploymentVersionNumber" />
+		</Prompt>
+
+		<Error Text="Please enter a version number." Condition="$(DeploymentVersionNumber) == ''" />
+
+		<Prompt Text="Enter semantic version:" Condition="$(SemanticVersion) == ''">
+			<Output TaskParameter="UserInput" PropertyName="SemanticVersion" />
+		</Prompt>
+		
+		<PropertyGroup>
+			<SemanticVersion Condition="$(SemanticVersion) == ''">$(DeploymentVersionNumber)</SemanticVersion>
+		</PropertyGroup>
+
+        <MSBuild
+            Projects="$(MSBuildProjectFile)"
+            Targets="ApplyDeploymentVersionNumber"
+            Properties="DeploymentVersionNumber=$(DeploymentVersionNumber);SemanticVersion=$(SemanticVersion)"
+        />
+
 		<MSBuild Projects="debug.msbuild"/>
 		<MSBuild Projects="release.msbuild"/>
 
 		<MSBuild Projects="$(MSBuildProjectFile)" Targets="DeployBinaries" Properties="Framework=%(Framework.Identity)"/>
 
-		<CallTarget Targets="NugetDeployment"/>
+        <MSBuild
+            Projects="$(MSBuildProjectFile)"
+            Targets="NugetDeployments"
+            Properties="DeploymentVersionNumber=$(DeploymentVersionNumber);SemanticVersion=$(SemanticVersion)"
+        />
+	</Target>
+
+	<Target Name="ApplyDeploymentVersionNumber">
+		<Error Text="Please enter a version number." Condition="$(DeploymentVersionNumber) == ''" />
+		
+		<ItemGroup>
+			<AssemblyInfoFiles Include="..\..\**\*AssemblyInfo.cs"/>
+			<NugetFiles Include="..\..\**\*.nuspec"/>
+		</ItemGroup>
+		
+		<FileUpdate Files="@(AssemblyInfoFiles)" Regex="AssemblyInformationalVersion\s*\(\s*&quot;.*&quot;\s*\)" ReplacementText="AssemblyInformationalVersion(&quot;$(SemanticVersion)&quot;)" />
+		<FileUpdate Files="@(AssemblyInfoFiles)" Regex="AssemblyVersion\s*\(\s*&quot;.*&quot;\s*\)" ReplacementText="AssemblyVersion(&quot;$(DeploymentVersionNumber)&quot;)" />
+		<FileUpdate Files="@(NugetFiles)" Regex="\&lt;version\&gt;.*\&lt;/version\&gt;" ReplacementText="&lt;version&gt;$(SemanticVersion)&lt;/version&gt;" />
 	</Target>
 
 	<Target Name="DeployBinaries">
@@ -91,14 +129,25 @@
        DestinationFolder="$(ReleaseFolder)\samples\binary\$(Sample)\$(Sample).$(Project)" ContinueOnError="false" />
 	</Target>
 
-	<Target Name="NugetDeployment">
-		<ItemGroup>
-			<ReleaseBinaries Include="..\release\**\*.*" />
-		</ItemGroup>
+	<Target Name="NugetDeployments">
+		<MSBuild Projects="publish.msbuild" Targets="NugetDeployment" Properties="name=shuttle-esb-core;include=..\release\**\Shuttle.ESB.Core.dll" Condition="$(name) == '' Or $(name) == 'shuttle-esb-core'"/>
+		<MSBuild Projects="publish.msbuild" Targets="NugetDeployment" Properties="name=shuttle-esb-castle;include=..\release\**\Shuttle.ESB.Castle.dll" Condition="$(name) == '' Or $(name) == 'shuttle-esb-castle'"/>
+		<MSBuild Projects="publish.msbuild" Targets="NugetDeployment" Properties="name=shuttle-esb-modules;include=..\release\**\Shuttle.ESB.Modules.dll" Condition="$(name) == '' Or $(name) == 'shuttle-esb-modules'"/>
+		<MSBuild Projects="publish.msbuild" Targets="NugetDeployment" Properties="name=shuttle-esb-msmq;include=..\release\**\Shuttle.ESB.Msmq.dll" Condition="$(name) == '' Or $(name) == 'shuttle-esb-msmq'"/>
+		<MSBuild Projects="publish.msbuild" Targets="NugetDeployment" Properties="name=shuttle-esb-rabbitmq;include=..\release\**\Shuttle.ESB.RabbitMQ.dll" Condition="$(name) == '' Or $(name) == 'shuttle-esb-rabbitmq'"/>
+		<MSBuild Projects="publish.msbuild" Targets="NugetDeployment" Properties="name=shuttle-esb-sqlserver;include=..\release\**\Shuttle.ESB.SqlServer.dll" Condition="$(name) == '' Or $(name) == 'shuttle-esb-sqlserver'"/>
+	</Target>
 
-		<Copy SourceFiles="shuttle-esb.nuspec" DestinationFolder="$(DeploymentFolder)\nuget" SkipUnchangedFiles="false" />
-		<Copy SourceFiles="@(ReleaseBinaries)" DestinationFolder="$(DeploymentFolder)\nuget\lib\%(RecursiveDir)" SkipUnchangedFiles="false" />
-		
-		<Exec Command="nuget pack shuttle-esb.nuspec" WorkingDirectory="$(DeploymentFolder)\nuget" />
+	<Target Name="NugetDeployment">
+	<Message Text="DEPLOYMENT VERSION NUMBER: $(DeploymentVersionNumber)"/>
+		<CreateItem Include="$(include)">
+			<Output TaskParameter="Include" ItemName="NugetBinaries"/>
+		</CreateItem>
+
+		<Copy SourceFiles="$(name).nuspec" DestinationFolder="$(DeploymentFolder)\nuget\$(name)" SkipUnchangedFiles="false" />
+		<Copy SourceFiles="@(NugetBinaries)" DestinationFolder="$(DeploymentFolder)\nuget\$(name)\lib\%(RecursiveDir)" SkipUnchangedFiles="false" />
+
+		<Exec Command="nuget pack $(name).nuspec" WorkingDirectory="$(DeploymentFolder)\nuget\$(name)" />
+		<!-- <Exec Command="nuget push $(DeploymentFolder)\nuget\$(name)\$(name).$(DeploymentVersionNumber)$(SemanticVersion).nupkg" /> -->
 	</Target>  
 </Project>

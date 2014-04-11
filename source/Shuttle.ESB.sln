@@ -43,21 +43,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.ESB.Castle", "Shutt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.ESB.Modules", "Shuttle.ESB.Modules\Shuttle.ESB.Modules.csproj", "{B0B00292-E9FB-49C9-84FB-ACFF9725B08D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{1DE44067-8D2F-4990-8635-F99844A9EE11}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{C14F683E-E26F-4E68-ADCA-F8B0A629E3F0}"
-	ProjectSection(SolutionItems) = preProject
-		..\..\build\4.0\complete-build.debug.msbuild = ..\..\build\4.0\complete-build.debug.msbuild
-		..\..\build\4.0\complete-build.deploy-binary.msbuild = ..\..\build\4.0\complete-build.deploy-binary.msbuild
-		..\..\build\4.0\complete-build.deploy-source.msbuild = ..\..\build\4.0\complete-build.deploy-source.msbuild
-		..\..\build\4.0\complete-build.deploy.msbuild = ..\..\build\4.0\complete-build.deploy.msbuild
-		..\..\build\4.0\complete-build.release.msbuild = ..\..\build\4.0\complete-build.release.msbuild
-		..\..\build\4.0\initialize-environment.msbuild = ..\..\build\4.0\initialize-environment.msbuild
-		..\..\build\4.0\readme.txt = ..\..\build\4.0\readme.txt
-		..\..\build\4.0\shared.common.msbuild = ..\..\build\4.0\shared.common.msbuild
-		..\..\build\4.0\source-only.msbuild = ..\..\build\4.0\source-only.msbuild
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RequestResponse.Worker", "..\samples\RequestResponse\RequestResponse.Worker\RequestResponse.Worker.csproj", "{8B6EC76D-B010-4FF6-BA5D-BA1BC9A0B932}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shuttle.ESB.RabbitMQ", "Shuttle.ESB.RabbitMQ\Shuttle.ESB.RabbitMQ.csproj", "{72096229-B17B-4A19-916E-626E05FC1946}"
@@ -226,6 +211,5 @@ Global
 		{6DEFDD8F-FF56-4315-9557-A48B7756D702} = {6E43A3F9-4423-4617-8905-6E6707B20D50}
 		{2AB54BBA-8634-45EC-950F-B7F5EA7246CC} = {6E43A3F9-4423-4617-8905-6E6707B20D50}
 		{9321A05C-4CF3-4E49-ACAA-27847676A82F} = {6E43A3F9-4423-4617-8905-6E6707B20D50}
-		{C14F683E-E26F-4E68-ADCA-F8B0A629E3F0} = {1DE44067-8D2F-4990-8635-F99844A9EE11}
 	EndGlobalSection
 EndGlobal

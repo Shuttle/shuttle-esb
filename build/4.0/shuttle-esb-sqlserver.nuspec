@@ -1,0 +1,23 @@
+﻿<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>shuttle-esb-sqlserver</id>
+    <version>3.0.0-rc1</version>
+    <authors>Eben Roux</authors>
+    <owners>Eben Roux</owners>
+    <licenseUrl>https://github.com/shuttle/shuttle-esb/raw/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/shuttle/shuttle-esb</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/Shuttle/shuttle-esb/master/media/logo/logo-core-small.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A free open-source enterprise service bus.</description>
+    <releaseNotes>Contains the Sql Server queue implementation, idempotence service, and subscription manager for Shuttle ESB.</releaseNotes>
+    <copyright>Copyright (c) 2011-2014, Eben Roux</copyright>
+    <tags>Enterprise Service ESB esb c# Event Driven messaging MSMQ RabbitMQ nservicebus pipeline development Service Bus shuttle soa</tags>
+	<dependencies>
+		<dependency id="shuttle-core-infrastructure" />
+		<dependency id="shuttle-core-data" />
+		<dependency id="shuttle-core-domain" />
+		<dependency id="shuttle-esb-core" />
+	</dependencies>
+  </metadata>
+</package>

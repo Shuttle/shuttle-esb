@@ -67,17 +67,17 @@
     <DefineConstants>$(DefineConstants);NET45FULL</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Shuttle.Core.Data, Version=2.1.2.1, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Shuttle.Core.Data, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\shuttle-core-data.2.1.2.1\lib\net35-full\Shuttle.Core.Data.dll</HintPath>
+      <HintPath>..\packages\shuttle-core-data.3.0.0.0\lib\net35-full\Shuttle.Core.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Shuttle.Core.Domain, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Shuttle.Core.Domain, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\shuttle-core-domain.2.1.2.0\lib\net35-full\Shuttle.Core.Domain.dll</HintPath>
+      <HintPath>..\packages\shuttle-core-domain.3.0.0.0\lib\net35-full\Shuttle.Core.Domain.dll</HintPath>
     </Reference>
-    <Reference Include="Shuttle.Core.Infrastructure, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Shuttle.Core.Infrastructure, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\shuttle-core-infrastructure.2.1.2.1\lib\net35-full\Shuttle.Core.Infrastructure.dll</HintPath>
+      <HintPath>..\packages\shuttle-core-infrastructure.3.0.0.0\lib\net35-full\Shuttle.Core.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />

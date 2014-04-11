@@ -8,16 +8,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\source\**\*.csproj" Exclude="..\..\source\**\Shuttle.ESB.Test.*.csproj" />
     <ProjectReference Include="..\..\samples\**\*.csproj" />
-    <OutputFiles Include="..\$(Configuration)\$(Framework)\*.dll" />
-
-    <CastleFiles Include="$(RootFolder)\external-bin\castle\*.dll" />
-    <Log4NetFiles Include="$(RootFolder)\external-bin\log4net\log4net.dll" />
-
-    <CoreFiles Include="$(RootFolder)\Shuttle.Core\build\$(Configuration)\$(Framework)\Shuttle.Core.Data.dll;$(RootFolder)\Shuttle.Core\build\$(Configuration)\$(Framework)\Shuttle.Core.Infrastructure.Castle.dll;$(RootFolder)\Shuttle.Core\build\$(Configuration)\$(Framework)\Shuttle.Core.Infrastructure.dll;$(RootFolder)\Shuttle.Core\build\$(Configuration)\$(Framework)\Shuttle.Core.Infrastructure.Log4Net.dll;$(RootFolder)\Shuttle.Core\build\$(Configuration)\$(Framework)\Shuttle.Core.SqlServer.dll" />
-    <ESBFiles Include="$(RootFolder)\Shuttle.ESB\build\$(Configuration)\$(Framework)\*.*" Exclude="$(RootFolder)\Shuttle.ESB\build\$(Configuration)\$(Framework)\Shuttle.ESB.SqlServer.dll;$(RootFolder)\Shuttle.ESB\build\$(Configuration)\$(Framework)\Shuttle.ESB.Msmq.dll" />
-    <ESBSqlFiles Include="$(RootFolder)\Shuttle.ESB\build\$(Configuration)\$(Framework)\Shuttle.ESB.SqlServer.dll" />
-    <ESBSqlScripts Include="$(RootFolder)\Shuttle.ESB\source\Shuttle.ESB.SqlServer\Scripts\2000\*.sql" />
-    <ESBMsmqFiles Include="$(RootFolder)\Shuttle.ESB\build\$(Configuration)\$(Framework)\Shuttle.ESB.Msmq.dll" />
 
 	<Framework Include="net35-full;net40-full;net45-full" />
   </ItemGroup>
@@ -30,9 +20,4 @@
     <Error Text="The 'EnvironmentName' property must be set." Condition="'$(EnvironmentName)' == ''" />
     <CallTarget Targets="PerformBuild"></CallTarget>
   </Target>
-
-  <!-- shared targets -->
-  <ItemGroup>
-    <OutputFilesToClean Include="$(Configuration)\*.*" />
-  </ItemGroup>
 </Project>
