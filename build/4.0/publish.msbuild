@@ -40,7 +40,7 @@
         <MSBuild
             Projects="$(MSBuildProjectFile)"
             Targets="NugetDeployments"
-            Properties="DeploymentVersionNumber=$(DeploymentVersionNumber);SemanticVersion=$(SemanticVersion)"
+            Properties="DeploymentVersionNumber=$(DeploymentVersionNumber);SemanticVersion=$(SemanticVersion);PackageId=$(PackageId)"
         />
 	</Target>
 
@@ -130,24 +130,23 @@
 	</Target>
 
 	<Target Name="NugetDeployments">
-		<MSBuild Projects="publish.msbuild" Targets="NugetDeployment" Properties="name=shuttle-esb-core;include=..\release\**\Shuttle.ESB.Core.dll" Condition="$(name) == '' Or $(name) == 'shuttle-esb-core'"/>
-		<MSBuild Projects="publish.msbuild" Targets="NugetDeployment" Properties="name=shuttle-esb-castle;include=..\release\**\Shuttle.ESB.Castle.dll" Condition="$(name) == '' Or $(name) == 'shuttle-esb-castle'"/>
-		<MSBuild Projects="publish.msbuild" Targets="NugetDeployment" Properties="name=shuttle-esb-modules;include=..\release\**\Shuttle.ESB.Modules.dll" Condition="$(name) == '' Or $(name) == 'shuttle-esb-modules'"/>
-		<MSBuild Projects="publish.msbuild" Targets="NugetDeployment" Properties="name=shuttle-esb-msmq;include=..\release\**\Shuttle.ESB.Msmq.dll" Condition="$(name) == '' Or $(name) == 'shuttle-esb-msmq'"/>
-		<MSBuild Projects="publish.msbuild" Targets="NugetDeployment" Properties="name=shuttle-esb-rabbitmq;include=..\release\**\Shuttle.ESB.RabbitMQ.dll" Condition="$(name) == '' Or $(name) == 'shuttle-esb-rabbitmq'"/>
-		<MSBuild Projects="publish.msbuild" Targets="NugetDeployment" Properties="name=shuttle-esb-sqlserver;include=..\release\**\Shuttle.ESB.SqlServer.dll" Condition="$(name) == '' Or $(name) == 'shuttle-esb-sqlserver'"/>
+		<MSBuild Projects="publish.msbuild" Targets="NugetDeployment" Properties="PackageId=shuttle-esb-core;include=..\release\**\Shuttle.ESB.Core.dll" Condition="$(PackageId) == '' Or $(PackageId) == 'shuttle-esb-core'"/>
+		<MSBuild Projects="publish.msbuild" Targets="NugetDeployment" Properties="PackageId=shuttle-esb-castle;include=..\release\**\Shuttle.ESB.Castle.dll" Condition="$(PackageId) == '' Or $(PackageId) == 'shuttle-esb-castle'"/>
+		<MSBuild Projects="publish.msbuild" Targets="NugetDeployment" Properties="PackageId=shuttle-esb-modules;include=..\release\**\Shuttle.ESB.Modules.dll" Condition="$(PackageId) == '' Or $(PackageId) == 'shuttle-esb-modules'"/>
+		<MSBuild Projects="publish.msbuild" Targets="NugetDeployment" Properties="PackageId=shuttle-esb-msmq;include=..\release\**\Shuttle.ESB.Msmq.dll" Condition="$(PackageId) == '' Or $(PackageId) == 'shuttle-esb-msmq'"/>
+		<MSBuild Projects="publish.msbuild" Targets="NugetDeployment" Properties="PackageId=shuttle-esb-rabbitmq;include=..\release\**\Shuttle.ESB.RabbitMQ.dll" Condition="$(PackageId) == '' Or $(PackageId) == 'shuttle-esb-rabbitmq'"/>
+		<MSBuild Projects="publish.msbuild" Targets="NugetDeployment" Properties="PackageId=shuttle-esb-sqlserver;include=..\release\**\Shuttle.ESB.SqlServer.dll" Condition="$(PackageId) == '' Or $(PackageId) == 'shuttle-esb-sqlserver'"/>
 	</Target>
 
 	<Target Name="NugetDeployment">
-	<Message Text="DEPLOYMENT VERSION NUMBER: $(DeploymentVersionNumber)"/>
 		<CreateItem Include="$(include)">
 			<Output TaskParameter="Include" ItemName="NugetBinaries"/>
 		</CreateItem>
 
-		<Copy SourceFiles="$(name).nuspec" DestinationFolder="$(DeploymentFolder)\nuget\$(name)" SkipUnchangedFiles="false" />
-		<Copy SourceFiles="@(NugetBinaries)" DestinationFolder="$(DeploymentFolder)\nuget\$(name)\lib\%(RecursiveDir)" SkipUnchangedFiles="false" />
+		<Copy SourceFiles="$(PackageId).nuspec" DestinationFolder="$(DeploymentFolder)\nuget\$(PackageId)" SkipUnchangedFiles="false" />
+		<Copy SourceFiles="@(NugetBinaries)" DestinationFolder="$(DeploymentFolder)\nuget\$(PackageId)\lib\%(RecursiveDir)" SkipUnchangedFiles="false" />
 
-		<Exec Command="nuget pack $(name).nuspec" WorkingDirectory="$(DeploymentFolder)\nuget\$(name)" />
-		<!-- <Exec Command="nuget push $(DeploymentFolder)\nuget\$(name)\$(name).$(DeploymentVersionNumber)$(SemanticVersion).nupkg" /> -->
+		<Exec Command="nuget pack $(PackageId).nuspec" WorkingDirectory="$(DeploymentFolder)\nuget\$(PackageId)" />
+		<Exec Command="nuget push $(DeploymentFolder)\nuget\$(PackageId)\$(PackageId).$(SemanticVersion).nupkg" />
 	</Target>  
 </Project>
