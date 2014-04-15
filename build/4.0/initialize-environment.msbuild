@@ -15,7 +15,8 @@
    <Target Name="InitializeEnvironment">
       <CallTarget Targets="ApplicationConfigurationSetup" />
       <CallTarget Targets="ProjectConfiguration" />
-      <MSBuild Projects="deployment.msbuild"></MSBuild>
+      <MSBuild Projects="debug.msbuild"></MSBuild>
+      <MSBuild Projects="release.msbuild"></MSBuild>
    </Target>
 
    <Target Name="ApplicationConfigurationSetup">

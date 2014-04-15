@@ -1,6 +1,6 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <RootFolder>C:\development.github\shuttle-esb\build\4.0\..\..</RootFolder>
+    <RootFolder>D:\development.github\shuttle\shuttle-esb\build\4.0\..\..</RootFolder>
     <Framework Condition="'$(Framework)' == ''">net35-full</Framework>
     <TargetFolder>..\$(Configuration)\</TargetFolder>
   </PropertyGroup>

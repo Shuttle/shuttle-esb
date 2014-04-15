@@ -103,6 +103,12 @@
     <Compile Include="ConfigurationAvailableEventArgs.cs" />
     <Compile Include="ConfigurationSections\RabbitMQ\RabbitMQSectionFixture.cs" />
     <Compile Include="ConfigurationSections\RabbitMQ\RabbitMQSectionTest.cs" />
+    <Compile Include="Inbox\InboxConcurrencyModule.cs" />
+    <Compile Include="Inbox\InboxDeferredModule.cs" />
+    <Compile Include="Inbox\InboxFixture.cs" />
+    <Compile Include="Inbox\MsmqInboxTest.cs" />
+    <Compile Include="Inbox\RabbitMQInboxTest.cs" />
+    <Compile Include="Inbox\SqlInboxTest.cs" />
     <Compile Include="Deferred\DeferredMessageModule.cs" />
     <Compile Include="Deferred\RabbitMQDeferredMessageTest.cs" />
     <Compile Include="Deferred\SqlDeferredMessageTest.cs" />
@@ -112,11 +118,9 @@
     <Compile Include="Idempotence\IdempotenceMessageHandlerFactory.cs" />
     <Compile Include="Idempotence\IdempotenceMessageRouteProvider.cs" />
     <Compile Include="Idempotence\SqlServer\MsmqIdempotenceTest.cs" />
-    <Compile Include="Inbox\InboxDeferredModule.cs" />
-    <Compile Include="Inbox\InboxConcurrencyModule.cs" />
-    <Compile Include="Inbox\RabbitMQInboxTest.cs" />
+    <Compile Include="Outbox\RabbitMQOutboxTest.cs" />
     <Compile Include="BasicQueue\RabbitMQQueueTest.cs" />
-    <Compile Include="Inbox\MsmqInboxTest.cs" />
+    <Compile Include="Outbox\MsmqOutboxTest.cs" />
     <Compile Include="ConfigurationSections\Msmq\MsmqSectionFixture.cs" />
     <Compile Include="PipelineExceptionHandling\SqlPipelineExceptionHandlingTest.cs" />
     <Compile Include="PipelineExceptionHandling\RabbitMQPipelineExceptionHandlingTest.cs" />
@@ -137,11 +141,11 @@
     <Compile Include="PipelineExceptionHandling\ReceivePipelineCommand.cs" />
     <Compile Include="PipelineExceptionHandling\ReceivePipelineHandler.cs" />
     <Compile Include="Core\ThreadActivityTest.cs" />
-    <Compile Include="Inbox\InboxFixture.cs" />
+    <Compile Include="Outbox\OutboxFixture.cs" />
     <Compile Include="ConfigurationSections\Msmq\MsmqSectionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MemoryInboxTest.cs" />
-    <Compile Include="Inbox\SqlInboxTest.cs" />
+    <Compile Include="Outbox\SqlOutboxTest.cs" />
     <Compile Include="IntegrationFixture.cs" />
     <Compile Include="BasicQueue\SqlQueueTest.cs" />
   </ItemGroup>

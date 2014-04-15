@@ -20,15 +20,16 @@ namespace Shuttle.ESB.Core
 
 				try
 				{
-					if (!pipelineEvent.Pipeline.StageName.Equals("Send"))
-					{
-						return;
-					}
-
+					var receivedMessage = state.GetReceivedMessage();
 					var transportMessage = state.GetTransportMessage();
 
 					if (transportMessage == null)
 					{
+						if (receivedMessage != null)
+						{
+							state.GetWorkQueue().Release(receivedMessage.AcknowledgementToken);
+						}
+
 						return;
 					}
 
@@ -49,7 +50,7 @@ namespace Shuttle.ESB.Core
 							state.GetServiceBus().Configuration.Serializer.Serialize(transportMessage));
 					}
 
-					state.SetTransactionComplete();
+					state.GetWorkQueue().Acknowledge(receivedMessage.AcknowledgementToken); 
 				}
 				finally
 				{

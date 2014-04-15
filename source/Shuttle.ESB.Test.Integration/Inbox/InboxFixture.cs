@@ -21,7 +21,7 @@ namespace Shuttle.ESB.Test.Integration
 		{
 			const int threadCount = 1;
 			var padlock = new object();
-			var configuration = GetInboxConfiguration(workQueueUriFormat, errorQueueUriFormat, threadCount, isTransactional);
+			var configuration = GetConfiguration(workQueueUriFormat, errorQueueUriFormat, threadCount, isTransactional);
 
 			Console.WriteLine("Sending {0} messages to input queue '{1}'.", count, configuration.Inbox.WorkQueue.Uri);
 
@@ -107,7 +107,7 @@ namespace Shuttle.ESB.Test.Integration
 		protected void TestInboxError(string workQueueUriFormat, string errorQueueUriFormat, bool isTransactional)
 		{
 			var padlock = new object();
-			var configuration = GetInboxConfiguration(workQueueUriFormat, errorQueueUriFormat, 1, isTransactional);
+			var configuration = GetConfiguration(workQueueUriFormat, errorQueueUriFormat, 1, isTransactional);
 
 			using (var bus = new ServiceBus(configuration))
 			{
@@ -143,7 +143,7 @@ namespace Shuttle.ESB.Test.Integration
 			AttemptDropQueues(workQueueUriFormat, errorQueueUriFormat);
 		}
 
-		private static IServiceBusConfiguration GetInboxConfiguration(string workQueueUriFormat, string errorQueueUriFormat,
+		private static IServiceBusConfiguration GetConfiguration(string workQueueUriFormat, string errorQueueUriFormat,
 																	  int threadCount, bool isTransactional)
 		{
 			var configuration = DefaultConfiguration(isTransactional);
@@ -183,7 +183,7 @@ namespace Shuttle.ESB.Test.Integration
 			const int threadCount = 1;
 
 			var padlock = new object();
-			var configuration = GetInboxConfiguration(workQueueUriFormat, errorQueueUriFormat, threadCount, isTransactional);
+			var configuration = GetConfiguration(workQueueUriFormat, errorQueueUriFormat, threadCount, isTransactional);
 			var module = new InboxConcurrencyModule();
 
 			configuration.Modules.Add(module);
@@ -239,7 +239,7 @@ namespace Shuttle.ESB.Test.Integration
 
 		protected void TestInboxDeferred(string workQueueUriFormat, string errorQueueUriFormat)
 		{
-			var configuration = GetInboxConfiguration(workQueueUriFormat, errorQueueUriFormat, 1, false);
+			var configuration = GetConfiguration(workQueueUriFormat, errorQueueUriFormat, 1, false);
 
 			var module = new InboxDeferredModule();
 

@@ -106,7 +106,7 @@ namespace Shuttle.ESB.Core
 		{
 			var queue =
 				_queues.Find(
-					candidate => FindByString(candidate, uri));
+					candidate => Find(candidate, uri));
 
 			if (queue != null)
 			{
@@ -117,7 +117,7 @@ namespace Shuttle.ESB.Core
 			{
 				queue =
 					_queues.Find(
-						candidate => FindByString(candidate, uri));
+						candidate => Find(candidate, uri));
 
 				if (queue != null)
 				{
@@ -134,7 +134,7 @@ namespace Shuttle.ESB.Core
 			}
 		}
 
-		private static bool FindByString(IQueue candidate, string uri)
+		private static bool Find(IQueue candidate, string uri)
 		{
 			return candidate.Uri.ToString().Equals(uri, StringComparison.InvariantCultureIgnoreCase);
 		}

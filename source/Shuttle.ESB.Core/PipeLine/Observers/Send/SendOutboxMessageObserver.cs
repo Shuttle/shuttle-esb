@@ -15,8 +15,10 @@ namespace Shuttle.ESB.Core
 		{
 			var state = pipelineEvent.Pipeline.State;
 			var transportMessage = state.GetTransportMessage();
+			var receivedMessage = state.GetReceivedMessage();
 
 			Guard.AgainstNull(transportMessage, "transportMessage");
+			Guard.AgainstNull(receivedMessage, "receivedMessage");
 			Guard.AgainstNullOrEmptyString(transportMessage.RecipientInboxWorkQueueUri, "uri");
 
 			var queue =
@@ -30,7 +32,7 @@ namespace Shuttle.ESB.Core
 				                          queue.Uri));
 			}
 
-			using (var stream = state.GetTransportMessageStream().Copy())
+			using (var stream = receivedMessage.Stream.Copy())
 			{
 				queue.Enqueue(transportMessage.MessageId, stream);
 			}
