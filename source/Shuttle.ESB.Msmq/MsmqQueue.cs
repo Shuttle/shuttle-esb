@@ -18,7 +18,7 @@ namespace Shuttle.ESB.Msmq
 		private readonly Type _msmqDequeuePipelineType = typeof(MsmqGetMessagePipeline);
 		private readonly ReusableObjectPool<MsmqGetMessagePipeline> _dequeuePipelinePool;
 		private readonly object _padlock = new object();
-		private bool _journalMessagesReturned;
+		private bool _journalInitialized;
 
 		private readonly ILog _log;
 
@@ -47,7 +47,7 @@ namespace Shuttle.ESB.Msmq
 		{
 			lock (_padlock)
 			{
-				if (_journalMessagesReturned
+				if (_journalInitialized
 					||
 					!_parser.Journal
 					||
@@ -60,7 +60,7 @@ namespace Shuttle.ESB.Msmq
 
 				new MsmqReturnJournalPipeline().Execute(_parser, _timeout);
 
-				_journalMessagesReturned = true;
+				_journalInitialized = true;
 			}
 		}
 
@@ -226,8 +226,9 @@ namespace Shuttle.ESB.Msmq
 
 		public ReceivedMessage GetMessage()
 		{
-			if (!_journalMessagesReturned)
+			if (!_journalInitialized)
 			{
+				CreateJournal();
 				ReturnJournalMessages();
 			}
 
