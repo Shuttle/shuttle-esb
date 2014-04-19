@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using Shuttle.Core.Data;
@@ -9,7 +8,7 @@ using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.SqlServer
 {
-	public class SqlQueue : IQueue, ICreate, IDrop, IPurge, IQueueReader
+	public class SqlQueue : IQueue, ICreate, IDrop, IPurge
 	{
 		private class UnacknowledgedMessage
 		{
@@ -278,36 +277,6 @@ namespace Shuttle.ESB.SqlServer
 			_enqueueQueryStatement = _scriptProvider.GetScript(Script.QueueEnqueue, _tableName);
 			_removeQueryStatement = _scriptProvider.GetScript(Script.QueueRemove, _tableName);
 			_dequeueIdQueryStatement = _scriptProvider.GetScript(Script.QueueDequeueId, _tableName);
-		}
-
-		public IEnumerable<Stream> Read(int top)
-		{
-			try
-			{
-				var result = new List<Stream>();
-
-				using (_databaseConnectionFactory.Create(_dataSource))
-				{
-					using (var reader = _databaseGateway.GetReaderUsing(
-						_dataSource,
-						RawQuery.Create(_scriptProvider.GetScript(Script.QueueRead, top.ToString(CultureInfo.InvariantCulture), _tableName)))
-						)
-					{
-						while (reader.Read())
-						{
-							result.Add(new MemoryStream((byte[])reader["MessageBody"]));
-						}
-					}
-				}
-
-				return result;
-			}
-			catch (Exception ex)
-			{
-				_log.Error(string.Format(SqlResources.ReadError, top, Uri, ex.Message, _createQuery));
-
-				throw;
-			}
 		}
 
 		public void Acknowledge(object acknowledgementToken)

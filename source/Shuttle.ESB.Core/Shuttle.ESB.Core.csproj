@@ -229,7 +229,6 @@
     <Compile Include="Exceptions\SendMessageException.cs" />
     <Compile Include="Exceptions\SubscriptionManagerException.cs" />
     <Compile Include="IRequireInitialization.cs" />
-    <Compile Include="Queues\IQueueReader.cs" />
     <Compile Include="Security\Section\TripleDESSection.cs" />
     <Compile Include="ServiceBusEvents\QueueStreamEventArgs.cs" />
     <Compile Include="Security\IEncryptionAlgorithm.cs" />

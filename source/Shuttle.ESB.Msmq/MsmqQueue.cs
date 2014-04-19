@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Messaging;
@@ -10,7 +9,7 @@ using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.Msmq
 {
-	public class MsmqQueue : IQueue, ICreate, IDrop, IPurge, IQueueReader, IRequireInitialization
+	public class MsmqQueue : IQueue, ICreate, IDrop, IPurge, IRequireInitialization
 	{
 		private readonly TimeSpan _timeout;
 		private readonly MsmqUriParser _parser;
@@ -250,51 +249,6 @@ namespace Shuttle.ESB.Msmq
 
 				throw;
 			}
-		}
-
-		public IEnumerable<Stream> Read(int top)
-		{
-			var result = new List<Stream>();
-
-			var count = 0;
-
-			try
-			{
-				using (var queue = CreateQueue())
-				using (var cursor = queue.CreateCursor())
-				{
-					var peek = PeekMessage(queue, cursor, PeekAction.Current);
-
-					while (peek != null && (top == 0 || count < top))
-					{
-						result.Add(peek.BodyStream);
-
-						count++;
-
-						peek = PeekMessage(queue, cursor, PeekAction.Next);
-					}
-				}
-			}
-			catch (MessageQueueException ex)
-			{
-				if (ex.MessageQueueErrorCode == MessageQueueErrorCode.IOTimeout)
-				{
-					return null;
-				}
-
-				if (ex.MessageQueueErrorCode == MessageQueueErrorCode.AccessDenied)
-				{
-					AccessDenied(_log, _parser.Path);
-				}
-
-				_log.Error(string.Format(MsmqResources.ReadError, top, _parser.Path, ex.CompactMessages()));
-			}
-			catch (Exception ex)
-			{
-				_log.Error(string.Format(MsmqResources.ReadError, top, _parser.Path, ex.CompactMessages()));
-			}
-
-			return result;
 		}
 
 		private MessageQueue CreateQueue()
