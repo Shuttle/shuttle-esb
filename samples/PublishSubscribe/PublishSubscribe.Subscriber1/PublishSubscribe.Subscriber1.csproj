@@ -69,15 +69,15 @@
   <ItemGroup>
     <Reference Include="Shuttle.Core.Data, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\source\packages\shuttle-core-data.3.0.0.0\lib\net35-full\Shuttle.Core.Data.dll</HintPath>
+      <HintPath>..\..\..\source\packages\shuttle-core-data.3.0.2\lib\net35-full\Shuttle.Core.Data.dll</HintPath>
     </Reference>
     <Reference Include="Shuttle.Core.Host, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\source\packages\shuttle-core-host.3.0.0.0\lib\net35-full\Shuttle.Core.Host.exe</HintPath>
+      <HintPath>..\..\..\source\packages\shuttle-core-host.3.0.2\lib\net35-full\Shuttle.Core.Host.exe</HintPath>
     </Reference>
-    <Reference Include="Shuttle.Core.Infrastructure, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Shuttle.Core.Infrastructure, Version=3.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\source\packages\shuttle-core-infrastructure.3.0.0.0\lib\net35-full\Shuttle.Core.Infrastructure.dll</HintPath>
+      <HintPath>..\..\..\source\packages\shuttle-core-infrastructure.3.0.2\lib\net35-full\Shuttle.Core.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="Shuttle.ESB.Core, Version=0.1.4075.35334, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

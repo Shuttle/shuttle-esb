@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>shuttle-esb-msmq</id>
-    <version>3.0.0-rc1</version>
+    <version>3.0.0-rc2</version>
     <authors>Eben Roux</authors>
     <owners>Eben Roux</owners>
     <licenseUrl>https://github.com/shuttle/shuttle-esb/raw/master/LICENSE</licenseUrl>
