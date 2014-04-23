@@ -31,8 +31,6 @@ The queue configuration is part of the specified uri, e.g.:
 | journal			 | true		| Specifies whether a journal queue will be used when returning messages from the queue |
 | transactional		 | true		| Determines whether the queue is transactional or not |
 
-The `user information` and `virtual host` bits are optional.
-
 In addition to this there is also a RabbitMQ specific section (defaults specified here):
 
 ```xml
