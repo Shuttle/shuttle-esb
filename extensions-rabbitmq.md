@@ -23,20 +23,13 @@ The queue configuration is part of the specified uri, e.g.:
     />
 ```
 
-
-| Tables        | Are           | Cool  |
-| ------------- |:-------------:| -----:|
-| col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
-
-| Segment / Argument	| Default	| Description |
-| ---------------------------- | ---------	| ----------- |		
-| username:password	?	| empty		| 	|
-| virtualhost			| /			|	|
-| port					| default	|	|
-| journal				| true		| Specifies whether a journal queue will be used when returning messages from the queue |
-| transactional			| true		| Determines whether the queue is transactional or not |
+| Segment / Argument | Default	| Description |
+| ------------------ | ---------	| ----------- |		
+| username:password	 | empty|	|
+| virtualhost		 | /	|	|
+| port				 | default	|	|
+| journal			 | true		| Specifies whether a journal queue will be used when returning messages from the queue |
+| transactional		 | true		| Determines whether the queue is transactional or not |
 
 The `user information` and `virtual host` bits are optional.
 
