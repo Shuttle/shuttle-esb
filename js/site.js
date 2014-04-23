@@ -12,4 +12,6 @@ $(function(){
 		.data('toc-tocify');
 		
 	$( window ).resize(setTOC);
+	
+	$('table').addClass('table');
 })
