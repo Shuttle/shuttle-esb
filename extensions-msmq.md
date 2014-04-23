@@ -12,14 +12,16 @@ The queue configuration is part of the specified uri, e.g.:
 
 ```xml
     <inbox
-      workQueueUri="msmq://host/queue?transactional=false"
+      workQueueUri="msmq://host/queue?journal-true&transactional=true"
 	  .
 	  .
 	  .
     />
 ```
 
-If you do not specify the `transactional` parameter it defaults to false.
+|Segment / Argument	|Default|Description|
+|journal			|true	|Specifies whether a journal queue will be used when returning messages from the queue |
+|transactional		|true	|Determines whether the queue is transactional or not |
 
 In addition to this there is also a MSMQ specific section (defaults specified here):
 
