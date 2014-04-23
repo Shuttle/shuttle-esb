@@ -1,5 +1,4 @@
 using System;
-using Shuttle.ESB.Modules;
 using log4net;
 using RequestResponse.Messages;
 using Shuttle.Core.Infrastructure;

@@ -2,7 +2,7 @@
 <package >
 	<metadata>
 		<id>shuttle-esb-sqlserver</id>
-		<version>3.0.0-rc2</version>
+		<version>3.0.0-rc4</version>
 		<authors>Eben Roux</authors>
 		<owners>Eben Roux</owners>
 		<licenseUrl>https://github.com/shuttle/shuttle-esb/raw/master/LICENSE</licenseUrl>
@@ -14,13 +14,14 @@
 		<copyright>Copyright (c) 2011-2014, Eben Roux</copyright>
 		<tags>Enterprise Service ESB esb c# Event Driven messaging MSMQ RabbitMQ nservicebus pipeline development Service Bus shuttle soa</tags>
 		<dependencies>
-			<dependency id="shuttle-core-infrastructure" />
-			<dependency id="shuttle-core-data" />
-			<dependency id="shuttle-core-domain" />
-			<dependency id="shuttle-esb-core" />
+			<dependency id="shuttle-core-infrastructure" version="3.0.2" />
+			<dependency id="shuttle-core-data" version="3.0.2" />
+			<dependency id="shuttle-core-domain" version="3.0.2" />
+			<dependency id="shuttle-esb-core" version="" />
 		</dependencies>
 	</metadata>
 	<files>
 		<file src="..\..\..\..\source\Shuttle.ESB.SqlServer\Scripts\**\*.sql" target="scripts" />
+		<file src="lib\**\*.*" target="lib" />
 	</files>
 </package>

@@ -21,12 +21,12 @@
 		<Prompt Text="Enter semantic version:" Condition="$(SemanticVersion) == ''">
 			<Output TaskParameter="UserInput" PropertyName="SemanticVersion" />
 		</Prompt>
-		
+
 		<PropertyGroup>
 			<SemanticVersion Condition="$(SemanticVersion) == ''">$(DeploymentVersionNumber)</SemanticVersion>
 		</PropertyGroup>
 
-        <MSBuild
+		<MSBuild
             Projects="$(MSBuildProjectFile)"
             Targets="ApplyDeploymentVersionNumber"
             Properties="DeploymentVersionNumber=$(DeploymentVersionNumber);SemanticVersion=$(SemanticVersion)"
@@ -37,21 +37,21 @@
 
 		<MSBuild Projects="$(MSBuildProjectFile)" Targets="DeployBinaries" Properties="Framework=%(Framework.Identity)"/>
 
-        <MSBuild
+		<MSBuild
             Projects="$(MSBuildProjectFile)"
             Targets="NugetDeployments"
-            Properties="DeploymentVersionNumber=$(DeploymentVersionNumber);SemanticVersion=$(SemanticVersion);PackageId=$(PackageId)"
+            Properties="DeploymentVersionNumber=$(DeploymentVersionNumber);SemanticVersion=$(SemanticVersion);PackageId=$(PackageId);Operation=$(Operation)"
         />
 	</Target>
 
 	<Target Name="ApplyDeploymentVersionNumber">
 		<Error Text="Please enter a version number." Condition="$(DeploymentVersionNumber) == ''" />
-		
+
 		<ItemGroup>
 			<AssemblyInfoFiles Include="..\..\**\*AssemblyInfo.cs"/>
 			<NugetFiles Include="..\..\**\*.nuspec"/>
 		</ItemGroup>
-		
+
 		<FileUpdate Files="@(AssemblyInfoFiles)" Regex="AssemblyInformationalVersion\s*\(\s*&quot;.*&quot;\s*\)" ReplacementText="AssemblyInformationalVersion(&quot;$(SemanticVersion)&quot;)" />
 		<FileUpdate Files="@(AssemblyInfoFiles)" Regex="AssemblyVersion\s*\(\s*&quot;.*&quot;\s*\)" ReplacementText="AssemblyVersion(&quot;$(DeploymentVersionNumber)&quot;)" />
 		<FileUpdate Files="@(NugetFiles)" Regex="\&lt;version\&gt;.*\&lt;/version\&gt;" ReplacementText="&lt;version&gt;$(SemanticVersion)&lt;/version&gt;" />
@@ -114,8 +114,8 @@
 		<Copy SourceFiles="%(SampleProjectFiles.FullPath)" DestinationFolder="$(ReleaseFolder)\samples\source\%(RecursiveDir)" SkipUnchangedFiles="false" />
 
 		<Msbuild Targets="CopyDeploymentItem"
-       Projects="$(MSBuildProjectFile)"
-       Properties="ItemFullPath=%(SampleBinaryFiles.FullPath);Sample=%(SampleBinaryFiles.Sample);Project=%(SampleBinaryFiles.Project);" />
+			Projects="$(MSBuildProjectFile)"
+			Properties="ItemFullPath=%(SampleBinaryFiles.FullPath);Sample=%(SampleBinaryFiles.Sample);Project=%(SampleBinaryFiles.Project);" />
 
 		<FileUpdate Files="@(SampleProjectFiles)" Regex="&lt;HintPath&gt;.*(Shuttle.Core.*.dll|Shuttle.Core.Host.exe).*&lt;/HintPath&gt;" ReplacementText="&lt;HintPath&gt;..\..\..\..\shuttle\$1&lt;/HintPath&gt;" />
 		<FileUpdate Files="@(SampleProjectFiles)" Regex="&lt;HintPath&gt;.*(Shuttle.ESB.*.dll).*&lt;/HintPath&gt;" ReplacementText="&lt;HintPath&gt;..\..\..\..\shuttle\$1&lt;/HintPath&gt;" />
@@ -125,8 +125,8 @@
 
 	<Target Name="CopyDeploymentItem">
 		<Copy
-       SourceFiles="$(ItemFullPath)"
-       DestinationFolder="$(ReleaseFolder)\samples\binary\$(Sample)\$(Sample).$(Project)" ContinueOnError="false" />
+			SourceFiles="$(ItemFullPath)"
+			DestinationFolder="$(ReleaseFolder)\samples\binary\$(Sample)\$(Sample).$(Project)" ContinueOnError="false" />
 	</Target>
 
 	<Target Name="NugetDeployments">
@@ -147,6 +147,6 @@
 		<Copy SourceFiles="@(NugetBinaries)" DestinationFolder="$(DeploymentFolder)\nuget\$(PackageId)\lib\%(RecursiveDir)" SkipUnchangedFiles="false" />
 
 		<Exec Command="nuget pack $(PackageId).nuspec" WorkingDirectory="$(DeploymentFolder)\nuget\$(PackageId)" />
-		<Exec Command="nuget push $(DeploymentFolder)\nuget\$(PackageId)\$(PackageId).$(SemanticVersion).nupkg" />
+		<Exec Command="nuget push $(DeploymentFolder)\nuget\$(PackageId)\$(PackageId).$(SemanticVersion).nupkg" Condition="$(Operation) != 'pack-only'" />
 	</Target>  
 </Project>
