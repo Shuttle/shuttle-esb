@@ -31,7 +31,7 @@ The queue configuration is part of the specified uri, e.g.:
 | zebra stripes | are neat      |    $1 |
 
 | Segment / Argument	| Default	| Description |
-| --------------------- | ---------	| ----------- |		
+| ---------------------------- | ---------	| ----------- |		
 | username:password		| empty		| 	|
 | virtualhost			| /			|	|
 | port					| default	|	|
