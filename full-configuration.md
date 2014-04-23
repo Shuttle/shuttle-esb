@@ -63,7 +63,6 @@ The `inbox` should be specified if the endpoint has message handlers that need t
     <inbox
       workQueueUri="msmq://./inbox-work"
       errorQueueUri="msmq://./shuttle-error"
-      journalQueueUri="msmq://./inbox-journal"
       workQueueStartupAction="Purge"
       threadCount="25"
       durationToSleepWhenIdle="250ms,10s,30s"
@@ -114,7 +113,6 @@ Since a worker sends thread availability to the physical distribution master the
     <control
       workQueueUri="control-inbox-work"
       errorQueueUri="msmq://./shuttle-error"
-      journalQueueUri="msmq://./control-inbox-journal"
       threadCount="25"
       durationToSleepWhenIdle="250ms,10s,30s"
       durationToIgnoreOnFailure="30m,1h"
