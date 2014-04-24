@@ -23,6 +23,6 @@ The queue configuration is part of the specified uri, e.g.:
 
 A Sql Server based `ISubscriptionManager` implementation is also provided.  The subscription manager caches all subscriptions forever so should a new subscriber be added be sure to restart the publisher endpoint service.
 
-# DeferredMessageQueue
+# IdempotenceService
 
-A `IDeferredMessageQueue` implementation is also available for Sql Server.
+A `IIdempotenceService` implementation is also available for Sql Server.
