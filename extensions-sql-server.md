@@ -4,7 +4,20 @@ layout: api
 ---
 # SqlQueue
 
-There is a `IQueue` implementation for Sql Server that enables a table-based queue.  Since this a table-based queue is not a _real_ queuing technology it is prudent to make use of a local outbox.
+There is a `IQueue` implementation for Sql Server that enables a table-based queue.  Since this a table-based queue is not a real queuing technology it is prudent to make use of a local outbox.
+
+## Configuration
+
+The queue configuration is part of the specified uri, e.g.:
+
+```xml
+    <inbox
+      workQueueUri="sql://connectionstring-name/table-queue"
+	  .
+	  .
+	  .
+    />
+```
 
 # SubscriptionManager
 
