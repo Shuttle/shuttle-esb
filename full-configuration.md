@@ -62,6 +62,7 @@ The `inbox` should be specified if the endpoint has message handlers that need t
 ```xml
     <inbox
       workQueueUri="msmq://./inbox-work"
+      deferredQueueUri="msmq://./inbox-work-deferred"
       errorQueueUri="msmq://./shuttle-error"
       workQueueStartupAction="Purge"
       threadCount="25"

@@ -34,6 +34,10 @@ Shuttle is based on messages.  The messages are data transfer objects that imple
 
 Messages are processed by message handlers that are invoked by Shuttle ESB.  When a service bus is started it starts listening for messages in an inbox queue.  So messages have to end up in the relevant queue to be processed.  The inbox configuration is specified in the application configuration file.
 
+The approach taken is an **at-least-once** delivery.  This differs from an **exactly-once** delivery in that edge cases may result in a message being processed more than once (these should hardly ever occur).  However, for other mechanism edge cases may result in a message loss which is impossible to spot (a duplicate message is easier to spot than no message at all).
+
+It is important to note that all queues are non-destructive and should always be implemented with acknowledgement in mind.  So as soon as a message is retrieved from the queue it should be possible to either acknowledge the message to release the message back onto the queue.
+
 ## Service bus
 
 A service bus instance is required in every application that accesses the service bus.  To configure the service bus a combination of code, the application configuration file, and custom components is used, e.g.:
@@ -289,4 +293,4 @@ The `DefaultMessageRouteProvider` makes use of the application configuration fil
 
 Each implementation of `IMessageRouteProvider` can determine the routes however it needs to from the given message.  A typical scenario, and the way the `DefaultMessageRouteProvider` works, is to use the full type name to determine the destination.
 
-**Please note**: each message type may only be sent to _one_ endpoint.
+**Please note**: each message type may only be sent to _one_ endpoint (using `Send` or `SendDeferred`).
