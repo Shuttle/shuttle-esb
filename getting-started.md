@@ -8,7 +8,9 @@ layout: api
 
 The first step is to get the latest binary release from the GitHub project releases page:
 
-> [Take me to the download page](https://github.com/Shuttle/shuttle-esb/releases)
+> [Show the Nuget shuttle-esb packages](http://www.nuget.org/packages?q=shuttle-esb)
+
+> [Take me to the releases page](https://github.com/Shuttle/shuttle-esb/releases)
 
 ## Quick Start using MSMQ
 
@@ -34,15 +36,10 @@ Click **OK** to create the solution.
 
 Since our message is shared we will create a separate assembly to contain it.  Add a new class library project to the solution and call it **QuickStart.Shuttle.Messages**.
 
-Add references from the Shuttle ESB installation folder to the following:
-
-* `Shuttle.ESB.Core`
 
 You can then rename the default **Class1** file to **WriteBlueMessageCommand** and add an automatic property for the **Message**:
 
 ``` c#
-using Shuttle.ESB.Core;
-
 namespace QuickStart.Shuttle.Messages
 {
 	public class WriteBlueMessageCommand
@@ -54,14 +51,10 @@ namespace QuickStart.Shuttle.Messages
 
 ## Client
 
-Now add a console application called **QuickStart.Shuttle.Client** (remember to target .NET 3.5) to the solution and reference the following:
+Now add a console application called **QuickStart.Shuttle.Client** to the solution and reference the following:
 
 * QuickStart.Shuttle.Messages (project reference)
-* Shuttle.ESB.Core 
-* Shuttle.ESB.Msmq (since we will be using MSMQ queues)
-* Shuttle.Core.Infrastructure
-
-**Note**: ensure that you target framework 4 by opening the properties and selecting **.Net Framework 4** as the **Target Framework** on the **Application** tab.
+* Nuget package: shuttle-esb-msmq
 
 Add the following code to your console implemetation:
 
@@ -131,10 +124,7 @@ This will tell Shuttle ESB to send all messages that have their full name start 
 Add a class library project to the solution and call it **QuickStart.Shuttle.Server** reference the following:
 
 * QuickStart.Shuttle.Messages (project reference)
-* Shuttle.ESB.Core
-* Shuttle.ESB.Msmq
-* Shuttle.Core.Infrastructure
-* Shuttle.Core.Host
+* Nuget package: shuttle-esb-msmq
 
 Rename the **Class1** file to **ServiceBusHost**.  Since we will be hosting our server using the generic host we need an entry point for the generic host.  It searches for classes implementing **IHost** so let's implement this interface on our **ServiceBusHost** class:
 
@@ -174,13 +164,12 @@ Our service bus instance needs to process an input queue so let's configure that
 	<serviceBus>
 		<inbox
 			workQueueUri="msmq://./quickstart_server_inbox_work"
-			journalQueueUri="msmq://./quickstart_server_inbox_journal"
 			errorQueueUri="msmq://./quickstart_server_inbox_error"/>
 	</serviceBus>
 </configuration>
 ```
 
-In order for our endpoint to start up property we need to configure our project.  **Build** your server project to have the referenced assemblies copied locally.  Open the project properties and go to the **Debug** tab.  For the **Start Action** select the **Start external program** option.  Click the ellipsis (...) and navigate to the **bin\debug** folder of your project and select the **Shuttle.Core.Host.exe** as the startup program.
+In order for our endpoint to start up property we need to configure our project.  **Build** your server project to have the referenced assemblies copied locally.  Open the project properties and go to the **Debug** tab.  For the **Start Action** select the **Start external program** option.  Click the ellipsis (...) and navigate to the **bin\debug** folder of your project and select the **Shuttle.Core.Host.exe** as the startup program (if you do not see the **Shuttle.Core.Host.exe** file you may first need to build your project).
 
 For Shuttle ESB to process the received message a message handler for each type received will need to be created.  Let's create one for our **WriteBlueMessageCommand** message.  Add a new class called **WriteBlueMessageHandler** and implement the **IMessageHandler<WriteBlueMessageCommand>** interface:
 
