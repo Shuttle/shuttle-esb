@@ -9,8 +9,19 @@ namespace Shuttle.ESB.Test.Integration.Deferred
 		IPipelineObserver<OnAfterHandleMessage>,
 		IPipelineObserver<OnAfterProcessDeferredMessage>
 	{
-		public bool MessageHandled { get; private set; }
-		public bool DeferredMessageReturned { get; private set; }
+		private readonly object padlock =new object();
+		private readonly int _deferredMessageCount;
+		private readonly ILog _log;
+
+		public DeferredMessageModule(int deferredMessageCount)
+		{
+			_deferredMessageCount = deferredMessageCount;
+
+			_log = Log.For(this);
+		}
+
+		public int NumberOfDeferredMessagesReturned { get; private set; }
+		public int NumberOfMessagesHandled { get; private set; }
 
 		public void Initialize(IServiceBus bus)
 		{
@@ -33,12 +44,35 @@ namespace Shuttle.ESB.Test.Integration.Deferred
 
 		public void Execute(OnAfterHandleMessage pipelineEvent)
 		{
-			MessageHandled = true;
+			_log.Information(string.Format("[OnAfterHandleMessage]"));
+
+			lock (padlock)
+			{
+				NumberOfMessagesHandled++;
+			}
 		}
 
 		public void Execute(OnAfterProcessDeferredMessage pipelineEvent)
 		{
-			DeferredMessageReturned = pipelineEvent.Pipeline.State.GetDeferredMessageReturned();
+			_log.Information(string.Format("[OnAfterProcessDeferredMessage] : deferred message returned = '{0}'", pipelineEvent.Pipeline.State.GetDeferredMessageReturned()));
+
+			if (pipelineEvent.Pipeline.State.GetDeferredMessageReturned())
+			{
+				lock (padlock)
+				{
+					NumberOfDeferredMessagesReturned++;
+				}
+			}
+		}
+
+		public bool AllMessagesHandled()
+		{
+			return NumberOfMessagesHandled == _deferredMessageCount;
+		}
+
+		public bool AllDeferredMessageReturned()
+		{
+			return NumberOfDeferredMessagesReturned == _deferredMessageCount;
 		}
 	}
 }

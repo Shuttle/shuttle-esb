@@ -19,8 +19,6 @@ namespace Shuttle.ESB.Core
 
 			Guard.AgainstNull(queue, "deferredQueue");
 
-        	var bus = state.GetServiceBus();
-
             var receivedMessage = queue.GetMessage();
 
             // Abort the pipeline if there is no message on the queue
