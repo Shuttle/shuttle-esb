@@ -14,7 +14,9 @@
 				.WithEvent<OnSerializeTransportMessage>()
 				.WithEvent<OnAfterSerializeTransportMessage>()
 				.WithEvent<OnSendMessage>()
-				.WithEvent<OnAfterSendMessage>();
+				.WithEvent<OnAfterSendMessage>()
+				.WithEvent<OnAcknowledgeMessage>()
+				.WithEvent<OnAfterAcknowledgeMessage>();
 
 			RegisterObserver(new GetWorkMessageObserver());
 			RegisterObserver(new DeserializeTransportMessageObserver());
@@ -22,6 +24,7 @@
 			RegisterObserver(new SerializeTransportMessageObserver());
 			RegisterObserver(new SendMessageObserver());
 			RegisterObserver(new DistributorExceptionObserver());
+			RegisterObserver(new AcknowledgeMessageObserver());
 		}
 
 		public override sealed void Obtained()

@@ -1,5 +1,4 @@
-﻿using System;
-using Shuttle.Core.Infrastructure;
+﻿using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ESB.Core
 {
@@ -16,25 +15,13 @@ namespace Shuttle.ESB.Core
 		public void Execute(OnAcknowledgeMessage pipelineEvent)
 		{
 			var state = pipelineEvent.Pipeline.State;
+
 			if (pipelineEvent.Pipeline.Exception != null && !state.GetTransactionComplete())
 			{
 				return;
 			}
 
-			var bus = state.GetServiceBus();
 			var transportMessage = state.GetTransportMessage();
-
-			if (bus.Configuration.HasIdempotenceService)
-			{
-				try
-				{
-					bus.Configuration.IdempotenceService.ProcessingCompleted(transportMessage);
-				}
-				catch (Exception ex)
-				{
-					bus.Configuration.IdempotenceService.AccessException(_log, ex, pipelineEvent.Pipeline);
-				}
-			}
 
 			state.GetWorkQueue().Acknowledge(state.GetReceivedMessage().AcknowledgementToken);
 
