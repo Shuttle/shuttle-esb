@@ -72,32 +72,6 @@
 
 			<ESBFiles Include="..\..\build\release\$(Framework)\*.*" />
 			<ScriptFiles Include="..\..\source\Shuttle.ESB.SqlServer\Scripts\**\*.*" />
-
-			<SampleFiles Include="..\..\samples\**\*.csproj;..\..\samples\**\*.csproj.user;..\..\samples\**\*.cs;..\..\samples\**\*.sln;..\..\samples\**\*.suo;..\..\samples\**\app.config" />
-			<SampleBinaryFiles Include="..\..\samples\build\release\$(Framework)\RequestResponse.Client\*.*">
-				<Sample>RequestResponse</Sample>
-				<Project>Client</Project>
-			</SampleBinaryFiles>
-			<SampleBinaryFiles Include="..\..\samples\build\release\$(Framework)\RequestResponse.Server\*.*">
-				<Sample>RequestResponse</Sample>
-				<Project>Server</Project>
-			</SampleBinaryFiles>
-			<SampleBinaryFiles Include="..\..\samples\build\release\$(Framework)\PublishSubscribe.Subscriber1\*.*">
-				<Sample>PublishSubscribe</Sample>
-				<Project>Subscriber1</Project>
-			</SampleBinaryFiles>
-			<SampleBinaryFiles Include="..\..\samples\build\release\$(Framework)\PublishSubscribe.Subscriber2\*.*">
-				<Sample>PublishSubscribe</Sample>
-				<Project>Subscriber2</Project>
-			</SampleBinaryFiles>
-			<SampleBinaryFiles Include="..\..\samples\build\release\$(Framework)\PublishSubscribe.Client\*.*">
-				<Sample>PublishSubscribe</Sample>
-				<Project>Client</Project>
-			</SampleBinaryFiles>
-			<SampleBinaryFiles Include="..\..\samples\build\release\$(Framework)\RequestResponse.Worker\*.*">
-				<Sample>RequestResponse</Sample>
-				<Project>Worker</Project>
-			</SampleBinaryFiles>
 		</ItemGroup>
 
 		<Copy SourceFiles="%(CoreFiles.FullPath)" DestinationFolder="$(ReleaseFolder)\shuttle\" SkipUnchangedFiles="false" />
@@ -105,28 +79,6 @@
 		<Copy SourceFiles="%(ScriptFiles.FullPath)" DestinationFolder="$(ReleaseFolder)\shuttle\scripts\%(RecursiveDir)" SkipUnchangedFiles="false" />
 		<Copy SourceFiles="%(CastleFiles.FullPath)" DestinationFolder="$(ReleaseFolder)\castle\" SkipUnchangedFiles="false" />
 		<Copy SourceFiles="%(Log4NetFiles.FullPath)" DestinationFolder="$(ReleaseFolder)\log4net\" SkipUnchangedFiles="false" />
-		<Copy SourceFiles="%(SampleFiles.FullPath)" DestinationFolder="$(ReleaseFolder)\samples\source\%(RecursiveDir)" SkipUnchangedFiles="false" />
-
-		<ItemGroup>
-			<SampleProjectFiles Include="$(ReleaseFolder)\samples\source\**\*.csproj" />
-		</ItemGroup>
-
-		<Copy SourceFiles="%(SampleProjectFiles.FullPath)" DestinationFolder="$(ReleaseFolder)\samples\source\%(RecursiveDir)" SkipUnchangedFiles="false" />
-
-		<Msbuild Targets="CopyDeploymentItem"
-			Projects="$(MSBuildProjectFile)"
-			Properties="ItemFullPath=%(SampleBinaryFiles.FullPath);Sample=%(SampleBinaryFiles.Sample);Project=%(SampleBinaryFiles.Project);" />
-
-		<FileUpdate Files="@(SampleProjectFiles)" Regex="&lt;HintPath&gt;.*(Shuttle.Core.*.dll|Shuttle.Core.Host.exe).*&lt;/HintPath&gt;" ReplacementText="&lt;HintPath&gt;..\..\..\..\shuttle\$1&lt;/HintPath&gt;" />
-		<FileUpdate Files="@(SampleProjectFiles)" Regex="&lt;HintPath&gt;.*(Shuttle.ESB.*.dll).*&lt;/HintPath&gt;" ReplacementText="&lt;HintPath&gt;..\..\..\..\shuttle\$1&lt;/HintPath&gt;" />
-		<FileUpdate Files="@(SampleProjectFiles)" Regex="&lt;HintPath&gt;.*external-bin\\(.*)\\(.*.dll).*&lt;/HintPath&gt;" ReplacementText="&lt;HintPath&gt;..\..\..\..\$1\$2&lt;/HintPath&gt;" />
-		<FileUpdate Files="@(SampleProjectFiles)" Regex="&lt;PostBuildEvent&gt;.*Scripts.*&lt;/PostBuildEvent&gt;" ReplacementText="&lt;PostBuildEvent&gt;xcopy &quot;..\..\..\..\shuttle\scripts&quot; &quot;$(TargetDir)scripts\&quot; /s /y&lt;/PostBuildEvent&gt;" />
-	</Target>
-
-	<Target Name="CopyDeploymentItem">
-		<Copy
-			SourceFiles="$(ItemFullPath)"
-			DestinationFolder="$(ReleaseFolder)\samples\binary\$(Sample)\$(Sample).$(Project)" ContinueOnError="false" />
 	</Target>
 
 	<Target Name="NugetDeployments">
