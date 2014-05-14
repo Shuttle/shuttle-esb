@@ -79,7 +79,7 @@ The `inbox` should be specified if the endpoint has message handlers that need t
 | ---							| ---		| ---			|
 | `workQueueStartupAction`		| 'None'	| <ul><li>QueueStartupAction.None - inbox work queue is left as is.</li><li>QueueStartupAction.Purge - inbox work queue is purged at start-up</li><ul> |
 | `threadCount`					| 5			| The number of worker threads that will service the inbox work queue.  The deferred queue will always be serviced by only 1 thread. |
-| `durationToSleepWhenIdle`		| 250ms*4,500ms*2,1s | |
+| `durationToSleepWhenIdle`		| 250ms\*4,500ms\*2,1s | |
 | `durationToIgnoreOnFailure`	| 5m,10m,15m,30m,60m | |
 | `maximumFailureCount`			| 5			| The maximum number of failures that are retried before the message is moved to the error queue. |
 | `distribute`					| false		| If `true` the endpoint will act as only a distributor.  If `false` the endpoint will distribute messages if a worker is available; else process the message itself. |
@@ -100,7 +100,7 @@ For some queueing technologies the `outbox` may not be required.  Msmq, for inst
 | Attribute						| Default 	| Description	|
 | ---							| ---		| ---			|
 | `threadCount`					| 1			| The number of worker threads that will service the outbox work queue. |
-| `durationToSleepWhenIdle`		| 250ms*4,500ms*2,1s | |
+| `durationToSleepWhenIdle`		| 250ms\*4,500ms\*2,1s | |
 | `durationToIgnoreOnFailure`	| 5m,10m,15m,30m,60m | |
 | `maximumFailureCount`			| 5			| The maximum number of failures that are retried before the message is moved to the error queue. |
 
@@ -147,7 +147,7 @@ Since a worker sends thread availability to the physical distribution master the
 | Attribute						| Default 	| Description	|
 | ---							| ---		| ---			|
 | `threadCount`					| 1			| The number of worker thread that will service the control work queue. |
-| `durationToSleepWhenIdle`		| 250ms*4,500ms*2,1s | |
+| `durationToSleepWhenIdle`		| 250ms\*4,500ms\*2,1s | |
 | `durationToIgnoreOnFailure`	| 5m,10m,15m,30m,60m | |
 | `maximumFailureCount`			| 5			| The maximum number of failures that are retried before the message is moved to the error queue. |
 
