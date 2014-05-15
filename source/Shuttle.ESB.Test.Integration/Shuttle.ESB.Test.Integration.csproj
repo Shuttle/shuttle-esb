@@ -127,7 +127,6 @@
     <Compile Include="PipelineExceptionHandling\PipelineExceptionFixture.cs" />
     <Compile Include="ServiceBusSection\ControlInboxServiceBusSection.cs" />
     <Compile Include="ServiceBusSection\TransactionScopeServiceBusSection.cs" />
-    <Compile Include="ServiceBusSection\DeferredMessageServiceBusSection.cs" />
     <Compile Include="ServiceBusSection\ServiceBusSectionFixture.cs" />
     <Compile Include="ServiceBusSection\WorkerServiceBusSection.cs" />
     <Compile Include="ServiceBusSection\SharedServiceBusSection.cs" />

@@ -23,7 +23,7 @@ namespace Shuttle.ESB.Test.Integration
             
             Assert.IsNotNull(section);
             Assert.IsEmpty(section.Worker.DistributorControlWorkQueueUri);
-            Assert.AreEqual(WorkerElement.ThreadAvailableNotificationIntervalSecondsDefault, section.Worker.ThreadAvailableNotificationIntervalSeconds);
+            Assert.AreEqual(15, section.Worker.ThreadAvailableNotificationIntervalSeconds);
         }
     }
 }

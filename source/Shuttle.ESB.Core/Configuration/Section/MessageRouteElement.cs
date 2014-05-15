@@ -5,20 +5,12 @@ namespace Shuttle.ESB.Core
 {
     public class MessageRouteElement : ConfigurationElementCollection
     {
-        private static readonly ConfigurationProperty uri =
-            new ConfigurationProperty("uri", typeof (string), string.Empty, ConfigurationPropertyOptions.IsRequired);
-
-        public MessageRouteElement()
-        {
-            base.Properties.Add(uri);
-        }
-
         [ConfigurationProperty("uri", IsRequired = true)]
         public string Uri
         {
             get
             {
-                return (string)this[uri];
+				return (string)this["uri"];
             }
         }
 

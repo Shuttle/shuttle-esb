@@ -11,19 +11,10 @@ namespace Shuttle.ESB.Core
                        .GetSection("tripleDES") as ServiceBusSection;
         }
 
-        private static readonly ConfigurationProperty key =
-            new ConfigurationProperty("key", typeof (string), null,ConfigurationPropertyOptions.None);
-
-
-        public TripleDESSection()
-        {
-            base.Properties.Add(key);
-        }
-
-        [ConfigurationProperty("key", IsRequired = false)]
+        [ConfigurationProperty("key", IsRequired = false, DefaultValue = null)]
         public string Key
         {
-            get { return (string) this[key]; }
+			get { return (string)this["key"]; }
         }
     }
 }

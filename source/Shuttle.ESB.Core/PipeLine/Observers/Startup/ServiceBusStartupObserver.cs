@@ -237,12 +237,17 @@ namespace Shuttle.ESB.Core
 			_configuration.RemoveMessagesNotHandled = ServiceBusConfiguration.ServiceBusSection.RemoveMessagesNotHandled;
 			_configuration.CompressionAlgorithm = ServiceBusConfiguration.ServiceBusSection.CompressionAlgorithm;
 			_configuration.EncryptionAlgorithm = ServiceBusConfiguration.ServiceBusSection.EncryptionAlgorithm;
-			_configuration.TransactionScope = new TransactionScopeConfiguration
-				{
-					Enabled = ServiceBusConfiguration.ServiceBusSection.TransactionScope.Enabled,
-					IsolationLevel = ServiceBusConfiguration.ServiceBusSection.TransactionScope.IsolationLevel,
-					TimeoutSeconds = ServiceBusConfiguration.ServiceBusSection.TransactionScope.TimeoutSeconds
-				};
+
+			var transactionScopeElement = ServiceBusConfiguration.ServiceBusSection.TransactionScope;
+
+			_configuration.TransactionScope = transactionScopeElement != null
+				                                  ? new TransactionScopeConfiguration
+					                                  {
+						                                  Enabled = transactionScopeElement.Enabled,
+						                                  IsolationLevel = transactionScopeElement.IsolationLevel,
+						                                  TimeoutSeconds = transactionScopeElement.TimeoutSeconds
+					                                  }
+				                                  : new TransactionScopeConfiguration();
 		}
 
 		public void Execute(OnRegisterControlInboxQueueConfiguration pipelineEvent)

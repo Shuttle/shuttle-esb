@@ -9,30 +9,12 @@ namespace Shuttle.ESB.Core
 		private const int DefaultTimeoutSeconds = 30;
 		private const IsolationLevel DefaultIsolationLevel = IsolationLevel.ReadCommitted;
 
-		private static readonly ConfigurationProperty enabled =
-			new ConfigurationProperty("enabled", typeof(bool), true, ConfigurationPropertyOptions.None);
-
-		private static readonly ConfigurationProperty isolationLevel =
-			new ConfigurationProperty("isolationLevel", typeof(IsolationLevel), DefaultIsolationLevel,
-									  ConfigurationPropertyOptions.None);
-
-		private static readonly ConfigurationProperty timeoutSeconds =
-			new ConfigurationProperty("timeoutSeconds", typeof(int), DefaultTimeoutSeconds,
-									  ConfigurationPropertyOptions.None);
-
-		public TransactionScopeElement()
-		{
-			base.Properties.Add(enabled);
-			base.Properties.Add(isolationLevel);
-			base.Properties.Add(timeoutSeconds);
-		}
-
-		[ConfigurationProperty("enabled", IsRequired = false)]
+		[ConfigurationProperty("enabled", IsRequired = false, DefaultValue = true)]
 		public bool Enabled
 		{
 			get
 			{
-				return (bool)this[enabled];
+				return (bool)this["enabled"];
 			}
 		}
 
@@ -41,7 +23,7 @@ namespace Shuttle.ESB.Core
 		{
 			get
 			{
-				var value = this[isolationLevel];
+				var value = this["isolationLevel"];
 
 				if (value == null || string.IsNullOrEmpty(value.ToString()))
 				{
@@ -64,7 +46,7 @@ namespace Shuttle.ESB.Core
 		{
 			get
 			{
-				var value = this[timeoutSeconds].ToString();
+				var value = this["timeoutSeconds"].ToString();
 
 				if (string.IsNullOrEmpty(value))
 				{
