@@ -22,7 +22,7 @@ namespace Shuttle.ESB.SqlServer.Idempotence
 		public static IIdempotenceService Default()
 		{
 			return
-				new IdempotenceService(new ScriptProvider(),
+				new IdempotenceService(ScriptProvider.Default(),
 				                       DatabaseConnectionFactory.Default(),
 				                       DatabaseGateway.Default());
 		}

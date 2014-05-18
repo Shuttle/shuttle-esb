@@ -101,6 +101,8 @@
     <Compile Include="ConcurrentHandler.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="ConfigurationAvailableEventArgs.cs" />
+    <Compile Include="ConfigurationSections\SqlServer\SqlServerSectionFixture.cs" />
+    <Compile Include="ConfigurationSections\SqlServer\SqlServerSectionTest.cs" />
     <Compile Include="ConfigurationSections\RabbitMQ\RabbitMQSectionFixture.cs" />
     <Compile Include="ConfigurationSections\RabbitMQ\RabbitMQSectionTest.cs" />
     <Compile Include="Inbox\InboxConcurrencyModule.cs" />
@@ -125,15 +127,15 @@
     <Compile Include="PipelineExceptionHandling\SqlPipelineExceptionHandlingTest.cs" />
     <Compile Include="PipelineExceptionHandling\RabbitMQPipelineExceptionHandlingTest.cs" />
     <Compile Include="PipelineExceptionHandling\PipelineExceptionFixture.cs" />
-    <Compile Include="ServiceBusSection\ControlInboxServiceBusSection.cs" />
-    <Compile Include="ServiceBusSection\TransactionScopeServiceBusSection.cs" />
-    <Compile Include="ServiceBusSection\ServiceBusSectionFixture.cs" />
-    <Compile Include="ServiceBusSection\WorkerServiceBusSection.cs" />
-    <Compile Include="ServiceBusSection\SharedServiceBusSection.cs" />
-    <Compile Include="ServiceBusSection\ForwardingRoutesServiceBusSection.cs" />
-    <Compile Include="ServiceBusSection\OutboxServiceBusSection.cs" />
-    <Compile Include="ServiceBusSection\InboxServiceBusSection.cs" />
-    <Compile Include="ServiceBusSection\MessageRoutesServiceBusSection.cs" />
+    <Compile Include="ConfigurationSections\ServiceBusSection\ControlInboxServiceBusSection.cs" />
+    <Compile Include="ConfigurationSections\ServiceBusSection\TransactionScopeServiceBusSection.cs" />
+    <Compile Include="ConfigurationSections\ServiceBusSection\ServiceBusSectionFixture.cs" />
+    <Compile Include="ConfigurationSections\ServiceBusSection\WorkerServiceBusSection.cs" />
+    <Compile Include="ConfigurationSections\ServiceBusSection\SharedServiceBusSection.cs" />
+    <Compile Include="ConfigurationSections\ServiceBusSection\ForwardingRoutesServiceBusSection.cs" />
+    <Compile Include="ConfigurationSections\ServiceBusSection\OutboxServiceBusSection.cs" />
+    <Compile Include="ConfigurationSections\ServiceBusSection\InboxServiceBusSection.cs" />
+    <Compile Include="ConfigurationSections\ServiceBusSection\MessageRoutesServiceBusSection.cs" />
     <Compile Include="Core\ExceptionAssertion.cs" />
     <Compile Include="PipelineExceptionHandling\MsmqPipelineExceptionHandlingTest.cs" />
     <Compile Include="PipelineExceptionHandling\ReceivePipelineExceptionModule.cs" />
@@ -172,6 +174,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="ConfigurationSections\SqlServer\files\SqlServer.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="ConfigurationSections\RabbitMQ\files\RabbitMQ.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -181,48 +187,48 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
-    <None Include="ServiceBusSection\files\Control-Full.config">
+    <None Include="ConfigurationSections\ServiceBusSection\files\Control-Full.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="ServiceBusSection\files\DeferredMessage.config">
+    <None Include="ConfigurationSections\ServiceBusSection\files\DeferredMessage.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="ServiceBusSection\files\Worker.config">
+    <None Include="ConfigurationSections\ServiceBusSection\files\Worker.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="ServiceBusSection\files\Shared.config">
+    <None Include="ConfigurationSections\ServiceBusSection\files\Shared.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="ServiceBusSection\files\ForwardingRoutes.config">
+    <None Include="ConfigurationSections\ServiceBusSection\files\ForwardingRoutes.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="ServiceBusSection\files\TransactionScope.config">
+    <None Include="ConfigurationSections\ServiceBusSection\files\TransactionScope.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="ServiceBusSection\files\Distributor-Full.config">
+    <None Include="ConfigurationSections\ServiceBusSection\files\Distributor-Full.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="ServiceBusSection\files\Empty.config">
+    <None Include="ConfigurationSections\ServiceBusSection\files\Empty.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="ServiceBusSection\files\Outbox-Required.config">
+    <None Include="ConfigurationSections\ServiceBusSection\files\Outbox-Required.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="ServiceBusSection\files\Outbox-Full.config">
+    <None Include="ConfigurationSections\ServiceBusSection\files\Outbox-Full.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="ServiceBusSection\files\Inbox-Required.config">
+    <None Include="ConfigurationSections\ServiceBusSection\files\Inbox-Required.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="ServiceBusSection\files\Inbox-Full.config">
+    <None Include="ConfigurationSections\ServiceBusSection\files\Inbox-Full.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="ServiceBusSection\files\MessageRoutes.config">
+    <None Include="ConfigurationSections\ServiceBusSection\files\MessageRoutes.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

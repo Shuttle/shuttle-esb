@@ -54,7 +54,7 @@ namespace Shuttle.ESB.SqlServer
 
 		public SqlQueue(Uri uri)
 			: this(uri,
-				   new ScriptProvider(),
+				   ScriptProvider.Default(),
 				   DatabaseConnectionFactory.Default(),
 				   DatabaseGateway.Default())
 		{

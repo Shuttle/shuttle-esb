@@ -95,8 +95,11 @@
     <Compile Include="Definitions\DeferredMessageColumns.cs" />
     <Compile Include="Definitions\IdempotenceColumns.cs" />
     <Compile Include="Idempotence\IdempotenceService.cs" />
+    <Compile Include="ISqlServerConfiguration.cs" />
     <Compile Include="IScriptProvider.cs" />
     <Compile Include="Queue\SqlUriParser.cs" />
+    <Compile Include="SqlServerConfiguration.cs" />
+    <Compile Include="SqlServerSection.cs" />
     <Compile Include="ScriptProvider.cs" />
     <Compile Include="SubscriptionManager.cs" />
     <Compile Include="Definitions\QueueColumns.cs" />

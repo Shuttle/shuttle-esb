@@ -13,7 +13,7 @@ namespace Shuttle.ESB.SqlServer
 
 		public SqlQueueFactory()
 		{
-			scriptProvider = new ScriptProvider();
+			scriptProvider = ScriptProvider.Default();
 			databaseConnectionFactory = DatabaseConnectionFactory.Default();
 			databaseGateway = DatabaseGateway.Default();
 		}
