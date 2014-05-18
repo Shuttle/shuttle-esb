@@ -12,7 +12,7 @@ The basic parts of Shuttle ESB consist of:
 * Queues
 * Service bus
 
-Every service bus instance is associated, and therefore processes, only one queue.  This is the inbox.  All messages received in the inbox are processed by the associated service bus instance.
+Every service bus instance is associated with, and therefore processes, only one input queue.  This is the inbox.  All messages received in the inbox are processed by the associated service bus instance.
 
 ## Messages
 
@@ -228,6 +228,12 @@ You then install as many workers as you require on as many machines as you want 
 ```
 
 As soon as the application configuration file contains the **worker** tag each thread that goes idle will send a message to the distributor to indicate that a thread has become available to perform word.  The distributor will then send a message for each available thread.
+
+### Message Distribution Exceptions
+
+Some queueing technologies do not require message distribution.  Instead of a worker another instance of the endpoint can consume the same input queue.  This mechanism applies to brokers.  Since brokers manage queues centrally the messages are consumed via consumers typically running per thread.  Where the consumers originates does not matter so the queue can be consumed from various processes.
+
+The broker style differes from something like Msmq or Sql-based queues where the message-handling is managed by the process hosting the thread-consumers.  Here `process-A` would not be aware of which messages are being consumed by `process-B` leading to one *stealing* messages from the other.
 
 # Message Routing
 
