@@ -9,8 +9,8 @@
     <projectUrl>https://github.com/shuttle/shuttle-esb</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/Shuttle/shuttle-esb/master/media/logo/logo-core-small.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>A free open-source enterprise service bus.</description>
-    <releaseNotes>Contains common module extensions for  the Shuttle ESB.</releaseNotes>
+    <description>Contains common module extensions for  the Shuttle ESB.</description>
+    <releaseNotes></releaseNotes>
     <copyright>Copyright (c) 2011-2014, Eben Roux</copyright>
     <tags>Enterprise Service ESB esb c# Event Driven messaging MSMQ RabbitMQ nservicebus pipeline development Service Bus shuttle soa</tags>
 	<dependencies>
