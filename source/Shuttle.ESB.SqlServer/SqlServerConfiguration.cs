@@ -36,7 +36,7 @@ namespace Shuttle.ESB.SqlServer
 			get
 			{
 				return section ??
-				       (section = ConfigurationManager.GetSection("SqlServer") as SqlServerSection);
+				       (section = ConfigurationManager.GetSection("sqlServer") as SqlServerSection);
 			}
 		}
 
