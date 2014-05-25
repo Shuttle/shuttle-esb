@@ -35,13 +35,35 @@ You may want to apply some convention to distinguish between the messages.  As i
 
 Once you have an instance of the service bus available it is a matter of calling `Send` on the instance:
 
-| Method												| Description							|
-| ---													| ---									|
-| `TransportMessage Send(object message)`				| This method is the most typical invocation and simply takes the message and sends it to the destination as determined by the `IMessageRouteProvider`. |
-| `TransportMessage Send(object message, string uri)`	| Using this method a message can be sent to the specified `Uri`.  *More commonly used by Shuttle-ESB itself*. |
-| `TransportMessage Send(object message, IQueue queue)`	| Should you have a specific `IQueue` instance available you could send the message directly there. *More commonly used by Shuttle-ESB itself*. |
-| `TransportMessage SendLocal(object message)`			| The given message will be sent back to the inboc work queue of this endpoint. |
-| `TransportMessage SendReply(object message)`			| This method is only available when handling a message and will send the given message back to the `RecipientInboxWorkQueueUri` of the `TransportMessage` being handled. |
+---
+``` c#
+TransportMessage Send(object message)
+```
+This method is the most typical invocation and simply takes the message and sends it to the destination as determined by the `IMessageRouteProvider`.
+
+---
+``` c#
+TransportMessage Send(object message, string uri)
+```
+Using this method a message can be sent to the specified `Uri`.  *More commonly used by Shuttle-ESB itself*.
+
+---
+``` c#
+TransportMessage Send(object message, IQueue queue)
+```
+Should you have a specific `IQueue` instance available you could send the message directly there. *More commonly used by Shuttle-ESB itself*.
+
+---
+``` c#
+TransportMessage SendLocal(object message)
+```
+The given message will be sent back to the inboc work queue of this endpoint.
+
+---
+``` c#
+TransportMessage SendReply(object message)
+```
+This method is only available when handling a message and will send the given message back to the `RecipientInboxWorkQueueUri` of the `TransportMessage` being handled.
 
 ## Sending deferred **command** messages
 
@@ -62,16 +84,71 @@ The processor on the deferred queue is optimized to process only when a message 
 
 All you need to do now is call the relevant `SendDeferred` method on the available bus instance:
 
-| Method																		| Description							|
-| ---																			| ---									|
-| `TransportMessage SendDeferred(DateTime at, object message)`					| This method is the most typical invocation and simply takes the message and sends it to the destination as determined by the `IMessageRouteProvider`. |
-| `TransportMessage SendDeferred(DateTime at, object message, string uri)`		| Using this method a message can be sent to the specified `Uri`.  *More commonly used by Shuttle-ESB itself*. |
-| `TransportMessage SendDeferred(DateTime at, object message, IQueue queue)`	| Should you have a specific `IQueue` instance available you could send the message directly there. *More commonly used by Shuttle-ESB itself*. |
-| `TransportMessage SendDeferredLocal(DateTime at, object message)`				| The given message will be sent back to the inboc work queue of this endpoint. |
-| `TransportMessage SendDeferredReply(DateTime at, object message)`				| This method is only available when handling a message and will send the given message back to the `RecipientInboxWorkQueueUri` of the `TransportMessage` being handled. |
+---
+``` c#
+TransportMessage SendDeferred(DateTime at, object message)
+```
+This method is the most typical invocation and simply takes the message and sends it to the destination as determined by the `IMessageRouteProvider`.
+
+---
+``` c#
+TransportMessage SendDeferred(DateTime at, object message, string uri)
+```
+Using this method a message can be sent to the specified `Uri`.  *More commonly used by Shuttle-ESB itself*.
+
+---
+``` c#
+TransportMessage SendDeferred(DateTime at, object message, IQueue queue)
+```
+Should you have a specific `IQueue` instance available you could send the message directly there. *More commonly used by Shuttle-ESB itself*.
+
+---
+``` c#
+TransportMessage SendDeferredLocal(DateTime at, object message)
+```
+The given message will be sent back to the inboc work queue of this endpoint.
+
+---
+``` c#
+TransportMessage SendDeferredReply(DateTime at, object message)
+```
+This method is only available when handling a message and will send the given message back to the `RecipientInboxWorkQueueUri` of the `TransportMessage` being handled.
 
 ## Publishing **event** messages
 
+In order to notify other endpoints of an event that has occurred you need to `Publish` the event on the available bus isntance:
+
+---
+``` c#
+IEnumerable<string> Publish(object message)
+```
+The service bus will make use of the registered `ISubscriptionManager` instance to obtain the `Uri`s of the subscribers that a copy of the message needs to be sent to.  The list of subscriber `Uri`s will be returned.
+
+You will notice that there is no way to publish a deferred event.  This is because the event has already occurred and should a particular endpoint require deferred processing as a result then *that* endpoint can do a `SendDeferredLocal` to effect the required deferred processing.
+
 # ServiceBusConfiguration
 
-TBD
+The `ServiceBusConfiguration` instance contains all the configuration required by the `ServiceBus` to operate.  In order to build the configuration you can make use of the `ServiceBusConfigurationBuilder` class.  To obtain an instance you can either `new` one up or call `ServiceBus.Create()`.  The `Start()` method of the `ServiceBusConfigurationBuilder` will create a new `ServiceBus` instance and call `Start()` on the newly instanced `ServiceBus`.
+
+The simplest possible way to create and start a service bus is as follows:
+
+``` c#
+	bus = ServiceBus
+		.Create()
+		.Start();
+```
+
+All the default options will be used in such as case but there will be rather few occasions where this will suffice.  For instance, when you need to subscribe to an event or publish an event you will need an imeplementation of the `ISubscriptionManager`.  A typical call to create and the start a service bus using a Sql Server subscription manager is as follows:
+
+``` c#
+	var subscriptionManager = SubscriptionManager.Default();
+
+	subscriptionManager.Subscribe(new[] { typeof(SomeInterestingEvent).FullName });
+
+	bus = ServiceBus
+		.Create()
+		.SubscriptionManager(subscriptionManager)
+		.Start();
+```
+
+Quite a number of the defaults can be replaced with custom imeplementations allowing you to configure Shuttle to be used in future in ways that one cannot conceive today.
