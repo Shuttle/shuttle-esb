@@ -29,6 +29,14 @@ namespace Shuttle.ESB.Core
 			Modules = new ModuleCollection();
 			TransactionScope = new TransactionScopeConfiguration();
 			QueueManager = Core.QueueManager.Default();
+			Serializer = new DefaultSerializer();
+			MessageHandlerFactory = new DefaultMessageHandlerFactory();
+			MessageRouteProvider = new DefaultMessageRouteProvider();
+			ForwardingRouteProvider = new DefaultForwardingRouteProvider();
+			PipelineFactory = new DefaultPipelineFactory();
+			TransactionScopeFactory = new DefaultServiceBusTransactionScopeFactory();
+			Policy = new DefaultServiceBusPolicy();
+			ThreadActivityFactory = new DefaultThreadActivityFactory();
 		}
 
 		public static ServiceBusSection ServiceBusSection

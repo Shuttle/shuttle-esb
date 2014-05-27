@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ESB.Core
@@ -6,18 +5,6 @@ namespace Shuttle.ESB.Core
 	internal class ServiceBusConfigurationBuilder : IServiceBusConfigurationBuilder
 	{
 		private readonly ServiceBusConfiguration configuration = new ServiceBusConfiguration();
-
-		public ServiceBusConfigurationBuilder()
-		{
-			DefaultMessageSerializer();
-			DefaultMessageHandlerFactory();
-			DefaultMessageRouteProvider();
-			DefaultForwardingRouteProvider();
-			DefaultPipelineFactory();
-			DefaultTransactionScopeFactory();
-			DefaultServiceBusPolicy();
-			DefaultThreadActivityFactory();
-		}
 
 		public IServiceBusConfigurationBuilder MessageSerializer(ISerializer serializer)
 		{
@@ -28,25 +15,11 @@ namespace Shuttle.ESB.Core
 			return this;
 		}
 
-		public IServiceBusConfigurationBuilder DefaultMessageSerializer()
-		{
-			configuration.Serializer = new DefaultSerializer();
-
-			return this;
-		}
-
 		public IServiceBusConfigurationBuilder MessageHandlerFactory(IMessageHandlerFactory messageHandlerFactory)
 		{
 			Guard.AgainstNull(messageHandlerFactory, "messageHandlerFactory");
 
 			configuration.MessageHandlerFactory = messageHandlerFactory;
-
-			return this;
-		}
-
-		public IServiceBusConfigurationBuilder DefaultMessageHandlerFactory()
-		{
-			configuration.MessageHandlerFactory = new DefaultMessageHandlerFactory();
 
 			return this;
 		}
@@ -142,26 +115,12 @@ namespace Shuttle.ESB.Core
 			return this;
 		}
 
-		public IServiceBusConfigurationBuilder DefaultPipelineFactory()
-		{
-			configuration.PipelineFactory = new DefaultPipelineFactory();
-
-			return this;
-		}
-
 		public IServiceBusConfigurationBuilder TransactionScopeFactory(
 			IServiceBusTransactionScopeFactory serviceBusTransactionScopeFactory)
 		{
 			Guard.AgainstNull(serviceBusTransactionScopeFactory, "serviceBusTransactionScopeFactory");
 
 			configuration.TransactionScopeFactory = serviceBusTransactionScopeFactory;
-
-			return this;
-		}
-
-		public IServiceBusConfigurationBuilder DefaultTransactionScopeFactory()
-		{
-			configuration.TransactionScopeFactory = new DefaultServiceBusTransactionScopeFactory();
 
 			return this;
 		}
@@ -175,39 +134,11 @@ namespace Shuttle.ESB.Core
 			return this;
 		}
 
-		public IServiceBusConfigurationBuilder DefaultMessageRouteProvider()
-		{
-			configuration.MessageRouteProvider = new DefaultMessageRouteProvider();
-
-			return this;
-		}
-
 		public IServiceBusConfigurationBuilder ForwardingRouteProvider(IMessageRouteProvider forwardingRouteProvider)
 		{
 			Guard.AgainstNull(forwardingRouteProvider, "forwardingRouteProvider");
 
 			configuration.ForwardingRouteProvider = forwardingRouteProvider;
-
-			return this;
-		}
-
-		public IServiceBusConfigurationBuilder DefaultForwardingRouteProvider()
-		{
-			configuration.ForwardingRouteProvider = new DefaultForwardingRouteProvider();
-
-			return this;
-		}
-
-		public IServiceBusConfigurationBuilder DefaultServiceBusPolicy()
-		{
-			configuration.Policy = new DefaultServiceBusPolicy();
-
-			return this;
-		}
-
-		public IServiceBusConfigurationBuilder DefaultThreadActivityFactory()
-		{
-			configuration.ThreadActivityFactory = new DefaultThreadActivityFactory();
 
 			return this;
 		}
