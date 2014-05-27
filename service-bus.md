@@ -8,7 +8,7 @@ There are basically three ways to communicate from one endpoint to another:
 
 - sending **command** messages for processing
 - sending **command** messages for *deferred* processing
-- publish **event** messages
+- publishing **event** messages
 
 A **command** message is only ever sent to **one** endpoint and at least **one** endpoint is required for the message to be successfully sent.  This requirement stems from a **command** being an instruction that will result in an action so it is something that is still going to take place.  If there is no endpoint to send a **command** to the instruction will not be executed whilst there is an expectation that the action would be executed.
 
@@ -22,6 +22,13 @@ Some examples of *commands* and *events*:
 | `CreateCustomerCommand`	| `CustomerCreatedEvent`	|
 | `PlaceOrderCommand`		| `OrderPlacedEvent`		|
 | `CancelOrderCommand`		| `OrderCancelledEvent`		|
+
+## Sending **command** messages
+
+
+## Sending deferred **command** messages
+
+## Publishing **event** messages
 
 # ServiceBusConfiguration
 
