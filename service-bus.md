@@ -151,4 +151,34 @@ All the default options will be used in such as case but there will be rather fe
 		.Start();
 ```
 
-Quite a number of the defaults can be replaced with custom imeplementations allowing you to configure Shuttle to be used in future in ways that one cannot conceive today.
+Quite a number of the defaults can be replaced with custom implementations allowing you to configure Shuttle to be used in future in ways that one cannot conceive today.  All the methods on the `ServiceBusConfigurationBuilder` interface return the `ServiceBusConfigurationBuilder` instance again except for he following:
+
+``` c#
+	IServiceBus Start();
+	IServiceBusConfiguration Configuration();
+``` 
+
+Here are the defaults used and the `IServiceBusConfigurationBuilder` method to specify and implementation:
+
+### TransactionScopeFactory
+``` c#
+	public interface IServiceBusConfiguration
+	{
+		IServiceBusTransactionScopeFactory TransactionScopeFactory { get; }
+	}
+
+	public interface IServiceBusConfigurationBuilder
+	{
+        IServiceBusConfigurationBuilder TransactionScopeFactory(IServiceBusTransactionScopeFactory serviceBusTransactionScopeFactory);
+	}
+
+	internal class ServiceBusConfigurationBuilder : IServiceBusConfigurationBuilder
+	{
+		public IServiceBusConfigurationBuilder DefaultTransactionScopeFactory()
+		{
+			configuration.TransactionScopeFactory = new DefaultServiceBusTransactionScopeFactory();
+
+			return this;
+		}
+	}
+```
