@@ -183,4 +183,28 @@ Here are the defaults used and the `IServiceBusConfigurationBuilder` method to s
 	}
 ```
 
+### PipelineFactory
+
+``` c#
+	public interface IServiceBusConfiguration
+	{
+		IPipelineFactory PipelineFactory { get; }
+	}
+
+	public interface IServiceBusConfigurationBuilder
+	{
+        IServiceBusConfigurationBuilder PipelineFactory(IPipelineFactory pipelineFactory);
+	}
+
+	internal class ServiceBusConfigurationBuilder : IServiceBusConfigurationBuilder
+	{
+		public IServiceBusConfigurationBuilder DefaultTransactionScopeFactory()
+		{
+			configuration.TransactionScopeFactory = new DefaultServiceBusTransactionScopeFactory();
+
+			return this;
+		}
+	}
+```
+
 *TO BE COMPLETED*
