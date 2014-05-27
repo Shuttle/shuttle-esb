@@ -158,7 +158,7 @@ Quite a number of the defaults can be replaced with custom implementations allow
 	IServiceBusConfiguration Configuration();
 ``` 
 
-Here are the defaults used and the `IServiceBusConfigurationBuilder` method to specify and implementation:
+Here are the defaults used and the `IServiceBusConfigurationBuilder` method to specify a specific implementation (snippets only):
 
 ### TransactionScopeFactory
 ``` c#
@@ -172,13 +172,11 @@ Here are the defaults used and the `IServiceBusConfigurationBuilder` method to s
         IServiceBusConfigurationBuilder TransactionScopeFactory(IServiceBusTransactionScopeFactory serviceBusTransactionScopeFactory);
 	}
 
-	internal class ServiceBusConfigurationBuilder : IServiceBusConfigurationBuilder
+	public class ServiceBusConfiguration : IServiceBusConfiguration
 	{
-		public IServiceBusConfigurationBuilder DefaultTransactionScopeFactory()
+		public ServiceBusConfiguration()
 		{
-			configuration.TransactionScopeFactory = new DefaultServiceBusTransactionScopeFactory();
-
-			return this;
+			TransactionScopeFactory = new DefaultServiceBusTransactionScopeFactory();
 		}
 	}
 ```
@@ -196,14 +194,158 @@ Here are the defaults used and the `IServiceBusConfigurationBuilder` method to s
         IServiceBusConfigurationBuilder PipelineFactory(IPipelineFactory pipelineFactory);
 	}
 
-	internal class ServiceBusConfigurationBuilder : IServiceBusConfigurationBuilder
+	public class ServiceBusConfiguration : IServiceBusConfiguration
 	{
-		public IServiceBusConfigurationBuilder DefaultTransactionScopeFactory()
+		public ServiceBusConfiguration()
 		{
-			configuration.TransactionScopeFactory = new DefaultServiceBusTransactionScopeFactory();
-
-			return this;
+			PipelineFactory = new DefaultPipelineFactory();
 		}
+	}
+```
+
+### MessageRouteProvider
+
+``` c#
+	public interface IServiceBusConfiguration
+	{
+		IMessageRouteProvider MessageRouteProvider { get; }
+	}
+
+	public interface IServiceBusConfigurationBuilder
+	{
+        IServiceBusConfigurationBuilder MessageRouteProvider(IMessageRouteProvider messageRouteProvider);
+	}
+
+	public class ServiceBusConfiguration : IServiceBusConfiguration
+	{
+		public ServiceBusConfiguration()
+		{
+			MessageRouteProvider = new DefaultMessageRouteProvider();
+		}
+	}
+```
+
+### MessageHandlerFactory
+
+``` c#
+	public interface IServiceBusConfiguration
+	{
+		IMessageHandlerFactory MessageHandlerFactory { get; }
+	}
+
+	public interface IServiceBusConfigurationBuilder
+	{
+        IServiceBusConfigurationBuilder MessageHandlerFactory(IMessageHandlerFactory messageHandlerFactory);
+	}
+
+	public class ServiceBusConfiguration : IServiceBusConfiguration
+	{
+		public ServiceBusConfiguration()
+		{
+			MessageHandlerFactory = new DefaultMessageHandlerFactory();
+		}
+	}
+```
+
+### MessageSerializer
+
+``` c#
+	public interface IServiceBusConfiguration
+	{
+		ISerializer Serializer { get; }
+	}
+
+	public interface IServiceBusConfigurationBuilder
+	{
+        IServiceBusConfigurationBuilder MessageSerializer(ISerializer serializer);
+	}
+
+	public class ServiceBusConfiguration : IServiceBusConfiguration
+	{
+		public ServiceBusConfiguration()
+		{
+			Serializer = new DefaultSerializer();
+		}
+	}
+```
+
+### ForwardingRouteProvider
+
+``` c#
+	public interface IServiceBusConfiguration
+	{
+		IMessageRouteProvider ForwardingRouteProvider { get; }
+	}
+
+	public interface IServiceBusConfigurationBuilder
+	{
+        IServiceBusConfigurationBuilder ForwardingRouteProvider(IMessageRouteProvider forwardingRouteProvider);
+	}
+
+	public class ServiceBusConfiguration : IServiceBusConfiguration
+	{
+		public ServiceBusConfiguration()
+		{
+			ForwardingRouteProvider = new DefaultForwardingRouteProvider();
+		}
+	}
+```
+
+### Policy
+
+``` c#
+	public interface IServiceBusConfiguration
+	{
+		IServiceBusPolicy Policy { get; }
+	}
+
+	public interface IServiceBusConfigurationBuilder
+	{
+        IServiceBusConfigurationBuilder Policy(IServiceBusPolicy policy);
+	}
+
+	public class ServiceBusConfiguration : IServiceBusConfiguration
+	{
+		public ServiceBusConfiguration()
+		{
+			Policy = new DefaultServiceBusPolicy();
+		}
+	}
+```
+
+### ThreadActivityFactory
+
+``` c#
+	public interface IServiceBusConfiguration
+	{
+		IThreadActivityFactory ThreadActivityFactory { get; }
+	}
+
+	public interface IServiceBusConfigurationBuilder
+	{
+        IServiceBusConfigurationBuilder ThreadActivityFactory(IThreadActivityFactory factory);
+	}
+
+	public class ServiceBusConfiguration : IServiceBusConfiguration
+	{
+		public ServiceBusConfiguration()
+		{
+			ThreadActivityFactory = new DefaultThreadActivityFactory();
+		}
+	}
+```
+
+### SubscriptionManager
+
+``` c#
+	public interface IServiceBusConfiguration
+	{
+		ISubscriptionManager SubscriptionManager { get; }
+	}
+
+	public interface IServiceBusConfigurationBuilder
+	{
+        IServiceBusConfigurationBuilder SubscriptionManager(ISubscriptionManager manager);
 	}
 ```
 
