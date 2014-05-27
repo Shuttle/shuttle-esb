@@ -420,7 +420,7 @@
     <value>[publishing] : no subscribers / event message type = '{0}'</value>
     <comment>{0} = full type name of event message</comment>
   </data>
-  <data name="WarningPublishWithoutSubscriptionManager" xml:space="preserve">
+  <data name="PublishWithoutSubscriptionManagerException" xml:space="preserve">
     <value>[publishing] : no subscription manager registered / event message type = '{0}'</value>
     <comment>{0} = full type name of event message</comment>
   </data>

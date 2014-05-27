@@ -219,7 +219,7 @@ namespace Shuttle.ESB.Core
 			}
 			else
 			{
-				log.Warning(string.Format(ESBResources.WarningPublishWithoutSubscriptionManager, message.GetType().FullName));
+				throw new InvalidOperationException(string.Format(ESBResources.PublishWithoutSubscriptionManagerException, message.GetType().FullName));
 			}
 
 			return EmptyPublishFlyweight;
