@@ -151,15 +151,6 @@ All the default options will be used in such as case but there will be rather fe
 		.Start();
 ```
 
-Quite a number of the defaults can be replaced with custom implementations allowing you to configure Shuttle to be used in future in ways that one cannot conceive today.  All the methods on the `ServiceBusConfigurationBuilder` interface return the `ServiceBusConfigurationBuilder` instance again except for he following:
-
-``` c#
-	IServiceBus Start();
-	IServiceBusConfiguration Configuration();
-``` 
-
-Here are the defaults used and the `IServiceBusConfigurationBuilder` method to specify a specific implementation (snippets only):
-
 ### TransactionScopeFactory
 ``` c#
 	public interface IServiceBusConfiguration
@@ -341,6 +332,7 @@ Here are the defaults used and the `IServiceBusConfigurationBuilder` method to s
 	public interface IServiceBusConfiguration
 	{
 		ISubscriptionManager SubscriptionManager { get; }
+		bool HasSubscriptionManager { get; }
 	}
 
 	public interface IServiceBusConfigurationBuilder
@@ -349,4 +341,46 @@ Here are the defaults used and the `IServiceBusConfigurationBuilder` method to s
 	}
 ```
 
-*TO BE COMPLETED*
+### Encryption
+
+``` c#
+	public interface IServiceBusConfiguration
+	{
+		void AddEncryptionAlgorithm(IEncryptionAlgorithm algorithm);
+		IEncryptionAlgorithm FindEncryptionAlgorithm(string name);
+	}
+
+	public interface IServiceBusConfigurationBuilder
+	{
+        IServiceBusConfigurationBuilder AddEnryptionAlgorithm(IEncryptionAlgorithm algorithm);
+	}
+```
+
+### Compression
+
+``` c#
+	public interface IServiceBusConfiguration
+	{
+		void AddCompressionAlgorithm(ICompressionAlgorithm algorithm);
+		ICompressionAlgorithm FindCompressionAlgorithm(string name);
+	}
+
+	public interface IServiceBusConfigurationBuilder
+	{
+        IServiceBusConfigurationBuilder AddCompressionAlgorithm(ICompressionAlgorithm algorithm);
+	}
+```
+
+### Modules
+
+``` c#
+	public interface IServiceBusConfiguration
+	{
+		ModuleCollection Modules { get; }
+	}
+
+	public interface IServiceBusConfigurationBuilder
+	{
+        IServiceBusConfigurationBuilder AddModule(IModule module);
+	}
+```
