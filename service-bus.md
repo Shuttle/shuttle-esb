@@ -152,6 +152,9 @@ All the default options will be used in such as case but there will be rather fe
 ```
 
 ### TransactionScopeFactory
+
+[Got to the TransactionScopeFactory documentation]({{ site.baseurl }}/transactionscopefactory/index.html).
+
 ``` c#
 	public interface IServiceBusConfiguration
 	{
