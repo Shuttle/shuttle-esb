@@ -1,5 +1,5 @@
 ---
-title: TransactionScopeFactory
+title: TransactionScope Factory
 layout: api
 ---
 # IServiceBusTransactionScopeFactory
@@ -19,4 +19,13 @@ If you do not want to make use of a `TransactionScope` you can disable it throug
 
 It is the responsibility of the `IServiceBusTransactionScopeFactory` implementation to return a `NullServiceBusTransactionScope` should the transaction scope not be required.  An example can be viewed in the source for the `DefaultServiceBusTransactionScopeFactory`.
 
+## Methods
+
+### Create
+
+``` c#
+IServiceBusTransactionScope Create(PipelineEvent pipelineEvent)
+```
+
+The method returns a new `IServiceBusTransactionScope` instance.
 
