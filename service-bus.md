@@ -201,6 +201,8 @@ All the default options will be used in such as case but there will be rather fe
 
 ### MessageRouteProvider
 
+[Got to the Message Route Provider documentation]({{ site.baseurl }}/message-route-provider/index.html).
+
 ``` c#
 	public interface IServiceBusConfiguration
 	{
@@ -266,6 +268,8 @@ All the default options will be used in such as case but there will be rather fe
 ```
 
 ### ForwardingRouteProvider
+
+[Got to the Message Route Provider documentation]({{ site.baseurl }}/message-route-provider/index.html).
 
 ``` c#
 	public interface IServiceBusConfiguration
