@@ -225,6 +225,8 @@ All the default options will be used in such as case but there will be rather fe
 
 ### MessageHandlerFactory
 
+[Got to the Message Handler Factory documentation]({{ site.baseurl }}/message-handler-factory/index.html).
+
 ``` c#
 	public interface IServiceBusConfiguration
 	{
