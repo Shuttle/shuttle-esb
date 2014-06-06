@@ -4,7 +4,7 @@ layout: api
 ---
 # IMessageRouteProvider
 
-An implementation of the `IMessageRouteProvider` interface is used to obtain an the uris that a message should be routed to.
+An implementation of the `IMessageRouteProvider` interface is used to obtain a list of the uris that a message should be routed to.
 
 There are two default implementations of the interface that are used for different purposes.  Should you ever require a custom mechanism to return the uris you simply provide the configuration with the relevant instance.  An example may be a centrally managed database containing the routing.
 
