@@ -153,7 +153,7 @@ All the default options will be used in such as case but there will be rather fe
 
 ### TransactionScopeFactory
 
-[Got to the Transaction Scope Factory documentation]({{ site.baseurl }}/transactionscope-factory/index.html).
+[Go to the Transaction Scope Factory documentation]({{ site.baseurl }}/transactionscope-factory/index.html).
 
 ``` c#
 	public interface IServiceBusConfiguration
@@ -177,7 +177,7 @@ All the default options will be used in such as case but there will be rather fe
 
 ### PipelineFactory
 
-[Got to the Pipeline Factory documentation]({{ site.baseurl }}/pipeline-factory/index.html).
+[Go to the Pipeline Factory documentation]({{ site.baseurl }}/pipeline-factory/index.html).
 
 ``` c#
 	public interface IServiceBusConfiguration
@@ -201,7 +201,7 @@ All the default options will be used in such as case but there will be rather fe
 
 ### MessageRouteProvider
 
-[Got to the Message Route Provider documentation]({{ site.baseurl }}/message-route-provider/index.html).
+[Go to the Message Route Provider documentation]({{ site.baseurl }}/message-route-provider/index.html).
 
 ``` c#
 	public interface IServiceBusConfiguration
@@ -225,7 +225,7 @@ All the default options will be used in such as case but there will be rather fe
 
 ### MessageHandlerFactory
 
-[Got to the Message Handler Factory documentation]({{ site.baseurl }}/message-handler-factory/index.html).
+[Go to the Message Handler Factory documentation]({{ site.baseurl }}/message-handler-factory/index.html).
 
 ``` c#
 	public interface IServiceBusConfiguration
@@ -247,7 +247,9 @@ All the default options will be used in such as case but there will be rather fe
 	}
 ```
 
-### MessageSerializer
+### Serializer
+
+[Go to the Serializer documentation]({{ site.baseurl }}/serializer/index.html).
 
 ``` c#
 	public interface IServiceBusConfiguration
@@ -271,7 +273,7 @@ All the default options will be used in such as case but there will be rather fe
 
 ### ForwardingRouteProvider
 
-[Got to the Message Route Provider documentation]({{ site.baseurl }}/message-route-provider/index.html).
+[Go to the Message Route Provider documentation]({{ site.baseurl }}/message-route-provider/index.html).
 
 ``` c#
 	public interface IServiceBusConfiguration
@@ -294,6 +296,8 @@ All the default options will be used in such as case but there will be rather fe
 ```
 
 ### Policy
+
+[Go to the Service Bus Policy documentation]({{ site.baseurl }}/service-bus-policy/index.html).
 
 ``` c#
 	public interface IServiceBusConfiguration
