@@ -321,6 +321,8 @@ All the default options will be used in such as case but there will be rather fe
 
 ### ThreadActivityFactory
 
+[Go to the Thread Activity Factory documentation]({{ site.baseurl }}/thread-activity-factory/index.html).
+
 ``` c#
 	public interface IServiceBusConfiguration
 	{
