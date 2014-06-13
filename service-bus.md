@@ -345,6 +345,8 @@ All the default options will be used in such as case but there will be rather fe
 
 ### SubscriptionManager
 
+[Go to the Subscription Manager documentation]({{ site.baseurl }}/subscription-manager/index.html).
+
 ``` c#
 	public interface IServiceBusConfiguration
 	{
@@ -387,8 +389,10 @@ All the default options will be used in such as case but there will be rather fe
         IServiceBusConfigurationBuilder AddCompressionAlgorithm(ICompressionAlgorithm algorithm);
 	}
 ```
-
+.
 ### Modules
+
+[Go to the Modules documentation]({{ site.baseurl }}/modules/index.html).
 
 ``` c#
 	public interface IServiceBusConfiguration
