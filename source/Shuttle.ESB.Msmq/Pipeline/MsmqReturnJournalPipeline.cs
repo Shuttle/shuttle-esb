@@ -1,9 +1,9 @@
 ﻿using System;
-using Shuttle.Core.Infrastructure;
+using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.Msmq
 {
-	public class MsmqReturnJournalPipeline : ObservablePipeline
+	public class MsmqReturnJournalPipeline : Pipeline
 	{
 		public MsmqReturnJournalPipeline()
 		{

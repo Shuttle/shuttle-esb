@@ -37,11 +37,11 @@ namespace Shuttle.ESB.Core
 						{
 							state.GetWorkQueue().Release(receivedMessage.AcknowledgementToken);
 
-							_log.Error(string.Format(ESBResources.ReceivePipelineExceptionMessageReleased, pipelineEvent.Pipeline.Exception.CompactMessages()));
+							_log.Error(string.Format(ESBResources.ReceivePipelineExceptionMessageReleased, pipelineEvent.Pipeline.Exception.AllMessages()));
 						}
 						else
 						{
-							_log.Error(string.Format(ESBResources.ReceivePipelineExceptionMessageNotReceived, pipelineEvent.Pipeline.Exception.CompactMessages()));
+							_log.Error(string.Format(ESBResources.ReceivePipelineExceptionMessageNotReceived, pipelineEvent.Pipeline.Exception.AllMessages()));
 						}
 
 						return;
@@ -49,7 +49,7 @@ namespace Shuttle.ESB.Core
 
 					var action = bus.Configuration.Policy.EvaluateMessageHandlingFailure(pipelineEvent);
 
-					transportMessage.RegisterFailure(pipelineEvent.Pipeline.Exception.CompactMessages(),
+					transportMessage.RegisterFailure(pipelineEvent.Pipeline.Exception.AllMessages(),
 					                                 action.TimeSpanToIgnoreRetriedMessage);
 
 					using (var stream = bus.Configuration.Serializer.Serialize(transportMessage))
@@ -66,7 +66,7 @@ namespace Shuttle.ESB.Core
 						{
 							_log.Warning(string.Format(ESBResources.MessageHandlerExceptionWillRetry,
 							                           handlerFullTypeName,
-							                           pipelineEvent.Pipeline.Exception.CompactMessages(),
+							                           pipelineEvent.Pipeline.Exception.AllMessages(),
 							                           transportMessage.MessageType,
 							                           transportMessage.MessageId,
 							                           currentRetryCount,
@@ -78,7 +78,7 @@ namespace Shuttle.ESB.Core
 						{
 							_log.Error(string.Format(ESBResources.MessageHandlerExceptionFailure,
 							                         handlerFullTypeName,
-							                         pipelineEvent.Pipeline.Exception.CompactMessages(),
+							                         pipelineEvent.Pipeline.Exception.AllMessages(),
 							                         transportMessage.MessageType,
 							                         transportMessage.MessageId,
 							                         state.GetMaximumFailureCount(),

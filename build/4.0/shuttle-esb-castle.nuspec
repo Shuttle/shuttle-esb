@@ -13,5 +13,9 @@
     <releaseNotes></releaseNotes>
     <copyright>Copyright (c) 2011-2014, Eben Roux</copyright>
     <tags>Enterprise Service ESB esb c# Event Driven messaging MSMQ RabbitMQ nservicebus pipeline development Service Bus shuttle soa castle di dependency injection</tags>
+	<dependencies>
+		<dependency id="castle.core" version="" />
+		<dependency id="castle.windsor" version="" />
+	</dependencies>
   </metadata>
 </package>

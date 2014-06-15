@@ -112,14 +112,22 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="DistributorCapabilityEventPublished" xml:space="preserve">
+  <data name="DistributorCapabilityEventPublishedx" xml:space="preserve">
     <value>Published DistributorCapabilityEvent for work queue uri '{0}'.</value>
     <comment>{0} = work queue uri</comment>
+  </data>
+  <data name="InvalidActiveFromTime" xml:space="preserve">
+    <value>ActiveFromTime '{0}' is not a valid time.</value>
+    <comment>{0} = invalid time</comment>
+  </data>
+  <data name="InvalidActiveToTime" xml:space="preserve">
+    <value>ActiveToTime '{0}' is not a valid time.</value>
+    <comment>{0} = invalid time</comment>
   </data>
   <data name="MessageTypeHandlerCapabilityEventPublished" xml:space="preserve">
     <value>Published MessageTypeHandlerCapabilityEvent for message type '{0}' on work queue uri '{1}'.</value>

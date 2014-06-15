@@ -14,7 +14,7 @@
     <copyright>Copyright (c) 2011-2014, Eben Roux</copyright>
     <tags>Enterprise Service ESB esb c# Event Driven messaging MSMQ RabbitMQ nservicebus pipeline development Service Bus shuttle soa</tags>
 	<dependencies>
-		<dependency id="shuttle-core-infrastructure" version="3.0.2" />
+		<dependency id="shuttle-core-infrastructure" version="3.1.0" />
 		<dependency id="shuttle-esb-core" version="" />
 	</dependencies>
   </metadata>

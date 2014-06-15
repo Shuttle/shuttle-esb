@@ -6,13 +6,13 @@ namespace Shuttle.ESB.Core
 {
     public class DefaultMessageHandlerFactory : MessageHandlerFactory
     {
-        private readonly Dictionary<Type, Type> messageHandlerTypes = new Dictionary<Type, Type>();
+        private readonly Dictionary<Type, Type> _messageHandlerTypes = new Dictionary<Type, Type>();
 
-        private readonly ILog log;
+        private readonly ILog _log;
 
         public DefaultMessageHandlerFactory()
         {
-            log = Log.For(this);
+            _log = Log.For(this);
         }
 
         private void AddMessageHandlerType(Type messageHandlerType)
@@ -32,23 +32,23 @@ namespace Shuttle.ESB.Core
 
         private void AddMessageTypeHandler(Type messageType, Type messageHandlerType)
         {
-            if (messageHandlerTypes.ContainsKey(messageType))
+            if (_messageHandlerTypes.ContainsKey(messageType))
             {
                 return;
             }
 
-            messageHandlerTypes.Add(messageType, messageHandlerType);
+            _messageHandlerTypes.Add(messageType, messageHandlerType);
 
-            log.Information(string.Format("[add message handler] : message type = '{0}' / handler type = '{1}' ", messageType.FullName, messageHandlerType.FullName));
+            _log.Information(string.Format("[add message handler] : message type = '{0}' / handler type = '{1}' ", messageType.FullName, messageHandlerType.FullName));
         }
 
         public override IMessageHandler CreateHandler(object message)
         {
             var messageType = message.GetType();
 
-            if (messageHandlerTypes.ContainsKey(messageType))
+            if (_messageHandlerTypes.ContainsKey(messageType))
             {
-                return (IMessageHandler)Activator.CreateInstance(messageHandlerTypes[messageType]);
+                return (IMessageHandler)Activator.CreateInstance(_messageHandlerTypes[messageType]);
             }
 
             return null;
@@ -56,21 +56,26 @@ namespace Shuttle.ESB.Core
 
         public override IEnumerable<Type> MessageTypesHandled
         {
-            get { return messageHandlerTypes.Keys; }
+            get { return _messageHandlerTypes.Keys; }
         }
 
         public override void Initialize(IServiceBus bus)
         {
-            messageHandlerTypes.Clear();
+            _messageHandlerTypes.Clear();
 
-            new ReflectionService().GetTypes(typeof(IMessageHandler<>)).ForEach(
-                type =>
-                {
-                    if (type.HasDefaultConstructor())
-                    {
-                        AddMessageHandlerType(type);
-                    }
-                });
+	        var reflectionService = new ReflectionService();
+
+	        foreach (var type in reflectionService.GetTypes(typeof(IMessageHandler<>)))
+	        {
+				if (type.GetConstructor(Type.EmptyTypes) != null)
+				{
+					AddMessageHandlerType(type);
+				}
+				else
+				{
+					_log.Warning(string.Format(ESBResources.DefaultMessageHandlerFactoryNoDefaultConstructor, type.FullName));
+				}
+			}
         }
     }
 }

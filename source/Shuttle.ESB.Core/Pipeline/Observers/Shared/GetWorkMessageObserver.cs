@@ -33,7 +33,7 @@ namespace Shuttle.ESB.Core
 
                 if (_log.IsVerboseEnabled)
                 {
-                    _log.Verbose(string.Format(ESBResources.DequeueStream, queue.Uri.Secured()));
+                    _log.Trace(string.Format(ESBResources.TraceStreamDequeued, queue.Uri.Secured()));
                 }
             }
         }

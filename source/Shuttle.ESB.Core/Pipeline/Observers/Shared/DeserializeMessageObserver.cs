@@ -33,7 +33,7 @@ namespace Shuttle.ESB.Core
 		    }
             catch (Exception ex)
             {
-				transportMessage.RegisterFailure(ex.CompactMessages(), new TimeSpan());
+				transportMessage.RegisterFailure(ex.AllMessages(), new TimeSpan());
 
 				state.GetErrorQueue().Enqueue(transportMessage.MessageId, state.GetServiceBus().Configuration.Serializer.Serialize(transportMessage));
 				
@@ -54,7 +54,7 @@ namespace Shuttle.ESB.Core
 
 			if (log.IsVerboseEnabled)
             {
-                log.Verbose(string.Format(ESBResources.MessageDeserialized, message.GetType(), transportMessage.MessageId));
+                log.Trace(string.Format(ESBResources.TraceMessageDeserialized, message.GetType(), transportMessage.MessageId));
             }
 		}
 	}

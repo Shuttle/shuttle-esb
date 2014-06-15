@@ -45,19 +45,23 @@
     <DefineConstants>$(DefineConstants);NET45FULL</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Shuttle.Core.Infrastructure, Version=3.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Shuttle.Core.Infrastructure, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\shuttle-core-infrastructure.3.0.2\lib\net35-full\Shuttle.Core.Infrastructure.dll</HintPath>
+      <HintPath>..\packages\shuttle-core-infrastructure.3.1.0\lib\net35-full\Shuttle.Core.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ActiveTimeRange\ActiveTimeRange.cs" />
+    <Compile Include="ActiveTimeRange\ActiveTimeRangeConfiguration.cs" />
     <Compile Include="ActiveTimeRange\ActiveTimeRangeModule.cs" />
     <Compile Include="ActiveTimeRange\ActiveTimeRangeObserver.cs" />
+    <Compile Include="ActiveTimeRange\IActiveTimeRangeConfiguration.cs" />
     <Compile Include="CorruptTransportMessage\CorruptTransportMessageModule.cs" />
     <Compile Include="ESBModuleResources.Designer.cs">
       <AutoGen>True</AutoGen>

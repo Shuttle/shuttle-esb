@@ -1,9 +1,7 @@
-﻿using Shuttle.Core.Infrastructure;
-
-namespace Shuttle.ESB.Core
+﻿namespace Shuttle.ESB.Core
 {
     public class DistributorMessageObserver :
-        IPipelineObserver<OnHandleDistributeMessage>,
+	    IPipelineObserver<OnHandleDistributeMessage>,
         IPipelineObserver<OnAbortPipeline>
     {
         public void Execute(OnHandleDistributeMessage pipelineEvent)

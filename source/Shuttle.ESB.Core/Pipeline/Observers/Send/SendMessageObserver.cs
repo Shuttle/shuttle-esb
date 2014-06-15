@@ -21,7 +21,8 @@ namespace Shuttle.ESB.Core
 			{
 				try
 				{
-					bus.Configuration.IdempotenceService.AddDeferredMessage(bus.TransportMessageBeingHandled, state.GetTransportMessageStream());
+					bus.Configuration.IdempotenceService.AddDeferredMessage(bus.TransportMessageBeingHandled,
+					                                                        state.GetTransportMessageStream());
 				}
 				catch (Exception ex)
 				{
@@ -44,8 +45,8 @@ namespace Shuttle.ESB.Core
 			}
 
 			var queue = !bus.Configuration.HasOutbox
-						? bus.Configuration.QueueManager.GetQueue(transportMessage.RecipientInboxWorkQueueUri)
-						: bus.Configuration.Outbox.WorkQueue;
+				            ? bus.Configuration.QueueManager.GetQueue(transportMessage.RecipientInboxWorkQueueUri)
+				            : bus.Configuration.Outbox.WorkQueue;
 
 			if (_log.IsVerboseEnabled)
 			{
@@ -56,10 +57,10 @@ namespace Shuttle.ESB.Core
 					_log.Verbose(string.Format(ESBResources.TraceTransportHeaderReceived, header.Key, header.Value));
 				}
 
-				_log.Verbose(string.Format(ESBResources.EnqueueMessage,
-										  transportMessage.MessageType,
-										  transportMessage.MessageId,
-										  queue.Uri));
+				_log.Trace(string.Format(ESBResources.TraceMessageEnqueued,
+				                         transportMessage.MessageType,
+				                         transportMessage.MessageId,
+				                         queue.Uri));
 			}
 
 			using (var stream = state.GetTransportMessageStream().Copy())

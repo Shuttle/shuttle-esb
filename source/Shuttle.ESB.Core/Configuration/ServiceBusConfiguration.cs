@@ -5,12 +5,6 @@ using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ESB.Core
 {
-	public enum QueueStartupAction
-	{
-		None = 0,
-		Purge = 1
-	}
-
 	public class ServiceBusConfiguration : IServiceBusConfiguration
 	{
 		public const string ServiceBusSectionName = "serviceBus";
@@ -58,13 +52,6 @@ namespace Shuttle.ESB.Core
 				if (value.Equals(Serializer))
 				{
 					return;
-				}
-
-				var replay = Serializer as IReplay<ISerializer>;
-
-				if (replay != null)
-				{
-					replay.Replay(value);
 				}
 
 				_serializer = value;

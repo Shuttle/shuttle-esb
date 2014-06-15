@@ -9,7 +9,7 @@ using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.RabbitMQ
 {
-	public class RabbitMQQueue : IQueue, ICreate, IDrop, IDisposable, IPurge
+	public class RabbitMQQueue : IQueue, ICreateQueue, IDropQueue, IDisposable, IPurgeQueue
 	{
 		private readonly IRabbitMQConfiguration _configuration;
 

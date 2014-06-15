@@ -2,7 +2,7 @@
 
 namespace Shuttle.ESB.Core
 {
-	public abstract class MessagePipeline : ObservablePipeline
+	public abstract class MessagePipeline : Pipeline
 	{
 		protected readonly IServiceBus _bus;
 

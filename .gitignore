@@ -57,7 +57,10 @@ ipch/
 *.gpState
 
 # ReSharper is a .NET coding add-in
-_ReSharper*
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+*.DotSettings
 
 # NCrunch
 *.ncrunch*

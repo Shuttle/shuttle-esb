@@ -1,9 +1,10 @@
 ﻿using System;
 using Shuttle.Core.Infrastructure;
+using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.Msmq
 {
-	public class MsmqReleaseMessagePipeline : ObservablePipeline
+	public class MsmqReleaseMessagePipeline : Pipeline
 	{
 		public MsmqReleaseMessagePipeline()
 		{

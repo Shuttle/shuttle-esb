@@ -70,47 +70,11 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Attempted to purge queue &apos;{0}&apos; but the queue does not implement the IPurge interface.  The queue cannot be purged..
-        /// </summary>
-        public static string CannotPurgeQueue {
-            get {
-                return ResourceManager.GetString("CannotPurgeQueue", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to IMessageSerializer implementation &apos;{0}&apos; does not implement IKnownTypes.  There are {1} known type assemblies specified in the application configuration that cannot be registered..
-        /// </summary>
-        public static string CannotRegisterKnownTypes {
-            get {
-                return ResourceManager.GetString("CannotRegisterKnownTypes", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Compression algorithm &apos;{0}&apos; has not been registered..
         /// </summary>
         public static string CompressionAlgorithmException {
             get {
                 return ResourceManager.GetString("CompressionAlgorithmException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Could not resolve instance (or default instance) of type &apos;{0}&apos; with key &apos;{0}&apos;..
-        /// </summary>
-        public static string CouldNotResolveKeyException {
-            get {
-                return ResourceManager.GetString("CouldNotResolveKeyException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Could not resolve instance (or default instance) of type &apos;{0}&apos;..
-        /// </summary>
-        public static string CouldNotResolveTypeException {
-            get {
-                return ResourceManager.GetString("CouldNotResolveTypeException", resourceCulture);
             }
         }
         
@@ -133,6 +97,15 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Handler type &apos;{0}&apos; has no default constructor and will be ignored by the DefaultMessageHandlerFactory.  If you need to use this message handler you will need to make use of an IMessageHandlerFactory that can inject the dependency for you..
+        /// </summary>
+        public static string DefaultMessageHandlerFactoryNoDefaultConstructor {
+            get {
+                return ResourceManager.GetString("DefaultMessageHandlerFactoryNoDefaultConstructor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Only one instance of the DeferredMessageProcessor should be created.  Check that the ProcessorThreadPool for the DeferredMessageProcessorFactory is not using more than 1 thread..
         /// </summary>
         public static string DeferredMessageProcessorInstanceException {
@@ -142,56 +115,11 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Stream dequeued from queue &apos;{0}&apos;..
-        /// </summary>
-        public static string DequeueStream {
-            get {
-                return ResourceManager.GetString("DequeueStream", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to When using the distributor a control inbox is required to receive notifications of worker availability.  No control inbox has been configured..
-        /// </summary>
-        public static string DistributorRequiresControlInbox {
-            get {
-                return ResourceManager.GetString("DistributorRequiresControlInbox", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A subscription manager is being used but, as per configuration, no subscriptions will be automatically registered..
-        /// </summary>
-        public static string DoNotRegisterSubscriptions {
-            get {
-                return ResourceManager.GetString("DoNotRegisterSubscriptions", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A default service has already been registered for type &apos;{0}&apos;..
-        /// </summary>
-        public static string DuplicateDefaultServiceType {
-            get {
-                return ResourceManager.GetString("DuplicateDefaultServiceType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to A queue factory for scheme &apos;{0}&apos; already existed.  Removed queue factory type &apos;{1}&apos; to register queue factory type &apos;{2}&apos;..
         /// </summary>
         public static string DuplicateQueueFactoryReplaced {
             get {
                 return ResourceManager.GetString("DuplicateQueueFactoryReplaced", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A service has already been registered for type &apos;{0}&apos;..
-        /// </summary>
-        public static string DuplicateServiceTypeException {
-            get {
-                return ResourceManager.GetString("DuplicateServiceTypeException", resourceCulture);
             }
         }
         
@@ -214,24 +142,6 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Message type &apos;{0}&apos; with id &apos;{1}&apos; equeuing on queue &apos;{2}&apos;..
-        /// </summary>
-        public static string EnqueueMessage {
-            get {
-                return ResourceManager.GetString("EnqueueMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Cannot enqueue data of type &apos;{0}&apos; on queue &apos;{1}&apos; since expected type is &apos;{2}&apos;..
-        /// </summary>
-        public static string EnqueueMessageDataTypeMismatchException {
-            get {
-                return ResourceManager.GetString("EnqueueMessageDataTypeMismatchException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Encountered a fatal exception accessing the idempotence service type &apos;{0}&apos;.  Without the idempotence service operational the integrity of the message processing cannot be guaranteed.  The pipeline has been aborted.  Exception: {1}.
         /// </summary>
         public static string FatalIdempotenceServiceException {
@@ -250,38 +160,11 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [configuration] : state folder = &apos;{0}&apos;.
-        /// </summary>
-        public static string InformationStateFolder {
-            get {
-                return ResourceManager.GetString("InformationStateFolder", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Only scheme &apos;{0}&apos; is supported.  The given uri &apos;{1}&apos; is not supported..
         /// </summary>
         public static string InvalidSchemeException {
             get {
                 return ResourceManager.GetString("InvalidSchemeException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The provided xml is not of type Shuttle.ESB.Core.TransportMessage..
-        /// </summary>
-        public static string MessageDeserializationException {
-            get {
-                return ResourceManager.GetString("MessageDeserializationException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Message type &apos;{0}&apos; with id &apos;{1}&apos; has been deserialized..
-        /// </summary>
-        public static string MessageDeserialized {
-            get {
-                return ResourceManager.GetString("MessageDeserialized", resourceCulture);
             }
         }
         
@@ -349,33 +232,6 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to While transferring message from queue with uri &apos;{0}&apos; to queue with uri &apos;{1}&apos; an exception &apos;{2}&apos; occurred.  Message type &apos;{3}&apos; with id &apos;{4}&apos; has reached the maximum number of retries ({5}).  The message has been moved to error queue &apos;{6}&apos;.
-        /// </summary>
-        public static string MessageTransferExceptionFailure {
-            get {
-                return ResourceManager.GetString("MessageTransferExceptionFailure", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to While transferring message from queue with uri &apos;{0}&apos; to queue with uri &apos;{1}&apos; an exception &apos;{2}&apos; occurred.  Transfer of message type &apos;{3}&apos; with id &apos;{4}&apos; will be retried.  It is retry number: {5}.
-        /// </summary>
-        public static string MessageTransferExceptionWillRetry {
-            get {
-                return ResourceManager.GetString("MessageTransferExceptionWillRetry", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No IDeferredMessageQueue implementation has been specified..
-        /// </summary>
-        public static string NoDeferredMessageQueue {
-            get {
-                return ResourceManager.GetString("NoDeferredMessageQueue", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to No IIdempotenceService implementation has been specified..
         /// </summary>
         public static string NoIdempotenceService {
@@ -385,20 +241,29 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No inbox has been specified so no subscriptions can be registered since event message types subscribed to are sent to the inbox of the subscriber..
+        ///   Looks up a localized string similar to No IMessageHandlerFactory implementation has been configured..
         /// </summary>
-        public static string NoInboxForSubscriptions {
+        public static string NoMessageHandlerFactoryException {
             get {
-                return ResourceManager.GetString("NoInboxForSubscriptions", resourceCulture);
+                return ResourceManager.GetString("NoMessageHandlerFactoryException", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No queues have been specified for the bus; it cannot start.  Please specify either an inbox / distributor configuration (to process messages) or an outbox configuration (to send/publish messages) or both..
+        ///   Looks up a localized string similar to No IMessageRouteProvider (message routing) has been configured..
         /// </summary>
-        public static string NoQueuesConfigurationException {
+        public static string NoMessageRouteProviderException {
             get {
-                return ResourceManager.GetString("NoQueuesConfigurationException", resourceCulture);
+                return ResourceManager.GetString("NoMessageRouteProviderException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No ISerializer implementation has been configured..
+        /// </summary>
+        public static string NoSerializerException {
+            get {
+                return ResourceManager.GetString("NoSerializerException", resourceCulture);
             }
         }
         
@@ -421,20 +286,20 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Factory that creates pipelines for context type &apos;{0}&apos; has no create method..
+        ///   Looks up a localized string similar to Pipeline stage &apos;{0}&apos; has no event of type &apos;{1}&apos;..
         /// </summary>
-        public static string PipelineFactoryHasNoCreateMethod {
+        public static string PipelineStageEventNotRegistered {
             get {
-                return ResourceManager.GetString("PipelineFactoryHasNoCreateMethod", resourceCulture);
+                return ResourceManager.GetString("PipelineStageEventNotRegistered", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No pipeline factory has been registered for context type &apos;{0}&apos;..
+        ///   Looks up a localized string similar to There is no pipeline stage with a name of &apos;{0}&apos;..
         /// </summary>
-        public static string PipelineFactoryNotFound {
+        public static string PipelineStageNotFound {
             get {
-                return ResourceManager.GetString("PipelineFactoryNotFound", resourceCulture);
+                return ResourceManager.GetString("PipelineStageNotFound", resourceCulture);
             }
         }
         
@@ -457,92 +322,11 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Purging inbox work queue &apos;{0}&apos;..
-        /// </summary>
-        public static string PurgingInboxWorkQueue {
-            get {
-                return ResourceManager.GetString("PurgingInboxWorkQueue", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Purging inbox work queue &apos;{0}&apos; complete..
-        /// </summary>
-        public static string PurgingInboxWorkQueueComplete {
-            get {
-                return ResourceManager.GetString("PurgingInboxWorkQueueComplete", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Queue &apos;{0}&apos; has not been specified in the configuration..
-        /// </summary>
-        public static string QueueConfigurationException {
-            get {
-                return ResourceManager.GetString("QueueConfigurationException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Queue with uri &apos;{0}&apos; does not exist..
-        /// </summary>
-        public static string QueueDoesNotExistException {
-            get {
-                return ResourceManager.GetString("QueueDoesNotExistException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to No queue factory has been registered for scheme &apos;{0}&apos;..
         /// </summary>
         public static string QueueFactoryNotFoundException {
             get {
                 return ResourceManager.GetString("QueueFactoryNotFoundException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Queue factory type &apos;{0}&apos; not found.  Cannot create queue factory for scheme &apos;{1}&apos;..
-        /// </summary>
-        public static string QueueFactoryTypeNotFoundException {
-            get {
-                return ResourceManager.GetString("QueueFactoryTypeNotFoundException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to QueueTransactionScope (&apos;{0}&apos;) using ambient transaction..
-        /// </summary>
-        public static string QueueTransactionScopeAmbient {
-            get {
-                return ResourceManager.GetString("QueueTransactionScopeAmbient", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to QueueTransactionScope (&apos;{0}&apos;) using ambient transaction has completed..
-        /// </summary>
-        public static string QueueTransactionScopeAmbientCompleted {
-            get {
-                return ResourceManager.GetString("QueueTransactionScopeAmbientCompleted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to QueueTransactionScope (&apos;{0}&apos;) has completed..
-        /// </summary>
-        public static string QueueTransactionScopeCompleted {
-            get {
-                return ResourceManager.GetString("QueueTransactionScopeCompleted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to QueueTransactionScope (&apos;{0}&apos;) created with isolation level &apos;{1}&apos; and timeout of &apos;{2}&apos;..
-        /// </summary>
-        public static string QueueTransactionScopeCreated {
-            get {
-                return ResourceManager.GetString("QueueTransactionScopeCreated", resourceCulture);
             }
         }
         
@@ -561,24 +345,6 @@ namespace Shuttle.ESB.Core {
         public static string ReceivePipelineExceptionMessageReleased {
             get {
                 return ResourceManager.GetString("ReceivePipelineExceptionMessageReleased", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Attempt to register event type &apos;{0}&apos; on pipeline type &apos;{1}&apos;.  The vent type is not compatible with the supported pipeline event type &apos;{2}&apos;..
-        /// </summary>
-        public static string RegisteredIncompatiblePipelineEvent {
-            get {
-                return ResourceManager.GetString("RegisteredIncompatiblePipelineEvent", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Removing message type &apos;{0}&apos; with id &apos;{1}&apos; from queue &apos;{2}&apos;..
-        /// </summary>
-        public static string RemoveMessageFromQueue {
-            get {
-                return ResourceManager.GetString("RemoveMessageFromQueue", resourceCulture);
             }
         }
         
@@ -619,24 +385,6 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Serializer type &apos;{0}&apos; does not implement IKnownTypes.  Types implementing &apos;{1}&apos; cannot be added from folder &apos;{2}&apos;..
-        /// </summary>
-        public static string SerializerDoesNotImplementKnownTypes {
-            get {
-                return ResourceManager.GetString("SerializerDoesNotImplementKnownTypes", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Could not find serializer type specified in the application configuration file: {0}.
-        /// </summary>
-        public static string SerializerTypeNotFound {
-            get {
-                return ResourceManager.GetString("SerializerTypeNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Type &apos;{0}&apos; is not registered with the serializer so it cannot be serialized.  Please use [SerialierInstance].AddKnownType to add the type before attempting to serialize or deserialize a TransportMessage containing this type in the object graph of the message property..
         /// </summary>
         public static string SerializerUnknownTypeExcption {
@@ -646,7 +394,7 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A service bus instance has already been started..
+        ///   Looks up a localized string similar to The service bus instance has already been started..
         /// </summary>
         public static string ServiceBusInstanceAlreadyStarted {
             get {
@@ -655,47 +403,20 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Could not get section &apos;serviceBus&apos; from the application configuration file..
+        ///   Looks up a localized string similar to The queue handler configuration requires thread count of at least 1.  The input queue can not be processed..
         /// </summary>
-        public static string ServiceBusSectionException {
+        public static string ThreadCountZeroException {
             get {
-                return ResourceManager.GetString("ServiceBusSectionException", resourceCulture);
+                return ResourceManager.GetString("ThreadCountZeroException", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In order to start the endpoint exactly 1 type has to exist that implements IStartEndpoint but {0} were found.  The service bus for this endpoint cannot be started..
+        ///   Looks up a localized string similar to Thread pool &apos;{0}&apos; has {1} successfully..
         /// </summary>
-        public static string StartEndpointException {
+        public static string ThreadPoolStatusChange {
             get {
-                return ResourceManager.GetString("StartEndpointException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Start endpoint type &apos;{0}&apos; implementing IStartEndpoint must have a default constructor..
-        /// </summary>
-        public static string StartEndpointRequiresDefaultConstructor {
-            get {
-                return ResourceManager.GetString("StartEndpointRequiresDefaultConstructor", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The provided string argument {0} must not be empty..
-        /// </summary>
-        public static string StringCannotBeEmpty {
-            get {
-                return ResourceManager.GetString("StringCannotBeEmpty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Could not find subscription manager type specified in the application configuration file: {0}.
-        /// </summary>
-        public static string SubscriptionManagerTypeNotFound {
-            get {
-                return ResourceManager.GetString("SubscriptionManagerTypeNotFound", resourceCulture);
+                return ResourceManager.GetString("ThreadPoolStatusChange", resourceCulture);
             }
         }
         
@@ -705,15 +426,6 @@ namespace Shuttle.ESB.Core {
         public static string TraceAcknowledge {
             get {
                 return ResourceManager.GetString("TraceAcknowledge", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to [outgoing correlation id] : &apos;{0}&apos;.
-        /// </summary>
-        public static string TraceCorrelationIdOutgoing {
-            get {
-                return ResourceManager.GetString("TraceCorrelationIdOutgoing", resourceCulture);
             }
         }
         
@@ -745,11 +457,20 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [receive message state service] : transport message type &apos;{0}&apos; with id &apos;{1}&apos; has been handled and state has been removed..
+        ///   Looks up a localized string similar to Message type &apos;{0}&apos; with id &apos;{1}&apos; has been deserialized..
         /// </summary>
-        public static string TraceMessageAcknowledged {
+        public static string TraceMessageDeserialized {
             get {
-                return ResourceManager.GetString("TraceMessageAcknowledged", resourceCulture);
+                return ResourceManager.GetString("TraceMessageDeserialized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Message type &apos;{0}&apos; with id &apos;{1}&apos; equeuing on queue &apos;{2}&apos;..
+        /// </summary>
+        public static string TraceMessageEnqueued {
+            get {
+                return ResourceManager.GetString("TraceMessageEnqueued", resourceCulture);
             }
         }
         
@@ -763,11 +484,38 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Publishing transport message type &apos;{0}&apos; with id &apos;{1}&apos; to &apos;{2}&apos;..
+        ///   Looks up a localized string similar to [processor thread active] : managed thread id = {0} / processor type = {1}.
         /// </summary>
-        public static string TracePublishing {
+        public static string TraceProcessorThreadActive {
             get {
-                return ResourceManager.GetString("TracePublishing", resourceCulture);
+                return ResourceManager.GetString("TraceProcessorThreadActive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [processor thread starting] : managed thread id = {0} / processor type = {1}.
+        /// </summary>
+        public static string TraceProcessorThreadStarting {
+            get {
+                return ResourceManager.GetString("TraceProcessorThreadStarting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [processor thread stopped] : managed thread id = {0} / processor type = {1}.
+        /// </summary>
+        public static string TraceProcessorThreadStopped {
+            get {
+                return ResourceManager.GetString("TraceProcessorThreadStopped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [processor thread stopping] : managed thread id = {0} / processor type = {1}.
+        /// </summary>
+        public static string TraceProcessorThreadStopping {
+            get {
+                return ResourceManager.GetString("TraceProcessorThreadStopping", resourceCulture);
             }
         }
         
@@ -781,11 +529,11 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [transport message header (outgoing)] : {0} = {1}.
+        ///   Looks up a localized string similar to Stream dequeued from queue &apos;{0}&apos;..
         /// </summary>
-        public static string TraceTransportHeaderOutgoing {
+        public static string TraceStreamDequeued {
             get {
-                return ResourceManager.GetString("TraceTransportHeaderOutgoing", resourceCulture);
+                return ResourceManager.GetString("TraceStreamDequeued", resourceCulture);
             }
         }
         
@@ -810,18 +558,9 @@ namespace Shuttle.ESB.Core {
         /// <summary>
         ///   Looks up a localized string similar to Call to &apos;{0}.{1}&apos; already contains an active TransactionScope..
         /// </summary>
-        public static string TransactionAlreadyStarted {
+        public static string TransactionAlreadyStartedException {
             get {
-                return ResourceManager.GetString("TransactionAlreadyStarted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Call to &apos;{0}.{1}&apos; requires an active TransactionScope..
-        /// </summary>
-        public static string TransactionRequired {
-            get {
-                return ResourceManager.GetString("TransactionRequired", resourceCulture);
+                return ResourceManager.GetString("TransactionAlreadyStartedException", resourceCulture);
             }
         }
         
@@ -862,20 +601,20 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type &apos;{0}&apos; is does not derive from a Message type..
-        /// </summary>
-        public static string TypeIsNotAMessageType {
-            get {
-                return ResourceManager.GetString("TypeIsNotAMessageType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Cannot get type &apos;{0}&apos; for TypeListMessageRouteSpecification..
         /// </summary>
         public static string TypeListMessageRouteSpecificationUnknownType {
             get {
                 return ResourceManager.GetString("TypeListMessageRouteSpecificationUnknownType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unhandled exception during event &apos;{0}&apos;: {1}.
+        /// </summary>
+        public static string UnhandledPipelineException {
+            get {
+                return ResourceManager.GetString("UnhandledPipelineException", resourceCulture);
             }
         }
         
@@ -894,6 +633,87 @@ namespace Shuttle.ESB.Core {
         public static string UriFormatException {
             get {
                 return ResourceManager.GetString("UriFormatException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Entering pipeline stage &apos;{0}&apos;..
+        /// </summary>
+        public static string VerboseEnteringPipelineStage {
+            get {
+                return ResourceManager.GetString("VerboseEnteringPipelineStage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Executing pipeline &apos;{0}&apos;..
+        /// </summary>
+        public static string VerboseExecutingPipeline {
+            get {
+                return ResourceManager.GetString("VerboseExecutingPipeline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First chance exception handled by pipeline: {0}.
+        /// </summary>
+        public static string VerboseFirstChanceExceptionHandledByPipeline {
+            get {
+                return ResourceManager.GetString("VerboseFirstChanceExceptionHandledByPipeline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [processor thread executing] : managed thread id = {0} / processor type = {1}.
+        /// </summary>
+        public static string VerboseProcessorExecuting {
+            get {
+                return ResourceManager.GetString("VerboseProcessorExecuting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Raising pipeline event &apos;{0}&apos; in stage &apos;{1}&apos; for observer &apos;{2}&apos;..
+        /// </summary>
+        public static string VerboseRaisingPipelineEvent {
+            get {
+                return ResourceManager.GetString("VerboseRaisingPipelineEvent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TransactionScope (&apos;{0}&apos;) using ambient transaction..
+        /// </summary>
+        public static string VerboseTransactionScopeAmbient {
+            get {
+                return ResourceManager.GetString("VerboseTransactionScopeAmbient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TransactionScope (&apos;{0}&apos;) using ambient transaction has completed..
+        /// </summary>
+        public static string VerboseTransactionScopeAmbientCompleted {
+            get {
+                return ResourceManager.GetString("VerboseTransactionScopeAmbientCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TransactionScope (&apos;{0}&apos;) has completed..
+        /// </summary>
+        public static string VerboseTransactionScopeCompleted {
+            get {
+                return ResourceManager.GetString("VerboseTransactionScopeCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TransactionScope (&apos;{0}&apos;) created with isolation level &apos;{1}&apos; and timeout of &apos;{2}&apos;..
+        /// </summary>
+        public static string VerboseTransactionScopeCreated {
+            get {
+                return ResourceManager.GetString("VerboseTransactionScopeCreated", resourceCulture);
             }
         }
         

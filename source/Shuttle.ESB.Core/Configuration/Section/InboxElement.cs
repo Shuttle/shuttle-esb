@@ -6,12 +6,6 @@ namespace Shuttle.ESB.Core
 {
 	public class InboxElement : ConfigurationElement
 	{
-		[ConfigurationProperty("workQueueStartupAction", IsRequired = false, DefaultValue = QueueStartupAction.None)]
-		public QueueStartupAction WorkQueueStartupAction
-		{
-			get { return (QueueStartupAction) this["workQueueStartupAction"]; }
-		}
-
 		[ConfigurationProperty("workQueueUri", IsRequired = true)]
 		public string WorkQueueUri
 		{

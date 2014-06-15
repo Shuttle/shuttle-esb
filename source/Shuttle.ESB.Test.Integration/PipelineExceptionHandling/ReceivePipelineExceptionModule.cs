@@ -141,7 +141,7 @@ namespace Shuttle.ESB.Test.Integration.Core
 				}
 				catch (Exception ex)
 				{
-					_log.Error(ex.CompactMessages());
+					_log.Error(ex.AllMessages());
 
 					_failed = true;
 				}

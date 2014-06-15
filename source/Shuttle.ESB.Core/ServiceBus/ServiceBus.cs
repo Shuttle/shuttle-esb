@@ -11,14 +11,11 @@ namespace Shuttle.ESB.Core
 	{
 		private static bool started;
 
-		[ThreadStatic]
-		private static string outgoingCorrelationId;
+		[ThreadStatic] private static string outgoingCorrelationId;
 
-		[ThreadStatic]
-		private static TransportMessage _transportMessageBeingHandled;
+		[ThreadStatic] private static TransportMessage _transportMessageBeingHandled;
 
-		[ThreadStatic]
-		private static List<TransportHeader> outgoingHeaders;
+		[ThreadStatic] private static List<TransportHeader> outgoingHeaders;
 
 		private IProcessorThreadPool controlThreadPool;
 		private IProcessorThreadPool inboxThreadPool;
@@ -43,12 +40,14 @@ namespace Shuttle.ESB.Core
 
 		public IServiceBusConfiguration Configuration { get; private set; }
 		public IServiceBusEvents Events { get; private set; }
-		
-		public TransportMessage TransportMessageBeingHandled {
+
+		public TransportMessage TransportMessageBeingHandled
+		{
 			get { return _transportMessageBeingHandled; }
 		}
 
-		public bool IsHandlingTransportMessage {
+		public bool IsHandlingTransportMessage
+		{
 			get { return _transportMessageBeingHandled != null; }
 		}
 
@@ -85,7 +84,7 @@ namespace Shuttle.ESB.Core
 			if (log.IsTraceEnabled)
 			{
 				log.Trace(string.Format(ESBResources.TraceSend, transportMessage.MessageType,
-										transportMessage.RecipientInboxWorkQueueUri));
+				                        transportMessage.RecipientInboxWorkQueueUri));
 			}
 
 			try
@@ -100,7 +99,7 @@ namespace Shuttle.ESB.Core
 
 		public TransportMessage Send(object message)
 		{
-			return SendDeferred(DateTime.MinValue, message, (IQueue)null);
+			return SendDeferred(DateTime.MinValue, message, (IQueue) null);
 		}
 
 		public TransportMessage Send(object message, string uri)
@@ -122,12 +121,13 @@ namespace Shuttle.ESB.Core
 
 		public TransportMessage SendReply(object message)
 		{
-			return SendDeferred(DateTime.MinValue, message, Configuration.QueueManager.GetQueue(_transportMessageBeingHandled.SenderInboxWorkQueueUri));
+			return SendDeferred(DateTime.MinValue, message,
+			                    Configuration.QueueManager.GetQueue(_transportMessageBeingHandled.SenderInboxWorkQueueUri));
 		}
 
 		public TransportMessage SendDeferred(DateTime at, object message)
 		{
-			return SendDeferred(at, message, (IQueue)null);
+			return SendDeferred(at, message, (IQueue) null);
 		}
 
 		public TransportMessage SendDeferred(DateTime at, object message, string uri)
@@ -146,12 +146,12 @@ namespace Shuttle.ESB.Core
 			if (log.IsTraceEnabled)
 			{
 				log.Trace(string.Format(ESBResources.TraceSend, message.GetType().FullName,
-										queue == null ? "[null]" : queue.Uri.ToString()));
+				                        queue == null ? "[null]" : queue.Uri.ToString()));
 			}
 
 			try
 			{
-				((SendMessagePipeline)messagePipeline).Execute(at, message, queue);
+				((SendMessagePipeline) messagePipeline).Execute(at, message, queue);
 
 				return messagePipeline.State.Get<TransportMessage>(StateKeys.TransportMessage);
 			}
@@ -190,7 +190,8 @@ namespace Shuttle.ESB.Core
 			OutgoingCorrelationId = _transportMessageBeingHandled.CorrelationId;
 			OutgoingHeaders.Merge(_transportMessageBeingHandled.Headers);
 
-			return SendDeferred(at, message, Configuration.QueueManager.GetQueue(_transportMessageBeingHandled.SenderInboxWorkQueueUri));
+			return SendDeferred(at, message,
+			                    Configuration.QueueManager.GetQueue(_transportMessageBeingHandled.SenderInboxWorkQueueUri));
 		}
 
 		public IEnumerable<string> Publish(object message)
@@ -219,7 +220,8 @@ namespace Shuttle.ESB.Core
 			}
 			else
 			{
-				throw new InvalidOperationException(string.Format(ESBResources.PublishWithoutSubscriptionManagerException, message.GetType().FullName));
+				throw new InvalidOperationException(string.Format(ESBResources.PublishWithoutSubscriptionManagerException,
+				                                                  message.GetType().FullName));
 			}
 
 			return EmptyPublishFlyweight;
@@ -257,45 +259,38 @@ namespace Shuttle.ESB.Core
 
 		private void GuardAgainstInvalidConfiguration()
 		{
-			Guard.AgainstNullDependency(Configuration.Serializer, "serializer");
-			Guard.AgainstNullDependency(Configuration.MessageHandlerFactory, "MessageHandlerFactory");
+			Guard.Against<ESBConfigurationException>(Configuration.Serializer == null, ESBResources.NoSerializerException);
 
-			if (Configuration.IsWorker && !Configuration.HasInbox)
-			{
-				throw new WorkerException(ESBResources.WorkerRequiresInbox);
-			}
+			Guard.Against<ESBConfigurationException>(Configuration.MessageHandlerFactory == null,
+			                                         ESBResources.NoMessageHandlerFactoryException);
+
+			Guard.Against<WorkerException>(Configuration.IsWorker && !Configuration.HasInbox, ESBResources.WorkerRequiresInbox);
 
 			if (Configuration.HasInbox)
 			{
-				Guard.Against<QueueConfigurationException>(Configuration.Inbox.WorkQueue == null,
-														   string.Format(ESBResources.RequiredQueueMissing,
-																		 "Inbox.WorkQueue"));
+				Guard.Against<ESBConfigurationException>(Configuration.Inbox.WorkQueue == null,
+				                                         string.Format(ESBResources.RequiredQueueMissing, "Inbox.WorkQueue"));
 
-				Guard.Against<QueueConfigurationException>(Configuration.Inbox.ErrorQueue == null,
-														   string.Format(ESBResources.RequiredQueueMissing,
-																		 "Inbox.ErrorQueue"));
+				Guard.Against<ESBConfigurationException>(Configuration.Inbox.ErrorQueue == null,
+				                                         string.Format(ESBResources.RequiredQueueMissing, "Inbox.ErrorQueue"));
 			}
 
 			if (Configuration.HasOutbox)
 			{
-				Guard.Against<QueueConfigurationException>(Configuration.Outbox.WorkQueue == null,
-														   string.Format(ESBResources.RequiredQueueMissing,
-																		 "Outbox.WorkQueue"));
+				Guard.Against<ESBConfigurationException>(Configuration.Outbox.WorkQueue == null,
+				                                         string.Format(ESBResources.RequiredQueueMissing, "Outbox.WorkQueue"));
 
-				Guard.Against<QueueConfigurationException>(Configuration.Outbox.ErrorQueue == null,
-														   string.Format(ESBResources.RequiredQueueMissing,
-																		 "Outbox.ErrorQueue"));
+				Guard.Against<ESBConfigurationException>(Configuration.Outbox.ErrorQueue == null,
+				                                         string.Format(ESBResources.RequiredQueueMissing, "Outbox.ErrorQueue"));
 			}
 
 			if (Configuration.HasControlInbox)
 			{
-				Guard.Against<QueueConfigurationException>(Configuration.ControlInbox.WorkQueue == null,
-														   string.Format(ESBResources.RequiredQueueMissing,
-																		 "ControlInbox.WorkQueue"));
+				Guard.Against<ESBConfigurationException>(Configuration.ControlInbox.WorkQueue == null,
+				                                         string.Format(ESBResources.RequiredQueueMissing, "ControlInbox.WorkQueue"));
 
-				Guard.Against<QueueConfigurationException>(Configuration.ControlInbox.ErrorQueue == null,
-														   string.Format(ESBResources.RequiredQueueMissing,
-																		 "ControlInbox.ErrorQueue"));
+				Guard.Against<ESBConfigurationException>(Configuration.ControlInbox.ErrorQueue == null,
+				                                         string.Format(ESBResources.RequiredQueueMissing, "ControlInbox.ErrorQueue"));
 			}
 		}
 
@@ -357,8 +352,8 @@ namespace Shuttle.ESB.Core
 					: string.Empty;
 
 			result.PrincipalIdentityName = identity != null
-											   ? identity.Name
-											   : WindowsIdentity.GetAnonymous().Name;
+				                               ? identity.Name
+				                               : WindowsIdentity.GetAnonymous().Name;
 
 			if (result.SendDate == DateTime.MinValue)
 			{
@@ -383,22 +378,6 @@ namespace Shuttle.ESB.Core
 		public static IServiceBusConfigurationBuilder Create()
 		{
 			return new ServiceBusConfigurationBuilder();
-		}
-
-		public static IServiceBus StartEndpoint()
-		{
-			var starters = new ReflectionService().GetTypes<IStartEndpoint>().ToList();
-
-			if (starters.Count != 1)
-			{
-				throw new ApplicationException(string.Format(ESBResources.StartEndpointException, starters.Count()));
-			}
-
-			var type = starters.ElementAt(0);
-
-			type.AssertDefaultConstructor(string.Format(ESBResources.StartEndpointRequiresDefaultConstructor, type.FullName));
-
-			return ((IStartEndpoint)Activator.CreateInstance(type)).Start();
 		}
 
 		public string OutgoingCorrelationId

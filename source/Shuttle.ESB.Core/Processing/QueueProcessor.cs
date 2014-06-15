@@ -18,7 +18,7 @@ namespace Shuttle.ESB.Core
             _threadActivity = threadActivity;
         }
 
-        public virtual void Execute(IActiveState state)
+        public virtual void Execute(IThreadState state)
         {
             var messagePipeline = _bus.Configuration.PipelineFactory.GetPipeline<TMessagePipeline>(_bus);
 
@@ -49,7 +49,7 @@ namespace Shuttle.ESB.Core
         }
 
         [DebuggerNonUserCode]
-        void IProcessor.Execute(IActiveState state)
+        void IProcessor.Execute(IThreadState state)
         {
             Execute(state);
         }

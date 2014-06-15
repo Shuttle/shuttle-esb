@@ -1,13 +1,12 @@
 ﻿using System;
-using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ESB.Core
 {
 	public class PipelineExceptionEventArgs : EventArgs
 	{
-		public ObservablePipeline Pipeline { get; private set; }
+		public Pipeline Pipeline { get; private set; }
 
-		public PipelineExceptionEventArgs(ObservablePipeline pipeline)
+		public PipelineExceptionEventArgs(Pipeline pipeline)
 		{
 			Pipeline = pipeline;
 		}

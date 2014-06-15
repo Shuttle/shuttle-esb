@@ -24,7 +24,7 @@ namespace Shuttle.ESB.Core
             log = Log.For(this);
         }
 
-        public void Waiting(IActiveState state)
+        public void Waiting(IThreadState state)
         {
             if (ShouldNotifyDistributor())
             {

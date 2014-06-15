@@ -27,8 +27,7 @@ namespace Shuttle.ESB.Core
                                             };
         }
 
-        public QueueStartupAction WorkQueueStartupAction { get; set; }
-        public IQueue WorkQueue { get; set; }
+	    public IQueue WorkQueue { get; set; }
         public IQueue ErrorQueue { get; set; }
         public bool Distribute { get; set; }
 	    public IQueue DeferredQueue { get; set; }

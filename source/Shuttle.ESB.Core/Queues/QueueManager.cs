@@ -49,8 +49,10 @@ namespace Shuttle.ESB.Core
 					{
 						var factoryTypes = new List<Type>();
 
-						_reflectionService.GetAssemblies(AppDomain.CurrentDomain.BaseDirectory).ForEach(
-							assembly => factoryTypes.AddRange(_reflectionService.GetTypes<IQueueFactory>(assembly)));
+						foreach (var assembly in _reflectionService.GetAssemblies(AppDomain.CurrentDomain.BaseDirectory))
+						{
+							factoryTypes.AddRange(_reflectionService.GetTypes<IQueueFactory>(assembly));
+						}
 
 						foreach (var type in factoryTypes.Union(_reflectionService.GetTypes<IQueueFactory>()))
 						{

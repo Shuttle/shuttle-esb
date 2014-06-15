@@ -66,9 +66,9 @@
     <DefineConstants>$(DefineConstants);NET45FULL</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Shuttle.Core.Infrastructure, Version=3.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Shuttle.Core.Infrastructure, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\shuttle-core-infrastructure.3.0.2\lib\net35-full\Shuttle.Core.Infrastructure.dll</HintPath>
+      <HintPath>..\packages\shuttle-core-infrastructure.3.1.0\lib\net35-full\Shuttle.Core.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -97,19 +97,32 @@
     <Compile Include="Configuration\ModuleCollection.cs" />
     <Compile Include="Configuration\Section\TransactionScopeElement.cs" />
     <Compile Include="Configuration\TransactionScopeConfiguration.cs" />
-    <Compile Include="Exceptions\DeferredMessageException.cs" />
-    <Compile Include="Exceptions\IdempotenceTrackerException.cs" />
+    <Compile Include="Exceptions\IdempotenceServiceException.cs" />
     <Compile Include="Exceptions\ProcessorException.cs" />
     <Compile Include="Idempotence\IIdempotenceService.cs" />
     <Compile Include="Idempotence\IdempotenceServiceExtensions.cs" />
     <Compile Include="Messages\ReceivedMessage.cs" />
+    <Compile Include="Pipeline\IExecuteEventThen.cs" />
+    <Compile Include="Pipeline\IPipeline.cs" />
+    <Compile Include="Pipeline\IPipelineObserver.cs" />
+    <Compile Include="Pipeline\IRegisterObserverAnd.cs" />
+    <Compile Include="Pipeline\IRegisterObserverForEventAnd.cs" />
+    <Compile Include="Pipeline\Pipeline.cs" />
     <Compile Include="Pipeline\Observers\DeferredMessage\ProcessDeferredMessageObserver.cs" />
     <Compile Include="Pipeline\Observers\Receive\AcknowledgeMessageObserver.cs" />
     <Compile Include="Pipeline\Observers\Receive\SendDeferredObserver.cs" />
     <Compile Include="Pipeline\Observers\DeferredMessage\GetDeferredMessageObserver.cs" />
     <Compile Include="Pipeline\Observers\Receive\DeferTransportMessageObserver.cs" />
+    <Compile Include="Pipeline\PipelineEvent.cs" />
+    <Compile Include="Pipeline\PipelineStage.cs" />
     <Compile Include="Pipeline\Pipelines\DeferredMessagePipeline.cs" />
     <Compile Include="Pipeline\Pipelines\SendTransportMessagePipeline.cs" />
+    <Compile Include="Pipeline\RegisterEventAfter.cs" />
+    <Compile Include="Pipeline\RegisterEventBefore.cs" />
+    <Compile Include="Pipeline\State.cs" />
+    <Compile Include="Pipeline\SystemEvents\OnAbortPipeline.cs" />
+    <Compile Include="Pipeline\SystemEvents\OnPipelineException.cs" />
+    <Compile Include="Pipeline\SystemEvents\OnPipelineStarting.cs" />
     <Compile Include="Pipeline\Transactions\DefaultServiceBusTransactionScopeFactory.cs" />
     <Compile Include="Exceptions\ProcessMessageMethodMissingException.cs" />
     <Compile Include="Exceptions\UnrecoverableHandlerException.cs" />
@@ -128,17 +141,19 @@
     <Compile Include="Processing\Policies\IServiceBusPolicy.cs" />
     <Compile Include="Processing\Policies\MessageFailureAction.cs" />
     <Compile Include="Processing\Policies\DefaultServiceBusPolicy.cs" />
-    <Compile Include="Queues\IPeek.cs" />
+    <Compile Include="Queues\ICreateQueue.cs" />
+    <Compile Include="Queues\IDropQueue.cs" />
+    <Compile Include="Queues\IPurgeQueue.cs" />
     <Compile Include="Queues\IQueueExtensions.cs" />
     <Compile Include="Queues\UriExtensions.cs" />
+    <Compile Include="ReusableObjectPool.cs" />
     <Compile Include="ServiceBusEvents\PipelineEventEventArgs.cs" />
     <Compile Include="ServiceBusEvents\PipelineExceptionEventArgs.cs" />
     <Compile Include="ServiceBusEvents\ThreadWorkingEventArgs.cs" />
-    <Compile Include="ServiceBusEvents\TransportMessageSerializationEventArgs.cs" />
     <Compile Include="ServiceBus\ServiceBusExtensions.cs" />
     <Compile Include="IStartEndpoint.cs" />
     <Compile Include="MessageHandling\MessageHandlerFactory.cs" />
-    <Compile Include="Modules\IModule.cs" />
+    <Compile Include="IModule.cs" />
     <Compile Include="MessageHandling\HandlerContext.cs" />
     <Compile Include="MessageRoute\DefaultMessageRouteProvider.cs" />
     <Compile Include="MessageRoute\IMessageRouteProvider.cs" />
@@ -192,8 +207,6 @@
     <Compile Include="Configuration\IWorkProcessorConfiguration.cs" />
     <Compile Include="Processing\QueueProcessor.cs" />
     <Compile Include="Security\NullEncryptionAlgorithm.cs" />
-    <Compile Include="ServiceBusEvents\AfterHandleMessageEventArgs.cs" />
-    <Compile Include="ServiceBusEvents\QueueMessageEventArgs.cs" />
     <Compile Include="ServiceBusEvents\HandlerExceptionEventArgs.cs" />
     <Compile Include="ServiceBusEvents\IServiceBusEvents.cs" />
     <Compile Include="ServiceBusEvents\MessageNotHandledEventArgs.cs" />
@@ -201,13 +214,8 @@
     <Compile Include="ServiceBus\ServiceBusEvents.cs" />
     <Compile Include="Configuration\ControlInboxQueueConfiguration.cs" />
     <Compile Include="Configuration\IErrorQueueConfiguration.cs" />
-    <Compile Include="ServiceBusEvents\BeforeHandleMessageEventArgs.cs" />
-    <Compile Include="ServiceBusEvents\DequeueExceptionEventArgs.cs" />
     <Compile Include="ServiceBusEvents\DeserializationExceptionEventArgs.cs" />
-    <Compile Include="ServiceBusEvents\DistributeMessageEventArgs.cs" />
-    <Compile Include="ServiceBusEvents\MessageSerializationEventArgs.cs" />
     <Compile Include="ServiceBusEvents\QueueEmptyEventArgs.cs" />
-    <Compile Include="Exceptions\EnqueueMessageDataTypeMismatchException.cs" />
     <Compile Include="Exceptions\WorkerException.cs" />
     <Compile Include="MessageHandling\DefaultMessageHandlerFactory.cs" />
     <Compile Include="MessageHandling\IMessageHandlerFactory.cs" />
@@ -224,19 +232,15 @@
     <Compile Include="Configuration\Section\SpecificationElement.cs" />
     <Compile Include="Configuration\Section\StringDurationArrayConverter.cs" />
     <Compile Include="Configuration\WorkerConfiguration.cs" />
-    <Compile Include="ServiceBusEvents\BeforeDequeueEventArgs.cs" />
     <Compile Include="Exceptions\SendMessageException.cs" />
     <Compile Include="Exceptions\SubscriptionManagerException.cs" />
     <Compile Include="IRequireInitialization.cs" />
     <Compile Include="Security\Section\TripleDESSection.cs" />
-    <Compile Include="ServiceBusEvents\QueueStreamEventArgs.cs" />
     <Compile Include="Security\IEncryptionAlgorithm.cs" />
     <Compile Include="Security\TripleDesEncryptionAlgorithm.cs" />
-    <Compile Include="Subscription\ISubscriptionManager.cs" />
-    <Compile Include="Exceptions\CouldNotResolveKeyException.cs" />
+    <Compile Include="ISubscriptionManager.cs" />
     <Compile Include="Exceptions\MessageRouteSpecificationException.cs" />
-    <Compile Include="Exceptions\QueueConfigurationException.cs" />
-    <Compile Include="Exceptions\QueueFactoryTypeNotFoundException.cs" />
+    <Compile Include="Exceptions\ESBConfigurationException.cs" />
     <Compile Include="Configuration\IInboxQueueConfiguration.cs" />
     <Compile Include="Configuration\InboxQueueConfiguration.cs" />
     <Compile Include="Configuration\IWorkQueueConfiguration.cs" />
@@ -259,8 +263,6 @@
     <Compile Include="MessageRoute\MessageRouteCollection.cs" />
     <Compile Include="Serialization\DefaultSerializer.cs" />
     <Compile Include="Exceptions\SerializerUnknownTypeExcption.cs" />
-    <Compile Include="Exceptions\CouldNotResolveTypeException.cs" />
-    <Compile Include="Exceptions\QueueDoesNotExistException.cs" />
     <Compile Include="Exceptions\InvalidSchemeException.cs" />
     <Compile Include="Queues\IQueue.cs" />
     <Compile Include="Queues\IQueueFactory.cs" />
@@ -277,6 +279,16 @@
     <Compile Include="Configuration\ServiceBusConfiguration.cs" />
     <Compile Include="Processing\DeferredMessage\DeferredMessageProcessor.cs" />
     <Compile Include="Pipeline\Transactions\ServiceBusTransactionScope.cs" />
+    <Compile Include="Threading\IProcessor.cs" />
+    <Compile Include="Threading\IProcessorFactory.cs" />
+    <Compile Include="Threading\IProcessorThreadPool.cs" />
+    <Compile Include="Threading\IThreadActivity.cs" />
+    <Compile Include="Threading\IThreadActivityConfiguration.cs" />
+    <Compile Include="Threading\IThreadCount.cs" />
+    <Compile Include="Threading\ProcessorThread.cs" />
+    <Compile Include="Threading\ProcessorThreadPool.cs" />
+    <Compile Include="Threading\ThreadActivity.cs" />
+    <Compile Include="Threading\ThreadCountZeroException.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ESBResources.resx">

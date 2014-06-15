@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Text;
-using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ESB.Core
 {
@@ -10,19 +9,22 @@ namespace Shuttle.ESB.Core
 		{
 			var state = pipelineEvent.Pipeline.State;
 			var queueUri = state.GetDestinationQueue() != null
-			               	? state.GetDestinationQueue().Uri.ToString()
-			               	: FindRoute(state.GetServiceBus(), state.GetMessage());
+				               ? state.GetDestinationQueue().Uri.ToString()
+				               : FindRoute(state.GetServiceBus(), state.GetMessage());
 
 			state.GetTransportMessage().RecipientInboxWorkQueueUri = queueUri;
 		}
 
 		private static string FindRoute(IServiceBus bus, object message)
 		{
-			Guard.AgainstNullDependency(bus.Configuration.MessageRouteProvider, "MessageRouteProvider");
+			if (bus.Configuration.MessageRouteProvider == null)
+			{
+				throw new ESBConfigurationException(ESBResources.NoMessageRouteProviderException);
+			}
 
-			var routeUris = bus.Configuration.MessageRouteProvider.GetRouteUris(message);
+			var routeUris = bus.Configuration.MessageRouteProvider.GetRouteUris(message).ToList();
 
-			if (routeUris.Count() <= 0)
+			if (!routeUris.Any())
 			{
 				throw new SendMessageException(string.Format(ESBResources.MessageRouteNotFound, message.GetType().FullName));
 			}
@@ -34,8 +36,8 @@ namespace Shuttle.ESB.Core
 				foreach (var route in routeUris)
 				{
 					uris.AppendFormat("{0}{1}", uris.Length > 0
-					                            	? ","
-					                            	: string.Empty, route);
+						                            ? ","
+						                            : string.Empty, route);
 				}
 
 				throw new SendMessageException(string.Format(ESBResources.MessageRoutedToMoreThanOneEndpoint,

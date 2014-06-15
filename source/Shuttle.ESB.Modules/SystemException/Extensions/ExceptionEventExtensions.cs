@@ -13,7 +13,7 @@ namespace Shuttle.ESB.Modules.Extensions
 			return new HandlerExceptionEvent
 					{
 						Source = ex.Source,
-						Message=ex.CompactMessages(),
+						Message=ex.AllMessages(),
 						StackTrace = ex.ToString(),
 						ExceptionTypeFullName = ex.GetType().FullName,
 						TargetSite = ex.TargetSite.ToString(),
@@ -36,7 +36,7 @@ namespace Shuttle.ESB.Modules.Extensions
 			return new PipelineExceptionEvent
 					{
 						Source = ex.Source,
-						Message=ex.CompactMessages(),
+						Message=ex.AllMessages(),
 						StackTrace = ex.ToString(),
 						ExceptionTypeFullName = ex.GetType().FullName,
 						TargetSite = ex.TargetSite.ToString(),

@@ -6,7 +6,7 @@ using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ESB.Core
 {
-	public class MemoryQueue : IQueue, ICount, ICreate, IPurge
+	public class MemoryQueue : IQueue, ICreateQueue, IPurgeQueue
 	{
 		internal const string SCHEME = "memory";
 
@@ -47,22 +47,14 @@ namespace Shuttle.ESB.Core
             Create();
 		}
 
-		public int Count
-		{
-			get
-			{
-				lock (_padlock)
-				{
-					return _queues[Uri.ToString()].Count;
-				}
-			}
-		}
-
 		public Uri Uri { get; private set; }
 
 		public bool IsEmpty()
 		{
-			return Count == 0;
+			lock (_padlock)
+			{
+				return _queues[Uri.ToString()].Count == 0;
+			}
 		}
 
 		public void Enqueue(Guid messageId, Stream stream)

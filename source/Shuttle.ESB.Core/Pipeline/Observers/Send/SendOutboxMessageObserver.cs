@@ -26,10 +26,10 @@ namespace Shuttle.ESB.Core
 
 			if (_log.IsVerboseEnabled)
 			{
-				_log.Verbose(string.Format(ESBResources.EnqueueMessage,
-				                          transportMessage.MessageType,
-				                          transportMessage.MessageId,
-				                          queue.Uri));
+				_log.Trace(string.Format(ESBResources.TraceMessageEnqueued,
+				                         transportMessage.MessageType,
+				                         transportMessage.MessageId,
+				                         queue.Uri));
 			}
 
 			using (var stream = receivedMessage.Stream.Copy())

@@ -8,7 +8,7 @@ using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.SqlServer
 {
-	public class SqlQueue : IQueue, ICreate, IDrop, IPurge
+	public class SqlQueue : IQueue, ICreateQueue, IDropQueue, IPurgeQueue
 	{
 		private class UnacknowledgedMessage
 		{

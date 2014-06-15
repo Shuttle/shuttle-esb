@@ -9,7 +9,7 @@ using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.Msmq
 {
-	public class MsmqQueue : IQueue, ICreate, IDrop, IPurge, IRequireInitialization
+	public class MsmqQueue : IQueue, ICreateQueue, IDropQueue, IPurgeQueue, IRequireInitialization
 	{
 		private readonly TimeSpan _timeout;
 		private readonly MsmqUriParser _parser;
@@ -211,13 +211,13 @@ namespace Shuttle.ESB.Msmq
 					AccessDenied(_log, _parser.Path);
 				}
 
-				_log.Error(string.Format(MsmqResources.SendMessageIdError, messageId, Uri, ex.CompactMessages()));
+				_log.Error(string.Format(MsmqResources.SendMessageIdError, messageId, Uri, ex.AllMessages()));
 
 				throw;
 			}
 			catch (Exception ex)
 			{
-				_log.Error(string.Format(MsmqResources.SendMessageIdError, messageId, Uri, ex.CompactMessages()));
+				_log.Error(string.Format(MsmqResources.SendMessageIdError, messageId, Uri, ex.AllMessages()));
 
 				throw;
 			}
@@ -245,7 +245,7 @@ namespace Shuttle.ESB.Msmq
 			}
 			catch (Exception ex)
 			{
-				_log.Error(string.Format(MsmqResources.GetMessageError, _parser.Path, ex.CompactMessages()));
+				_log.Error(string.Format(MsmqResources.GetMessageError, _parser.Path, ex.AllMessages()));
 
 				throw;
 			}
@@ -318,13 +318,13 @@ namespace Shuttle.ESB.Msmq
 					AccessDenied(_log, _parser.Path);
 				}
 
-				_log.Error(string.Format(MsmqResources.RemoveError, messageId, _parser.Path, ex.CompactMessages()));
+				_log.Error(string.Format(MsmqResources.RemoveError, messageId, _parser.Path, ex.AllMessages()));
 
 				throw;
 			}
 			catch (Exception ex)
 			{
-				_log.Error(string.Format(MsmqResources.RemoveError, messageId, _parser.Path, ex.CompactMessages()));
+				_log.Error(string.Format(MsmqResources.RemoveError, messageId, _parser.Path, ex.AllMessages()));
 
 				throw;
 			}

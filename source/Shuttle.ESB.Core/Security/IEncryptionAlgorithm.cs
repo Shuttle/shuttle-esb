@@ -1,5 +1,3 @@
-using System.IO;
-
 namespace Shuttle.ESB.Core
 {
     public interface IEncryptionAlgorithm

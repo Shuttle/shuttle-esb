@@ -122,24 +122,6 @@ namespace Shuttle.ESB.Core
 
 			var inbox = _configuration.Inbox;
 
-			if (inbox.WorkQueueStartupAction == QueueStartupAction.Purge)
-			{
-				var queue = inbox.WorkQueue as IPurge;
-
-				if (queue != null)
-				{
-					_log.Information(string.Format(ESBResources.PurgingInboxWorkQueue, inbox.WorkQueue.Uri));
-
-					queue.Purge();
-
-					_log.Information(string.Format(ESBResources.PurgingInboxWorkQueueComplete, inbox.WorkQueue.Uri));
-				}
-				else
-				{
-					_log.Warning(string.Format(ESBResources.CannotPurgeQueue, inbox.WorkQueue.Uri));
-				}
-			}
-
 			pipelineEvent.Pipeline.State.Add(
 				"InboxThreadPool",
 				new ProcessorThreadPool(
@@ -296,7 +278,6 @@ namespace Shuttle.ESB.Core
 					{
 						WorkQueue = _configuration.QueueManager.GetQueue(ServiceBusConfiguration.ServiceBusSection.Inbox.WorkQueueUri),
 						ErrorQueue = _configuration.QueueManager.GetQueue(ServiceBusConfiguration.ServiceBusSection.Inbox.ErrorQueueUri),
-						WorkQueueStartupAction = ServiceBusConfiguration.ServiceBusSection.Inbox.WorkQueueStartupAction,
 						ThreadCount = ServiceBusConfiguration.ServiceBusSection.Inbox.ThreadCount,
 						MaximumFailureCount = ServiceBusConfiguration.ServiceBusSection.Inbox.MaximumFailureCount,
 						DurationToIgnoreOnFailure =

@@ -2,7 +2,7 @@ using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ESB.Core
 {
-	public class StartupPipeline : ObservablePipeline
+	public class StartupPipeline : Pipeline
 	{
 		public StartupPipeline(IServiceBus bus)
 		{

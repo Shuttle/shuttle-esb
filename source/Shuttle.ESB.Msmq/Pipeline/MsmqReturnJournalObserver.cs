@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Messaging;
 using Shuttle.Core.Infrastructure;
+using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.Msmq
 {

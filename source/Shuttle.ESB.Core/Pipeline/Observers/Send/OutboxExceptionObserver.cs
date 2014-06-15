@@ -35,7 +35,7 @@ namespace Shuttle.ESB.Core
 
 				    var action = bus.Configuration.Policy.EvaluateOutboxFailure(pipelineEvent);
 
-					transportMessage.RegisterFailure(pipelineEvent.Pipeline.Exception.CompactMessages(), action.TimeSpanToIgnoreRetriedMessage);
+					transportMessage.RegisterFailure(pipelineEvent.Pipeline.Exception.AllMessages(), action.TimeSpanToIgnoreRetriedMessage);
 
 					if (action.Retry)
 					{

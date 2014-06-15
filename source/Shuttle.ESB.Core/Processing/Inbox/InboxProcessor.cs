@@ -18,12 +18,12 @@ namespace Shuttle.ESB.Core
         }
 
         [DebuggerNonUserCode]
-        void IProcessor.Execute(IActiveState state)
+        void IProcessor.Execute(IThreadState state)
         {
             Execute(state);
         }
 
-        public virtual void Execute(IActiveState state)
+        public virtual void Execute(IThreadState state)
         {
             var availableWorker = _bus.Configuration.WorkerAvailabilityManager.GetAvailableWorker();
 

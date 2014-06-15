@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using System.Transactions;
-using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ESB.Core
 {
@@ -70,7 +69,7 @@ namespace Shuttle.ESB.Core
 			if (scope != null)
 			{
 				throw new TransactionException(
-					(string.Format(ESBResources.TransactionAlreadyStarted, GetType().FullName, MethodBase.GetCurrentMethod().Name)));
+					(string.Format(ESBResources.TransactionAlreadyStartedException, GetType().FullName, MethodBase.GetCurrentMethod().Name)));
 			}
 
 			scope = state.GetServiceBus().Configuration.TransactionScopeFactory.Create(pipelineEvent);

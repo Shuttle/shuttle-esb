@@ -7,7 +7,7 @@ namespace Shuttle.ESB.Core
 	{
 		public static bool AttemptCreate(this IQueue queue)
 		{
-			var operation = queue as ICreate;
+			var operation = queue as ICreateQueue;
 
 			if (operation == null)
 			{
@@ -23,12 +23,12 @@ namespace Shuttle.ESB.Core
 		{
 			Guard.AgainstNull(queue, "queue");
 
-			var operation = queue as ICreate;
+			var operation = queue as ICreateQueue;
 
 			if (operation == null)
 			{
 				throw new InvalidOperationException(string.Format(ESBResources.NotImplementedOnQueue,
-																  queue.GetType().FullName, "ICreate"));
+																  queue.GetType().FullName, "ICreateQueue"));
 			}
 
 			operation.Create();
@@ -36,7 +36,7 @@ namespace Shuttle.ESB.Core
 		
 		public static bool AttemptDrop(this IQueue queue)
 		{
-			var operation = queue as IDrop;
+			var operation = queue as IDropQueue;
 
 			if (operation == null)
 			{
@@ -52,12 +52,12 @@ namespace Shuttle.ESB.Core
 		{
 			Guard.AgainstNull(queue, "queue");
 
-			var operation = queue as IDrop;
+			var operation = queue as IDropQueue;
 
 			if (operation == null)
 			{
 				throw new InvalidOperationException(string.Format(ESBResources.NotImplementedOnQueue,
-																  queue.GetType().FullName, "IDrop"));
+																  queue.GetType().FullName, "IDropQueue"));
 			}
 
 			operation.Drop();
@@ -65,7 +65,7 @@ namespace Shuttle.ESB.Core
 		
 		public static bool AttemptPurge(this IQueue queue)
 		{
-			var operation = queue as IPurge;
+			var operation = queue as IPurgeQueue;
 
 			if (operation == null)
 			{
@@ -81,12 +81,12 @@ namespace Shuttle.ESB.Core
 		{
 			Guard.AgainstNull(queue, "queue");
 
-			var operation = queue as IPurge;
+			var operation = queue as IPurgeQueue;
 
 			if (operation == null)
 			{
 				throw new InvalidOperationException(string.Format(ESBResources.NotImplementedOnQueue,
-																  queue.GetType().FullName, "IPurge"));
+																  queue.GetType().FullName, "IPurgeQueue"));
 			}
 
 			operation.Purge();

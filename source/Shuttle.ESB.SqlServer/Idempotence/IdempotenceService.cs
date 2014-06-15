@@ -53,7 +53,7 @@ namespace Shuttle.ESB.SqlServer.Idempotence
 						_scriptProvider.GetScript(
 							Script.IdempotenceServiceExists))) != 1)
 				{
-					throw new IdempotenceTrackerException(SqlResources.IdempotenceDatabaseNotConfigured);
+					throw new IdempotenceServiceException(SqlResources.IdempotenceDatabaseNotConfigured);
 				}
 
 				_databaseGateway.ExecuteUsing(

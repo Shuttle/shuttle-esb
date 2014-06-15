@@ -19,7 +19,7 @@ namespace Shuttle.ESB.Core
 			_bus = bus;
 		}
 
-		public void Execute(IActiveState state)
+		public void Execute(IThreadState state)
 		{
 			if (!ShouldProcessDeferred())
 			{
