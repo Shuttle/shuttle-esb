@@ -7,7 +7,7 @@ namespace Shuttle.ESB.Core
     {
         IMessageRouteCollection Add(IMessageRoute map);
 
-        List<IMessageRoute> FindAll(object message);
+        List<IMessageRoute> FindAll(string messageType);
     	IMessageRoute Find(Uri uri);
         IMessageRoute Find(string uri);
         IMessageRoute Find(IQueue queue);

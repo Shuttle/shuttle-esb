@@ -14,7 +14,7 @@ namespace Shuttle.ESB.Test.Shared.MessageHandling
 
 		public void ProcessMessage(HandlerContext<IdempotenceCommand> context)
 		{
-			context.Bus.Send(new NoHandlerCommand());
+			context.Send(new NoHandlerCommand());
 
 			_counter.Processed();
 		}

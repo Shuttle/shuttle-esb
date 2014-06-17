@@ -2,7 +2,7 @@ namespace Shuttle.ESB.Core
 {
 	public interface IServiceBusConfigurationBuilder
 	{
-        IServiceBusConfigurationBuilder TransactionScopeFactory(IServiceBusTransactionScopeFactory serviceBusTransactionScopeFactory);
+        IServiceBusConfigurationBuilder TransactionScopeFactory(ITransactionScopeFactory transactionScopeFactory);
         IServiceBusConfigurationBuilder PipelineFactory(IPipelineFactory pipelineFactory);
         IServiceBusConfigurationBuilder MessageRouteProvider(IMessageRouteProvider messageRouteProvider);
         IServiceBusConfigurationBuilder MessageHandlerFactory(IMessageHandlerFactory messageHandlerFactory);

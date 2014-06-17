@@ -12,11 +12,11 @@ namespace Shuttle.ESB.Core
             regex = new Regex(pattern, RegexOptions.IgnoreCase | RegexOptions.Compiled);
         }
 
-        public bool IsSatisfiedBy(object message)
+        public bool IsSatisfiedBy(string messageType)
         {
-            Guard.AgainstNull(message, "message");
+            Guard.AgainstNull(messageType, "message");
 
-            return regex.IsMatch(message.GetType().FullName);
+            return regex.IsMatch(messageType);
         }
     }
 }

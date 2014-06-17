@@ -28,7 +28,7 @@ namespace Shuttle.ESB.Test.Integration
 					MessageHandlerFactory = new DefaultMessageHandlerFactory(),
 					PipelineFactory = new DefaultPipelineFactory(),
 					ForwardingRouteProvider = new DefaultForwardingRouteProvider(),
-					TransactionScopeFactory = new DefaultServiceBusTransactionScopeFactory(),
+					TransactionScopeFactory = new DefaultTransactionScopeFactory(),
 					Policy = new DefaultServiceBusPolicy(),
 					ThreadActivityFactory = new DefaultThreadActivityFactory(),
 					TransactionScope = new TransactionScopeConfiguration

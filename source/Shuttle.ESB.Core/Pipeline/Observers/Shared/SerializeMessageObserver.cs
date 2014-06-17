@@ -9,7 +9,6 @@ namespace Shuttle.ESB.Core
 	        var state = pipelineEvent.Pipeline.State;
             var message = state.GetMessage();
             var transportMessage = state.GetTransportMessage();
-            var bus = state.GetServiceBus();
             var bytes = state.GetServiceBus()
                 .Configuration.Serializer
                 .Serialize(message).ToBytes();

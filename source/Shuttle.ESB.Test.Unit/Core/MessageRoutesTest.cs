@@ -18,7 +18,7 @@ namespace Shuttle.ESB.Test.Unit.Core
 
             routes.Add(route);
 
-            Assert.AreSame(queue, routes.FindAll(new SimpleCommand())[0].Queue);
+			Assert.AreSame(queue, routes.FindAll(new SimpleCommand().GetType().FullName)[0].Queue);
         }
     }
 }

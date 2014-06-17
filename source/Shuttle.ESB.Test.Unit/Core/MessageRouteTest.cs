@@ -15,8 +15,8 @@ namespace Shuttle.ESB.Test.Unit.Core
 
             map.AddSpecification(new RegexMessageRouteSpecification("simple"));
 
-            Assert.IsFalse(map.IsSatisfiedBy(new OtherNamespaceCommand()));
-            Assert.IsTrue(map.IsSatisfiedBy(new SimpleCommand()));
+			Assert.IsFalse(map.IsSatisfiedBy(new OtherNamespaceCommand().GetType().FullName));
+			Assert.IsTrue(map.IsSatisfiedBy(new SimpleCommand().GetType().FullName));
         }
     }
 }

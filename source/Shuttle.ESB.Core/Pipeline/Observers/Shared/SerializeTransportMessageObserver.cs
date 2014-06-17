@@ -1,13 +1,17 @@
-﻿namespace Shuttle.ESB.Core
+﻿using Shuttle.Core.Infrastructure;
+
+namespace Shuttle.ESB.Core
 {
 	public class SerializeTransportMessageObserver : IPipelineObserver<OnSerializeTransportMessage>
 	{
 		public void Execute(OnSerializeTransportMessage pipelineEvent)
 		{
 			var state = pipelineEvent.Pipeline.State;
-			var transportMessage = state.GetTransportMessage();
+			var messageSenderContext = state.GetMessageSenderContext();
 
-			state.SetTransportMessageStream(state.GetServiceBus().Configuration.Serializer.Serialize(transportMessage));
+			Guard.AgainstNull(messageSenderContext, "messageSenderContext");
+
+			state.SetTransportMessageStream(state.GetServiceBus().Configuration.Serializer.Serialize(messageSenderContext.TransportMessage));
 		}
 	}
 }

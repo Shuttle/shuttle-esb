@@ -6,7 +6,7 @@ namespace Shuttle.ESB.Core
     {
         IQueue Queue { get; }
         IMessageRoute AddSpecification(IMessageRouteSpecification specification);
-        bool IsSatisfiedBy(object message);
+        bool IsSatisfiedBy(string messageType);
 
         IEnumerable<IMessageRouteSpecification> Specifications { get; }
     }

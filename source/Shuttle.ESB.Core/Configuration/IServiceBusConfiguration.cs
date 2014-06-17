@@ -36,7 +36,7 @@ namespace Shuttle.ESB.Core
 		ModuleCollection Modules { get; }
 		string OutgoingEncryptionAlgorithm { get; }
 		string OutgoingCompressionAlgorithm { get; }
-		IServiceBusTransactionScopeFactory TransactionScopeFactory { get; }
+		ITransactionScopeFactory TransactionScopeFactory { get; }
 		string EncryptionAlgorithm { get; }
 		string CompressionAlgorithm { get; }
 		ITransactionScopeConfiguration TransactionScope { get; }

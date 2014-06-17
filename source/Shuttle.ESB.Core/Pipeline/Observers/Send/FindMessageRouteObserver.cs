@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Text;
 
 namespace Shuttle.ESB.Core
 {
@@ -8,41 +7,32 @@ namespace Shuttle.ESB.Core
 		public void Execute(OnFindRouteForMessage pipelineEvent)
 		{
 			var state = pipelineEvent.Pipeline.State;
-			var queueUri = state.GetDestinationQueue() != null
-				               ? state.GetDestinationQueue().Uri.ToString()
-				               : FindRoute(state.GetServiceBus(), state.GetMessage());
+			var messageSenderContext = state.GetMessageSenderContext();
 
-			state.GetTransportMessage().RecipientInboxWorkQueueUri = queueUri;
+			if (string.IsNullOrEmpty(messageSenderContext.TransportMessage.RecipientInboxWorkQueueUri))
+			{
+				messageSenderContext.TransportMessage.RecipientInboxWorkQueueUri = FindRoute(state.GetServiceBus().Configuration.MessageRouteProvider, messageSenderContext.TransportMessage.MessageType);
+			}
 		}
 
-		private static string FindRoute(IServiceBus bus, object message)
+		private static string FindRoute(IMessageRouteProvider routeProvider, string messageType)
 		{
-			if (bus.Configuration.MessageRouteProvider == null)
+			if (routeProvider == null)
 			{
 				throw new ESBConfigurationException(ESBResources.NoMessageRouteProviderException);
 			}
 
-			var routeUris = bus.Configuration.MessageRouteProvider.GetRouteUris(message).ToList();
+			var routeUris = routeProvider.GetRouteUris(messageType).ToList();
 
 			if (!routeUris.Any())
 			{
-				throw new SendMessageException(string.Format(ESBResources.MessageRouteNotFound, message.GetType().FullName));
+				throw new SendMessageException(string.Format(ESBResources.MessageRouteNotFound, messageType));
 			}
 
 			if (routeUris.Count() > 1)
 			{
-				var uris = new StringBuilder();
-
-				foreach (var route in routeUris)
-				{
-					uris.AppendFormat("{0}{1}", uris.Length > 0
-						                            ? ","
-						                            : string.Empty, route);
-				}
-
 				throw new SendMessageException(string.Format(ESBResources.MessageRoutedToMoreThanOneEndpoint,
-				                                             message.GetType().FullName,
-				                                             uris));
+				                                             messageType, string.Join(",", routeUris.ToArray())));
 			}
 
 			return routeUris.ElementAt(0);

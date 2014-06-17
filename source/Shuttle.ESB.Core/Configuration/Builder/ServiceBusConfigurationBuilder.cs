@@ -116,11 +116,11 @@ namespace Shuttle.ESB.Core
 		}
 
 		public IServiceBusConfigurationBuilder TransactionScopeFactory(
-			IServiceBusTransactionScopeFactory serviceBusTransactionScopeFactory)
+			ITransactionScopeFactory transactionScopeFactory)
 		{
-			Guard.AgainstNull(serviceBusTransactionScopeFactory, "serviceBusTransactionScopeFactory");
+			Guard.AgainstNull(transactionScopeFactory, "transactionScopeFactory");
 
-			configuration.TransactionScopeFactory = serviceBusTransactionScopeFactory;
+			configuration.TransactionScopeFactory = transactionScopeFactory;
 
 			return this;
 		}

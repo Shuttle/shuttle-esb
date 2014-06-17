@@ -27,7 +27,7 @@ namespace Shuttle.ESB.Test.Unit.Core
 
 			var mockMessageRouteProvider = new Mock<IMessageRouteProvider>();
 
-			mockMessageRouteProvider.Setup(mock => mock.GetRouteUris(It.IsAny<object>())).Returns(new List<string>
+			mockMessageRouteProvider.Setup(mock => mock.GetRouteUris(It.IsAny<string>())).Returns(new List<string>
 			{
 			  configuration.Inbox.WorkQueue.Uri.ToString()
 			});

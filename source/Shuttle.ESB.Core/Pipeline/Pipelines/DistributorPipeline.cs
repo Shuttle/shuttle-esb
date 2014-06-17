@@ -13,8 +13,8 @@
 				.WithEvent<OnAfterHandleDistributeMessage>()
 				.WithEvent<OnSerializeTransportMessage>()
 				.WithEvent<OnAfterSerializeTransportMessage>()
-				.WithEvent<OnSendMessage>()
-				.WithEvent<OnAfterSendMessage>()
+				.WithEvent<OnDispatchTransportMessage>()
+				.WithEvent<OnAfterDispatchTransportMessage>()
 				.WithEvent<OnAcknowledgeMessage>()
 				.WithEvent<OnAfterAcknowledgeMessage>();
 
@@ -22,7 +22,7 @@
 			RegisterObserver(new DeserializeTransportMessageObserver());
 			RegisterObserver(new DistributorMessageObserver());
 			RegisterObserver(new SerializeTransportMessageObserver());
-			RegisterObserver(new SendMessageObserver());
+			RegisterObserver(new DispatchTransportMessageObserver());
 			RegisterObserver(new DistributorExceptionObserver());
 			RegisterObserver(new AcknowledgeMessageObserver());
 		}

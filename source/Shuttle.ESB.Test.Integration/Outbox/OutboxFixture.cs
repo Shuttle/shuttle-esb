@@ -27,7 +27,7 @@ namespace Shuttle.ESB.Test.Integration
 
 			var receiverWorkQueueUri = string.Format(workQueueUriFormat, "test-receiver-work");
 
-			messageRouteProvider.Setup(m => m.GetRouteUris(It.IsAny<object>())).Returns(new[] {receiverWorkQueueUri});
+			messageRouteProvider.Setup(m => m.GetRouteUris(It.IsAny<string>())).Returns(new[] {receiverWorkQueueUri});
 
 			configuration.MessageRouteProvider = messageRouteProvider.Object;
 

@@ -22,13 +22,13 @@ namespace Shuttle.ESB.Core
             return messagePipeline;
         }
 
-        public MessagePipeline GetPipeline<TPipeline>(IServiceBus bus) where TPipeline : MessagePipeline
+        public TPipeline GetPipeline<TPipeline>(IServiceBus bus) where TPipeline : MessagePipeline
         {
             var messagePipeline = pool.Get(typeof (TPipeline)) ?? CreatePipeline<TPipeline>(bus);
 
             messagePipeline.Obtained();
 
-            return messagePipeline;
+            return (TPipeline)messagePipeline;
         }
 
         public void ReleasePipeline(MessagePipeline messagePipeline)

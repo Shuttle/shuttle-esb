@@ -21,11 +21,11 @@ namespace Shuttle.ESB.Core
             return this;
         }
 
-        public bool IsSatisfiedBy(object message)
+        public bool IsSatisfiedBy(string messageType)
         {
             foreach (var specification in specifications)
             {
-                if (specification.IsSatisfiedBy(message))
+                if (specification.IsSatisfiedBy(messageType))
                 {
                     return true;
                 }

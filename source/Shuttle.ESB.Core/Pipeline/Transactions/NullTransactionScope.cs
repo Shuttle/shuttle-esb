@@ -1,6 +1,6 @@
 namespace Shuttle.ESB.Core
 {
-	public class NullServiceBusTransactionScope : IServiceBusTransactionScope
+	public class NullTransactionScope : ITransactionScope
 	{
 		public void Complete()
 		{

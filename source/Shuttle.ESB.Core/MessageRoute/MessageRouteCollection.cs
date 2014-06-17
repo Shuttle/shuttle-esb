@@ -31,11 +31,11 @@ namespace Shuttle.ESB.Core
             return this;
         }
 
-        public List<IMessageRoute> FindAll(object message)
+        public List<IMessageRoute> FindAll(string messageType)
         {
-            Guard.AgainstNull(message, "message");
+            Guard.AgainstNull(messageType, "message");
 
-        	return maps.Where(map => map.IsSatisfiedBy(message)).ToList();
+        	return maps.Where(map => map.IsSatisfiedBy(messageType)).ToList();
         }
 
     	public IMessageRoute Find(Uri uri)

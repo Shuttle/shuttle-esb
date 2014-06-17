@@ -1,6 +1,6 @@
 ﻿namespace Shuttle.ESB.Core
 {
-	public class OnPrepareMessage : PipelineEvent
+	public class OnAssembleMessage : PipelineEvent
 	{
 	}
 
@@ -48,11 +48,11 @@
 	{
 	}
 
-	public class OnSendMessage : PipelineEvent
+	public class OnDispatchTransportMessage : PipelineEvent
 	{
 	}
 
-	public class OnAfterSendMessage : PipelineEvent
+	public class OnAfterDispatchTransportMessage : PipelineEvent
 	{
 	}
 }

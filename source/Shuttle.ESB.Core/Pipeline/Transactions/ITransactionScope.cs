@@ -2,7 +2,7 @@ using System;
 
 namespace Shuttle.ESB.Core
 {
-	public interface IServiceBusTransactionScope : IDisposable
+	public interface ITransactionScope : IDisposable
 	{
 		void Complete();
 	}

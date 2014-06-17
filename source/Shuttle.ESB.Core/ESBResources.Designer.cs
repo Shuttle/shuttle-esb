@@ -286,6 +286,15 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not execute pipeline &apos;{0}&apos;.  Exception: {1}.
+        /// </summary>
+        public static string PipelineExecutionException {
+            get {
+                return ResourceManager.GetString("PipelineExecutionException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pipeline stage &apos;{0}&apos; has no event of type &apos;{1}&apos;..
         /// </summary>
         public static string PipelineStageEventNotRegistered {
@@ -516,15 +525,6 @@ namespace Shuttle.ESB.Core {
         public static string TraceProcessorThreadStopping {
             get {
                 return ResourceManager.GetString("TraceProcessorThreadStopping", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to [sending] : message type = &apos;{0}&apos; / queue uri = &apos;{1}&apos;.
-        /// </summary>
-        public static string TraceSend {
-            get {
-                return ResourceManager.GetString("TraceSend", resourceCulture);
             }
         }
         

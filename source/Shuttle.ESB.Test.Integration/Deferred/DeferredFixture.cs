@@ -22,7 +22,8 @@ namespace Shuttle.ESB.Test.Integration.Deferred
 		                                      string errorQueueUriFormat, bool isTransactional)
 		{
 			const int deferredMessageCount = 5;
-			var configuration = GetInboxConfiguration(workQueueUriFormat, deferredQueueUriFormat, errorQueueUriFormat, 1, isTransactional);
+			var configuration = GetInboxConfiguration(workQueueUriFormat, deferredQueueUriFormat, errorQueueUriFormat, 1,
+			                                          isTransactional);
 
 			var module = new DeferredMessageModule(deferredMessageCount);
 
@@ -39,7 +40,8 @@ namespace Shuttle.ESB.Test.Integration.Deferred
 				EnqueueDeferredMessage(bus, ignoreTillDate);
 				EnqueueDeferredMessage(bus, ignoreTillDate);
 
-				var timeout = DateTime.Now.AddMilliseconds(MillisecondsToDefer + 15000); // add the extra time else there is no time to process
+				var timeout = DateTime.Now.AddMilliseconds(MillisecondsToDefer + 15000);
+					// add the extra time else there is no time to process
 
 				// wait for the message to be returned from the deferred queue
 				while ((!module.AllDeferredMessageReturned() || !module.AllMessagesHandled())
@@ -49,9 +51,11 @@ namespace Shuttle.ESB.Test.Integration.Deferred
 					Thread.Sleep(5);
 				}
 
-				_log.Information(string.Format("{0} of {1} deferred messages returned to the inbox.", module.NumberOfDeferredMessagesReturned, deferredMessageCount));
-				_log.Information(string.Format("{0} of {1} deferred messages handled.", module.NumberOfMessagesHandled, deferredMessageCount));
-				
+				_log.Information(string.Format("{0} of {1} deferred messages returned to the inbox.",
+				                               module.NumberOfDeferredMessagesReturned, deferredMessageCount));
+				_log.Information(string.Format("{0} of {1} deferred messages handled.", module.NumberOfMessagesHandled,
+				                               deferredMessageCount));
+
 				Assert.IsTrue(module.AllDeferredMessageReturned(), "All the deferred messages were not returned.");
 				Assert.IsTrue(module.AllMessagesHandled(), "All the deferred messages were not handled.");
 
@@ -65,14 +69,16 @@ namespace Shuttle.ESB.Test.Integration.Deferred
 
 		private void EnqueueDeferredMessage(IServiceBus bus, DateTime ignoreTillDate)
 		{
-			var message = bus.CreateTransportMessage(new SimpleCommand());
-
-			message.IgnoreTillDate = ignoreTillDate;
-			message.RecipientInboxWorkQueueUri = bus.Configuration.Inbox.WorkQueue.Uri.ToString();
+			var message = bus.CreateTransportMessage(new SimpleCommand(), options =>
+				{
+					options.IgnoreTillDate = ignoreTillDate;
+					options.Queue = bus.Configuration.Inbox.WorkQueue;
+				});
 
 			bus.Configuration.Inbox.WorkQueue.Enqueue(message.MessageId, bus.Configuration.Serializer.Serialize(message));
 
-			_log.Information(string.Format("[message enqueued] : message id = '{0}' / deferred till date = '{1}'", message.MessageId, message.IgnoreTillDate));
+			_log.Information(string.Format("[message enqueued] : message id = '{0}' / deferred till date = '{1}'",
+			                               message.MessageId, message.IgnoreTillDate));
 		}
 
 		private static ServiceBusConfiguration GetInboxConfiguration(string workQueueUriFormat, string deferredQueueUriFormat,

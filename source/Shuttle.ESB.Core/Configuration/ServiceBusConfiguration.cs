@@ -28,7 +28,7 @@ namespace Shuttle.ESB.Core
 			MessageRouteProvider = new DefaultMessageRouteProvider();
 			ForwardingRouteProvider = new DefaultForwardingRouteProvider();
 			PipelineFactory = new DefaultPipelineFactory();
-			TransactionScopeFactory = new DefaultServiceBusTransactionScopeFactory();
+			TransactionScopeFactory = new DefaultTransactionScopeFactory();
 			Policy = new DefaultServiceBusPolicy();
 			ThreadActivityFactory = new DefaultThreadActivityFactory();
 		}
@@ -133,7 +133,7 @@ namespace Shuttle.ESB.Core
 
 		public IPipelineFactory PipelineFactory { get; set; }
 
-		public IServiceBusTransactionScopeFactory TransactionScopeFactory { get; set; }
+		public ITransactionScopeFactory TransactionScopeFactory { get; set; }
 
 		public IServiceBus StartServiceBus()
 		{

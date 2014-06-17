@@ -13,8 +13,8 @@ namespace Shuttle.ESB.Test.Unit.Core
         {
             var specification = new RegexMessageRouteSpecification("simple");
 
-            Assert.IsFalse(specification.IsSatisfiedBy(new OtherNamespaceCommand()));
-            Assert.IsTrue(specification.IsSatisfiedBy(new SimpleCommand()));
+            Assert.IsFalse(specification.IsSatisfiedBy(new OtherNamespaceCommand().GetType().FullName));
+			Assert.IsTrue(specification.IsSatisfiedBy(new SimpleCommand().GetType().FullName));
         }
 
         [Test]
@@ -22,17 +22,17 @@ namespace Shuttle.ESB.Test.Unit.Core
         {
             var specification = new StartsWithMessageRouteSpecification("Shuttle.ESB");
 
-            Assert.IsFalse(specification.IsSatisfiedBy(new OtherNamespaceCommand()));
-            Assert.IsTrue(specification.IsSatisfiedBy(new SimpleCommand()));
+			Assert.IsFalse(specification.IsSatisfiedBy(new OtherNamespaceCommand().GetType().FullName));
+			Assert.IsTrue(specification.IsSatisfiedBy(new SimpleCommand().GetType().FullName));
         }
 
         [Test]
         public void Should_be_able_to_use_typelist()
         {
-            var specification = new TypeListMessageRouteSpecification(typeof (SimpleCommand));
+			var specification = new TypeListMessageRouteSpecification(typeof(SimpleCommand).AssemblyQualifiedName);
 
-            Assert.IsFalse(specification.IsSatisfiedBy(new OtherNamespaceCommand()));
-            Assert.IsTrue(specification.IsSatisfiedBy(new SimpleCommand()));
+			Assert.IsFalse(specification.IsSatisfiedBy(new OtherNamespaceCommand().GetType().FullName));
+			Assert.IsTrue(specification.IsSatisfiedBy(new SimpleCommand().GetType().FullName));
         }
     }
 }

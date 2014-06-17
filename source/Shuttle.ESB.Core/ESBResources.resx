@@ -280,10 +280,6 @@
     <value>[transport message header (received)] : {0} = {1}</value>
     <comment>{0} = key, {1} = value</comment>
   </data>
-  <data name="TraceSend" xml:space="preserve">
-    <value>[sending] : message type = '{0}' / queue uri = '{1}'</value>
-    <comment>{0} = full type name of message</comment>
-  </data>
   <data name="WarningPublishWithoutSubscribers" xml:space="preserve">
     <value>[publishing] : no subscribers / event message type = '{0}'</value>
     <comment>{0} = full type name of event message</comment>
@@ -401,5 +397,9 @@
   </data>
   <data name="NoSerializerException" xml:space="preserve">
     <value>No ISerializer implementation has been configured.</value>
+  </data>
+  <data name="PipelineExecutionException" xml:space="preserve">
+    <value>Could not execute pipeline '{0}'.  Exception: {1}</value>
+    <comment>{0} = pipeline name, {1} = exception message(s)</comment>
   </data>
 </root>

@@ -41,16 +41,6 @@ namespace Shuttle.ESB.Core
 			return state.Get<TimeSpan[]>(StateKeys.DurationToIgnoreOnFailure);
 		}
 
-		public static void SetDestinationQueue(this State<Pipeline> state, IQueue value)
-		{
-			state.Replace(StateKeys.DestinationQueue, value);
-		}
-
-		public static IQueue GetDestinationQueue(this State<Pipeline> state)
-		{
-			return state.Get<IQueue>(StateKeys.DestinationQueue);
-		}
-
 		public static void SetTransportMessage(this State<Pipeline> state, TransportMessage value)
 		{
 			state.Replace(StateKeys.TransportMessage, value);
@@ -91,11 +81,6 @@ namespace Shuttle.ESB.Core
 			state.Replace(StateKeys.MessageBytes, bytes);
 		}
 
-		public static DateTime GetIgnoreTillDate(this State<Pipeline> state)
-		{
-			return state.Get<DateTime>(StateKeys.IgnoreTillDate);
-		}
-
 		public static object GetMessage(this State<Pipeline> state)
 		{
 			return state.Get<object>(StateKeys.Message);
@@ -104,6 +89,11 @@ namespace Shuttle.ESB.Core
 		public static void SetMessage(this State<Pipeline> state, object message)
 		{
 			state.Replace(StateKeys.Message, message);
+		}
+
+		public static void SetTransportMessageContext(this State<Pipeline> state, TransportMessageConfigurator configurator)
+		{
+			state.Replace(StateKeys.TransportMessageConfigurator, configurator);
 		}
 
 		public static void SetAvailableWorker(this State<Pipeline> state, AvailableWorker value)
@@ -136,12 +126,12 @@ namespace Shuttle.ESB.Core
 			state.Replace(StateKeys.Working, false);
 		}
 
-		public static IServiceBusTransactionScope GetTransactionScope(this State<Pipeline> state)
+		public static ITransactionScope GetTransactionScope(this State<Pipeline> state)
 		{
-			return state.Get<IServiceBusTransactionScope>(StateKeys.TransactionScope);
+			return state.Get<ITransactionScope>(StateKeys.TransactionScope);
 		}
 
-		public static void SetTransactionScope(this State<Pipeline> state, IServiceBusTransactionScope scope)
+		public static void SetTransactionScope(this State<Pipeline> state, ITransactionScope scope)
 		{
 			state.Replace(StateKeys.TransactionScope, scope);
 		}
@@ -201,11 +191,6 @@ namespace Shuttle.ESB.Core
 			state.Add(StateKeys.ErrorQueue, queue);
 		}
 
-		public static void SetIgnoreTillDate(this State<Pipeline> state, DateTime date)
-		{
-			state.Add(StateKeys.IgnoreTillDate, date);
-		}
-
 		public static void SetMaximumFailureCount(this State<Pipeline> state, int count)
 		{
 			state.Add(StateKeys.MaximumFailureCount, count);
@@ -219,6 +204,16 @@ namespace Shuttle.ESB.Core
 		public static void SetActiveState(this State<Pipeline> state, IThreadState activeState)
 		{
 			state.Add(StateKeys.ActiveState, activeState);
+		}
+
+		public static void SetMessageSenderContext(this State<Pipeline> state, MessageSenderContext messageSenderContext)
+		{
+			state.Replace(StateKeys.MessageSenderContext, messageSenderContext);
+		}
+
+		public static MessageSenderContext GetMessageSenderContext(this State<Pipeline> state)
+		{
+			return state.Get<MessageSenderContext>(StateKeys.MessageSenderContext);
 		}
 	}
 }

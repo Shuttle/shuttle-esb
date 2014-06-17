@@ -47,7 +47,7 @@ namespace Shuttle.ESB.Test.Shared
 					Serializer = new DefaultSerializer(),
 					MessageHandlerFactory = new DefaultMessageHandlerFactory(),
 					PipelineFactory = new DefaultPipelineFactory(),
-					TransactionScopeFactory = new DefaultServiceBusTransactionScopeFactory(),
+					TransactionScopeFactory = new DefaultTransactionScopeFactory(),
 					ThreadActivityFactory = new DefaultThreadActivityFactory()
 				};
 		}

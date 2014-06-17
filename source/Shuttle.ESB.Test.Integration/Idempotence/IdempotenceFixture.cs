@@ -10,33 +10,31 @@ namespace Shuttle.ESB.Test.Integration.Idempotence.SqlServer.Msmq
 {
 	public class IdempotenceFixture : IntegrationFixture
 	{
-		protected void TestIdempotenceProcessing(string workQueueUriFormat, string errorQueueUriFormat, bool isTransactional, bool enqueueUniqueMessages)
+		protected void TestIdempotenceProcessing(string workQueueUriFormat, string errorQueueUriFormat, bool isTransactional,
+		                                         bool enqueueUniqueMessages)
 		{
-			const int messageCount = 200;
+			const int threadCount = 1;
+			const int messageCount = 5;
 
-			var configuration = GetInboxConfiguration(workQueueUriFormat, errorQueueUriFormat, 5, isTransactional);
+			var configuration = GetInboxConfiguration(workQueueUriFormat, errorQueueUriFormat, threadCount, isTransactional);
 			var padlock = new object();
 
 			using (var bus = new ServiceBus(configuration))
 			{
 				if (enqueueUniqueMessages)
 				{
-					for (int i = 0; i < messageCount; i++)
+					for (var i = 0; i < messageCount; i++)
 					{
-						var message = bus.CreateTransportMessage(new IdempotenceCommand());
-
-						message.RecipientInboxWorkQueueUri = configuration.Inbox.WorkQueue.Uri.ToString();
+						var message = bus.CreateTransportMessage(new IdempotenceCommand(), c => { c.Queue = configuration.Inbox.WorkQueue; });
 
 						configuration.Inbox.WorkQueue.Enqueue(message.MessageId, configuration.Serializer.Serialize(message));
 					}
 				}
 				else
 				{
-					var message = bus.CreateTransportMessage(new IdempotenceCommand());
+					var message = bus.CreateTransportMessage(new IdempotenceCommand(), c => { c.Queue = configuration.Inbox.WorkQueue; });
 
-					message.RecipientInboxWorkQueueUri = configuration.Inbox.WorkQueue.Uri.ToString();
-
-					for (int i = 0; i < messageCount; i++)
+					for (var i = 0; i < messageCount; i++)
 					{
 						configuration.Inbox.WorkQueue.Enqueue(message.MessageId, configuration.Serializer.Serialize(message));
 					}
@@ -45,21 +43,21 @@ namespace Shuttle.ESB.Test.Integration.Idempotence.SqlServer.Msmq
 				var idleThreads = new List<int>();
 
 				bus.Events.ThreadWaiting += (sender, args) =>
-				{
-					lock (padlock)
 					{
-						if (idleThreads.Contains(Thread.CurrentThread.ManagedThreadId))
+						lock (padlock)
 						{
-							return;
-						}
+							if (idleThreads.Contains(Thread.CurrentThread.ManagedThreadId))
+							{
+								return;
+							}
 
-						idleThreads.Add(Thread.CurrentThread.ManagedThreadId);
-					}
-				};
+							idleThreads.Add(Thread.CurrentThread.ManagedThreadId);
+						}
+					};
 
 				bus.Start();
 
-				while (idleThreads.Count < 5)
+				while (idleThreads.Count < threadCount)
 				{
 					Thread.Sleep(5);
 				}
@@ -69,11 +67,12 @@ namespace Shuttle.ESB.Test.Integration.Idempotence.SqlServer.Msmq
 
 				if (enqueueUniqueMessages)
 				{
-					Assert.AreEqual(messageCount, ((IdempotenceMessageHandlerFactory)bus.Configuration.MessageHandlerFactory).ProcessedCount);
+					Assert.AreEqual(messageCount,
+					                ((IdempotenceMessageHandlerFactory) bus.Configuration.MessageHandlerFactory).ProcessedCount);
 				}
 				else
 				{
-					Assert.AreEqual(1, ((IdempotenceMessageHandlerFactory)bus.Configuration.MessageHandlerFactory).ProcessedCount);
+					Assert.AreEqual(1, ((IdempotenceMessageHandlerFactory) bus.Configuration.MessageHandlerFactory).ProcessedCount);
 				}
 			}
 
@@ -81,7 +80,7 @@ namespace Shuttle.ESB.Test.Integration.Idempotence.SqlServer.Msmq
 		}
 
 		private static ServiceBusConfiguration GetInboxConfiguration(string workQueueUriFormat, string errorQueueUriFormat,
-															   int threadCount, bool isTransactional)
+		                                                             int threadCount, bool isTransactional)
 		{
 			var configuration = DefaultConfiguration(isTransactional);
 
@@ -95,12 +94,13 @@ namespace Shuttle.ESB.Test.Integration.Idempotence.SqlServer.Msmq
 
 			configuration.Inbox =
 				new InboxQueueConfiguration
-				{
-					WorkQueue = inboxWorkQueue,
-					ErrorQueue = errorQueue,
-					DurationToSleepWhenIdle = new[] { TimeSpan.FromMilliseconds(5) },
-					ThreadCount = threadCount
-				};
+					{
+						WorkQueue = inboxWorkQueue,
+						ErrorQueue = errorQueue,
+						DurationToIgnoreOnFailure = new[] {TimeSpan.FromMilliseconds(5)},
+						DurationToSleepWhenIdle = new[] {TimeSpan.FromMilliseconds(5)},
+						ThreadCount = threadCount
+					};
 
 			inboxWorkQueue.AttemptDrop();
 			errorQueue.AttemptDrop();

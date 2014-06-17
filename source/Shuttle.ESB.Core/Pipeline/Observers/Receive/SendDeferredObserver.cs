@@ -33,7 +33,7 @@ namespace Shuttle.ESB.Core
 				{
 					var deferredTransportMessage = (TransportMessage)configuration.Serializer.Deserialize(typeof (TransportMessage), stream);
 
-					state.GetServiceBus().Send(deferredTransportMessage);
+					state.GetServiceBus().Dispatch(deferredTransportMessage);
 				
 					idempotenceService.DeferredMessageSent(transportMessage, deferredTransportMessage);
 				}

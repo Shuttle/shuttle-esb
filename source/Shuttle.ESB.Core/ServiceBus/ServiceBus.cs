@@ -1,231 +1,32 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Security.Principal;
 using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ESB.Core
 {
 	public class ServiceBus : IServiceBus
 	{
-		private static bool started;
+		private static bool _started;
+		private readonly IMessageSender _messageSender;
 
-		[ThreadStatic] private static string outgoingCorrelationId;
-
-		[ThreadStatic] private static TransportMessage _transportMessageBeingHandled;
-
-		[ThreadStatic] private static List<TransportHeader> outgoingHeaders;
-
-		private IProcessorThreadPool controlThreadPool;
-		private IProcessorThreadPool inboxThreadPool;
-		private IProcessorThreadPool outboxThreadPool;
-		private IProcessorThreadPool deferredMessageThreadPool;
-
-		private readonly IEnumerable<string> EmptyPublishFlyweight =
-			new ReadOnlyCollection<string>(new List<string>());
-
-		private readonly ILog log;
+		private IProcessorThreadPool _controlThreadPool;
+		private IProcessorThreadPool _inboxThreadPool;
+		private IProcessorThreadPool _outboxThreadPool;
+		private IProcessorThreadPool _deferredMessageThreadPool;
 
 		internal ServiceBus(IServiceBusConfiguration configuration)
 		{
 			Guard.AgainstNull(configuration, "configuration");
 
-			log = Log.For(this);
-
 			Configuration = configuration;
 
 			Events = new ServiceBusEvents();
+
+			_messageSender = new MessageSender(this);
 		}
 
 		public IServiceBusConfiguration Configuration { get; private set; }
 		public IServiceBusEvents Events { get; private set; }
-
-		public TransportMessage TransportMessageBeingHandled
-		{
-			get { return _transportMessageBeingHandled; }
-		}
-
-		public bool IsHandlingTransportMessage
-		{
-			get { return _transportMessageBeingHandled != null; }
-		}
-
-		public void TransportMessageHandled()
-		{
-			_transportMessageBeingHandled = null;
-		}
-
-		public void HandlingTransportMessage(TransportMessage transportMessage)
-		{
-			_transportMessageBeingHandled = transportMessage;
-
-			ResetOutgoingHeaders();
-
-			if (transportMessage == null)
-			{
-				outgoingCorrelationId = string.Empty;
-
-				return;
-			}
-
-			outgoingCorrelationId = _transportMessageBeingHandled.CorrelationId;
-			outgoingHeaders.Merge(transportMessage.Headers);
-		}
-
-		public void Send(TransportMessage transportMessage)
-		{
-			Guard.AgainstNull(transportMessage, "transportMessage");
-
-			var messagePipeline = Configuration.PipelineFactory.GetPipeline<SendTransportMessagePipeline>(this);
-
-			messagePipeline.State.SetTransportMessage(transportMessage);
-
-			if (log.IsTraceEnabled)
-			{
-				log.Trace(string.Format(ESBResources.TraceSend, transportMessage.MessageType,
-				                        transportMessage.RecipientInboxWorkQueueUri));
-			}
-
-			try
-			{
-				messagePipeline.Execute();
-			}
-			finally
-			{
-				Configuration.PipelineFactory.ReleasePipeline(messagePipeline);
-			}
-		}
-
-		public TransportMessage Send(object message)
-		{
-			return SendDeferred(DateTime.MinValue, message, (IQueue) null);
-		}
-
-		public TransportMessage Send(object message, string uri)
-		{
-			Guard.AgainstNullOrEmptyString(uri, "uri");
-
-			return SendDeferred(DateTime.MinValue, message, Configuration.QueueManager.GetQueue(uri));
-		}
-
-		public TransportMessage Send(object message, IQueue queue)
-		{
-			return SendDeferred(DateTime.MinValue, message, queue);
-		}
-
-		public TransportMessage SendLocal(object message)
-		{
-			return SendDeferred(DateTime.MinValue, message, Configuration.Inbox.WorkQueue);
-		}
-
-		public TransportMessage SendReply(object message)
-		{
-			return SendDeferred(DateTime.MinValue, message,
-			                    Configuration.QueueManager.GetQueue(_transportMessageBeingHandled.SenderInboxWorkQueueUri));
-		}
-
-		public TransportMessage SendDeferred(DateTime at, object message)
-		{
-			return SendDeferred(at, message, (IQueue) null);
-		}
-
-		public TransportMessage SendDeferred(DateTime at, object message, string uri)
-		{
-			Guard.AgainstNullOrEmptyString(uri, "uri");
-
-			return SendDeferred(at, message, Configuration.QueueManager.GetQueue(uri));
-		}
-
-		public TransportMessage SendDeferred(DateTime at, object message, IQueue queue)
-		{
-			Guard.AgainstNull(message, "message");
-
-			var messagePipeline = Configuration.PipelineFactory.GetPipeline<SendMessagePipeline>(this);
-
-			if (log.IsTraceEnabled)
-			{
-				log.Trace(string.Format(ESBResources.TraceSend, message.GetType().FullName,
-				                        queue == null ? "[null]" : queue.Uri.ToString()));
-			}
-
-			try
-			{
-				((SendMessagePipeline) messagePipeline).Execute(at, message, queue);
-
-				return messagePipeline.State.Get<TransportMessage>(StateKeys.TransportMessage);
-			}
-			finally
-			{
-				Configuration.PipelineFactory.ReleasePipeline(messagePipeline);
-			}
-		}
-
-		public TransportMessage SendDeferredLocal(DateTime at, object message)
-		{
-			Guard.AgainstNull(message, "message");
-
-			if (!Configuration.HasInbox)
-			{
-				throw new InvalidOperationException(ESBResources.RequeueWithNoInbox);
-			}
-
-			return SendDeferred(at, message, Configuration.Inbox.WorkQueue);
-		}
-
-		public TransportMessage SendDeferredReply(DateTime at, object message)
-		{
-			Guard.AgainstNull(message, "message");
-
-			if (_transportMessageBeingHandled == null)
-			{
-				throw new InvalidOperationException(ESBResources.ReplyWithoutCurrentMessage);
-			}
-
-			if (!_transportMessageBeingHandled.HasSenderInboxWorkQueueUri())
-			{
-				throw new InvalidOperationException(ESBResources.ReplyWithoutSenderInboxWorkQueueUri);
-			}
-
-			OutgoingCorrelationId = _transportMessageBeingHandled.CorrelationId;
-			OutgoingHeaders.Merge(_transportMessageBeingHandled.Headers);
-
-			return SendDeferred(at, message,
-			                    Configuration.QueueManager.GetQueue(_transportMessageBeingHandled.SenderInboxWorkQueueUri));
-		}
-
-		public IEnumerable<string> Publish(object message)
-		{
-			Guard.AgainstNull(message, "message");
-
-			if (Configuration.HasSubscriptionManager)
-			{
-				var subscribers = Configuration.SubscriptionManager.GetSubscribedUris(message).ToList();
-
-				if (subscribers.Count > 0)
-				{
-					var result = new List<string>();
-
-					foreach (var subscriber in subscribers)
-					{
-						Send(message, subscriber);
-
-						result.Add(subscriber);
-					}
-
-					return result;
-				}
-
-				log.Warning(string.Format(ESBResources.WarningPublishWithoutSubscribers, message.GetType().FullName));
-			}
-			else
-			{
-				throw new InvalidOperationException(string.Format(ESBResources.PublishWithoutSubscriptionManagerException,
-				                                                  message.GetType().FullName));
-			}
-
-			return EmptyPublishFlyweight;
-		}
 
 		public IServiceBus Start()
 		{
@@ -247,12 +48,12 @@ namespace Shuttle.ESB.Core
 
 			startupPipeline.Execute();
 
-			inboxThreadPool = startupPipeline.State.Get<IProcessorThreadPool>("InboxThreadPool");
-			controlThreadPool = startupPipeline.State.Get<IProcessorThreadPool>("ControlInboxThreadPool");
-			outboxThreadPool = startupPipeline.State.Get<IProcessorThreadPool>("OutboxThreadPool");
-			deferredMessageThreadPool = startupPipeline.State.Get<IProcessorThreadPool>("DeferredMessageThreadPool");
+			_inboxThreadPool = startupPipeline.State.Get<IProcessorThreadPool>("InboxThreadPool");
+			_controlThreadPool = startupPipeline.State.Get<IProcessorThreadPool>("ControlInboxThreadPool");
+			_outboxThreadPool = startupPipeline.State.Get<IProcessorThreadPool>("OutboxThreadPool");
+			_deferredMessageThreadPool = startupPipeline.State.Get<IProcessorThreadPool>("DeferredMessageThreadPool");
 
-			started = true;
+			_started = true;
 
 			return this;
 		}
@@ -305,32 +106,32 @@ namespace Shuttle.ESB.Core
 
 			if (Configuration.HasInbox)
 			{
-				inboxThreadPool.Dispose();
+				_inboxThreadPool.Dispose();
 			}
 
 			if (Configuration.HasControlInbox)
 			{
-				controlThreadPool.Dispose();
+				_controlThreadPool.Dispose();
 			}
 
 			if (Configuration.HasOutbox)
 			{
-				outboxThreadPool.Dispose();
+				_outboxThreadPool.Dispose();
 			}
 
 			if (Configuration.HasDeferredQueue)
 			{
-				deferredMessageThreadPool.Dispose();
+				_deferredMessageThreadPool.Dispose();
 			}
 
 			Configuration.QueueManager.AttemptDispose();
 
-			started = false;
+			_started = false;
 		}
 
 		public bool Started
 		{
-			get { return started; }
+			get { return _started; }
 		}
 
 		public void Dispose()
@@ -338,62 +139,39 @@ namespace Shuttle.ESB.Core
 			Stop();
 		}
 
-		public TransportMessage CreateTransportMessage(object message)
-		{
-			Guard.AgainstNull(message, "message");
-
-			var result = new TransportMessage();
-
-			var identity = WindowsIdentity.GetCurrent();
-
-			result.SenderInboxWorkQueueUri =
-				Configuration.HasInbox
-					? Configuration.Inbox.WorkQueue.Uri.ToString()
-					: string.Empty;
-
-			result.PrincipalIdentityName = identity != null
-				                               ? identity.Name
-				                               : WindowsIdentity.GetAnonymous().Name;
-
-			if (result.SendDate == DateTime.MinValue)
-			{
-				result.SendDate = DateTime.Now;
-			}
-
-			result.Message = Configuration.Serializer.Serialize(message).ToBytes();
-			result.MessageType = message.GetType().FullName;
-			result.AssemblyQualifiedName = message.GetType().AssemblyQualifiedName;
-
-			result.EncryptionAlgorithm = Configuration.EncryptionAlgorithm;
-			result.CompressionAlgorithm = Configuration.CompressionAlgorithm;
-
-			if (_transportMessageBeingHandled != null)
-			{
-				result.MessageReceivedId = _transportMessageBeingHandled.MessageId;
-			}
-
-			return result;
-		}
-
 		public static IServiceBusConfigurationBuilder Create()
 		{
 			return new ServiceBusConfigurationBuilder();
 		}
 
-		public string OutgoingCorrelationId
+		public TransportMessage CreateTransportMessage(object message, Action<TransportMessageConfigurator> configurator)
 		{
-			get { return outgoingCorrelationId; }
-			set { outgoingCorrelationId = value; }
+			return _messageSender.CreateTransportMessage(message, configurator);
 		}
 
-		public List<TransportHeader> OutgoingHeaders
+		public void Dispatch(TransportMessage transportMessage)
 		{
-			get { return outgoingHeaders ?? (outgoingHeaders = new List<TransportHeader>()); }
+			_messageSender.Dispatch(transportMessage);
 		}
 
-		public void ResetOutgoingHeaders()
+		public TransportMessage Send(object message)
 		{
-			OutgoingHeaders.Clear();
+			return _messageSender.Send(message);
+		}
+
+		public TransportMessage Send(object message, Action<TransportMessageConfigurator> configurator)
+		{
+			return _messageSender.Send(message, configurator);
+		}
+
+		public IEnumerable<TransportMessage> Publish(object message)
+		{
+			return _messageSender.Publish(message);
+		}
+
+		public IEnumerable<TransportMessage> Publish(object message, Action<TransportMessageConfigurator> configurator)
+		{
+			return _messageSender.Publish(message, configurator);
 		}
 	}
 }

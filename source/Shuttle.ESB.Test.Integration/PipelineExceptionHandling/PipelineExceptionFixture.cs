@@ -19,8 +19,8 @@ namespace Shuttle.ESB.Test.Integration.Core
 					{
 						WorkQueue = inboxWorkQueue,
 						ErrorQueue = inboxErrorQueue,
-						DurationToSleepWhenIdle = new[] { TimeSpan.FromMilliseconds(5) },
-						DurationToIgnoreOnFailure = new[] { TimeSpan.FromMilliseconds(5) },
+						DurationToSleepWhenIdle = new[] {TimeSpan.FromMilliseconds(5)},
+						DurationToIgnoreOnFailure = new[] {TimeSpan.FromMilliseconds(5)},
 						MaximumFailureCount = 100,
 						ThreadCount = 1
 					};
@@ -37,7 +37,7 @@ namespace Shuttle.ESB.Test.Integration.Core
 
 			using (var bus = new ServiceBus(configuration))
 			{
-				var message = bus.CreateTransportMessage(new ReceivePipelineCommand());
+				var message = bus.CreateTransportMessage(new ReceivePipelineCommand(), c => { c.Queue = inboxWorkQueue; });
 
 				inboxWorkQueue.Enqueue(message.MessageId, configuration.Serializer.Serialize(message));
 

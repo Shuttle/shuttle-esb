@@ -50,7 +50,10 @@ namespace Shuttle.ESB.Core
 
         private void AddAssemblyTypes(Assembly assembly)
         {
-            types.AddRange(assembly.GetTypes());
+			foreach (var type in assembly.GetTypes())
+	        {
+		        _messageTypes.Add(type.FullName);
+	        }
         }
     }
 }

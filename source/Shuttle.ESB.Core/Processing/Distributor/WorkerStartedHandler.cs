@@ -4,7 +4,7 @@ namespace Shuttle.ESB.Core
 	{
 		public void ProcessMessage(HandlerContext<WorkerStartedEvent> context)
 		{
-			context.Bus.Configuration.WorkerAvailabilityManager.WorkerStarted(context.Message);
+			context.Configuration.WorkerAvailabilityManager.WorkerStarted(context.Message);
 		}
 
 		public bool IsReusable

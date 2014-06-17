@@ -11,11 +11,11 @@ namespace Shuttle.ESB.Core
             this.startWith = startWith.ToLower();
         }
 
-        public bool IsSatisfiedBy(object message)
+        public bool IsSatisfiedBy(string messageType)
         {
-            Guard.AgainstNull(message, "message");
+            Guard.AgainstNull(messageType, "message");
 
-            return message.GetType().FullName.ToLower().StartsWith(startWith);
+            return messageType.ToLower().StartsWith(startWith);
         }
     }
 }

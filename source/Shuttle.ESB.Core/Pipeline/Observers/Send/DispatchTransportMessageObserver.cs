@@ -3,25 +3,28 @@ using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ESB.Core
 {
-	public class SendMessageObserver : IPipelineObserver<OnSendMessage>
+	public class DispatchTransportMessageObserver : IPipelineObserver<OnDispatchTransportMessage>
 	{
 		private readonly ILog _log;
 
-		public SendMessageObserver()
+		public DispatchTransportMessageObserver()
 		{
 			_log = Log.For(this);
 		}
 
-		public void Execute(OnSendMessage pipelineEvent)
+		public void Execute(OnDispatchTransportMessage pipelineEvent)
 		{
 			var state = pipelineEvent.Pipeline.State;
+			var messageSenderContext = state.GetMessageSenderContext();
 			var bus = state.GetServiceBus();
 
-			if (bus.IsHandlingTransportMessage && bus.Configuration.HasIdempotenceService)
+			Guard.AgainstNull(messageSenderContext, "messageSenderContext");
+
+			if (messageSenderContext.HasTransportMessageReceived && bus.Configuration.HasIdempotenceService)
 			{
 				try
 				{
-					bus.Configuration.IdempotenceService.AddDeferredMessage(bus.TransportMessageBeingHandled,
+					bus.Configuration.IdempotenceService.AddDeferredMessage(messageSenderContext.TransportMessageReceived,
 					                                                        state.GetTransportMessageStream());
 				}
 				catch (Exception ex)
@@ -32,7 +35,7 @@ namespace Shuttle.ESB.Core
 				return;
 			}
 
-			var transportMessage = state.GetTransportMessage();
+			var transportMessage = messageSenderContext.TransportMessage;
 
 			Guard.AgainstNull(transportMessage, "transportMessage");
 			Guard.AgainstNullOrEmptyString(transportMessage.RecipientInboxWorkQueueUri, "uri");

@@ -12,8 +12,8 @@
 				.WithEvent<OnAfterDeserializeTransportMessage>();
 
 			RegisterStage("Send")
-				.WithEvent<OnSendMessage>()
-				.WithEvent<OnAfterSendMessage>()
+				.WithEvent<OnDispatchTransportMessage>()
+				.WithEvent<OnAfterDispatchTransportMessage>()
 				.WithEvent<OnAcknowledgeMessage>()
 				.WithEvent<OnAfterAcknowledgeMessage>();
 

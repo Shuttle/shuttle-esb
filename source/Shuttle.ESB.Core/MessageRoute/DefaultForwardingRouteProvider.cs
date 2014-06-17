@@ -7,9 +7,9 @@ namespace Shuttle.ESB.Core
 	{
 		private readonly IMessageRouteCollection messageRoutes = new MessageRouteCollection();
 
-		public IEnumerable<string> GetRouteUris(object message)
+		public IEnumerable<string> GetRouteUris(string messageType)
 		{
-			return messageRoutes.FindAll(message).Select(messageRoute => messageRoute.Queue.Uri.ToString()).ToList();
+			return messageRoutes.FindAll(messageType).Select(messageRoute => messageRoute.Queue.Uri.ToString()).ToList();
 		}
 
 		public void Initialize(IServiceBus bus)

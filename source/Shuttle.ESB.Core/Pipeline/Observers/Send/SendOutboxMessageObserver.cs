@@ -2,7 +2,7 @@
 
 namespace Shuttle.ESB.Core
 {
-	public class SendOutboxMessageObserver : IPipelineObserver<OnSendMessage>
+	public class SendOutboxMessageObserver : IPipelineObserver<OnDispatchTransportMessage>
 	{
 		private readonly ILog _log;
 
@@ -11,7 +11,7 @@ namespace Shuttle.ESB.Core
 			_log = Log.For(this);
 		}
 
-		public void Execute(OnSendMessage pipelineEvent)
+		public void Execute(OnDispatchTransportMessage pipelineEvent)
 		{
 			var state = pipelineEvent.Pipeline.State;
 			var transportMessage = state.GetTransportMessage();

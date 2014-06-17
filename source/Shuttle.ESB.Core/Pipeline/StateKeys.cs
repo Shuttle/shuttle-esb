@@ -4,8 +4,6 @@ namespace Shuttle.ESB.Core
 	{
 		public const string ActiveState = "ActiveState";
 		public const string AvailableWorker = "AvailableWorker";
-		public const string IgnoreTillDate = "IgnoreTillDate";
-		public const string DestinationQueue = "DestinationQueue";
 		public const string DurationToIgnoreOnFailure = "DurationToIgnoreOnFailure";
 		public const string ErrorQueue = "ErrorQueue";
 		public const string MaximumFailureCount = "MaximumFailureCount";
@@ -15,8 +13,10 @@ namespace Shuttle.ESB.Core
 		public const string TransactionComplete = "TransactionComplete";
 		public const string TransactionScope = "TransactionScope";
 		public const string TransportMessage = "TransportMessage";
+		public const string TransportMessageConfigurator = "TransportMessageConfigurator";
 		public const string TransportMessageStream = "TransportMessageStream";
 		public const string ReceivedMessage = "ReceivedMessage";
+		public const string MessageSenderContext = "MessageSenderContext";
 		public const string Working = "Working";
 		public const string WorkQueue = "WorkQueue";
 		public const string DeferredQueue = "DeferredQueue";

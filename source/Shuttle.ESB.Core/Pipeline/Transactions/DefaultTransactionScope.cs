@@ -5,7 +5,7 @@ using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ESB.Core
 {
-	public class ServiceBusTransactionScope : IServiceBusTransactionScope
+	public class DefaultTransactionScope : ITransactionScope
 	{
 		private readonly bool ignore = false;
         private readonly string name;
@@ -16,22 +16,22 @@ namespace Shuttle.ESB.Core
 
 		private readonly ILog log;
 
-        public ServiceBusTransactionScope()
+        public DefaultTransactionScope()
             : this(Guid.NewGuid().ToString("n"), DefaultIsolationLevel, TimeSpan.FromMinutes(15))
         {
         }
 
-        public ServiceBusTransactionScope(IsolationLevel isolationLevel, TimeSpan timeout)
+        public DefaultTransactionScope(IsolationLevel isolationLevel, TimeSpan timeout)
             : this(Guid.NewGuid().ToString("n"), isolationLevel, timeout)
         {
         }
 
-        public ServiceBusTransactionScope(string name)
+        public DefaultTransactionScope(string name)
             : this(name, DefaultIsolationLevel, DefaultTimeout)
         {
         }
 
-        public ServiceBusTransactionScope(string name, IsolationLevel isolationLevel, TimeSpan timeout)
+        public DefaultTransactionScope(string name, IsolationLevel isolationLevel, TimeSpan timeout)
         {
             this.name = name;
         	log = Log.For(this);

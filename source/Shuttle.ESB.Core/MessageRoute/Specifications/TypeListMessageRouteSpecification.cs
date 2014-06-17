@@ -6,18 +6,18 @@ namespace Shuttle.ESB.Core
 {
     public class TypeListMessageRouteSpecification : IMessageRouteSpecification
     {
-        protected readonly List<Type> types = new List<Type>();
+        protected readonly List<string> _messageTypes = new List<string>();
 
-        public TypeListMessageRouteSpecification(params Type[] types)
-            : this((IEnumerable<Type>)types)
+        public TypeListMessageRouteSpecification(params string[] messageTypes)
+            : this((IEnumerable<string>)messageTypes)
         {
         }
 
-        public TypeListMessageRouteSpecification(IEnumerable<Type> types)
+		public TypeListMessageRouteSpecification(IEnumerable<string> messageTypes)
         {
-            Guard.AgainstNull(types, "types");
+            Guard.AgainstNull(messageTypes, "messageTypes");
 
-            this.types.AddRange(types);
+            _messageTypes.AddRange(_messageTypes);
         }
 
         public TypeListMessageRouteSpecification(string value)
@@ -43,15 +43,15 @@ namespace Shuttle.ESB.Core
                     throw new MessageRouteSpecificationException(string.Format(ESBResources.TypeListMessageRouteSpecificationUnknownType, typeName));
                 }
 
-                types.Add(type);
+                _messageTypes.Add(type.FullName);
             }
         }
 
-        public bool IsSatisfiedBy(object message)
+        public bool IsSatisfiedBy(string messageType)
         {
-            Guard.AgainstNull(message, "message");
+            Guard.AgainstNull(messageType, "message");
 
-            return types.Contains(message.GetType());
+            return _messageTypes.Contains(messageType);
         }
     }
 }
