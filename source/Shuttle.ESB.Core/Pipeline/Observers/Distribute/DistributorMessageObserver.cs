@@ -10,6 +10,8 @@
             var transportMessage = state.GetTransportMessage();
 
 	        transportMessage.RecipientInboxWorkQueueUri = state.GetAvailableWorker().InboxWorkQueueUri;
+
+			state.SetMessageSenderContext(new MessageSenderContext(transportMessage));
         }
 
         public void Execute(OnAbortPipeline pipelineEvent)
