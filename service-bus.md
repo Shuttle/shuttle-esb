@@ -362,6 +362,8 @@ All the default options will be used in such as case but there will be rather fe
 
 ### Encryption
 
+[Go to the Encryption documentation]({{ site.baseurl }}/encryption/index.html).
+
 ``` c#
 	public interface IServiceBusConfiguration
 	{
@@ -377,6 +379,8 @@ All the default options will be used in such as case but there will be rather fe
 
 ### Compression
 
+[Go to the Compression documentation]({{ site.baseurl }}/compression/index.html).
+
 ``` c#
 	public interface IServiceBusConfiguration
 	{
@@ -389,7 +393,7 @@ All the default options will be used in such as case but there will be rather fe
         IServiceBusConfigurationBuilder AddCompressionAlgorithm(ICompressionAlgorithm algorithm);
 	}
 ```
-.
+
 ### Modules
 
 [Go to the Modules documentation]({{ site.baseurl }}/modules/index.html).
