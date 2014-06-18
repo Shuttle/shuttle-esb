@@ -111,7 +111,9 @@ namespace Shuttle.ESB.Core
 											 transportMessage.MessageId, new Uri(uri).Secured()));
 				}
 
-				bus.Send(message, c => { c.Queue = bus.Configuration.QueueManager.GetQueue(uri); });
+				string recipientUri = uri;
+
+				bus.Send(message, c => c.SendToRecipient(recipientUri));
 			}
 
 			var handler = bus.Configuration.MessageHandlerFactory.GetHandler(message);

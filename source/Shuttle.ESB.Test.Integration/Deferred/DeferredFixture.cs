@@ -41,7 +41,7 @@ namespace Shuttle.ESB.Test.Integration.Deferred
 				EnqueueDeferredMessage(bus, ignoreTillDate);
 
 				var timeout = DateTime.Now.AddMilliseconds(MillisecondsToDefer + 15000);
-					// add the extra time else there is no time to process
+				// add the extra time else there is no time to process
 
 				// wait for the message to be returned from the deferred queue
 				while ((!module.AllDeferredMessageReturned() || !module.AllMessagesHandled())
@@ -69,11 +69,10 @@ namespace Shuttle.ESB.Test.Integration.Deferred
 
 		private void EnqueueDeferredMessage(IServiceBus bus, DateTime ignoreTillDate)
 		{
-			var message = bus.CreateTransportMessage(new SimpleCommand(), options =>
-				{
-					options.IgnoreTillDate = ignoreTillDate;
-					options.Queue = bus.Configuration.Inbox.WorkQueue;
-				});
+			var message = bus.CreateTransportMessage(new SimpleCommand(),
+			                                         c => c
+				                                              .Defer(ignoreTillDate)
+				                                              .SendToRecipient(bus.Configuration.Inbox.WorkQueue));
 
 			bus.Configuration.Inbox.WorkQueue.Enqueue(message.MessageId, bus.Configuration.Serializer.Serialize(message));
 

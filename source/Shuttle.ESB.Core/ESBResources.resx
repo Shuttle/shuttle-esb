@@ -402,4 +402,10 @@
     <value>Could not execute pipeline '{0}'.  Exception: {1}</value>
     <comment>{0} = pipeline name, {1} = exception message(s)</comment>
   </data>
+  <data name="SendToSelfException" xml:space="preserve">
+    <value>You cannot send a message to this endpoint (SendToSelf) since this endpoint has no inbox.</value>
+  </data>
+  <data name="SendReplyException" xml:space="preserve">
+    <value>Cannot send reply as the provided transport message received has no inbox work queue uri.</value>
+  </data>
 </root>

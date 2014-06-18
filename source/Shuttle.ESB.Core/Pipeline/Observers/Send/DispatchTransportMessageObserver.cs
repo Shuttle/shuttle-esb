@@ -20,6 +20,8 @@ namespace Shuttle.ESB.Core
 
 			Guard.AgainstNull(messageSenderContext, "messageSenderContext");
 
+			messageSenderContext.TransportMessage.SendDate = DateTime.Now;
+
 			if (messageSenderContext.HasTransportMessageReceived && bus.Configuration.HasIdempotenceService)
 			{
 				try

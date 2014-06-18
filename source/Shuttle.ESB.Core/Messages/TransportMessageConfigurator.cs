@@ -7,48 +7,53 @@ namespace Shuttle.ESB.Core
 {
 	public class TransportMessageConfigurator
 	{
-		public Guid MessageReceivedId { get; set; }
-		public string CorrelationId { get; set; }
+		private bool _sendToSelf;
+		private string _recipientInboxWorkQueueUri;
+		private TransportMessage _transportMessage;
+		private DateTime _ignoreTillDate;
+		private string _correlationId;
+
 		public List<TransportHeader> Headers { get; set; }
 		public object Message { get; private set; }
-		public DateTime IgnoreTillDate { get; set; }
-		public IQueue Queue { get; set; }
 
 		public TransportMessageConfigurator(object message)
 		{
 			Guard.AgainstNull(message, "message");
 
-			MessageReceivedId = Guid.Empty;
-			CorrelationId = string.Empty;
 			Headers = new List<TransportHeader>();
 			Message = message;
-			IgnoreTillDate = DateTime.MinValue;
-			Queue = null;
+
+			_correlationId = string.Empty;
+			_ignoreTillDate = DateTime.MinValue;
+			_recipientInboxWorkQueueUri = null;
+			_sendToSelf = false;
 		}
 
 		public TransportMessage CreateTransportMessage(IServiceBusConfiguration configuration)
 		{
+			if (_sendToSelf && !configuration.HasInbox)
+			{
+				throw new InvalidOperationException(ESBResources.SendToSelfException);
+			}
+
 			var identity = WindowsIdentity.GetCurrent();
 
 			var result = new TransportMessage
 				{
-					RecipientInboxWorkQueueUri = Queue != null
-						                             ? Queue.Uri.ToString()
-						                             : string.Empty,
+					RecipientInboxWorkQueueUri = _sendToSelf ? configuration.Inbox.WorkQueue.Uri.ToString() : _recipientInboxWorkQueueUri,
 					SenderInboxWorkQueueUri = configuration.HasInbox
 						                          ? configuration.Inbox.WorkQueue.Uri.ToString()
 						                          : string.Empty,
 					PrincipalIdentityName = identity != null
 						                        ? identity.Name
 						                        : WindowsIdentity.GetAnonymous().Name,
-					SendDate = DateTime.Now,
-					IgnoreTillDate = IgnoreTillDate,
+					IgnoreTillDate = _ignoreTillDate,
 					MessageType = Message.GetType().FullName,
 					AssemblyQualifiedName = Message.GetType().AssemblyQualifiedName,
 					EncryptionAlgorithm = configuration.EncryptionAlgorithm,
 					CompressionAlgorithm = configuration.CompressionAlgorithm,
-					MessageReceivedId = MessageReceivedId,
-					CorrelationId = CorrelationId
+					MessageReceivedId = HasTransportMessageReceived ? _transportMessage.MessageId : Guid.Empty,
+					CorrelationId = _correlationId
 				};
 
 			result.Headers.Merge(Headers);
@@ -56,12 +61,59 @@ namespace Shuttle.ESB.Core
 			return result;
 		}
 
-		public void Merge(TransportMessage transportMessage)
+		public bool HasTransportMessageReceived
+		{
+			get { return _transportMessage != null; }
+		}
+
+		public void TransportMessageReceived(TransportMessage transportMessage)
 		{
 			Guard.AgainstNull(transportMessage, "transportMessage");
 
+			_transportMessage = transportMessage;
+
 			Headers.Merge(transportMessage.Headers);
-			CorrelationId = transportMessage.CorrelationId;
+			_correlationId = transportMessage.CorrelationId;
+		}
+
+		public TransportMessageConfigurator Defer(DateTime ignoreTillDate)
+		{
+			_ignoreTillDate = ignoreTillDate;
+
+			return this;
+		}
+
+		public TransportMessageConfigurator WithCorrelationId(string correlationId)
+		{
+			_correlationId = correlationId;
+
+			return this;
+		}
+
+		public TransportMessageConfigurator SendToRecipient(IQueue queue)
+		{
+			return SendToRecipient(queue.Uri.ToString());
+		}
+
+		public TransportMessageConfigurator SendToRecipient(Uri uri)
+		{
+			return SendToRecipient(uri.ToString());
+		}
+
+		public TransportMessageConfigurator SendToRecipient(string uri)
+		{
+			_sendToSelf = false;
+
+			_recipientInboxWorkQueueUri = uri;
+
+			return this;
+		}
+
+		public TransportMessageConfigurator SendToSelf()
+		{
+			_sendToSelf = true;
+
+			return this;
 		}
 	}
 }

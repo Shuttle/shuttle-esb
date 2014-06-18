@@ -25,14 +25,14 @@ namespace Shuttle.ESB.Test.Integration.Idempotence.SqlServer.Msmq
 				{
 					for (var i = 0; i < messageCount; i++)
 					{
-						var message = bus.CreateTransportMessage(new IdempotenceCommand(), c => { c.Queue = configuration.Inbox.WorkQueue; });
+						var message = bus.CreateTransportMessage(new IdempotenceCommand(), c => c.SendToRecipient(configuration.Inbox.WorkQueue));
 
 						configuration.Inbox.WorkQueue.Enqueue(message.MessageId, configuration.Serializer.Serialize(message));
 					}
 				}
 				else
 				{
-					var message = bus.CreateTransportMessage(new IdempotenceCommand(), c => { c.Queue = configuration.Inbox.WorkQueue; });
+					var message = bus.CreateTransportMessage(new IdempotenceCommand(), c => c.SendToRecipient(configuration.Inbox.WorkQueue));
 
 					for (var i = 0; i < messageCount; i++)
 					{

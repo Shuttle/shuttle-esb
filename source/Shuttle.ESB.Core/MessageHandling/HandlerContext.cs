@@ -60,5 +60,15 @@ namespace Shuttle.ESB.Core
 		{
 			return _messageSender.Publish(message, configurator);
 		}
+
+		public TransportMessage SendReply(object message)
+		{
+			if (string.IsNullOrEmpty(TransportMessage.SenderInboxWorkQueueUri))
+			{
+				throw new InvalidOperationException(ESBResources.SendReplyException);
+			}
+
+			return _messageSender.Send(message, c => c.SendToRecipient(TransportMessage.SenderInboxWorkQueueUri));
+		}
 	}
 }

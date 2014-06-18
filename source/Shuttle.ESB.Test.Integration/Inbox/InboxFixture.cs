@@ -32,7 +32,7 @@ namespace Shuttle.ESB.Test.Integration
 				for (var i = 0; i < 5; i++)
 				{
 					var warmup = bus.CreateTransportMessage(new SimpleCommand("warmup"),
-					                                  c => { c.Queue = configuration.Inbox.WorkQueue; });
+					                                        c => c.SendToRecipient(configuration.Inbox.WorkQueue));
 
 					configuration.Inbox.WorkQueue.Enqueue(warmup.MessageId, configuration.Serializer.Serialize(warmup));
 				}
@@ -66,7 +66,7 @@ namespace Shuttle.ESB.Test.Integration
 				for (var i = 0; i < count; i++)
 				{
 					var message = bus.CreateTransportMessage(new SimpleCommand("command " + i),
-					                                   c => { c.Queue = configuration.Inbox.WorkQueue; });
+					                                         c => c.SendToRecipient(configuration.Inbox.WorkQueue));
 
 					configuration.Inbox.WorkQueue.Enqueue(message.MessageId, configuration.Serializer.Serialize(message));
 				}
@@ -113,7 +113,8 @@ namespace Shuttle.ESB.Test.Integration
 
 			using (var bus = new ServiceBus(configuration))
 			{
-				var message = bus.CreateTransportMessage(new NoHandlerCommand(), c => { c.Queue = configuration.Inbox.WorkQueue; });
+				var message = bus.CreateTransportMessage(new NoHandlerCommand(),
+				                                         c => c.SendToRecipient(configuration.Inbox.WorkQueue));
 
 				configuration.Inbox.WorkQueue.Enqueue(message.MessageId, configuration.Serializer.Serialize(message));
 
@@ -197,7 +198,7 @@ namespace Shuttle.ESB.Test.Integration
 					var message = bus.CreateTransportMessage(new ConcurrentCommand
 						{
 							MessageIndex = i
-						}, c => { c.Queue = configuration.Inbox.WorkQueue; });
+						}, c => c.SendToRecipient(configuration.Inbox.WorkQueue));
 
 					configuration.Inbox.WorkQueue.Enqueue(message.MessageId, configuration.Serializer.Serialize(message));
 				}
@@ -254,12 +255,8 @@ namespace Shuttle.ESB.Test.Integration
 			{
 				bus.Start();
 
-				var transportMessage = bus.Send(new ReceivePipelineCommand(), c =>
-					{
-						c.IgnoreTillDate = DateTime.Now.AddMilliseconds(500);
-						c.Queue = configuration.Inbox.WorkQueue;
-					}
-					);
+				var transportMessage = bus.Send(new ReceivePipelineCommand(), c => c.Defer(DateTime.Now.AddMilliseconds(500))
+				                                                                    .SendToRecipient(configuration.Inbox.WorkQueue));
 
 				var timeout = DateTime.Now.AddMilliseconds(1000);
 

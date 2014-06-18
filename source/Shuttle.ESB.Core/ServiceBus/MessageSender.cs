@@ -40,12 +40,12 @@ namespace Shuttle.ESB.Core
 
 			if (_transportMessageReceived != null)
 			{
-				transportMessageConfigurator.Merge(_transportMessageReceived);
+				transportMessageConfigurator.TransportMessageReceived(_transportMessageReceived);
 			}
 
 			if (configurator != null)
 			{
-				configurator(transportMessageConfigurator);
+				configurator((TransportMessageConfigurator)transportMessageConfigurator);
 			}
 
 			if (!transportMessagePipeline.Execute(transportMessageConfigurator))

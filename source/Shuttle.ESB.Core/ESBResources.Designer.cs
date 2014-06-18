@@ -394,6 +394,24 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot send reply as the provided transport message received has no inbox work queue uri..
+        /// </summary>
+        public static string SendReplyException {
+            get {
+                return ResourceManager.GetString("SendReplyException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You cannot send a message to this endpoint (SendToSelf) since this endpoint has no inbox..
+        /// </summary>
+        public static string SendToSelfException {
+            get {
+                return ResourceManager.GetString("SendToSelfException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Type &apos;{0}&apos; is not registered with the serializer so it cannot be serialized.  Please use [SerialierInstance].AddKnownType to add the type before attempting to serialize or deserialize a TransportMessage containing this type in the object graph of the message property..
         /// </summary>
         public static string SerializerUnknownTypeExcption {
