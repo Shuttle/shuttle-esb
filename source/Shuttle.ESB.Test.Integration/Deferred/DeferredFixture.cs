@@ -72,7 +72,7 @@ namespace Shuttle.ESB.Test.Integration.Deferred
 			var message = bus.CreateTransportMessage(new SimpleCommand(),
 			                                         c => c
 				                                              .Defer(ignoreTillDate)
-				                                              .SendToRecipient(bus.Configuration.Inbox.WorkQueue));
+				                                              .WithRecipient(bus.Configuration.Inbox.WorkQueue));
 
 			bus.Configuration.Inbox.WorkQueue.Enqueue(message.MessageId, bus.Configuration.Serializer.Serialize(message));
 

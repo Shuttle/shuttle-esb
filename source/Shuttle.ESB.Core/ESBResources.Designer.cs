@@ -403,7 +403,7 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You cannot send a message to this endpoint (SendToSelf) since this endpoint has no inbox..
+        ///   Looks up a localized string similar to You cannot send a message to this endpoint (Local) since this endpoint has no inbox..
         /// </summary>
         public static string SendToSelfException {
             get {

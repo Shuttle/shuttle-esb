@@ -113,7 +113,7 @@ namespace Shuttle.ESB.Core
 
 				string recipientUri = uri;
 
-				bus.Send(message, c => c.SendToRecipient(recipientUri));
+				bus.Send(message, c => c.WithRecipient(recipientUri));
 			}
 
 			var handler = bus.Configuration.MessageHandlerFactory.GetHandler(message);

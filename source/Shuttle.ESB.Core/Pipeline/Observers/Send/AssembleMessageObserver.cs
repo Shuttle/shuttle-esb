@@ -13,7 +13,7 @@ namespace Shuttle.ESB.Core
 			Guard.AgainstNull(transportMessageConfigurator, "transportMessageConfigurator");
 			Guard.AgainstNull(transportMessageConfigurator.Message, "transportMessageConfigurator.Message");
 
-			state.SetTransportMessage(transportMessageConfigurator.CreateTransportMessage(bus.Configuration));
+			state.SetTransportMessage(transportMessageConfigurator.ToTransportMessage(bus.Configuration));
 			state.SetMessage(transportMessageConfigurator.Message);
 		}
 	}

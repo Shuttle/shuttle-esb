@@ -37,7 +37,7 @@ namespace Shuttle.ESB.Test.Integration.Core
 
 			using (var bus = new ServiceBus(configuration))
 			{
-				var message = bus.CreateTransportMessage(new ReceivePipelineCommand(), c => c.SendToRecipient(inboxWorkQueue));
+				var message = bus.CreateTransportMessage(new ReceivePipelineCommand(), c => c.WithRecipient(inboxWorkQueue));
 
 				inboxWorkQueue.Enqueue(message.MessageId, configuration.Serializer.Serialize(message));
 

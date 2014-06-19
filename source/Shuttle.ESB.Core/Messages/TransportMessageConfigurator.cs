@@ -7,7 +7,7 @@ namespace Shuttle.ESB.Core
 {
 	public class TransportMessageConfigurator
 	{
-		private bool _sendToSelf;
+		private bool _local;
 		private string _recipientInboxWorkQueueUri;
 		private TransportMessage _transportMessage;
 		private DateTime _ignoreTillDate;
@@ -26,12 +26,12 @@ namespace Shuttle.ESB.Core
 			_correlationId = string.Empty;
 			_ignoreTillDate = DateTime.MinValue;
 			_recipientInboxWorkQueueUri = null;
-			_sendToSelf = false;
+			_local = false;
 		}
 
-		public TransportMessage CreateTransportMessage(IServiceBusConfiguration configuration)
+		public TransportMessage ToTransportMessage(IServiceBusConfiguration configuration)
 		{
-			if (_sendToSelf && !configuration.HasInbox)
+			if (_local && !configuration.HasInbox)
 			{
 				throw new InvalidOperationException(ESBResources.SendToSelfException);
 			}
@@ -40,7 +40,7 @@ namespace Shuttle.ESB.Core
 
 			var result = new TransportMessage
 				{
-					RecipientInboxWorkQueueUri = _sendToSelf ? configuration.Inbox.WorkQueue.Uri.ToString() : _recipientInboxWorkQueueUri,
+					RecipientInboxWorkQueueUri = _local ? configuration.Inbox.WorkQueue.Uri.ToString() : _recipientInboxWorkQueueUri,
 					SenderInboxWorkQueueUri = configuration.HasInbox
 						                          ? configuration.Inbox.WorkQueue.Uri.ToString()
 						                          : string.Empty,
@@ -90,28 +90,42 @@ namespace Shuttle.ESB.Core
 			return this;
 		}
 
-		public TransportMessageConfigurator SendToRecipient(IQueue queue)
+		public TransportMessageConfigurator WithRecipient(IQueue queue)
 		{
-			return SendToRecipient(queue.Uri.ToString());
+			return WithRecipient(queue.Uri.ToString());
 		}
 
-		public TransportMessageConfigurator SendToRecipient(Uri uri)
+		public TransportMessageConfigurator WithRecipient(Uri uri)
 		{
-			return SendToRecipient(uri.ToString());
+			return WithRecipient(uri.ToString());
 		}
 
-		public TransportMessageConfigurator SendToRecipient(string uri)
+		public TransportMessageConfigurator WithRecipient(string uri)
 		{
-			_sendToSelf = false;
+			_local = false;
 
 			_recipientInboxWorkQueueUri = uri;
 
 			return this;
 		}
 
-		public TransportMessageConfigurator SendToSelf()
+		public TransportMessageConfigurator Local()
 		{
-			_sendToSelf = true;
+			_local = true;
+
+			return this;
+		}
+
+		public TransportMessageConfigurator Reply()
+		{
+			if (!HasTransportMessageReceived || string.IsNullOrEmpty(_transportMessage.SenderInboxWorkQueueUri))
+			{
+				throw new InvalidOperationException(ESBResources.SendReplyException);
+			}
+
+			_local = false;
+
+			WithRecipient(_transportMessage.SenderInboxWorkQueueUri);
 
 			return this;
 		}

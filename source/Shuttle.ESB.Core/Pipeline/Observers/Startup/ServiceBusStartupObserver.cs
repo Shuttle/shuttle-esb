@@ -189,7 +189,7 @@ namespace Shuttle.ESB.Core
 					InboxWorkQueueUri = _configuration.Inbox.WorkQueue.Uri.ToString(),
 					DateStarted = DateTime.Now
 				},
-			          c => c.SendToRecipient(_configuration.Worker.DistributorControlInboxWorkQueue));
+			          c => c.WithRecipient(_configuration.Worker.DistributorControlInboxWorkQueue));
 		}
 
 		public void Execute(OnInitializeMessageRouteProvider pipelineEvent)

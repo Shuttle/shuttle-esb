@@ -34,7 +34,7 @@ namespace Shuttle.ESB.Core
 						InboxWorkQueueUri = bus.Configuration.Inbox.WorkQueue.Uri.ToString(),
 						DateSent = DateTime.Now
 					},
-				         c => c.SendToRecipient(bus.Configuration.Worker.DistributorControlInboxWorkQueue));
+				         c => c.WithRecipient(bus.Configuration.Worker.DistributorControlInboxWorkQueue));
 
 				if (log.IsVerboseEnabled)
 				{
