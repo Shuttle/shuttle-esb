@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>shuttle-esb-castle</id>
-    <version>3.0.1-rc9</version>
+    <version>3.0.0-rc10</version>
     <authors>Eben Roux</authors>
     <owners>Eben Roux</owners>
     <licenseUrl>https://github.com/shuttle/shuttle-esb/raw/master/LICENSE</licenseUrl>
@@ -14,8 +14,8 @@
     <copyright>Copyright (c) 2011-2014, Eben Roux</copyright>
     <tags>Enterprise Service ESB esb c# Event Driven messaging MSMQ RabbitMQ nservicebus pipeline development Service Bus shuttle soa castle di dependency injection</tags>
 	<dependencies>
-		<dependency id="castle.core" version="" />
-		<dependency id="castle.windsor" version="" />
+		<dependency id="castle.core" version="3.3.0" />
+		<dependency id="castle.windsor" version="3.3.0" />
 	</dependencies>
   </metadata>
 </package>

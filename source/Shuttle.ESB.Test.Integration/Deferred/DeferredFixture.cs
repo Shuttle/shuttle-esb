@@ -21,9 +21,8 @@ namespace Shuttle.ESB.Test.Integration.Deferred
 		protected void TestDeferredProcessing(string workQueueUriFormat, string deferredQueueUriFormat,
 		                                      string errorQueueUriFormat, bool isTransactional)
 		{
-			const int deferredMessageCount = 5;
-			var configuration = GetInboxConfiguration(workQueueUriFormat, deferredQueueUriFormat, errorQueueUriFormat, 1,
-			                                          isTransactional);
+			const int deferredMessageCount = 200;
+			var configuration = GetInboxConfiguration(workQueueUriFormat, deferredQueueUriFormat, errorQueueUriFormat, 5, isTransactional);
 
 			var module = new DeferredMessageModule(deferredMessageCount);
 
@@ -34,11 +33,11 @@ namespace Shuttle.ESB.Test.Integration.Deferred
 				bus.Start();
 
 				var ignoreTillDate = DateTime.Now.AddMilliseconds(MillisecondsToDefer);
-				EnqueueDeferredMessage(bus, ignoreTillDate);
-				EnqueueDeferredMessage(bus, ignoreTillDate);
-				EnqueueDeferredMessage(bus, ignoreTillDate);
-				EnqueueDeferredMessage(bus, ignoreTillDate);
-				EnqueueDeferredMessage(bus, ignoreTillDate);
+
+				for (var i = 0; i < deferredMessageCount; i++)
+				{
+					EnqueueDeferredMessage(bus, ignoreTillDate);	
+				}
 
 				var timeout = DateTime.Now.AddMilliseconds(MillisecondsToDefer + 15000);
 				// add the extra time else there is no time to process
