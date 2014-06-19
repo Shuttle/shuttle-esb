@@ -33,24 +33,6 @@ namespace Shuttle.ESB.Core
 			return this;
 		}
 
-		public IServiceBusConfigurationBuilder OutgoingEncryptionAlgorithm(string name)
-		{
-			Guard.AgainstNullOrEmptyString(name, "name");
-
-			configuration.OutgoingEncryptionAlgorithm = name;
-
-			return this;
-		}
-
-		public IServiceBusConfigurationBuilder OutgoingCompressionAlgorithm(string name)
-		{
-			Guard.AgainstNullOrEmptyString(name, "name");
-
-			configuration.OutgoingCompressionAlgorithm = name;
-
-			return this;
-		}
-
 		public IServiceBusConfigurationBuilder AddEnryptionAlgorithm(IEncryptionAlgorithm algorithm)
 		{
 			Guard.AgainstNull(algorithm, "algorithm");

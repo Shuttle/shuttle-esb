@@ -34,8 +34,6 @@ namespace Shuttle.ESB.Core
 
 		IQueueManager QueueManager { get; }
 		ModuleCollection Modules { get; }
-		string OutgoingEncryptionAlgorithm { get; }
-		string OutgoingCompressionAlgorithm { get; }
 		ITransactionScopeFactory TransactionScopeFactory { get; }
 		string EncryptionAlgorithm { get; }
 		string CompressionAlgorithm { get; }

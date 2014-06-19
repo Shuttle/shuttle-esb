@@ -10,8 +10,6 @@ namespace Shuttle.ESB.Core
         IServiceBusConfigurationBuilder ForwardingRouteProvider(IMessageRouteProvider forwardingRouteProvider);
         IServiceBusConfigurationBuilder AddEnryptionAlgorithm(IEncryptionAlgorithm algorithm);
 		IServiceBusConfigurationBuilder AddCompressionAlgorithm(ICompressionAlgorithm algorithm);
-		IServiceBusConfigurationBuilder OutgoingEncryptionAlgorithm(string name);
-		IServiceBusConfigurationBuilder OutgoingCompressionAlgorithm(string name);
 		IServiceBusConfigurationBuilder SubscriptionManager(ISubscriptionManager manager);
 		IServiceBusConfigurationBuilder AddModule(IModule module);
 		IServiceBusConfigurationBuilder Policy(IServiceBusPolicy policy);

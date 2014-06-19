@@ -170,8 +170,5 @@ namespace Shuttle.ESB.Core
 		{
 			get { return Worker != null; }
 		}
-
-		public string OutgoingEncryptionAlgorithm { get; internal set; }
-		public string OutgoingCompressionAlgorithm { get; internal set; }
 	}
 }
