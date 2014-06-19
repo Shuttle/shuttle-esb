@@ -58,7 +58,6 @@ namespace Shuttle.ESB.Core
 				.WithEvent<OnStarting>();
 
 			RegisterObserver(new ServiceBusStartupObserver(bus));
-			RegisterObserver(new TransactionScopeObserver());
 		}
 	}
 }
