@@ -2,9 +2,9 @@
 title: TransactionScope Factory
 layout: api
 ---
-# IServiceBusTransactionScopeFactory
+# ITransactionScopeFactory
 
-An implementation of the `IServiceBusTransactionScopeFactory` interface is used in the `ReceiveMessagePipeline` by the `TransactionScopeObserver` to create a transaction on around the `OnHandleMessage` pipeline event.
+An implementation of the `ITransactionScopeFactory` interface is used in the `ReceiveMessagePipeline` by the `TransactionScopeObserver` to create a transaction on around the `OnHandleMessage` pipeline event.
 
 This allows messages to be optionally handled within a `TransactionScope`.
 
@@ -17,15 +17,15 @@ If you do not want to make use of a `TransactionScope` you can disable it throug
       timeoutSeconds="30" />
 ```
 
-It is the responsibility of the `IServiceBusTransactionScopeFactory` implementation to return a `NullServiceBusTransactionScope` should the transaction scope not be required.  An example can be viewed in the source for the `DefaultServiceBusTransactionScopeFactory`.
+It is the responsibility of the `ITransactionScopeFactory` implementation to return a `NullServiceBusTransactionScope` should the transaction scope not be required.  An example can be viewed in the source for the `DefaultServiceBusTransactionScopeFactory`.
 
 ## Methods
 
 ### Create
 
 ``` c#
-IServiceBusTransactionScope Create(PipelineEvent pipelineEvent)
+ITransactionScope Create(PipelineEvent pipelineEvent)
 ```
 
-The method returns a new `IServiceBusTransactionScope` instance.
+The method returns a new `ITransactionScope` instance.
 
