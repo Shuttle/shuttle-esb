@@ -9,7 +9,7 @@ namespace Shuttle.ESB.Core
 	{
 		private bool _local;
 		private string _recipientInboxWorkQueueUri;
-		private TransportMessage _transportMessage;
+		private TransportMessage _transportMessageReceived;
 		private DateTime _ignoreTillDate;
 		private string _correlationId;
 
@@ -29,7 +29,7 @@ namespace Shuttle.ESB.Core
 			_local = false;
 		}
 
-		public TransportMessage ToTransportMessage(IServiceBusConfiguration configuration)
+		public TransportMessage TransportMessage(IServiceBusConfiguration configuration)
 		{
 			if (_local && !configuration.HasInbox)
 			{
@@ -52,7 +52,7 @@ namespace Shuttle.ESB.Core
 					AssemblyQualifiedName = Message.GetType().AssemblyQualifiedName,
 					EncryptionAlgorithm = configuration.EncryptionAlgorithm,
 					CompressionAlgorithm = configuration.CompressionAlgorithm,
-					MessageReceivedId = HasTransportMessageReceived ? _transportMessage.MessageId : Guid.Empty,
+					MessageReceivedId = HasTransportMessageReceived ? _transportMessageReceived.MessageId : Guid.Empty,
 					CorrelationId = _correlationId
 				};
 
@@ -63,17 +63,17 @@ namespace Shuttle.ESB.Core
 
 		public bool HasTransportMessageReceived
 		{
-			get { return _transportMessage != null; }
+			get { return _transportMessageReceived != null; }
 		}
 
-		public void TransportMessageReceived(TransportMessage transportMessage)
+		public void TransportMessageReceived(TransportMessage transportMessageReceived)
 		{
-			Guard.AgainstNull(transportMessage, "transportMessage");
+			Guard.AgainstNull(transportMessageReceived, "transportMessageReceived");
 
-			_transportMessage = transportMessage;
+			_transportMessageReceived = transportMessageReceived;
 
-			Headers.Merge(transportMessage.Headers);
-			_correlationId = transportMessage.CorrelationId;
+			Headers.Merge(transportMessageReceived.Headers);
+			_correlationId = transportMessageReceived.CorrelationId;
 		}
 
 		public TransportMessageConfigurator Defer(DateTime ignoreTillDate)
@@ -118,14 +118,14 @@ namespace Shuttle.ESB.Core
 
 		public TransportMessageConfigurator Reply()
 		{
-			if (!HasTransportMessageReceived || string.IsNullOrEmpty(_transportMessage.SenderInboxWorkQueueUri))
+			if (!HasTransportMessageReceived || string.IsNullOrEmpty(_transportMessageReceived.SenderInboxWorkQueueUri))
 			{
 				throw new InvalidOperationException(ESBResources.SendReplyException);
 			}
 
 			_local = false;
 
-			WithRecipient(_transportMessage.SenderInboxWorkQueueUri);
+			WithRecipient(_transportMessageReceived.SenderInboxWorkQueueUri);
 
 			return this;
 		}

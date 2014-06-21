@@ -89,8 +89,7 @@
     <Compile Include="Compression\ICompressionAlgorithm.cs" />
     <Compile Include="Compression\NullCompressionAlgorithm.cs" />
     <Compile Include="Compression\GZipCompressionAlgorithm.cs" />
-    <Compile Include="Configuration\Builder\IServiceBusConfigurationBuilder.cs" />
-    <Compile Include="Configuration\Builder\ServiceBusConfigurationBuilder.cs" />
+    <Compile Include="ServiceBus\ServiceBusConfigurator.cs" />
     <Compile Include="Configuration\IControlInboxQueueConfiguration.cs" />
     <Compile Include="Configuration\IOutboxQueueConfiguration.cs" />
     <Compile Include="Configuration\ITransactionScopeConfiguration.cs" />
@@ -281,7 +280,7 @@
     <Compile Include="MessageRoute\Specifications\TypeListMessageRouteSpecification.cs" />
     <Compile Include="ServiceBus\ServiceBus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Configuration\ServiceBusConfiguration.cs" />
+    <Compile Include="ServiceBus\ServiceBusConfiguration.cs" />
     <Compile Include="Processing\DeferredMessage\DeferredMessageProcessor.cs" />
     <Compile Include="Pipeline\Transactions\DefaultTransactionScope.cs" />
     <Compile Include="Threading\IProcessor.cs" />

@@ -139,14 +139,26 @@ namespace Shuttle.ESB.Core
 			Stop();
 		}
 
-		public static IServiceBusConfigurationBuilder Create()
+		public static IServiceBus Create()
 		{
-			return new ServiceBusConfigurationBuilder();
+			return Create(null);
 		}
 
-		public TransportMessage CreateTransportMessage(object message, Action<TransportMessageConfigurator> configurator)
+		public static IServiceBus Create(Action<ServiceBusConfigurator> configure)
 		{
-			return _messageSender.CreateTransportMessage(message, configurator);
+			var configurator = new ServiceBusConfigurator();
+
+			if (configure != null)
+			{
+				configure.Invoke(configurator);
+			}
+
+			return new ServiceBus(configurator.Configuration());
+		}
+
+		public TransportMessage CreateTransportMessage(object message, Action<TransportMessageConfigurator> configure)
+		{
+			return _messageSender.CreateTransportMessage(message, configure);
 		}
 
 		public void Dispatch(TransportMessage transportMessage)
@@ -159,9 +171,9 @@ namespace Shuttle.ESB.Core
 			return _messageSender.Send(message);
 		}
 
-		public TransportMessage Send(object message, Action<TransportMessageConfigurator> configurator)
+		public TransportMessage Send(object message, Action<TransportMessageConfigurator> configure)
 		{
-			return _messageSender.Send(message, configurator);
+			return _messageSender.Send(message, configure);
 		}
 
 		public IEnumerable<TransportMessage> Publish(object message)
@@ -169,9 +181,9 @@ namespace Shuttle.ESB.Core
 			return _messageSender.Publish(message);
 		}
 
-		public IEnumerable<TransportMessage> Publish(object message, Action<TransportMessageConfigurator> configurator)
+		public IEnumerable<TransportMessage> Publish(object message, Action<TransportMessageConfigurator> configure)
 		{
-			return _messageSender.Publish(message, configurator);
+			return _messageSender.Publish(message, configure);
 		}
 	}
 }

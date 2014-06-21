@@ -30,7 +30,7 @@ namespace Shuttle.ESB.Core
 			_log = Log.For(this);
 		}
 
-		public TransportMessage CreateTransportMessage(object message, Action<TransportMessageConfigurator> configurator)
+		public TransportMessage CreateTransportMessage(object message, Action<TransportMessageConfigurator> configure)
 		{
 			Guard.AgainstNull(message, "message");
 
@@ -43,9 +43,9 @@ namespace Shuttle.ESB.Core
 				transportMessageConfigurator.TransportMessageReceived(_transportMessageReceived);
 			}
 
-			if (configurator != null)
+			if (configure != null)
 			{
-				configurator((TransportMessageConfigurator)transportMessageConfigurator);
+				configure(transportMessageConfigurator);
 			}
 
 			if (!transportMessagePipeline.Execute(transportMessageConfigurator))
@@ -78,11 +78,11 @@ namespace Shuttle.ESB.Core
 			return Send(message, null);
 		}
 
-		public TransportMessage Send(object message, Action<TransportMessageConfigurator> configurator)
+		public TransportMessage Send(object message, Action<TransportMessageConfigurator> configure)
 		{
 			Guard.AgainstNull(message, "message");
 
-			var result = CreateTransportMessage(message, configurator);
+			var result = CreateTransportMessage(message, configure);
 
 			Dispatch(result);
 
@@ -94,7 +94,7 @@ namespace Shuttle.ESB.Core
 			return Publish(message, null);
 		}
 
-		public IEnumerable<TransportMessage> Publish(object message, Action<TransportMessageConfigurator> configurator)
+		public IEnumerable<TransportMessage> Publish(object message, Action<TransportMessageConfigurator> configure)
 		{
 			Guard.AgainstNull(message, "message");
 
@@ -108,7 +108,7 @@ namespace Shuttle.ESB.Core
 
 					foreach (var subscriber in subscribers)
 					{
-						var transportMessage = CreateTransportMessage(message, configurator);
+						var transportMessage = CreateTransportMessage(message, configure);
 
 						transportMessage.RecipientInboxWorkQueueUri = subscriber;
 

@@ -31,9 +31,9 @@ namespace Shuttle.ESB.Core
 		public IThreadState ActiveState { get; private set; }
 		public IServiceBusConfiguration Configuration { get; private set; }
 
-		public TransportMessage CreateTransportMessage(object message, Action<TransportMessageConfigurator> configurator)
+		public TransportMessage CreateTransportMessage(object message, Action<TransportMessageConfigurator> configure)
 		{
-			return _messageSender.CreateTransportMessage(message, configurator);
+			return _messageSender.CreateTransportMessage(message, configure);
 		}
 
 		public void Dispatch(TransportMessage transportMessage)
@@ -46,9 +46,9 @@ namespace Shuttle.ESB.Core
 			return _messageSender.Send(message);
 		}
 
-		public TransportMessage Send(object message, Action<TransportMessageConfigurator> configurator)
+		public TransportMessage Send(object message, Action<TransportMessageConfigurator> configure)
 		{
-			return _messageSender.Send(message, configurator);
+			return _messageSender.Send(message, configure);
 		}
 
 		public IEnumerable<TransportMessage> Publish(object message)
@@ -56,9 +56,9 @@ namespace Shuttle.ESB.Core
 			return _messageSender.Publish(message);
 		}
 
-		public IEnumerable<TransportMessage> Publish(object message, Action<TransportMessageConfigurator> configurator)
+		public IEnumerable<TransportMessage> Publish(object message, Action<TransportMessageConfigurator> configure)
 		{
-			return _messageSender.Publish(message, configurator);
+			return _messageSender.Publish(message, configure);
 		}
 	}
 }
