@@ -36,7 +36,6 @@ Click **OK** to create the solution.
 
 Since our message is shared we will create a separate assembly to contain it.  Add a new class library project to the solution and call it **QuickStart.Shuttle.Messages**.
 
-
 You can then rename the default **Class1** file to **WriteBlueMessageCommand** and add an automatic property for the **Message**:
 
 ``` c#

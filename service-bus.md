@@ -128,7 +128,7 @@ You will notice that there is no way to publish a deferred event.  This is becau
 
 # ServiceBusConfiguration
 
-The `ServiceBusConfiguration` instance contains all the configuration required by the `ServiceBus` to operate.  In order to build the configuration you can make use of the `ServiceBusConfigurationBuilder` class.  To obtain an instance you can either `new` one up or call `ServiceBus.Create()`.  The `Start()` method of the `ServiceBusConfigurationBuilder` will create a new `ServiceBus` instance and call `Start()` on the newly instanced `ServiceBus`.
+The `ServiceBusConfiguration` instance contains all the configuration required by the `ServiceBus` to operate.  In order to build the configuration you can make use of the `ServiceBusConfigurator` that is exposed on the `Create` method.  The `Create` method returns an instance of the `ServiceBus` and you can then call the `Start` method at the appropriate time.
 
 The simplest possible way to create and start a service bus is as follows:
 
@@ -146,8 +146,7 @@ All the default options will be used in such as case but there will be rather fe
 	subscriptionManager.Subscribe(new[] { typeof(SomeInterestingEvent).FullName });
 
 	bus = ServiceBus
-		.Create()
-		.SubscriptionManager(subscriptionManager)
+		.Create(c => c.SubscriptionManager(subscriptionManager))
 		.Start();
 ```
 
@@ -158,19 +157,19 @@ All the default options will be used in such as case but there will be rather fe
 ``` c#
 	public interface IServiceBusConfiguration
 	{
-		IServiceBusTransactionScopeFactory TransactionScopeFactory { get; }
+		ITransactionScopeFactory TransactionScopeFactory { get; }
 	}
 
-	public interface IServiceBusConfigurationBuilder
+	public class ServiceBusConfigurator
 	{
-        IServiceBusConfigurationBuilder TransactionScopeFactory(IServiceBusTransactionScopeFactory serviceBusTransactionScopeFactory);
+        ServiceBusConfigurator TransactionScopeFactory(ITransactionScopeFactory TransactionScopeFactory);
 	}
 
 	public class ServiceBusConfiguration : IServiceBusConfiguration
 	{
 		public ServiceBusConfiguration()
 		{
-			TransactionScopeFactory = new DefaultServiceBusTransactionScopeFactory();
+			TransactionScopeFactory = new DefaultTransactionScopeFactory();
 		}
 	}
 ```
@@ -185,9 +184,9 @@ All the default options will be used in such as case but there will be rather fe
 		IPipelineFactory PipelineFactory { get; }
 	}
 
-	public interface IServiceBusConfigurationBuilder
+	public class ServiceBusConfigurator
 	{
-        IServiceBusConfigurationBuilder PipelineFactory(IPipelineFactory pipelineFactory);
+        ServiceBusConfigurator PipelineFactory(IPipelineFactory pipelineFactory);
 	}
 
 	public class ServiceBusConfiguration : IServiceBusConfiguration
@@ -209,9 +208,9 @@ All the default options will be used in such as case but there will be rather fe
 		IMessageRouteProvider MessageRouteProvider { get; }
 	}
 
-	public interface IServiceBusConfigurationBuilder
+	public class ServiceBusConfigurator
 	{
-        IServiceBusConfigurationBuilder MessageRouteProvider(IMessageRouteProvider messageRouteProvider);
+        ServiceBusConfigurator MessageRouteProvider(IMessageRouteProvider messageRouteProvider);
 	}
 
 	public class ServiceBusConfiguration : IServiceBusConfiguration
@@ -233,9 +232,9 @@ All the default options will be used in such as case but there will be rather fe
 		IMessageHandlerFactory MessageHandlerFactory { get; }
 	}
 
-	public interface IServiceBusConfigurationBuilder
+	public class ServiceBusConfigurator
 	{
-        IServiceBusConfigurationBuilder MessageHandlerFactory(IMessageHandlerFactory messageHandlerFactory);
+        ServiceBusConfigurator MessageHandlerFactory(IMessageHandlerFactory messageHandlerFactory);
 	}
 
 	public class ServiceBusConfiguration : IServiceBusConfiguration
@@ -257,9 +256,9 @@ All the default options will be used in such as case but there will be rather fe
 		ISerializer Serializer { get; }
 	}
 
-	public interface IServiceBusConfigurationBuilder
+	public class ServiceBusConfigurator
 	{
-        IServiceBusConfigurationBuilder MessageSerializer(ISerializer serializer);
+        ServiceBusConfigurator MessageSerializer(ISerializer serializer);
 	}
 
 	public class ServiceBusConfiguration : IServiceBusConfiguration
@@ -281,9 +280,9 @@ All the default options will be used in such as case but there will be rather fe
 		IMessageRouteProvider ForwardingRouteProvider { get; }
 	}
 
-	public interface IServiceBusConfigurationBuilder
+	public class ServiceBusConfigurator
 	{
-        IServiceBusConfigurationBuilder ForwardingRouteProvider(IMessageRouteProvider forwardingRouteProvider);
+        ServiceBusConfigurator ForwardingRouteProvider(IMessageRouteProvider forwardingRouteProvider);
 	}
 
 	public class ServiceBusConfiguration : IServiceBusConfiguration
@@ -305,9 +304,9 @@ All the default options will be used in such as case but there will be rather fe
 		IServiceBusPolicy Policy { get; }
 	}
 
-	public interface IServiceBusConfigurationBuilder
+	public class ServiceBusConfigurator
 	{
-        IServiceBusConfigurationBuilder Policy(IServiceBusPolicy policy);
+        ServiceBusConfigurator Policy(IServiceBusPolicy policy);
 	}
 
 	public class ServiceBusConfiguration : IServiceBusConfiguration
@@ -329,9 +328,9 @@ All the default options will be used in such as case but there will be rather fe
 		IThreadActivityFactory ThreadActivityFactory { get; }
 	}
 
-	public interface IServiceBusConfigurationBuilder
+	public class ServiceBusConfigurator
 	{
-        IServiceBusConfigurationBuilder ThreadActivityFactory(IThreadActivityFactory factory);
+        ServiceBusConfigurator ThreadActivityFactory(IThreadActivityFactory factory);
 	}
 
 	public class ServiceBusConfiguration : IServiceBusConfiguration
@@ -354,9 +353,9 @@ All the default options will be used in such as case but there will be rather fe
 		bool HasSubscriptionManager { get; }
 	}
 
-	public interface IServiceBusConfigurationBuilder
+	public class ServiceBusConfigurator
 	{
-        IServiceBusConfigurationBuilder SubscriptionManager(ISubscriptionManager manager);
+        ServiceBusConfigurator SubscriptionManager(ISubscriptionManager manager);
 	}
 ```
 
@@ -371,9 +370,9 @@ All the default options will be used in such as case but there will be rather fe
 		IEncryptionAlgorithm FindEncryptionAlgorithm(string name);
 	}
 
-	public interface IServiceBusConfigurationBuilder
+	public class ServiceBusConfigurator
 	{
-        IServiceBusConfigurationBuilder AddEnryptionAlgorithm(IEncryptionAlgorithm algorithm);
+        ServiceBusConfigurator AddEnryptionAlgorithm(IEncryptionAlgorithm algorithm);
 	}
 ```
 
@@ -388,9 +387,9 @@ All the default options will be used in such as case but there will be rather fe
 		ICompressionAlgorithm FindCompressionAlgorithm(string name);
 	}
 
-	public interface IServiceBusConfigurationBuilder
+	public class ServiceBusConfigurator
 	{
-        IServiceBusConfigurationBuilder AddCompressionAlgorithm(ICompressionAlgorithm algorithm);
+        ServiceBusConfigurator AddCompressionAlgorithm(ICompressionAlgorithm algorithm);
 	}
 ```
 
@@ -404,8 +403,8 @@ All the default options will be used in such as case but there will be rather fe
 		ModuleCollection Modules { get; }
 	}
 
-	public interface IServiceBusConfigurationBuilder
+	public class ServiceBusConfigurator
 	{
-        IServiceBusConfigurationBuilder AddModule(IModule module);
+        ServiceBusConfigurator AddModule(IModule module);
 	}
 ```

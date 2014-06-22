@@ -1,9 +1,9 @@
 ---
-title: Shuttle ESB v3.0.0-rc10
+title: Shuttle ESB v3.0.0-rc11
 layout: post
 ---
 
-Release Candidate 10 of Shuttle ESB is now available for use.
+Release Candidate 11 of Shuttle ESB is now available for use.
 
 ###Also available on Nuget
 
