@@ -31,104 +31,11 @@ Since the messages are plain classes you do not need to implement any specific i
 
 You may want to apply some convention to distinguish between the messages.  As indicated by the examples above a **Command** and **Event** suffix may be added to the **command** and **event** messages respectively.
 
-## Sending **command** messages
-
-Once you have an instance of the service bus available it is a matter of calling `Send` on the instance:
-
----
-``` c#
-TransportMessage Send(object message)
-```
-This method is the most typical invocation and simply takes the message and sends it to the destination as determined by the `IMessageRouteProvider`.
-
----
-``` c#
-TransportMessage Send(object message, string uri)
-```
-Using this method a message can be sent to the specified `Uri`.  *More commonly used by Shuttle-ESB itself*.
-
----
-``` c#
-TransportMessage Send(object message, IQueue queue)
-```
-Should you have a specific `IQueue` instance available you could send the message directly there. *More commonly used by Shuttle-ESB itself*.
-
----
-``` c#
-TransportMessage SendLocal(object message)
-```
-The given message will be sent back to the inboc work queue of this endpoint.
-
----
-``` c#
-TransportMessage SendReply(object message)
-```
-This method is only available when handling a message and will send the given message back to the `RecipientInboxWorkQueueUri` of the `TransportMessage` being handled.
-
-## Sending deferred **command** messages
-
-Sending deferred messages is functionally identical to sending message normally but the messages will only be processed once the given `DateTime` has been reached.  
-
-When making use of deferred messages the endpoint that is responsible for processing the deferred message should ideally have `deferredQueueUri` configured for the inbox:
-
-``` xml
-	<serviceBus>
-		<inbox
-		  workQueueUri="msmq://./pubsub-client-inbox-work"
-		  deferredQueueUri="msmq://./pubsub-client-inbox-deferred" <!-- THE DEFERRED QUEUE STORE -->
-		  errorQueueUri="msmq://./shuttle-samples-error" />
-	</serviceBus>
-```
-
-The processor on the deferred queue is optimized to process only when a message is due.  This leads to less IO than *not* having it.  If there is no deferred queue the message goes tot he work queue and will be ignored and may lead o sub-optimal processing of the work queue.
-
-All you need to do now is call the relevant `SendDeferred` method on the available bus instance:
-
----
-``` c#
-TransportMessage SendDeferred(DateTime at, object message)
-```
-This method is the most typical invocation and simply takes the message and sends it to the destination as determined by the `IMessageRouteProvider`.
-
----
-``` c#
-TransportMessage SendDeferred(DateTime at, object message, string uri)
-```
-Using this method a message can be sent to the specified `Uri`.  *More commonly used by Shuttle-ESB itself*.
-
----
-``` c#
-TransportMessage SendDeferred(DateTime at, object message, IQueue queue)
-```
-Should you have a specific `IQueue` instance available you could send the message directly there. *More commonly used by Shuttle-ESB itself*.
-
----
-``` c#
-TransportMessage SendDeferredLocal(DateTime at, object message)
-```
-The given message will be sent back to the inboc work queue of this endpoint.
-
----
-``` c#
-TransportMessage SendDeferredReply(DateTime at, object message)
-```
-This method is only available when handling a message and will send the given message back to the `RecipientInboxWorkQueueUri` of the `TransportMessage` being handled.
-
-## Publishing **event** messages
-
-In order to notify other endpoints of an event that has occurred you need to `Publish` the event on the available bus isntance:
-
----
-``` c#
-IEnumerable<string> Publish(object message)
-```
-The service bus will make use of the registered `ISubscriptionManager` instance to obtain the `Uri`s of the subscribers that a copy of the message needs to be sent to.  The list of subscriber `Uri`s will be returned.
-
-You will notice that there is no way to publish a deferred event.  This is because the event has already occurred and should a particular endpoint require deferred processing as a result then *that* endpoint can do a `SendDeferredLocal` to effect the required deferred processing.
+In order to **send** a command or **publish** an event you need an instance of the [IMessageSender][MessageSender] interface.  This interface is implemented on both the `ServiceBus` class (via the `IServiceBus` interface) and the [HandlerContext].
 
 # ServiceBusConfiguration
 
-The `ServiceBusConfiguration` instance contains all the configuration required by the `ServiceBus` to operate.  In order to build the configuration you can make use of the `ServiceBusConfigurator` that is exposed on the `Create` method.  The `Create` method returns an instance of the `ServiceBus` and you can then call the `Start` method at the appropriate time.
+The `ServiceBusConfiguration` instance contains all the configuration required by the `ServiceBus` to operate.  In order to build the configuration you can make use of the [ServiceBusConfigurator] that is exposed on the `Create` method.  The `Create` method returns an instance of the `ServiceBus` and you can then call the `Start` method at the appropriate time.
 
 The simplest possible way to create and start a service bus is as follows:
 
@@ -138,7 +45,7 @@ The simplest possible way to create and start a service bus is as follows:
 		.Start();
 ```
 
-All the default options will be used in such as case but there will be rather few occasions where this will suffice.  For instance, when you need to subscribe to an event or publish an event you will need an imeplementation of the `ISubscriptionManager`.  A typical call to create and the start a service bus using a Sql Server subscription manager is as follows:
+All the default options will be used in such as case but there will be rather few occasions where this will suffice.  For instance, when you need to subscribe to an event or publish an event you will need an imeplementation of the [ISubscriptionManager].  A typical call to create and the start a service bus using a Sql Server subscription manager is as follows:
 
 ``` c#
 	var subscriptionManager = SubscriptionManager.Default();
@@ -152,7 +59,7 @@ All the default options will be used in such as case but there will be rather fe
 
 ### TransactionScopeFactory
 
-[Go to the Transaction Scope Factory documentation]({{ site.baseurl }}/transactionscope-factory/index.html).
+Go to the [ITransactionScopeFactory] documentation.
 
 ``` c#
 	public interface IServiceBusConfiguration
@@ -176,7 +83,7 @@ All the default options will be used in such as case but there will be rather fe
 
 ### PipelineFactory
 
-[Go to the Pipeline Factory documentation]({{ site.baseurl }}/pipeline-factory/index.html).
+Go to the [IPipelineFactory] documentation.
 
 ``` c#
 	public interface IServiceBusConfiguration
@@ -200,7 +107,7 @@ All the default options will be used in such as case but there will be rather fe
 
 ### MessageRouteProvider
 
-[Go to the Message Route Provider documentation]({{ site.baseurl }}/message-route-provider/index.html).
+Go to the [IMessageRouteProvider] documentation.
 
 ``` c#
 	public interface IServiceBusConfiguration
@@ -224,7 +131,7 @@ All the default options will be used in such as case but there will be rather fe
 
 ### MessageHandlerFactory
 
-[Go to the Message Handler Factory documentation]({{ site.baseurl }}/message-handler-factory/index.html).
+Go to the [IMessageHandlerFactory] documentation.
 
 ``` c#
 	public interface IServiceBusConfiguration
@@ -248,7 +155,7 @@ All the default options will be used in such as case but there will be rather fe
 
 ### Serializer
 
-[Go to the Serializer documentation]({{ site.baseurl }}/serializer/index.html).
+Go to the [ISerializer] documentation.
 
 ``` c#
 	public interface IServiceBusConfiguration
@@ -269,10 +176,11 @@ All the default options will be used in such as case but there will be rather fe
 		}
 	}
 ```
+.
 
 ### ForwardingRouteProvider
 
-[Go to the Message Route Provider documentation]({{ site.baseurl }}/message-route-provider/index.html).
+Go to the [IMessageRouteProvider] documentation.
 
 ``` c#
 	public interface IServiceBusConfiguration
@@ -296,7 +204,7 @@ All the default options will be used in such as case but there will be rather fe
 
 ### Policy
 
-[Go to the Service Bus Policy documentation]({{ site.baseurl }}/service-bus-policy/index.html).
+Go to the [IServiceBusPolicy] documentation.
 
 ``` c#
 	public interface IServiceBusConfiguration
@@ -320,7 +228,7 @@ All the default options will be used in such as case but there will be rather fe
 
 ### ThreadActivityFactory
 
-[Go to the Thread Activity Factory documentation]({{ site.baseurl }}/thread-activity-factory/index.html).
+Go to the [IThreadActivityFactory] documentation.
 
 ``` c#
 	public interface IServiceBusConfiguration
@@ -344,7 +252,7 @@ All the default options will be used in such as case but there will be rather fe
 
 ### SubscriptionManager
 
-[Go to the Subscription Manager documentation]({{ site.baseurl }}/subscription-manager/index.html).
+Go to the [ISubscriptionManager] documentation.
 
 ``` c#
 	public interface IServiceBusConfiguration
@@ -361,7 +269,7 @@ All the default options will be used in such as case but there will be rather fe
 
 ### Encryption
 
-[Go to the Encryption documentation]({{ site.baseurl }}/encryption/index.html).
+Go to the [Encryption] documentation.
 
 ``` c#
 	public interface IServiceBusConfiguration
@@ -378,7 +286,7 @@ All the default options will be used in such as case but there will be rather fe
 
 ### Compression
 
-[Go to the Compression documentation]({{ site.baseurl }}/compression/index.html).
+Go to the [Compression] documentation.
 
 ``` c#
 	public interface IServiceBusConfiguration
@@ -395,7 +303,7 @@ All the default options will be used in such as case but there will be rather fe
 
 ### Modules
 
-[Go to the Modules documentation]({{ site.baseurl }}/modules/index.html).
+Go to the [Modules] documentation.
 
 ``` c#
 	public interface IServiceBusConfiguration
@@ -408,3 +316,20 @@ All the default options will be used in such as case but there will be rather fe
         ServiceBusConfigurator AddModule(IModule module);
 	}
 ```
+
+[Encryption]: {{ site.baseurl }}/encryption/index.html
+[Compression]: {{ site.baseurl }}/compression/index.html
+[HandlerContext]: {{ site.baseurl }}/handler-context/index.html
+[IMessageHandlerFactory]: {{ site.baseurl }}/message-handler-factory/index.html
+[IMessageRouteProvider]: {{ site.baseurl }}/message-route-provider/index.html
+[IPipelineFactory]: {{ site.baseurl }}/pipeline-factory/index.html
+[ISerializer]: {{ site.baseurl }}/serializer/index.html
+[IServiceBusPolicy]: {{ site.baseurl }}/service-bus-policy/index.html
+[ISubscriptionManager]: {{ site.baseurl }}/subscription-manager/index.html
+[IThreadActivityFactory]: {{ site.baseurl }}/thread-activity-factory/index.html
+[ITransactionScopeFactory]: {{ site.baseurl }}/transactionscope-factory/index.html
+[MessageSender]: {{ site.baseurl }}/message-sender/index.html
+[Modules]: {{ site.baseurl }}/modules/index.html
+[ServiceBusConfigurator]: {{ site.baseurl }}/service-bus-configurator/index.html
+[TransportMessage]: {{ site.baseurl }}/transport-message/index.html
+[TransportMessageConfigurator]: {{ site.baseurl }}/transport-message-configurator/index.html

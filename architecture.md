@@ -158,7 +158,7 @@ Typically the message handler for the command message goes about its business an
 The response can then be a command message or an event message and you can simply call the **reply** method on the service bus instance:
 
 ```c#
-    bus.SendReply(new ResponseMessage());
+    bus.Send(new ResponseMessage(), c => c.Reply());
 ```
 
 The response may, of course, be decoupled by publishing an event message but it is up to the implementor to decide the mechanism.  This would then no longer be request/response but rather publish/subscribe.  The advantage of request/response isthat it provides the ability to respond to the caller directly whereas publishing a message would result in **all** publishers receiving a copy of the message.
@@ -241,12 +241,10 @@ Typically when sending a message the message is a command.  It does not _have_ t
 
 ```c#
 		TransportMessage Send(object message);
-		TransportMessage Send(object message, string uri);
-		TransportMessage Send(object message, IQueue queue);
-		TransportMessage SendDeferred(DateTime at, object message);
-		TransportMessage SendDeferred(DateTime at, object message, string uri);
-		TransportMessage SendDeferred(DateTime at, object message, IQueue queue);
+		TransportMessage Send(object message, Action<TransportMessageConfigurator> configure);
 ```
+
+Only messages that have not `RecipientInboxWorkQueueUri` set will be routed by the service bus.
 
 The `TransportMessage` envelope will be returned if you need access to any of the metadata available for the message.
 
@@ -263,8 +261,7 @@ The message route provider to use is specified when constructing the service bus
 
 ```
 	bus = ServiceBus
-		.Create()
-		.MessageRouteProvider(new DefaultForwardingRouteProvider())
+		.Create(c => c.MessageRouteProvider(new DefaultForwardingRouteProvider())
 		.Start();
 ```
 
@@ -299,4 +296,4 @@ The `DefaultMessageRouteProvider` makes use of the application configuration fil
 
 Each implementation of `IMessageRouteProvider` can determine the routes however it needs to from the given message.  A typical scenario, and the way the `DefaultMessageRouteProvider` works, is to use the full type name to determine the destination.
 
-**Please note**: each message type may only be sent to _one_ endpoint (using `Send` or `SendDeferred`).
+**Please note**: each message type may only be sent to _one_ endpoint (using `Send`).
