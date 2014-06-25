@@ -20,7 +20,7 @@ If you are using a dependency injection container and you would like dependencie
 IMessageHandler GetHandler(object message);
 ```
 
-The method will return a new or pooled message handler for the message.  If the message handler's `IsReusable` returns `true` the message handler will be pooled and re-used upon release. 
+The method will return a new or pooled [MessageHandler] for the message.  If the message handler's `IsReusable` returns `true` the message handler will be pooled and re-used upon release. 
 
 ### ReleaseHandler
 
@@ -28,7 +28,7 @@ The method will return a new or pooled message handler for the message.  If the 
 void ReleaseHandler(IMessageHandler handler);
 ```
 
-The method will return the message handler to the pool if the message handler's `IsReusable` returns `true`; else it should be disposed of as necessary.
+The method will return the [MessageHandler] to the pool if the message handler's `IsReusable` returns `true`; else it should be disposed of as necessary.
 
 ### MessageTypesHandled
 
@@ -38,3 +38,4 @@ IEnumerable<Type> MessageTypesHandled { get; }
 
 Returns a list of the message types that will be handled by the factory.
 
+[MessageHandler]: {{ site.baseurl }}/message-handler/index.html
