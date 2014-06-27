@@ -8,15 +8,15 @@ layout: api
 
 The first step is to get the latest binary release from the GitHub project releases page:
 
-> [Show the Nuget shuttle-esb packages](http://www.nuget.org/packages?q=shuttle-esb)
+> <a href='http://www.nuget.org/packages?q=shuttle-esb' target='_blank'>Show the Nuget shuttle-esb packages</a>
 
-> [Take me to the releases page](https://github.com/Shuttle/shuttle-esb/releases)
+> <a href='https://github.com/Shuttle/shuttle-esb/releases' target='_blank'>Take me to the releases page</a>)
 
 ## Quick Start using MSMQ
 
 Since Shuttle ESB requires queues to operate we will use MSMQ for this.  Before we get started ensure that you have MSMQ installed on your version of Windows.
 
-> [Installing MSMQ](http://msdn.microsoft.com/en-us/library/aa967729%28v=vs.110%29.aspx)
+> <a href='http://msdn.microsoft.com/en-us/library/aa967729%28v=vs.110%29.aspx' target='_blank'>Installing MSMQ</a>)
 
 We will create a very simple scenario where we will send a command for processing to a generically hosted server.
 
