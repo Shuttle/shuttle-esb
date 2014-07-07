@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>shuttle-esb-msmq</id>
-    <version>3.0.0</version>
+    <version>3.0.1</version>
     <authors>Eben Roux</authors>
     <owners>Eben Roux</owners>
     <licenseUrl>https://github.com/shuttle/shuttle-esb/raw/master/LICENSE</licenseUrl>
@@ -12,10 +12,10 @@
     <description>Contains the Msmq queue implementation for Shuttle ESB.</description>
     <releaseNotes></releaseNotes>
     <copyright>Copyright (c) 2011-2014, Eben Roux</copyright>
-    <tags>Enterprise Service ESB esb c# Event Driven messaging MSMQ RabbitMQ nservicebus pipeline development Service Bus shuttle soa</tags>
+    <tags>Enterprise Service ESB esb c# Event Driven messaging MSMQ RabbitMQ pipeline development Service Bus shuttle soa</tags>
 	<dependencies>
 		<dependency id="shuttle-core-infrastructure" version="3.1.0" />
-		<dependency id="shuttle-esb-core" version="" />
+		<dependency id="shuttle-esb-core" version="3.0.0" />
 	</dependencies>
   </metadata>
 </package>

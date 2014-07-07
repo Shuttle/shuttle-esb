@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>shuttle-esb-castle</id>
-    <version>3.0.0</version>
+    <version>3.0.1</version>
     <authors>Eben Roux</authors>
     <owners>Eben Roux</owners>
     <licenseUrl>https://github.com/shuttle/shuttle-esb/raw/master/LICENSE</licenseUrl>
