@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Messaging;
 using System.Security.Principal;
-using System.Transactions;
 using Shuttle.Core.Infrastructure;
 using Shuttle.ESB.Core;
 
@@ -267,32 +266,11 @@ namespace Shuttle.ESB.Msmq
 				};
 		}
 
-		private Message PeekMessage(MessageQueue queue, Cursor cursor, PeekAction action)
-		{
-			try
-			{
-				return queue.Peek(_timeout, cursor, action);
-			}
-			catch
-			{
-				return null;
-			}
-		}
-
 		public static MessageQueueTransactionType TransactionType(bool transactional)
 		{
 			return transactional
-					   ? InTransactionScope
-							 ? MessageQueueTransactionType.Automatic
-							 : transactional
-								   ? MessageQueueTransactionType.Single
-								   : MessageQueueTransactionType.None
+					   ? MessageQueueTransactionType.Single
 					   : MessageQueueTransactionType.None;
-		}
-
-		private static bool InTransactionScope
-		{
-			get { return Transaction.Current != null; }
 		}
 
 		public void Acknowledge(object acknowledgementToken)
