@@ -1,22 +1,22 @@
 ﻿<?xml version="1.0"?>
 <package >
-  <metadata>
-    <id>shuttle-esb-rabbitmq</id>
-    <version>3.0.2</version>
-    <authors>Eben Roux</authors>
-    <owners>Eben Roux</owners>
-    <licenseUrl>https://github.com/shuttle/shuttle-esb/raw/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/shuttle/shuttle-esb</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/Shuttle/shuttle-esb/master/media/logo/logo-core-small.png</iconUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Contains the Sql Server queue implementation, idempotence service, and subscription manager for Shuttle ESB.</description>
-    <releaseNotes></releaseNotes>
-    <copyright>Copyright (c) 2011-2014, Eben Roux</copyright>
-    <tags>Enterprise Service ESB esb c# Event Driven messaging MSMQ RabbitMQ nservicebus pipeline development Service Bus shuttle soa</tags>
-	<dependencies>
-		<dependency id="rabbitmq.client" version="3.3.0" />
-		<dependency id="shuttle-core-infrastructure" version="3.1.0" />
-		<dependency id="shuttle-esb-core" version="" />
-	</dependencies>
-  </metadata>
+	<metadata>
+		<id>shuttle-esb-rabbitmq</id>
+		<version>3.0.2</version>
+		<authors>Eben Roux</authors>
+		<owners>Eben Roux</owners>
+		<licenseUrl>https://github.com/shuttle/shuttle-esb/raw/master/LICENSE</licenseUrl>
+		<projectUrl>https://github.com/shuttle/shuttle-esb</projectUrl>
+		<iconUrl>https://raw.githubusercontent.com/Shuttle/shuttle-esb/master/media/logo/logo-core-small.png</iconUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>Contains the Sql Server queue implementation, idempotence service, and subscription manager for Shuttle ESB.</description>
+		<releaseNotes/>
+		<copyright>Copyright (c) 2011-2014, Eben Roux</copyright>
+		<tags>enterprise-service-bus esb messaging msmq rabbitmq service-bus soa shuttle-esb</tags>
+		<dependencies>
+			<dependency id="rabbitmq.client" version="3.3.0" />
+			<dependency id="shuttle-core-infrastructure" version="3.1.0" />
+			<dependency id="shuttle-esb-core" version="3.0.2" />
+		</dependencies>
+	</metadata>
 </package>

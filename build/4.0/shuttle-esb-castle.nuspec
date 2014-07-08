@@ -1,21 +1,21 @@
 ﻿<?xml version="1.0"?>
 <package >
-  <metadata>
-    <id>shuttle-esb-castle</id>
-    <version>3.0.2</version>
-    <authors>Eben Roux</authors>
-    <owners>Eben Roux</owners>
-    <licenseUrl>https://github.com/shuttle/shuttle-esb/raw/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/shuttle/shuttle-esb</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/Shuttle/shuttle-esb/master/media/logo/logo-core-small.png</iconUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Contains the Castle binaries required to develop a Shuttle ESB solution using the WindsorContainer as the Dependency Injection Container.</description>
-    <releaseNotes></releaseNotes>
-    <copyright>Copyright (c) 2011-2014, Eben Roux</copyright>
-    <tags>Enterprise Service ESB esb c# Event Driven messaging MSMQ RabbitMQ nservicebus pipeline development Service Bus shuttle soa castle di dependency injection</tags>
-	<dependencies>
-		<dependency id="castle.core" version="3.3.0" />
-		<dependency id="castle.windsor" version="3.3.0" />
-	</dependencies>
-  </metadata>
+	<metadata>
+		<id>shuttle-esb-castle</id>
+		<version>3.0.2</version>
+		<authors>Eben Roux</authors>
+		<owners>Eben Roux</owners>
+		<licenseUrl>https://github.com/shuttle/shuttle-esb/raw/master/LICENSE</licenseUrl>
+		<projectUrl>https://github.com/shuttle/shuttle-esb</projectUrl>
+		<iconUrl>https://raw.githubusercontent.com/Shuttle/shuttle-esb/master/media/logo/logo-core-small.png</iconUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>Contains the Castle binaries required to develop a Shuttle ESB solution using the WindsorContainer as the Dependency Injection Container.</description>
+		<releaseNotes/>
+		<copyright>Copyright (c) 2011-2014, Eben Roux</copyright>
+		<tags>enterprise-service-bus esb messaging msmq rabbitmq service-bus soa shuttle-esb</tags>
+		<dependencies>
+			<dependency id="castle.core" version="3.3.0" />
+			<dependency id="castle.windsor" version="3.3.0" />
+		</dependencies>
+	</metadata>
 </package>
