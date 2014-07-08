@@ -23,8 +23,9 @@
 			RegisterObserver(new DistributorMessageObserver());
 			RegisterObserver(new SerializeTransportMessageObserver());
 			RegisterObserver(new DispatchTransportMessageObserver());
-			RegisterObserver(new DistributorExceptionObserver());
 			RegisterObserver(new AcknowledgeMessageObserver());
+
+			RegisterObserver(new DistributorExceptionObserver()); // must be last
 		}
 
 		public override sealed void Obtained()

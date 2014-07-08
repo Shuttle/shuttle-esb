@@ -1,6 +1,6 @@
 namespace Shuttle.ESB.Test.Shared
 {
-    public class NoHandlerCommand
+    public class ErrorCommand
     {
     }
 }

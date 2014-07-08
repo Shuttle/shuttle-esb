@@ -35,10 +35,11 @@
 			RegisterObserver(new DecryptMessageObserver());
 			RegisterObserver(new DecompressMessageObserver());
 			RegisterObserver(new HandleMessageObserver());
-			RegisterObserver(new ReceiveExceptionObserver());
 			RegisterObserver(new TransactionScopeObserver());
 			RegisterObserver(new AcknowledgeMessageObserver());
 			RegisterObserver(new SendDeferredObserver());
+
+			RegisterObserver(new ReceiveExceptionObserver()); // must be last
 		}
 	}
 }

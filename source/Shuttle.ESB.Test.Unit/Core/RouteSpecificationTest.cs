@@ -1,7 +1,7 @@
 using NUnit.Framework;
+using OtherNamespace;
 using Shuttle.ESB.Core;
-using Shuttle.ESB.Test.Shared.Mocks;
-using SomeNamespace;
+using Shuttle.ESB.Test.Shared;
 
 namespace Shuttle.ESB.Test.Unit.Core
 {

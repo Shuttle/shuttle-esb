@@ -5,7 +5,7 @@ using System.Threading;
 using Moq;
 using NUnit.Framework;
 using Shuttle.ESB.Core;
-using Shuttle.ESB.Test.Shared.Mocks;
+using Shuttle.ESB.Test.Shared;
 
 namespace Shuttle.ESB.Test.Unit.Core
 {

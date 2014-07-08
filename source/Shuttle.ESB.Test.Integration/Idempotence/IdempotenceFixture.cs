@@ -4,7 +4,7 @@ using System.Threading;
 using NUnit.Framework;
 using Shuttle.ESB.Core;
 using Shuttle.ESB.SqlServer.Idempotence;
-using Shuttle.ESB.Test.Shared.Mocks;
+using Shuttle.ESB.Test.Shared;
 
 namespace Shuttle.ESB.Test.Integration.Idempotence.SqlServer.Msmq
 {

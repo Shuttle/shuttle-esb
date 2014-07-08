@@ -1,7 +1,6 @@
 ﻿using Shuttle.ESB.Core;
-using Shuttle.ESB.Test.Shared.Mocks;
 
-namespace Shuttle.ESB.Test.Shared.MessageHandling
+namespace Shuttle.ESB.Test.Shared
 {
 	public class IdempotenceHandler : IMessageHandler<IdempotenceCommand>
 	{

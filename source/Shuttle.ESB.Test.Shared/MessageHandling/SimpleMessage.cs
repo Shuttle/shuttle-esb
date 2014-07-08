@@ -1,6 +1,6 @@
 using System;
 
-namespace Shuttle.ESB.Test.Shared.Mocks
+namespace Shuttle.ESB.Test.Shared
 {
     [Serializable]
     public class SimpleMessage : object

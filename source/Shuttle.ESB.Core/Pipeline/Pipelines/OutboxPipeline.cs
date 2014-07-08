@@ -22,7 +22,8 @@
 			RegisterObserver(new SendOutboxMessageObserver());
 
 			RegisterObserver(new AcknowledgeMessageObserver());
-			RegisterObserver(new OutboxExceptionObserver());
+			
+			RegisterObserver(new OutboxExceptionObserver()); // must be last
 		}
 
 		public override sealed void Obtained()

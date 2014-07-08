@@ -1,7 +1,7 @@
 using System;
 using Shuttle.Core.Infrastructure;
 using Shuttle.ESB.Core;
-using Shuttle.ESB.Test.Shared.Mocks;
+using Shuttle.ESB.Test.Shared;
 
 namespace Shuttle.ESB.Test.Unit.Core
 {

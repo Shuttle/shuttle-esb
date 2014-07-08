@@ -1,4 +1,4 @@
-﻿namespace Shuttle.ESB.Test.Shared.MessageHandling
+﻿namespace Shuttle.ESB.Test.Shared
 {
 	public class IdempotenceCounter
 	{

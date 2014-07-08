@@ -1,4 +1,4 @@
-﻿namespace Shuttle.ESB.Test.Shared.Mocks
+﻿namespace Shuttle.ESB.Test.Shared
 {
 	public class IdempotenceCommand
 	{

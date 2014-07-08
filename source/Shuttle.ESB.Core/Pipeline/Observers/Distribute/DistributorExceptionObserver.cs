@@ -1,4 +1,5 @@
-﻿using Shuttle.Core.Infrastructure;
+﻿using System;
+using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.ESB.Core
 {
@@ -19,35 +20,40 @@ namespace Shuttle.ESB.Core
                     return;
                 }
 
-                var transportMessage = state.GetTransportMessage();
+	            try
+	            {
+		            var transportMessage = state.GetTransportMessage();
 
-                if (transportMessage == null)
-                {
-                    return;
-                }
+		            if (transportMessage == null)
+		            {
+			            return;
+		            }
 
-                var action = bus.Configuration.Policy.EvaluateMessageDistributionFailure(pipelineEvent);
+		            var action = bus.Configuration.Policy.EvaluateMessageDistributionFailure(pipelineEvent);
 
-                transportMessage.RegisterFailure(pipelineEvent.Pipeline.Exception.AllMessages(), action.TimeSpanToIgnoreRetriedMessage);
+		            transportMessage.RegisterFailure(pipelineEvent.Pipeline.Exception.AllMessages(),
+		                                             action.TimeSpanToIgnoreRetriedMessage);
 
-                if (action.Retry)
-                {
-                    state.GetWorkQueue().Enqueue(
-                        transportMessage.MessageId,
-                        state.GetServiceBus().Configuration.Serializer.Serialize(transportMessage));
-                }
-                else
-                {
-                    state.GetErrorQueue().Enqueue(
-                        transportMessage.MessageId,
-                        state.GetServiceBus().Configuration.Serializer.Serialize(transportMessage));
-                }
+		            if (action.Retry)
+		            {
+			            state.GetWorkQueue().Enqueue(
+				            transportMessage.MessageId,
+				            state.GetServiceBus().Configuration.Serializer.Serialize(transportMessage));
+		            }
+		            else
+		            {
+			            state.GetErrorQueue().Enqueue(
+				            transportMessage.MessageId,
+				            state.GetServiceBus().Configuration.Serializer.Serialize(transportMessage));
+		            }
 
-                state.GetTransactionScope().Complete();
-                state.GetTransactionScope().Dispose();
-
-                pipelineEvent.Pipeline.MarkExceptionHandled();
-                bus.Events.OnAfterPipelineExceptionHandled(this, new PipelineExceptionEventArgs(pipelineEvent.Pipeline));
+		            state.GetWorkQueue().Acknowledge(state.GetReceivedMessage().AcknowledgementToken);
+	            }
+	            finally
+	            {
+		            pipelineEvent.Pipeline.MarkExceptionHandled();
+		            bus.Events.OnAfterPipelineExceptionHandled(this, new PipelineExceptionEventArgs(pipelineEvent.Pipeline));
+	            }
             }
             finally
             {

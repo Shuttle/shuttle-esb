@@ -11,8 +11,9 @@ namespace Shuttle.ESB.Core
 		internal const string SCHEME = "memory";
 
 		private static readonly object _padlock = new object();
-		private static Dictionary<string, Dictionary<Guid, Stream>> _queues = new Dictionary<string, Dictionary<Guid, Stream>>();
-		private readonly List<Guid> _unacknowledgedMessageIds = new List<Guid>();
+		private static Dictionary<string, Dictionary<int, MemoryQueueItem>> _queues = new Dictionary<string, Dictionary<int, MemoryQueueItem>>();
+		private readonly List<int> _unacknowledgedMessageIds = new List<int>();
+		private int _itemId = 0;
 
 		public MemoryQueue(Uri uri)
 		{
@@ -61,7 +62,9 @@ namespace Shuttle.ESB.Core
 		{
 			lock (_padlock)
 			{
-				_queues[Uri.ToString()].Add(messageId, stream.Copy());
+				_itemId++;
+
+				_queues[Uri.ToString()].Add(_itemId, new MemoryQueueItem(_itemId, messageId, stream.Copy()));
 			}
 		}
 
@@ -77,11 +80,11 @@ namespace Shuttle.ESB.Core
 				{
 					var pair = queue.ElementAt(index);
 
-					if (!_unacknowledgedMessageIds.Contains(pair.Key))
+					if (!_unacknowledgedMessageIds.Contains(pair.Value.ItemId))
 					{
-						_unacknowledgedMessageIds.Add(pair.Key);
+						_unacknowledgedMessageIds.Add(pair.Value.ItemId);
 
-						return new ReceivedMessage(pair.Value, pair.Key);
+						return new ReceivedMessage(pair.Value.Stream, pair.Value.ItemId);
 					}
 					
 					index++;
@@ -93,49 +96,49 @@ namespace Shuttle.ESB.Core
 
 		public void Acknowledge(object acknowledgementToken)
 		{
-			var messageId = (Guid)acknowledgementToken;
+			var itemId = (int)acknowledgementToken;
 
 			lock (_padlock)
 			{
 				var queue = _queues[Uri.ToString()];
 
-				if (!queue.ContainsKey(messageId) || !_unacknowledgedMessageIds.Contains(messageId))
+				if (!queue.ContainsKey(itemId) || !_unacknowledgedMessageIds.Contains(itemId))
 				{
 					return;
 				}
 
-				if (queue.ContainsKey(messageId))
+				if (queue.ContainsKey(itemId))
 				{
-					queue.Remove(messageId);
+					queue.Remove(itemId);
 				}
 
-				_unacknowledgedMessageIds.Remove(messageId);
+				_unacknowledgedMessageIds.Remove(itemId);
 			}
 		}
 
 		public void Release(object acknowledgementToken)
 		{
-			var messageId = (Guid) acknowledgementToken;
+			var itemId = (int) acknowledgementToken;
 
 			lock (_padlock)
 			{
 				var queue = _queues[Uri.ToString()];
 
-				if (!queue.ContainsKey(messageId) || !_unacknowledgedMessageIds.Contains(messageId))
+				if (!queue.ContainsKey(itemId) || !_unacknowledgedMessageIds.Contains(itemId))
 				{
 					return;
 				}
 
-				if (queue.ContainsKey(messageId))
+				if (queue.ContainsKey(itemId))
 				{
-					var message = queue[messageId];
+					var message = queue[itemId];
 
-					queue.Remove(messageId);
+					queue.Remove(itemId);
 
-					queue.Add(messageId, message);
+					queue.Add(itemId, message);
 				}
 
-				_unacknowledgedMessageIds.Remove(messageId);
+				_unacknowledgedMessageIds.Remove(itemId);
 			}
 		}
 
@@ -151,14 +154,14 @@ namespace Shuttle.ESB.Core
 
 		public static void Clear()
 		{
-			_queues = new Dictionary<string, Dictionary<Guid, Stream>>();
+			_queues = new Dictionary<string, Dictionary<int, MemoryQueueItem>>();
 		}
 
 	    public void Create()
 	    {
             if (!_queues.ContainsKey(Uri.ToString()))
             {
-                _queues.Add(Uri.ToString(), new Dictionary<Guid, Stream>());
+                _queues.Add(Uri.ToString(), new Dictionary<int, MemoryQueueItem>());
             }
         }
 
@@ -169,5 +172,19 @@ namespace Shuttle.ESB.Core
                 _queues[Uri.ToString()].Clear();
             }
         }
+	}
+
+	internal class MemoryQueueItem
+	{
+		public int ItemId { get; private set; }
+		public Guid MessageId { get; private set; }
+		public Stream Stream { get; private set; }
+
+		public MemoryQueueItem(int index, Guid messageId, Stream stream)
+		{
+			ItemId = index;
+			MessageId = messageId;
+			Stream = stream;
+		}
 	}
 }

@@ -36,6 +36,7 @@ namespace Shuttle.ESB.Core
 				transportMessage.RegisterFailure(ex.AllMessages(), new TimeSpan());
 
 				state.GetErrorQueue().Enqueue(transportMessage.MessageId, state.GetServiceBus().Configuration.Serializer.Serialize(transportMessage));
+				state.GetWorkQueue().Acknowledge(state.GetReceivedMessage().AcknowledgementToken);
 				
 				state.SetTransactionComplete();
 				pipelineEvent.Pipeline.Abort();

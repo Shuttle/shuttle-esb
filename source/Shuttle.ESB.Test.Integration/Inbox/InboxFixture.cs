@@ -5,7 +5,7 @@ using System.Threading;
 using NUnit.Framework;
 using Shuttle.ESB.Core;
 using Shuttle.ESB.Test.Integration.Core;
-using Shuttle.ESB.Test.Shared.Mocks;
+using Shuttle.ESB.Test.Shared;
 
 namespace Shuttle.ESB.Test.Integration
 {
@@ -113,7 +113,7 @@ namespace Shuttle.ESB.Test.Integration
 
 			using (var bus = new ServiceBus(configuration))
 			{
-				var message = bus.CreateTransportMessage(new NoHandlerCommand(),
+				var message = bus.CreateTransportMessage(new ErrorCommand(),
 				                                         c => c.WithRecipient(configuration.Inbox.WorkQueue));
 
 				configuration.Inbox.WorkQueue.Enqueue(message.MessageId, configuration.Serializer.Serialize(message));
@@ -140,6 +140,7 @@ namespace Shuttle.ESB.Test.Integration
 					Thread.Sleep(5);
 				}
 
+				Assert.Null(configuration.Inbox.WorkQueue.GetMessage());
 				Assert.NotNull(configuration.Inbox.ErrorQueue.GetMessage());
 			}
 
@@ -161,6 +162,7 @@ namespace Shuttle.ESB.Test.Integration
 						WorkQueue = inboxWorkQueue,
 						ErrorQueue = errorQueue,
 						DurationToSleepWhenIdle = new[] {TimeSpan.FromMilliseconds(5)},
+						DurationToIgnoreOnFailure= new[] {TimeSpan.FromMilliseconds(5)},
 						ThreadCount = threadCount
 					};
 

@@ -1,6 +1,4 @@
-using Shuttle.ESB.Core;
-
-namespace SomeNamespace
+namespace OtherNamespace
 {
     public class OtherNamespaceCommand 
     {

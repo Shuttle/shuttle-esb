@@ -15,17 +15,17 @@ namespace Shuttle.ESB.Core
 		}
 
 		private void InvokeHandler(IServiceBus bus, IMessageHandler handler, TransportMessage transportMessage,
-								   object message, PipelineEvent pipelineEvent, Type messageType)
+		                           object message, PipelineEvent pipelineEvent, Type messageType)
 		{
 			var state = pipelineEvent.Pipeline.State;
-			var contextType = typeof(HandlerContext<>).MakeGenericType(new[] { messageType });
-			var method = handler.GetType().GetMethod("ProcessMessage", new[] { contextType });
+			var contextType = typeof (HandlerContext<>).MakeGenericType(new[] {messageType});
+			var method = handler.GetType().GetMethod("ProcessMessage", new[] {contextType});
 
 			Guard.Against<ProcessMessageMethodMissingException>(method == null,
-																string.Format(
-																	ESBResources.ProcessMessageMethodMissingException,
-																	handler.GetType().FullName,
-																	transportMessage.MessageType));
+			                                                    string.Format(
+				                                                    ESBResources.ProcessMessageMethodMissingException,
+				                                                    handler.GetType().FullName,
+				                                                    transportMessage.MessageType));
 
 			if (_log.IsTraceEnabled)
 			{
@@ -37,24 +37,35 @@ namespace Shuttle.ESB.Core
 				}
 
 				_log.Trace(string.Format(ESBResources.MessageHandlerInvoke,
-										 transportMessage.MessageType,
-										 transportMessage.MessageId,
-										 handler.GetType().FullName));
+				                         transportMessage.MessageType,
+				                         transportMessage.MessageId,
+				                         handler.GetType().FullName));
 			}
 
 			try
 			{
+				var handlerContext = Activator.CreateInstance(contextType, new[]
+					{
+						bus, transportMessage, message, state.GetActiveState()
+					});
+
 				method.Invoke(handler, new[]
 					{
-						Activator.CreateInstance(contextType,
-						                         new[]
-							                         {
-								                         bus,
-								                         transportMessage,
-								                         message,
-								                         state.GetActiveState()
-							                         })
+						handlerContext
 					});
+
+				foreach (var uri in bus.Configuration.ForwardingRouteProvider.GetRouteUris(message.GetType().FullName))
+				{
+					if (_log.IsTraceEnabled)
+					{
+						_log.Trace(string.Format(ESBResources.TraceForwarding, transportMessage.MessageType,
+						                         transportMessage.MessageId, new Uri(uri).Secured()));
+					}
+
+					var recipientUri = uri;
+
+					((IMessageSender) handlerContext).Send(message, c => c.WithRecipient(recipientUri));
+				}
 			}
 			catch (Exception ex)
 			{
@@ -88,7 +99,7 @@ namespace Shuttle.ESB.Core
 					if (!bus.Configuration.IdempotenceService.ShouldProcess(transportMessage))
 					{
 						_log.Trace(string.Format(ESBResources.TraceMessageHandled, transportMessage.MessageType,
-												 transportMessage.MessageId));
+						                         transportMessage.MessageId));
 
 						pipelineEvent.Pipeline.Abort();
 
@@ -102,20 +113,6 @@ namespace Shuttle.ESB.Core
 			}
 
 			var message = state.GetMessage();
-
-			foreach (var uri in bus.Configuration.ForwardingRouteProvider.GetRouteUris(message.GetType().FullName))
-			{
-				if (_log.IsTraceEnabled)
-				{
-					_log.Trace(string.Format(ESBResources.TraceForwarding, transportMessage.MessageType,
-											 transportMessage.MessageId, new Uri(uri).Secured()));
-				}
-
-				string recipientUri = uri;
-
-				bus.Send(message, c => c.WithRecipient(recipientUri));
-			}
-
 			var handler = bus.Configuration.MessageHandlerFactory.GetHandler(message);
 
 			state.SetMessageHandler(handler);
@@ -123,17 +120,17 @@ namespace Shuttle.ESB.Core
 			if (handler == null)
 			{
 				bus.Events.OnMessageNotHandled(this,
-											   new MessageNotHandledEventArgs(
-												   pipelineEvent,
-												   state.GetWorkQueue(),
-												   state.GetErrorQueue(),
-												   transportMessage,
-												   message));
+				                               new MessageNotHandledEventArgs(
+					                               pipelineEvent,
+					                               state.GetWorkQueue(),
+					                               state.GetErrorQueue(),
+					                               transportMessage,
+					                               message));
 
 				if (!bus.Configuration.RemoveMessagesNotHandled)
 				{
 					var error = string.Format(ESBResources.MessageNotHandledFailure, message.GetType().FullName,
-											  transportMessage.MessageId, state.GetErrorQueue().Uri.Secured());
+					                          transportMessage.MessageId, state.GetErrorQueue().Uri.Secured());
 
 					_log.Error(error);
 
@@ -147,8 +144,8 @@ namespace Shuttle.ESB.Core
 				else
 				{
 					_log.Warning(string.Format(ESBResources.MessageNotHandledIgnored,
-											   message.GetType().FullName,
-											   transportMessage.MessageId));
+					                           message.GetType().FullName,
+					                           transportMessage.MessageId));
 				}
 			}
 			else

@@ -81,6 +81,8 @@
     <Compile Include="Fixture.cs" />
     <Compile Include="MemoryQueue\MemoryQueue.cs" />
     <Compile Include="MemoryQueue\MemoryQueueFactory.cs" />
+    <Compile Include="MessageHandling\ErrorCommandHandler.cs" />
+    <Compile Include="MessageHandling\ErrorCommand.cs" />
     <Compile Include="MessageHandling\IdempotenceCommand.cs" />
     <Compile Include="MessageHandling\IdempotenceCounter.cs" />
     <Compile Include="MessageHandling\IdempotenceHandler.cs" />

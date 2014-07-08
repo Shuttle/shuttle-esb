@@ -10,8 +10,8 @@ namespace Shuttle.ESB.Test.Unit.Core
         public void Should_be_able_to_get_types_from_given_valid_value_string()
         {
             new TypeListMessageRouteSpecification(
-                "Shuttle.ESB.Test.Shared.Mocks.SimpleCommand, Shuttle.ESB.Test.Shared;" +
-                "Shuttle.ESB.Test.Shared.Mocks.SimpleMessage, Shuttle.ESB.Test.Shared;");
+                "Shuttle.ESB.Test.Shared.SimpleCommand, Shuttle.ESB.Test.Shared;" +
+                "Shuttle.ESB.Test.Shared.SimpleMessage, Shuttle.ESB.Test.Shared;");
         }
 
         [Test]

@@ -1,6 +1,6 @@
 using Shuttle.ESB.Core;
 
-namespace Shuttle.ESB.Test.Shared.Mocks
+namespace Shuttle.ESB.Test.Shared
 {
 	public class SimpleCommandHandler : IMessageHandler<SimpleCommand>
 	{
