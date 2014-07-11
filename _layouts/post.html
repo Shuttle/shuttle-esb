@@ -1,17 +1,5 @@
-{% include header.html %}
-<div class='container'>
-	<div class='row'>
-	  <div id='toc-container' class='col-md-3'>
-		<div id='toc' class='visible-md visible-lg'></div>
-	  </div>
-	  <div class='col-md-6'>
-		<h1>{{ page.title }}</h1>
-		<p class='text-muted'>{{ page.date | date_to_long_string }}</p>
-		{{ content }}
-	  </div>
-	  <div class='col-md-3'>
-		{% include sidebar.html %}
-	  </div>
-	</div>
-</div>
-{% include footer.html %}
+---
+layout: default
+---
+{% include JB/setup %}
+{% include themes/shuttle/post.html %}

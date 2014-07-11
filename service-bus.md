@@ -317,19 +317,19 @@ Go to the [Modules] documentation.
 	}
 ```
 
-[Encryption]: {{ site.baseurl }}/encryption/index.html
-[Compression]: {{ site.baseurl }}/compression/index.html
-[HandlerContext]: {{ site.baseurl }}/handler-context/index.html
-[IMessageHandlerFactory]: {{ site.baseurl }}/message-handler-factory/index.html
-[IMessageRouteProvider]: {{ site.baseurl }}/message-route-provider/index.html
-[IPipelineFactory]: {{ site.baseurl }}/pipeline-factory/index.html
-[ISerializer]: {{ site.baseurl }}/serializer/index.html
-[IServiceBusPolicy]: {{ site.baseurl }}/service-bus-policy/index.html
-[ISubscriptionManager]: {{ site.baseurl }}/subscription-manager/index.html
-[IThreadActivityFactory]: {{ site.baseurl }}/thread-activity-factory/index.html
-[ITransactionScopeFactory]: {{ site.baseurl }}/transactionscope-factory/index.html
-[MessageSender]: {{ site.baseurl }}/message-sender/index.html
-[Modules]: {{ site.baseurl }}/modules/index.html
-[ServiceBusConfigurator]: {{ site.baseurl }}/service-bus-configurator/index.html
-[TransportMessage]: {{ site.baseurl }}/transport-message/index.html
-[TransportMessageConfigurator]: {{ site.baseurl }}/transport-message-configurator/index.html
+[Encryption]: {{ BASE_PATH }}/encryption/index.html
+[Compression]: {{ BASE_PATH }}/compression/index.html
+[HandlerContext]: {{ BASE_PATH }}/handler-context/index.html
+[IMessageHandlerFactory]: {{ BASE_PATH }}/message-handler-factory/index.html
+[IMessageRouteProvider]: {{ BASE_PATH }}/message-route-provider/index.html
+[IPipelineFactory]: {{ BASE_PATH }}/pipeline-factory/index.html
+[ISerializer]: {{ BASE_PATH }}/serializer/index.html
+[IServiceBusPolicy]: {{ BASE_PATH }}/service-bus-policy/index.html
+[ISubscriptionManager]: {{ BASE_PATH }}/subscription-manager/index.html
+[IThreadActivityFactory]: {{ BASE_PATH }}/thread-activity-factory/index.html
+[ITransactionScopeFactory]: {{ BASE_PATH }}/transactionscope-factory/index.html
+[MessageSender]: {{ BASE_PATH }}/message-sender/index.html
+[Modules]: {{ BASE_PATH }}/modules/index.html
+[ServiceBusConfigurator]: {{ BASE_PATH }}/service-bus-configurator/index.html
+[TransportMessage]: {{ BASE_PATH }}/transport-message/index.html
+[TransportMessageConfigurator]: {{ BASE_PATH }}/transport-message-configurator/index.html

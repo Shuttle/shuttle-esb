@@ -1,29 +1,10 @@
 ---
-title: Archive
-layout: default
+layout: page
+title : Archive
+header : Post Archive
+group: navigation
 ---
+{% include JB/setup %}
 
-<ul class='blog-archive'>
-  {% for post in site.posts %}
-
-    {% unless post.next %}
-      <h1>{{ post.date | date: '%Y' }}</h1>
-      <h3>{{ post.date | date: '%B' }}</h3>
-    {% else %}
-      {% capture year %}{{ post.date | date: '%Y' }}{% endcapture %}
-      {% capture nyear %}{{ post.next.date | date: '%Y' }}{% endcapture %}
-      {% capture month %}{{ post.date | date: '%m%Y' }}{% endcapture %}
-      {% capture nmonth %}{{ post.next.date | date: '%m%Y' }}{% endcapture %}
-
-      {% if year != nyear %}
-        <h1>{{ post.date | date: '%Y' }}</h1>
-      {% endif %}
-	  
-	  {% if month != nmonth %}
-        <h3>{{ post.date | date: '%B' }}</h3>
-	  {% endif %}
-    {% endunless %}
-
-    <li>{{ post.date | date:"%d" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
-  {% endfor %}
-</ul>
+{% assign posts_collate = site.posts %}
+{% include JB/posts_collate %}

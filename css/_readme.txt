@@ -1,1 +1,0 @@
-- the jquery ui here contain *only* the widget.

@@ -4,7 +4,7 @@ layout: api
 ---
 # TransportMessageConfigurator
 
-$$ Properties
+## Properties
 
 ### Headers
 
@@ -83,7 +83,7 @@ This will be called by shuttle-esb directly.  The call will add all the received
 public bool HasTransportMessageReceived
 ```
 
-Returns `true` if a [TransportMessageReceived] has been set for the [MessageSender]; else `false`.
+Returns `true` if a `TransportMessageReceived` has been set for the [MessageSender] else `false`.
 
 ### TransportMessage
 
@@ -93,6 +93,6 @@ public TransportMessage TransportMessage(IServiceBusConfiguration configuration)
 
 This returns a new [TransportMessage] that contains the configured properties.
 
-[MessageSender]: {{ site.baseurl }}/message-sender/index.html
-[HandlerContext]: {{ site.baseurl }}/handler-context/index.html
-[TransportMessage]: {{ site.baseurl }}/transport-message/index.html
+[MessageSender]: {{ BASE_PATH }}/message-sender/index.html
+[HandlerContext]: {{ BASE_PATH }}/handler-context/index.html
+[TransportMessage]: {{ BASE_PATH }}/transport-message/index.html

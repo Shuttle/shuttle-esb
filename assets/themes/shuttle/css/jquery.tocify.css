@@ -5,7 +5,10 @@
 
 /* The Table of Contents container element */
 .tocify {
+/* changed by shuttle
     width: 20%;
+	
+*/
     max-height: 90%;
     overflow: auto;
 /* removed by shuttle

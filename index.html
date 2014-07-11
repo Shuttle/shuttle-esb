@@ -13,7 +13,6 @@ layout: default
 <div class='list-group'>
 	<h4 class="list-group-item-heading">Resources</h4>
 	<a class='list-group-item' target='_blank' href='https://github.com/Shuttle/shuttle-esb-samples'>Shuttle ESB Samples</a>
-	<a class='list-group-item' target='_blank' href='http://blog.bitsnbytes.us/2013/06/why-cant-my-machines-talk-nicely-msmq.html?m=1'>Troubleshooting MSMQ, DTC</a>
 	<a class='list-group-item' target='_blank' href='http://www.eaipatterns.com/toc.html'>Enterprise Integration Patterns</a>
 	<a class='list-group-item' target='_blank' href='http://msdn.microsoft.com/en-us/library/aa480027.aspx'>Messaging Patterns in Service-Oriented Architecture, Part 1</a>
 	<a class='list-group-item' target='_blank' href='http://msdn.microsoft.com/en-us/library/aa480061.aspx'>Messaging Patterns in Service-Oriented Architecture, Part 2</a>
@@ -25,7 +24,7 @@ layout: default
     <h2>{{ post.title }}</h2>
     <h4>{{ post.date | date_to_long_string }}</h4>
     <p>
-      <a href='{{ site.baseurl }}{{ post.url }}'>Read Post</a>
+      <a href='{{ BASE_PATH }}{{ post.url }}'>Read Post</a>
     </p>
   </div>
 </div>
