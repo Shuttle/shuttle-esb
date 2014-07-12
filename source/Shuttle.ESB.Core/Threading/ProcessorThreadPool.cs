@@ -12,7 +12,7 @@ namespace Shuttle.ESB.Core
 		private readonly List<ProcessorThread> threads = new List<ProcessorThread>();
 		private bool disposed;
 		private bool started;
-		private ILog _log;
+		private readonly ILog _log;
 
 		public ProcessorThreadPool(string name, int threadCount, IProcessorFactory processorFactory)
 		{

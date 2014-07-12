@@ -149,6 +149,8 @@
     <Compile Include="Outbox\SqlOutboxTest.cs" />
     <Compile Include="IntegrationFixture.cs" />
     <Compile Include="BasicQueue\SqlQueueTest.cs" />
+    <Compile Include="ResourceUsage\MsmqResourceUsageTest.cs" />
+    <Compile Include="ResourceUsage\ResourceUsageFixture.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Shuttle.ESB.Core\Shuttle.ESB.Core.csproj">
