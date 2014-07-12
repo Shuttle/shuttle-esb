@@ -149,7 +149,10 @@
     <Compile Include="Outbox\SqlOutboxTest.cs" />
     <Compile Include="IntegrationFixture.cs" />
     <Compile Include="BasicQueue\SqlQueueTest.cs" />
+    <Compile Include="ResourceUsage\SqlResourceUsageTest.cs" />
+    <Compile Include="ResourceUsage\RabbitMQResourceUsageTest.cs" />
     <Compile Include="ResourceUsage\MsmqResourceUsageTest.cs" />
+    <Compile Include="ResourceUsage\PerformanceCounterValue.cs" />
     <Compile Include="ResourceUsage\ResourceUsageFixture.cs" />
   </ItemGroup>
   <ItemGroup>
