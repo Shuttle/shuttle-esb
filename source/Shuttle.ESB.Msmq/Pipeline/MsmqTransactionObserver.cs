@@ -11,13 +11,6 @@ namespace Shuttle.ESB.Msmq
 	{
 		public void Execute(OnStart pipelineEvent)
 		{
-			var parser = pipelineEvent.Pipeline.State.Get<MsmqUriParser>();
-
-			if (!parser.Transactional)
-			{
-				return;
-			}
-
 			pipelineEvent.Pipeline.State.Add(new MessageQueueTransaction());
 		}
 

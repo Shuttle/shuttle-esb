@@ -40,12 +40,12 @@ namespace Shuttle.ESB.Test.Integration
 			return configuration;
 		}
 
-		protected void AttemptDropQueues(string workQueueUriFormat, string errorQueueUriFormat)
+		protected void AttemptDropQueues(string queueUriFormat)
 		{
 			using (var queueManager = QueueManager.Default())
 			{
-				queueManager.GetQueue(string.Format(workQueueUriFormat, "test-inbox-work")).AttemptDrop();
-				queueManager.GetQueue(string.Format(errorQueueUriFormat, "test-error")).AttemptDrop();
+				queueManager.GetQueue(string.Format(queueUriFormat, "test-inbox-work")).AttemptDrop();
+				queueManager.GetQueue(string.Format(queueUriFormat, "test-error")).AttemptDrop();
 			}
 		}
 	}

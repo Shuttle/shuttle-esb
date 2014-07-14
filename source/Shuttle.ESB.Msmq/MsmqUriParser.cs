@@ -9,10 +9,10 @@ namespace Shuttle.ESB.Msmq
 {
 	public class MsmqUriParser
 	{
-		internal const string SCHEME = "msmq";
+		internal const string Scheme = "msmq";
 
-		private string host;
-		private bool usesIPAddress;
+		private readonly string host;
+		private readonly bool usesIPAddress;
 
 		private readonly Regex regexIPAddress =
 			new Regex(
@@ -22,9 +22,9 @@ namespace Shuttle.ESB.Msmq
 		{
 			Guard.AgainstNull(uri, "uri");
 
-			if (!uri.Scheme.Equals(SCHEME, StringComparison.InvariantCultureIgnoreCase))
+			if (!uri.Scheme.Equals(Scheme, StringComparison.InvariantCultureIgnoreCase))
 			{
-				throw new InvalidSchemeException(SCHEME, uri.ToString());
+				throw new InvalidSchemeException(Scheme, uri.ToString());
 			}
 
 			var builder = new UriBuilder(uri);
@@ -55,55 +55,10 @@ namespace Shuttle.ESB.Msmq
 							 : string.Format(@"FormatName:DIRECT=OS:{0}\private$\{1}", host, uri.Segments[1]);
 
 			JournalPath = string.Concat(Path, "$journal");
-
-			var parameters = HttpUtility.ParseQueryString(uri.Query);
-
-			SetJournal(parameters);
-			SetTransactional(parameters);
-		}
-
-		private void SetTransactional(NameValueCollection parameters)
-		{
-			Transactional = true;
-
-			var transactionalItem = parameters.Get("transactional");
-
-			if (transactionalItem == null)
-			{
-				return;
-			}
-
-			bool transactional;
-
-			if (bool.TryParse(transactionalItem, out transactional))
-			{
-				Transactional = transactional;
-			}
-		}
-
-		private void SetJournal(NameValueCollection parameters)
-		{
-			Journal = true;
-
-			var journalItem = parameters.Get("journal");
-
-			if (journalItem == null)
-			{
-				return;
-			}
-
-			bool journal;
-
-			if (bool.TryParse(journalItem, out journal))
-			{
-				Journal = journal;
-			}
 		}
 
 		public Uri Uri { get; private set; }
 		public bool Local { get; private set; }
-		public bool Transactional { get; private set; }
-		public bool Journal { get; private set; }
 		public string Path { get; private set; }
 		public string JournalPath { get; private set; }
 	}

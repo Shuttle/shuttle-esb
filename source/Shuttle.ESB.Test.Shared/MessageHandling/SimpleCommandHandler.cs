@@ -14,7 +14,7 @@ namespace Shuttle.ESB.Test.Shared
 
 		public void ProcessMessage(HandlerContext<SimpleCommand> context)
 		{
-			_log.Information(string.Format("[executed] : name = '{0}'", context.Message.Name));
+			_log.Trace(string.Format("[executed] : name = '{0}'", context.Message.Name));
 		}
 
 		public bool IsReusable

@@ -29,13 +29,10 @@ namespace Shuttle.ESB.Msmq
 					MessageReadPropertyFilter = _messagePropertyFilter
 				});
 
-			if (parser.Journal)
-			{
-				pipelineEvent.Pipeline.State.Add("journalQueue", new MessageQueue(parser.JournalPath)
-					{
-						MessageReadPropertyFilter = _messagePropertyFilter
-					});
-			}
+			pipelineEvent.Pipeline.State.Add("journalQueue", new MessageQueue(parser.JournalPath)
+				{
+					MessageReadPropertyFilter = _messagePropertyFilter
+				});
 		}
 
 		public void Execute(OnReleaseMessage pipelineEvent)
@@ -48,7 +45,7 @@ namespace Shuttle.ESB.Msmq
 
 			try
 			{
-				var journalMessage = ReceiveMessage(pipelineEvent.Pipeline.State.Get<Guid>("messageId"), parser.Transactional, tx, journalQueue, timeout);
+				var journalMessage = ReceiveMessage(pipelineEvent.Pipeline.State.Get<Guid>("messageId"), tx, journalQueue, timeout);
 
 				if (journalMessage == null)
 				{
@@ -63,14 +60,7 @@ namespace Shuttle.ESB.Msmq
 						BodyStream = journalMessage.BodyStream.Copy()
 					};
 
-				if (tx != null)
-				{
-					queue.Send(message, tx);
-				}
-				else
-				{
-					queue.Send(message, MsmqQueue.TransactionType(parser.Transactional));
-				}
+				queue.Send(message, tx);
 			}
 			catch (MessageQueueException ex)
 			{
@@ -85,15 +75,11 @@ namespace Shuttle.ESB.Msmq
 			}
 		}
 
-		private Message ReceiveMessage(Guid messageId, bool transactional, MessageQueueTransaction tx, MessageQueue journalQueue, TimeSpan timeout)
+		private Message ReceiveMessage(Guid messageId, MessageQueueTransaction tx, MessageQueue journalQueue, TimeSpan timeout)
 		{
 			try
 			{
-				var correlationId = string.Format(@"{0}\1", messageId);
-
-				return tx != null
-					       ? journalQueue.ReceiveByCorrelationId(correlationId, timeout, tx)
-						   : journalQueue.ReceiveByCorrelationId(correlationId, timeout, MsmqQueue.TransactionType(transactional));
+				return journalQueue.ReceiveByCorrelationId(string.Format(@"{0}\1", messageId), timeout, tx);
 			}
 			catch (MessageQueueException ex)
 			{

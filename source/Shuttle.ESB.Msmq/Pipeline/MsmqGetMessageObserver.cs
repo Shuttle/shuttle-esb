@@ -31,13 +31,10 @@ namespace Shuttle.ESB.Msmq
 					MessageReadPropertyFilter = _messagePropertyFilter
 				});
 
-			if (parser.Journal)
-			{
-				pipelineEvent.Pipeline.State.Add("journalQueue", new MessageQueue(parser.JournalPath)
-					{
-						MessageReadPropertyFilter = _messagePropertyFilter
-					});
-			}
+			pipelineEvent.Pipeline.State.Add("journalQueue", new MessageQueue(parser.JournalPath)
+				{
+					MessageReadPropertyFilter = _messagePropertyFilter
+				});
 		}
 
 		public void Execute(OnDispose pipelineEvent)
@@ -64,14 +61,7 @@ namespace Shuttle.ESB.Msmq
 
 			try
 			{
-				var message = tx != null
-					              ? pipelineEvent.Pipeline.State.Get<MessageQueue>("queue")
-					                             .Receive(pipelineEvent.Pipeline.State.Get<TimeSpan>("timeout"), tx)
-					              : pipelineEvent.Pipeline.State.Get<MessageQueue>("queue")
-					                             .Receive(pipelineEvent.Pipeline.State.Get<TimeSpan>("timeout"),
-					                                      MsmqQueue.TransactionType(parser.Transactional));
-
-				pipelineEvent.Pipeline.State.Add(message);
+				pipelineEvent.Pipeline.State.Add(pipelineEvent.Pipeline.State.Get<MessageQueue>("queue").Receive(pipelineEvent.Pipeline.State.Get<TimeSpan>("timeout"), tx));
 			}
 			catch (MessageQueueException ex)
 			{
@@ -111,16 +101,7 @@ namespace Shuttle.ESB.Msmq
 					BodyStream = message.BodyStream.Copy()
 				};
 
-			var tx = pipelineEvent.Pipeline.State.Get<MessageQueueTransaction>();
-
-			if (tx != null)
-			{
-				journalQueue.Send(journalMessage, tx);
-			}
-			else
-			{
-				journalQueue.Send(journalMessage, MsmqQueue.TransactionType(parser.Transactional));
-			}
+			journalQueue.Send(journalMessage, pipelineEvent.Pipeline.State.Get<MessageQueueTransaction>());
 		}
 	}
 }

@@ -22,7 +22,7 @@ namespace Shuttle.ESB.Msmq
 		{
 			get
 			{
-				return MsmqUriParser.SCHEME;
+				return MsmqUriParser.Scheme;
 			}
 		}
 

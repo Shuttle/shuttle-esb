@@ -20,11 +20,6 @@ namespace Shuttle.ESB.Msmq
 
 		public bool Execute(MsmqUriParser parser, TimeSpan timeout)
 		{
-			if (!parser.Journal)
-			{
-				return false;
-			}
-
 			State.Clear();
 
 			State.Add(parser);

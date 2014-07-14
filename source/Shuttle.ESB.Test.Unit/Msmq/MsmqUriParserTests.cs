@@ -28,23 +28,5 @@ namespace Shuttle.ESB.Test.Unit.Msmq
 		{
 			Assert.Throws<InvalidSchemeException>(() => new MsmqUriParser(new Uri("sql://./work-queue")));
 		}
-
-		[Test]
-		public void Should_be_able_to_create_with_default_parameter_values()
-		{
-			var parser = new MsmqUriParser(new Uri("msmq://./work-queue"));
-
-			Assert.IsTrue(parser.Transactional);
-			Assert.IsTrue(parser.Journal);
-		}
-
-		[Test]
-		public void Should_be_able_to_set_parameter_values()
-		{
-			var parser = new MsmqUriParser(new Uri("msmq://./work-queue?transactional=false&journal=false"));
-
-			Assert.IsFalse(parser.Transactional);
-			Assert.IsFalse(parser.Journal);
-		}
 	}
 }

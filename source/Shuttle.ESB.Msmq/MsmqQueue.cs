@@ -47,8 +47,6 @@ namespace Shuttle.ESB.Msmq
 			{
 				if (_journalInitialized
 					||
-					!_parser.Journal
-					||
 					!Exists()
 					||
 					!JournalExists())
@@ -76,18 +74,13 @@ namespace Shuttle.ESB.Msmq
 				throw new InvalidOperationException(string.Format(MsmqResources.CannotCreateRemoteQueue, Uri));
 			}
 
-			MessageQueue.Create(_parser.Path, _parser.Transactional).Dispose();
+			MessageQueue.Create(_parser.Path, true).Dispose();
 
 			_log.Information(string.Format(MsmqResources.QueueCreated, _parser.Path));
 		}
 
 		private void CreateJournal()
 		{
-			if (!_parser.Journal)
-			{
-				return;
-			}
-
 			if (JournalExists())
 			{
 				return;
@@ -98,7 +91,7 @@ namespace Shuttle.ESB.Msmq
 				throw new InvalidOperationException(string.Format(MsmqResources.CannotCreateRemoteQueue, Uri));
 			}
 
-			MessageQueue.Create(_parser.JournalPath, _parser.Transactional).Dispose();
+			MessageQueue.Create(_parser.JournalPath, true).Dispose();
 
 			_log.Information(string.Format(MsmqResources.QueueCreated, _parser.Path));
 		}
@@ -200,7 +193,7 @@ namespace Shuttle.ESB.Msmq
 			{
 				using (var queue = CreateQueue())
 				{
-					queue.Send(sendMessage, TransactionType(_parser.Transactional));
+					queue.Send(sendMessage, MessageQueueTransactionType.Single);
 				}
 			}
 			catch (MessageQueueException ex)
@@ -266,27 +259,15 @@ namespace Shuttle.ESB.Msmq
 				};
 		}
 
-		public static MessageQueueTransactionType TransactionType(bool transactional)
-		{
-			return transactional
-					   ? MessageQueueTransactionType.Single
-					   : MessageQueueTransactionType.None;
-		}
-
 		public void Acknowledge(object acknowledgementToken)
 		{
-			if (!_parser.Journal)
-			{
-				return;
-			}
-
 			var messageId = (Guid)acknowledgementToken;
 
 			try
 			{
 				using (var queue = CreateJournalQueue())
 				{
-					queue.ReceiveByCorrelationId(string.Format(@"{0}\1", messageId), TransactionType(_parser.Transactional));
+					queue.ReceiveByCorrelationId(string.Format(@"{0}\1", messageId), MessageQueueTransactionType.Single);
 				}
 			}
 			catch (MessageQueueException ex)
@@ -310,9 +291,7 @@ namespace Shuttle.ESB.Msmq
 
 		public void Release(object acknowledgementToken)
 		{
-			if (!_parser.Journal
-				||
-				!Exists()
+			if (!Exists()
 				||
 				!JournalExists())
 			{

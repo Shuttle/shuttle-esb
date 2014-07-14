@@ -17,12 +17,12 @@ namespace Shuttle.ESB.Test.Integration
 		[TestCase(500, true)]
 		public void Should_be_able_to_process_messages_concurrently(int msToComplete, bool isTransactionalEndpoint)
 		{
-			TestInboxConcurrency("sql://shuttle/{0}", 250, false);
+			TestInboxConcurrency("sql://shuttle/{0}", msToComplete, false);
 		}
 
 		[Test]
-		[TestCase(350, false)]
-		[TestCase(350, true)]
+		[TestCase(200, false)]
+		[TestCase(200, true)]
 		public void Should_be_able_to_process_queue_timeously_without_journal(int count, bool isTransactionalEndpoint)
 		{
 			TestInboxThroughput("sql://shuttle/{0}", 1000, count, isTransactionalEndpoint);

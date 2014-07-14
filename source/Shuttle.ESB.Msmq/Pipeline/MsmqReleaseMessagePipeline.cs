@@ -1,5 +1,4 @@
 ﻿using System;
-using Shuttle.Core.Infrastructure;
 using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.Msmq
@@ -21,11 +20,6 @@ namespace Shuttle.ESB.Msmq
 
 		public bool Execute(Guid messageId, MsmqUriParser parser, TimeSpan timeout)
 		{
-			if (!parser.Journal)
-			{
-				return false;
-			}
-
 			State.Clear();
 
 			State.Add("messageId", messageId);

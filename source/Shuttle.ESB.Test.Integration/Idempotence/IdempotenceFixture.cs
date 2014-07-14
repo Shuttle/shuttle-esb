@@ -10,13 +10,13 @@ namespace Shuttle.ESB.Test.Integration.Idempotence.SqlServer.Msmq
 {
 	public class IdempotenceFixture : IntegrationFixture
 	{
-		protected void TestIdempotenceProcessing(string workQueueUriFormat, string errorQueueUriFormat, bool isTransactional,
+		protected void TestIdempotenceProcessing(string queueUriFormat, string errorQueueUriFormat, bool isTransactional,
 		                                         bool enqueueUniqueMessages)
 		{
 			const int threadCount = 1;
 			const int messageCount = 5;
 
-			var configuration = GetInboxConfiguration(workQueueUriFormat, errorQueueUriFormat, threadCount, isTransactional);
+			var configuration = GetInboxConfiguration(queueUriFormat, errorQueueUriFormat, threadCount, isTransactional);
 			var padlock = new object();
 
 			using (var bus = new ServiceBus(configuration))
@@ -76,7 +76,7 @@ namespace Shuttle.ESB.Test.Integration.Idempotence.SqlServer.Msmq
 				}
 			}
 
-			AttemptDropQueues(workQueueUriFormat, errorQueueUriFormat);
+			AttemptDropQueues(queueUriFormat);
 		}
 
 		private static ServiceBusConfiguration GetInboxConfiguration(string workQueueUriFormat, string errorQueueUriFormat,

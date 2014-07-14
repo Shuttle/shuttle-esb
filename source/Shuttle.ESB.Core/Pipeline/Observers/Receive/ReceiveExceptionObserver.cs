@@ -29,11 +29,12 @@ namespace Shuttle.ESB.Core
 				try
 				{
 					var transportMessage = state.GetTransportMessage();
+					var transportMessageStream = state.GetTransportMessageStream();
 					var receivedMessage = state.GetReceivedMessage();
 
 					if (transportMessage == null)
 					{
-						if (receivedMessage != null)
+						if (receivedMessage != null && transportMessageStream != null)
 						{
 							state.GetWorkQueue().Release(receivedMessage.AcknowledgementToken);
 

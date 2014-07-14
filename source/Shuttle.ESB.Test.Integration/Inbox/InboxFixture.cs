@@ -11,17 +11,11 @@ namespace Shuttle.ESB.Test.Integration
 {
 	public abstract class InboxFixture : IntegrationFixture
 	{
-		protected void TestInboxThroughput(string workQueueUriFormat, int timeoutMilliseconds, int count, bool isTransactional)
+		protected void TestInboxThroughput(string queueUriFormat, int timeoutMilliseconds, int count, bool isTransactional)
 		{
-			TestInboxThroughput(workQueueUriFormat, workQueueUriFormat, timeoutMilliseconds, count, isTransactional);
-		}
-
-		protected void TestInboxThroughput(string workQueueUriFormat, string errorQueueUriFormat, int timeoutMilliseconds,
-		                                   int count, bool isTransactional)
-		{
-			const int threadCount = 1;
+			const int threadCount = 15;
 			var padlock = new object();
-			var configuration = GetConfiguration(workQueueUriFormat, errorQueueUriFormat, threadCount, isTransactional);
+			var configuration = GetConfiguration(queueUriFormat, threadCount, isTransactional);
 
 			Console.WriteLine("Sending {0} messages to input queue '{1}'.", count, configuration.Inbox.WorkQueue.Uri);
 
@@ -90,7 +84,7 @@ namespace Shuttle.ESB.Test.Integration
 				sw.Stop();
 			}
 
-			AttemptDropQueues(workQueueUriFormat, errorQueueUriFormat);
+			AttemptDropQueues(queueUriFormat);
 
 			var ms = sw.ElapsedMilliseconds;
 
@@ -101,15 +95,10 @@ namespace Shuttle.ESB.Test.Integration
 			              count, timeoutMilliseconds, ms);
 		}
 
-		protected void TestInboxError(string workQueueUriFormat, bool isTransactional)
-		{
-			TestInboxError(workQueueUriFormat, workQueueUriFormat, isTransactional);
-		}
-
-		protected void TestInboxError(string workQueueUriFormat, string errorQueueUriFormat, bool isTransactional)
+		protected void TestInboxError(string queueUriFormat, bool isTransactional)
 		{
 			var padlock = new object();
-			var configuration = GetConfiguration(workQueueUriFormat, errorQueueUriFormat, 1, isTransactional);
+			var configuration = GetConfiguration(queueUriFormat, 1, isTransactional);
 
 			using (var bus = new ServiceBus(configuration))
 			{
@@ -144,17 +133,16 @@ namespace Shuttle.ESB.Test.Integration
 				Assert.NotNull(configuration.Inbox.ErrorQueue.GetMessage());
 			}
 
-			AttemptDropQueues(workQueueUriFormat, errorQueueUriFormat);
+			AttemptDropQueues(queueUriFormat);
 		}
 
-		private static IServiceBusConfiguration GetConfiguration(string workQueueUriFormat, string errorQueueUriFormat,
-		                                                         int threadCount, bool isTransactional)
+		private static IServiceBusConfiguration GetConfiguration(string queueUriFormat, int threadCount, bool isTransactional)
 		{
 			var configuration = DefaultConfiguration(isTransactional);
 
 			var inboxWorkQueue =
-				configuration.QueueManager.GetQueue(string.Format(workQueueUriFormat, "test-inbox-work"));
-			var errorQueue = configuration.QueueManager.GetQueue(string.Format(errorQueueUriFormat, "test-error"));
+				configuration.QueueManager.GetQueue(string.Format(queueUriFormat, "test-inbox-work"));
+			var errorQueue = configuration.QueueManager.GetQueue(string.Format(queueUriFormat, "test-error"));
 
 			configuration.Inbox =
 				new InboxQueueConfiguration
@@ -162,7 +150,7 @@ namespace Shuttle.ESB.Test.Integration
 						WorkQueue = inboxWorkQueue,
 						ErrorQueue = errorQueue,
 						DurationToSleepWhenIdle = new[] {TimeSpan.FromMilliseconds(5)},
-						DurationToIgnoreOnFailure= new[] {TimeSpan.FromMilliseconds(5)},
+						DurationToIgnoreOnFailure = new[] {TimeSpan.FromMilliseconds(5)},
 						ThreadCount = threadCount
 					};
 
@@ -179,16 +167,10 @@ namespace Shuttle.ESB.Test.Integration
 
 		protected void TestInboxConcurrency(string workQueueUriFormat, int msToComplete, bool isTransactional)
 		{
-			TestInboxConcurrency(workQueueUriFormat, workQueueUriFormat, msToComplete, isTransactional);
-		}
-
-		protected void TestInboxConcurrency(string workQueueUriFormat, string errorQueueUriFormat, int msToComplete,
-		                                    bool isTransactional)
-		{
 			const int threadCount = 1;
 
 			var padlock = new object();
-			var configuration = GetConfiguration(workQueueUriFormat, errorQueueUriFormat, threadCount, isTransactional);
+			var configuration = GetConfiguration(workQueueUriFormat, threadCount, isTransactional);
 			var module = new InboxConcurrencyModule();
 
 			configuration.Modules.Add(module);
@@ -228,7 +210,7 @@ namespace Shuttle.ESB.Test.Integration
 				}
 			}
 
-			AttemptDropQueues(workQueueUriFormat, errorQueueUriFormat);
+			AttemptDropQueues(workQueueUriFormat);
 
 			Assert.AreEqual(threadCount, module.OnAfterGetMessageCount,
 			                string.Format("Got {0} messages but {1} were sent.", module.OnAfterGetMessageCount, threadCount));
@@ -237,14 +219,9 @@ namespace Shuttle.ESB.Test.Integration
 			              "All dequeued messages have to be within {0} ms of first get message.", msToComplete);
 		}
 
-		protected void TestInboxDeferred(string workQueueUriFormat)
+		protected void TestInboxDeferred(string queueUriFormat)
 		{
-			TestInboxDeferred(workQueueUriFormat, workQueueUriFormat);
-		}
-
-		protected void TestInboxDeferred(string workQueueUriFormat, string errorQueueUriFormat)
-		{
-			var configuration = GetConfiguration(workQueueUriFormat, errorQueueUriFormat, 1, false);
+			var configuration = GetConfiguration(queueUriFormat, 1, false);
 
 			var module = new InboxDeferredModule();
 

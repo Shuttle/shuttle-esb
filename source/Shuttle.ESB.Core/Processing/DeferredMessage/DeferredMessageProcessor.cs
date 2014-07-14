@@ -33,7 +33,7 @@ namespace Shuttle.ESB.Core
 				_messageDeferred = false;
 			}
 
-			var pipeline = (DeferredMessagePipeline)_bus.Configuration.PipelineFactory.GetPipeline<DeferredMessagePipeline>(_bus);
+			var pipeline = _bus.Configuration.PipelineFactory.GetPipeline<DeferredMessagePipeline>(_bus);
 
 			pipeline.State.SetCheckpointMessageId(_checkpointMessageId);
 			pipeline.State.SetNextDeferredProcessDate(_nextDeferredProcessDate);

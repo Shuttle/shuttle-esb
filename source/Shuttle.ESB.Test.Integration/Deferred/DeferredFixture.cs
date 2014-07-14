@@ -9,8 +9,6 @@ namespace Shuttle.ESB.Test.Integration.Deferred
 {
 	public class DeferredFixture : IntegrationFixture
 	{
-		private const int MillisecondsToDefer = 5000; // give the service bus enough time to start up
-
 		private readonly ILog _log;
 
 		public DeferredFixture()
@@ -18,11 +16,12 @@ namespace Shuttle.ESB.Test.Integration.Deferred
 			_log = Log.For(this);
 		}
 
-		protected void TestDeferredProcessing(string workQueueUriFormat, string deferredQueueUriFormat,
-		                                      string errorQueueUriFormat, bool isTransactional)
+		protected void TestDeferredProcessing(string queueUriFormat, bool isTransactional)
 		{
-			const int deferredMessageCount = 200;
-			var configuration = GetInboxConfiguration(workQueueUriFormat, deferredQueueUriFormat, errorQueueUriFormat, 5, isTransactional);
+			const int deferredMessageCount = 10;
+			const int millisecondsToDefer = 500;
+
+			var configuration = GetInboxConfiguration(queueUriFormat, queueUriFormat, queueUriFormat, 1, isTransactional);
 
 			var module = new DeferredMessageModule(deferredMessageCount);
 
@@ -32,30 +31,38 @@ namespace Shuttle.ESB.Test.Integration.Deferred
 			{
 				bus.Start();
 
-				var ignoreTillDate = DateTime.Now.AddMilliseconds(MillisecondsToDefer);
+				var ignoreTillDate = DateTime.Now.AddSeconds(5);
 
 				for (var i = 0; i < deferredMessageCount; i++)
 				{
-					EnqueueDeferredMessage(bus, ignoreTillDate);	
+					EnqueueDeferredMessage(bus, ignoreTillDate);
+
+					ignoreTillDate = ignoreTillDate.AddMilliseconds(millisecondsToDefer);
 				}
 
-				var timeout = DateTime.Now.AddMilliseconds(MillisecondsToDefer + 15000);
-				// add the extra time else there is no time to process
+				// add the extra time else there is no time to process message being returned
+				var timeout = ignoreTillDate.AddSeconds(150);
+				var timedOut = false;
+
+				_log.Information(string.Format("[start wait] : now = '{0}'", DateTime.Now));
 
 				// wait for the message to be returned from the deferred queue
-				while ((!module.AllDeferredMessageReturned() || !module.AllMessagesHandled())
+				while (!module.AllMessagesHandled()
 				       &&
-				       timeout > DateTime.Now)
+				       !timedOut)
 				{
-					Thread.Sleep(5);
+					Thread.Sleep(millisecondsToDefer);
+
+					timedOut = timeout < DateTime.Now;
 				}
+
+				_log.Information(string.Format("[end wait] : now = '{0}' / timeout = '{1}' / timed out = '{2}'", DateTime.Now, timeout, timedOut));
 
 				_log.Information(string.Format("{0} of {1} deferred messages returned to the inbox.",
 				                               module.NumberOfDeferredMessagesReturned, deferredMessageCount));
 				_log.Information(string.Format("{0} of {1} deferred messages handled.", module.NumberOfMessagesHandled,
 				                               deferredMessageCount));
 
-				Assert.IsTrue(module.AllDeferredMessageReturned(), "All the deferred messages were not returned.");
 				Assert.IsTrue(module.AllMessagesHandled(), "All the deferred messages were not handled.");
 
 				Assert.IsTrue(configuration.Inbox.ErrorQueue.IsEmpty());
@@ -63,20 +70,22 @@ namespace Shuttle.ESB.Test.Integration.Deferred
 				Assert.IsNull(configuration.Inbox.WorkQueue.GetMessage());
 			}
 
-			AttemptDropQueues(workQueueUriFormat, errorQueueUriFormat);
+			AttemptDropQueues(queueUriFormat);
 		}
 
 		private void EnqueueDeferredMessage(IServiceBus bus, DateTime ignoreTillDate)
 		{
-			var message = bus.CreateTransportMessage(new SimpleCommand(),
-			                                         c => c
-				                                              .Defer(ignoreTillDate)
-				                                              .WithRecipient(bus.Configuration.Inbox.WorkQueue));
+			var command = new SimpleCommand
+				{
+					Name = Guid.NewGuid().ToString()
+				};
+
+			var message = bus.CreateTransportMessage(command, c => c.Defer(ignoreTillDate)
+				         .WithRecipient(bus.Configuration.Inbox.WorkQueue));
 
 			bus.Configuration.Inbox.WorkQueue.Enqueue(message.MessageId, bus.Configuration.Serializer.Serialize(message));
 
-			_log.Information(string.Format("[message enqueued] : message id = '{0}' / deferred till date = '{1}'",
-			                               message.MessageId, message.IgnoreTillDate));
+			_log.Information(string.Format("[message enqueued] : name = '{0}' / deferred till date = '{1}'", command.Name, message.IgnoreTillDate));
 		}
 
 		private static ServiceBusConfiguration GetInboxConfiguration(string workQueueUriFormat, string deferredQueueUriFormat,
