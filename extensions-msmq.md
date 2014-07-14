@@ -4,6 +4,8 @@ layout: api
 ---
 # MsmqQueue
 
+All MSMQ queues are required to be **transactional**.  In addition to the actual queue a `msmq://host/queue$journal` queue will **always** be used.  If it does not exist it will be created, so if you are creating queues explicitly then remember to create these also.
+
 MSMQ creates outgoing queues internally so it is not necessary to use an outbox.
 
 ## Configuration
@@ -12,17 +14,12 @@ The queue configuration is part of the specified uri, e.g.:
 
 ```xml
     <inbox
-      workQueueUri="msmq://host/queue?journal-true&transactional=true"
+      workQueueUri="msmq://host/queue"
 	  .
 	  .
 	  .
     />
 ```
-
-| Segment / Argument	| Default 	| Description |
-| ---					| ---		| ---			|
-| journal				| true		| Specifies whether a journal queue will be used when returning messages from the queue |
-| transactional			| true		| Determines whether the queue is transactional or not |
 
 So by default the `MsmqQueue` is a transactional queue that utilizes a journal queue when retrieving messages.  Please try not to change the default unless you have carefully considered your choice.  Although there is a slightt performance penalty the defaults provide a reletively risk-free consumption of the queue.
 
@@ -34,7 +31,7 @@ In addition to this there is also a MSMQ specific section (defaults specified he
     <section name='msmq' type="Shuttle.ESB.MSMQ.MSMQSection, Shuttle.ESB.MSMQ"/>
   </configSections>
   
-  <rabbitmq
+  <msmq
 	localQueueTimeoutMilliseconds="0"
 	remoteQueueTimeoutMilliseconds="2000"
   />
