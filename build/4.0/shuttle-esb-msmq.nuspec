@@ -2,7 +2,7 @@
 <package >
 	<metadata>
 		<id>shuttle-esb-msmq</id>
-		<version>3.0.2</version>
+		<version>3.0.3</version>
 		<authors>Eben Roux</authors>
 		<owners>Eben Roux</owners>
 		<licenseUrl>https://github.com/shuttle/shuttle-esb/raw/master/LICENSE</licenseUrl>
@@ -15,7 +15,7 @@
 		<tags>enterprise-service-bus esb messaging msmq rabbitmq service-bus soa shuttle-esb</tags>
 		<dependencies>
 			<dependency id="shuttle-core-infrastructure" version="3.1.0" />
-			<dependency id="shuttle-esb-core" version="3.0.2" />
+			<dependency id="shuttle-esb-core" version="3.0.3" />
 		</dependencies>
 	</metadata>
 </package>
