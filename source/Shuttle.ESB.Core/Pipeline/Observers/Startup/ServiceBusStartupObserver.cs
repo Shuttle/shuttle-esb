@@ -285,6 +285,7 @@ namespace Shuttle.ESB.Core
 						DurationToSleepWhenIdle =
 							ServiceBusConfiguration.ServiceBusSection.Inbox.DurationToSleepWhenIdle ?? defaultDurationToSleepWhenIdle,
 						Distribute = ServiceBusConfiguration.ServiceBusSection.Inbox.Distribute,
+						DistributeSendCount = ServiceBusConfiguration.ServiceBusSection.Inbox.DistributeSendCount,
 						DeferredQueue =
 							string.IsNullOrEmpty(ServiceBusConfiguration.ServiceBusSection.Inbox.DeferredQueueUri)
 								? null

@@ -105,6 +105,7 @@
     <Compile Include="ConfigurationSections\SqlServer\SqlServerSectionTest.cs" />
     <Compile Include="ConfigurationSections\RabbitMQ\RabbitMQSectionFixture.cs" />
     <Compile Include="ConfigurationSections\RabbitMQ\RabbitMQSectionTest.cs" />
+    <Compile Include="Distributor\DistributorFixture.cs" />
     <Compile Include="Inbox\InboxConcurrencyModule.cs" />
     <Compile Include="Inbox\InboxDeferredModule.cs" />
     <Compile Include="Inbox\InboxFixture.cs" />

@@ -4,7 +4,14 @@ namespace Shuttle.ESB.Core
 	{
 		public void ProcessMessage(HandlerContext<WorkerThreadAvailableCommand> context)
 		{
-			context.Configuration.WorkerAvailabilityManager.WorkerAvailable(context.Message);
+			var distributeSendCount = context.Configuration.Inbox.DistributeSendCount > 0
+									   ? context.Configuration.Inbox.DistributeSendCount
+									   : 5;
+
+			for (var i = 0; i < distributeSendCount; i++)
+			{
+				context.Configuration.WorkerAvailabilityManager.WorkerAvailable(context.Message);
+			}
 		}
 
 		public bool IsReusable

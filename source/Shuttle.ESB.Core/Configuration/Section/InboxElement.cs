@@ -55,5 +55,11 @@ namespace Shuttle.ESB.Core
 		{
 			get { return (bool) this["distribute"]; }
 		}
+
+		[ConfigurationProperty("distributeSendCount", IsRequired = false, DefaultValue = 3)]
+		public int DistributeSendCount
+		{
+			get { return (int)this["distributeSendCount"]; }
+		}
 	}
 }

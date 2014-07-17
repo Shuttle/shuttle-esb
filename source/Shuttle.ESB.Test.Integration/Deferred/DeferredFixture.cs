@@ -21,7 +21,7 @@ namespace Shuttle.ESB.Test.Integration.Deferred
 			const int deferredMessageCount = 10;
 			const int millisecondsToDefer = 500;
 
-			var configuration = GetInboxConfiguration(queueUriFormat, queueUriFormat, queueUriFormat, 1, isTransactional);
+			var configuration = GetInboxConfiguration(queueUriFormat, 1, isTransactional);
 
 			var module = new DeferredMessageModule(deferredMessageCount);
 
@@ -48,8 +48,8 @@ namespace Shuttle.ESB.Test.Integration.Deferred
 
 				// wait for the message to be returned from the deferred queue
 				while (!module.AllMessagesHandled()
-				       &&
-				       !timedOut)
+					   &&
+					   !timedOut)
 				{
 					Thread.Sleep(millisecondsToDefer);
 
@@ -59,9 +59,9 @@ namespace Shuttle.ESB.Test.Integration.Deferred
 				_log.Information(string.Format("[end wait] : now = '{0}' / timeout = '{1}' / timed out = '{2}'", DateTime.Now, timeout, timedOut));
 
 				_log.Information(string.Format("{0} of {1} deferred messages returned to the inbox.",
-				                               module.NumberOfDeferredMessagesReturned, deferredMessageCount));
+											   module.NumberOfDeferredMessagesReturned, deferredMessageCount));
 				_log.Information(string.Format("{0} of {1} deferred messages handled.", module.NumberOfMessagesHandled,
-				                               deferredMessageCount));
+											   deferredMessageCount));
 
 				Assert.IsTrue(module.AllMessagesHandled(), "All the deferred messages were not handled.");
 
@@ -81,24 +81,20 @@ namespace Shuttle.ESB.Test.Integration.Deferred
 				};
 
 			var message = bus.CreateTransportMessage(command, c => c.Defer(ignoreTillDate)
-				         .WithRecipient(bus.Configuration.Inbox.WorkQueue));
+						 .WithRecipient(bus.Configuration.Inbox.WorkQueue));
 
 			bus.Configuration.Inbox.WorkQueue.Enqueue(message.MessageId, bus.Configuration.Serializer.Serialize(message));
 
 			_log.Information(string.Format("[message enqueued] : name = '{0}' / deferred till date = '{1}'", command.Name, message.IgnoreTillDate));
 		}
 
-		private static ServiceBusConfiguration GetInboxConfiguration(string workQueueUriFormat, string deferredQueueUriFormat,
-		                                                             string errorQueueUriFormat, int threadCount,
-		                                                             bool isTransactional)
+		private static ServiceBusConfiguration GetInboxConfiguration(string queueUriFormat, int threadCount, bool isTransactional)
 		{
 			var configuration = DefaultConfiguration(isTransactional);
 
-			var inboxWorkQueue =
-				configuration.QueueManager.GetQueue(string.Format(workQueueUriFormat, "test-inbox-work"));
-			var inboxDeferredQueue =
-				configuration.QueueManager.GetQueue(string.Format(deferredQueueUriFormat, "test-inbox-deferred"));
-			var errorQueue = configuration.QueueManager.GetQueue(string.Format(errorQueueUriFormat, "test-error"));
+			var inboxWorkQueue = configuration.QueueManager.GetQueue(string.Format(queueUriFormat, "test-inbox-work"));
+			var inboxDeferredQueue = configuration.QueueManager.GetQueue(string.Format(queueUriFormat, "test-inbox-deferred"));
+			var errorQueue = configuration.QueueManager.GetQueue(string.Format(queueUriFormat, "test-error"));
 
 			configuration.Inbox =
 				new InboxQueueConfiguration
@@ -106,7 +102,7 @@ namespace Shuttle.ESB.Test.Integration.Deferred
 						WorkQueue = inboxWorkQueue,
 						DeferredQueue = inboxDeferredQueue,
 						ErrorQueue = errorQueue,
-						DurationToSleepWhenIdle = new[] {TimeSpan.FromMilliseconds(5)},
+						DurationToSleepWhenIdle = new[] { TimeSpan.FromMilliseconds(5) },
 						ThreadCount = threadCount
 					};
 
