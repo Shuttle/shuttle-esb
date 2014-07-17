@@ -72,7 +72,8 @@ The `inbox` should be specified if the endpoint has message handlers that need t
       durationToSleepWhenIdle="250ms,10s,30s"
       durationToIgnoreOnFailure="30m,1h"
       maximumFailureCount="25" 
-      distribute="true|false" />
+      distribute="true|false" 
+      distributeSendCount="5" />
 ```
 
 | Attribute						| Default 	| Description	|
@@ -83,6 +84,7 @@ The `inbox` should be specified if the endpoint has message handlers that need t
 | `durationToIgnoreOnFailure`	| 5m,10m,15m,30m,60m | |
 | `maximumFailureCount`			| 5			| The maximum number of failures that are retried before the message is moved to the error queue. |
 | `distribute`					| false		| If `true` the endpoint will act as only a distributor.  If `false` the endpoint will distribute messages if a worker is available; else process the message itself. |
+| `distributeSendCount` | 5 | The number of messages to send to the work per available thread message received.  If less than 1 the default will be used.  |
 
 
 For some queueing technologies the `outbox` may not be required.  Msmq, for instance, create its own outgoing queues.  However, it should be used in scenarios where you need a store-and-forward mechanism for sending messages when the underlying infrastructure does not provide this such as with a SqlServer table-based queue or maybe even the file system.  RabbitMQ will also need an outbox since the destination broker may not be available and it does not have the concept of outgoing queues.
