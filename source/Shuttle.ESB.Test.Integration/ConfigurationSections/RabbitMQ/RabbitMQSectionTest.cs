@@ -6,9 +6,11 @@ namespace Shuttle.ESB.Test.Integration
 	public class RabbitMQSectionTest : RabbitMQSectionFixture
 	{
 		[Test]
-		public void Should_be_able_to_load_a_full_configuration()
+		[TestCase("RabbitMQ.config")]
+		[TestCase("RabbitMQ-Grouped.config")]
+		public void Should_be_able_to_load_a_full_configuration(string file)
 		{
-			var section = GetRabbitMQSection("RabbitMQ.config");
+			var section = GetRabbitMQSection(file);
 
 			Assert.IsNotNull(section);
 

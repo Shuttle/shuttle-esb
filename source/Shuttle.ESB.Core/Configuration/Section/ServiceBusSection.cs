@@ -7,9 +7,7 @@ namespace Shuttle.ESB.Core
     {
         public static ServiceBusSection Open(string file)
         {
-            return ConfigurationManager
-                       .OpenMappedMachineConfiguration(new ConfigurationFileMap(Path.GetFullPath(file)))
-                       .GetSection("serviceBus") as ServiceBusSection;
+			return ShuttleConfigurationSection.Open<ServiceBusSection>("serviceBus", file);
         }
 
         [ConfigurationProperty("messageRoutes", IsRequired = false, DefaultValue = null)]

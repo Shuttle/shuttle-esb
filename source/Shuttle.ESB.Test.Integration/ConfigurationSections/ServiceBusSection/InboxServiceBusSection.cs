@@ -7,9 +7,11 @@ namespace Shuttle.ESB.Test.Integration
 	public class InboxServiceBusSection : ServiceBusSectionFixture
 	{
 		[Test]
-		public void Should_be_able_to_load_a_full_configuration()
+		[TestCase("Inbox-Full.config")]
+		[TestCase("Inbox-Full-Grouped.config")]
+		public void Should_be_able_to_load_a_full_configuration(string file)
 		{
-			var section = GetServiceBusSection("Inbox-Full.config");
+			var section = GetServiceBusSection(file);
 
 			Assert.IsNotNull(section);
 

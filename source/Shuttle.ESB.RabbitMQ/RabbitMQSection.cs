@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.RabbitMQ
 {
@@ -6,9 +7,7 @@ namespace Shuttle.ESB.RabbitMQ
 	{
 		public static RabbitMQSection Open(string file)
 		{
-			return ConfigurationManager
-					   .OpenMappedMachineConfiguration(new ConfigurationFileMap(file))
-					   .GetSection("rabbitmq") as RabbitMQSection;
+			return ShuttleConfigurationSection.Open<RabbitMQSection>("rabbitmq", file);
 		}
 
 		[ConfigurationProperty("requestedHeartbeat", IsRequired = false, DefaultValue = (ushort)30)]

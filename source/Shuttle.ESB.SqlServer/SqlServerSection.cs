@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.SqlServer
 {
@@ -6,9 +7,7 @@ namespace Shuttle.ESB.SqlServer
 	{
 		public static SqlServerSection Open(string file)
 		{
-			return ConfigurationManager
-					   .OpenMappedMachineConfiguration(new ConfigurationFileMap(file))
-					   .GetSection("sqlServer") as SqlServerSection;
+			return ShuttleConfigurationSection.Open<SqlServerSection>("sqlServer", file);
 		}
 
 		[ConfigurationProperty("subscriptionManagerConnectionStringName", IsRequired = false, DefaultValue = "Subscription")]

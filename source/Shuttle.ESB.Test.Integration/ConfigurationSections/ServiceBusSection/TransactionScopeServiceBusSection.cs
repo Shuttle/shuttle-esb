@@ -7,9 +7,11 @@ namespace Shuttle.ESB.Test.Integration
 	public class TransactionScopeServiceBusSection : ServiceBusSectionFixture
 	{
 		[Test]
-		public void Should_be_able_to_load_a_valid_configuration()
+		[TestCase("TransactionScope.config")]
+		[TestCase("TransactionScope-Grouped.config")]
+		public void Should_be_able_to_load_a_valid_configuration(string file)
 		{
-			var section = GetServiceBusSection("TransactionScope.config");
+			var section = GetServiceBusSection(file);
 
 			Assert.IsNotNull(section);
 			Assert.IsFalse(section.TransactionScope.Enabled);

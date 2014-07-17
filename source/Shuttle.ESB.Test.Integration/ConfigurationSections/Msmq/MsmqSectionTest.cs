@@ -6,9 +6,11 @@ namespace Shuttle.ESB.Test.Integration
 	public class MsmqSectionTest : MsmqSectionFixture
 	{
 		[Test]
-		public void Should_be_able_to_load_a_full_configuration()
+		[TestCase("Msmq.config")]
+		[TestCase("Msmq-Grouped.config")]
+		public void Should_be_able_to_load_a_full_configuration(string file)
 		{
-			var section = GetMsmqSection("Msmq.config");
+			var section = GetMsmqSection(file);
 
 			Assert.IsNotNull(section);
 

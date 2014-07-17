@@ -408,4 +408,8 @@
   <data name="SendReplyException" xml:space="preserve">
     <value>Cannot send reply as the provided transport message received has no inbox work queue uri.</value>
   </data>
+  <data name="OpenSectionException" xml:space="preserve">
+    <value>Could not find a section named '{0}' in configuration file '{1}'.</value>
+    <comment>{0} = section name, {1} = configuration file</comment>
+  </data>
 </root>

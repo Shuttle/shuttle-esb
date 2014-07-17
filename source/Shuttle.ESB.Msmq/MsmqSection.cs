@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.Msmq
 {
@@ -6,9 +7,7 @@ namespace Shuttle.ESB.Msmq
 	{
 		public static MsmqSection Open(string file)
 		{
-			return ConfigurationManager
-					   .OpenMappedMachineConfiguration(new ConfigurationFileMap(file))
-					   .GetSection("msmq") as MsmqSection;
+			return ShuttleConfigurationSection.Open<MsmqSection>("msmq", file);
 		}
 
 		[ConfigurationProperty("localQueueTimeoutMilliseconds", IsRequired = false, DefaultValue = 0)]

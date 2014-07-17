@@ -1,5 +1,3 @@
-using System;
-using System.IO;
 using NUnit.Framework;
 
 namespace Shuttle.ESB.Test.Integration
@@ -8,9 +6,11 @@ namespace Shuttle.ESB.Test.Integration
 	public class SqlServerSectionTest : SqlServerSectionFixture
 	{
 		[Test]
-		public void Should_be_able_to_load_a_full_configuration()
+		[TestCase("SqlServer.config")]
+		[TestCase("SqlServer-Grouped.config")]
+		public void Should_be_able_to_load_a_full_configuration(string file)
 		{
-			var section = GetSqlServerSection("SqlServer.config");
+			var section = GetSqlServerSection(file);
 
 			Assert.IsNotNull(section);
 

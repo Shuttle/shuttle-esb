@@ -8,9 +8,11 @@ namespace Shuttle.ESB.Test.Integration
     public class ForwardingRoutesServiceBusSection : ServiceBusSectionFixture
     {
         [Test]
-        public void Should_be_able_to_load_the_configuration()
+		[TestCase("ForwardingRoutes.config")]
+		[TestCase("ForwardingRoutes-Grouped.config")]
+        public void Should_be_able_to_load_the_configuration(string file)
         {
-            var section = GetServiceBusSection("ForwardingRoutes.config");
+            var section = GetServiceBusSection(file);
 
             Assert.IsNotNull(section);
             Assert.AreEqual(2, section.ForwardingRoutes.Count);

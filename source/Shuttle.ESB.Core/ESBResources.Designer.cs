@@ -286,6 +286,15 @@ namespace Shuttle.ESB.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not find a section named &apos;{0}&apos; in configuration file &apos;{1}&apos;..
+        /// </summary>
+        public static string OpenSectionException {
+            get {
+                return ResourceManager.GetString("OpenSectionException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not execute pipeline &apos;{0}&apos;.  Exception: {1}.
         /// </summary>
         public static string PipelineExecutionException {

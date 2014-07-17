@@ -1,4 +1,3 @@
-using Shuttle.ESB.Msmq;
 using Shuttle.ESB.RabbitMQ;
 
 namespace Shuttle.ESB.Test.Integration

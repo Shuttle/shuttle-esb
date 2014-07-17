@@ -8,9 +8,11 @@ namespace Shuttle.ESB.Test.Integration
     public class MessageRoutesServiceBusSection : ServiceBusSectionFixture
     {
         [Test]
-        public void Should_be_able_to_load_the_configuration()
+		[TestCase("MessageRoutes.config")]
+		[TestCase("MessageRoutes-Grouped.config")]
+        public void Should_be_able_to_load_the_configuration(string file)
         {
-            var section = GetServiceBusSection("MessageRoutes.config");
+            var section = GetServiceBusSection(file);
 
             Assert.IsNotNull(section);
             Assert.AreEqual(2, section.MessageRoutes.Count);
