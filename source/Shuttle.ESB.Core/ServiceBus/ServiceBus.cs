@@ -6,7 +6,7 @@ namespace Shuttle.ESB.Core
 {
 	public class ServiceBus : IServiceBus
 	{
-		private static bool _started;
+		private bool _started;
 		private readonly IMessageSender _messageSender;
 
 		private IProcessorThreadPool _controlThreadPool;

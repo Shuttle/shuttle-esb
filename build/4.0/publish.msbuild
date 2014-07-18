@@ -32,8 +32,7 @@
             Properties="DeploymentVersionNumber=$(DeploymentVersionNumber);SemanticVersion=$(SemanticVersion)"
         />
 
-		<MSBuild Projects="debug.msbuild"/>
-		<MSBuild Projects="release.msbuild"/>
+		<MSBuild Projects="build.msbuild" />
 
 		<MSBuild Projects="$(MSBuildProjectFile)" Targets="DeployBinaries" Properties="Framework=%(Framework.Identity)"/>
 

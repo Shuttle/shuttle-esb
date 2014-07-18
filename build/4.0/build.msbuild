@@ -1,0 +1,9 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build" ToolsVersion="4.0">
+	<ItemGroup>
+		<Framework Include="net35-full;net40-full;net45-full" />
+	</ItemGroup>
+	<Target Name="Build">
+		<MSBuild Projects="shared.msbuild" Properties="Configuration=Debug;Framework=%(Framework.Identity);OutputPath=$(MSBuildProjectDirectory)\..\debug\%(Framework.Identity)\$(TargetFileName)"/>
+		<MSBuild Projects="shared.msbuild" Properties="Configuration=Release;Framework=%(Framework.Identity);OutputPath=$(MSBuildProjectDirectory)\..\release\%(Framework.Identity)\$(TargetFileName)"/>
+	</Target>
+</Project>

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -31,14 +32,14 @@ namespace Shuttle.ESB.SqlServer
 
 			return
 				new SubscriptionManager(configuration,
-				                        new ScriptProvider(configuration),
-				                        DatabaseConnectionFactory.Default(),
-				                        DatabaseGateway.Default());
+										new ScriptProvider(configuration),
+										DatabaseConnectionFactory.Default(),
+										DatabaseGateway.Default());
 		}
 
 
 		public SubscriptionManager(ISqlServerConfiguration configuration, IScriptProvider scriptProvider,
-		                           IDatabaseConnectionFactory databaseConnectionFactory, IDatabaseGateway databaseGateway)
+								   IDatabaseConnectionFactory databaseConnectionFactory, IDatabaseGateway databaseGateway)
 		{
 			Guard.AgainstNull(scriptProvider, "scriptProvider");
 			Guard.AgainstNull(databaseConnectionFactory, "databaseConnectionFactory");
@@ -49,7 +50,7 @@ namespace Shuttle.ESB.SqlServer
 			this.databaseGateway = databaseGateway;
 
 			SubscriptionDataSource = new DataSource(configuration.SubscriptionManagerConnectionStringName,
-			                                        new SqlDbDataParameterFactory());
+													new SqlDbDataParameterFactory());
 		}
 
 		protected bool HasDeferredSubscriptions
@@ -84,28 +85,50 @@ namespace Shuttle.ESB.SqlServer
 			}
 		}
 
-		public void Subscribe(IEnumerable<string> messageTypes)
+		public void Subscribe(IEnumerable<string> messageTypeFullNames)
 		{
+			Guard.AgainstNull(messageTypeFullNames, "messageTypeFullNames");
+
 			if (!Started)
 			{
-				deferredSubscriptions.AddRange(messageTypes);
+				deferredSubscriptions.AddRange(messageTypeFullNames);
 
 				return;
 			}
 
 			using (databaseConnectionFactory.Create(SubscriptionDataSource))
 			{
-				foreach (var messageType in messageTypes)
+				foreach (var messageType in messageTypeFullNames)
 				{
 					databaseGateway.ExecuteUsing(
 						SubscriptionDataSource,
 						RawQuery.Create(
 							scriptProvider.GetScript(Script.SubscriptionManagerSubscribe))
-						        .AddParameterValue(SubscriptionManagerColumns.InboxWorkQueueUri,
-						                           serviceBusConfiguration.Inbox.WorkQueue.Uri.ToString())
-						        .AddParameterValue(SubscriptionManagerColumns.MessageType, messageType));
+								.AddParameterValue(SubscriptionManagerColumns.InboxWorkQueueUri,
+												   serviceBusConfiguration.Inbox.WorkQueue.Uri.ToString())
+								.AddParameterValue(SubscriptionManagerColumns.MessageType, messageType));
 				}
 			}
+		}
+
+		public void Subscribe(string messageTypeFullName)
+		{
+			Subscribe(new[] { messageTypeFullName });
+		}
+
+		public void Subscribe(IEnumerable<Type> messageTypes)
+		{
+			Subscribe(messageTypes.Select(messageType => messageType.FullName).ToList());
+		}
+
+		public void Subscribe(Type messageType)
+		{
+			Subscribe(new[] { messageType.FullName });
+		}
+
+		public void Subscribe<T>()
+		{
+			Subscribe(new[] { typeof(T).FullName });
 		}
 
 		public IEnumerable<string> GetSubscribedUris(object message)
@@ -129,12 +152,12 @@ namespace Shuttle.ESB.SqlServer
 								RawQuery.Create(
 									scriptProvider.GetScript(
 										Script.SubscriptionManagerInboxWorkQueueUris))
-								        .AddParameterValue(SubscriptionManagerColumns.MessageType, messageType));
+										.AddParameterValue(SubscriptionManagerColumns.MessageType, messageType));
 						}
 
 						subscribers.Add(messageType, (from DataRow row in table.Rows
-						                              select SubscriptionManagerColumns.InboxWorkQueueUri.MapFrom(row))
-							                             .ToList());
+													  select SubscriptionManagerColumns.InboxWorkQueueUri.MapFrom(row))
+														 .ToList());
 					}
 				}
 			}
