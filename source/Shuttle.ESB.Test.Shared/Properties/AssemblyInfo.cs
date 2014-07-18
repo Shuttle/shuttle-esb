@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
 
 [assembly: AssemblyTitle("Shuttle.ESB.Test.Shared")]
-[assembly: AssemblyVersion("3.0.3.0")]
+[assembly: AssemblyVersion("3.1.0.0")]
 

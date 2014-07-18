@@ -1,23 +1,14 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <RootFolder>D:\development.github\shuttle\shuttle-esb\build\4.0\..\..</RootFolder>
-    <Framework Condition="'$(Framework)' == ''">net35-full</Framework>
-    <TargetFolder>..\$(Configuration)\</TargetFolder>
-  </PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\source\Shuttle.ESB.Castle\Shuttle.ESB.Castle.csproj" />
+		<ProjectReference Include="..\..\source\Shuttle.ESB.Core\Shuttle.ESB.Core.csproj" />
+		<ProjectReference Include="..\..\source\Shuttle.ESB.Modules\Shuttle.ESB.Modules.csproj" />
+		<ProjectReference Include="..\..\source\Shuttle.ESB.Msmq\Shuttle.ESB.Msmq.csproj" />
+		<ProjectReference Include="..\..\source\Shuttle.ESB.RabbitMQ\Shuttle.ESB.RabbitMQ.csproj" />
+		<ProjectReference Include="..\..\source\Shuttle.ESB.SqlServer\Shuttle.ESB.SqlServer.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\source\**\*.csproj" Exclude="..\..\source\**\Shuttle.ESB.Test.*.csproj" />
-    <ProjectReference Include="..\..\samples\**\*.csproj" />
-
-	<Framework Include="net35-full;net40-full;net45-full" />
-  </ItemGroup>
-
-  <Target Name="PerformBuild">
-    <MSBuild Projects="@(ProjectReference)" Targets="Rebuild" Properties="Framework=%(Framework.Identity);Configuration=$(Configuration)"></MSBuild>
-  </Target>
-
-  <Target Name="BuildEnvironment">
-    <Error Text="The 'EnvironmentName' property must be set." Condition="'$(EnvironmentName)' == ''" />
-    <CallTarget Targets="PerformBuild"></CallTarget>
-  </Target>
+	<Target Name="Build">
+		<MSBuild Projects="@(ProjectReference)" Targets="Rebuild" Properties="Configuration=$(Configuration);Framework=$(Framework);OutputPath=$(OutputPath)"/>
+	</Target>
 </Project>

@@ -12,4 +12,4 @@
 [assembly: AssemblyTitle("Shuttle.ESB.Modules for .NET Framework 4.5")]
 #endif
 
-[assembly: AssemblyVersion("3.0.3.0")]
+[assembly: AssemblyVersion("3.1.0.0")]
