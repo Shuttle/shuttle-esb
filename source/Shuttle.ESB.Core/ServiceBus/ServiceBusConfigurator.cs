@@ -92,8 +92,7 @@ namespace Shuttle.ESB.Core
 			return this;
 		}
 
-		public ServiceBusConfigurator TransactionScopeFactory(
-			ITransactionScopeFactory transactionScopeFactory)
+		public ServiceBusConfigurator TransactionScopeFactory(ITransactionScopeFactory transactionScopeFactory)
 		{
 			Guard.AgainstNull(transactionScopeFactory, "transactionScopeFactory");
 
@@ -116,6 +115,15 @@ namespace Shuttle.ESB.Core
 			Guard.AgainstNull(forwardingRouteProvider, "forwardingRouteProvider");
 
 			configuration.ForwardingRouteProvider = forwardingRouteProvider;
+
+			return this;
+		}
+
+		public ServiceBusConfigurator IdempotenceService(IIdempotenceService idempotenceService)
+		{
+			Guard.AgainstNull(idempotenceService, "idempotenceService");
+
+			configuration.IdempotenceService = idempotenceService;
 
 			return this;
 		}
