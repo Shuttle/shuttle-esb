@@ -334,20 +334,20 @@ Go to the [IdempotenceService] documentation.
 ```
 
 
-[Encryption]: {{ BASE_PATH }}/encryption/index.html
-[Compression]: {{ BASE_PATH }}/compression/index.html
-[HandlerContext]: {{ BASE_PATH }}/handler-context/index.html
-[IMessageHandlerFactory]: {{ BASE_PATH }}/message-handler-factory/index.html
-[IMessageRouteProvider]: {{ BASE_PATH }}/message-route-provider/index.html
-[IPipelineFactory]: {{ BASE_PATH }}/pipeline-factory/index.html
-[ISerializer]: {{ BASE_PATH }}/serializer/index.html
-[IServiceBusPolicy]: {{ BASE_PATH }}/service-bus-policy/index.html
-[ISubscriptionManager]: {{ BASE_PATH }}/subscription-manager/index.html
-[IThreadActivityFactory]: {{ BASE_PATH }}/thread-activity-factory/index.html
-[ITransactionScopeFactory]: {{ BASE_PATH }}/transactionscope-factory/index.html
-[MessageSender]: {{ BASE_PATH }}/message-sender/index.html
-[Modules]: {{ BASE_PATH }}/modules/index.html
-[ServiceBusConfigurator]: {{ BASE_PATH }}/service-bus-configurator/index.html
-[TransportMessage]: {{ BASE_PATH }}/transport-message/index.html
-[TransportMessageConfigurator]: {{ BASE_PATH }}/transport-message-configurator/index.html
-[IdempotenceService]: {{ BASE_PATH }}/idempotence-service/index.html
+[Encryption]: {{ BASE_PATH }}/encryption
+[Compression]: {{ BASE_PATH }}/compression
+[HandlerContext]: {{ BASE_PATH }}/handler-context
+[IMessageHandlerFactory]: {{ BASE_PATH }}/message-handler-factory
+[IMessageRouteProvider]: {{ BASE_PATH }}/message-route-provider
+[IPipelineFactory]: {{ BASE_PATH }}/pipeline-factory
+[ISerializer]: {{ BASE_PATH }}/serializer
+[IServiceBusPolicy]: {{ BASE_PATH }}/service-bus-policy
+[ISubscriptionManager]: {{ BASE_PATH }}/subscription-manager
+[IThreadActivityFactory]: {{ BASE_PATH }}/thread-activity-factory
+[ITransactionScopeFactory]: {{ BASE_PATH }}/transactionscope-factory
+[MessageSender]: {{ BASE_PATH }}/message-sender
+[Modules]: {{ BASE_PATH }}/modules
+[ServiceBusConfigurator]: {{ BASE_PATH }}/service-bus-configurator
+[TransportMessage]: {{ BASE_PATH }}/transport-message
+[TransportMessageConfigurator]: {{ BASE_PATH }}/transport-message-configurator
+[IdempotenceService]: {{ BASE_PATH }}/idempotence-service
