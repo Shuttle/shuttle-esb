@@ -316,6 +316,23 @@ Go to the [Modules] documentation.
         ServiceBusConfigurator AddModule(IModule module);
 	}
 ```
+.
+### IdempotenceService
+
+Go to the [IdempotenceService] documentation.
+
+``` c#
+	public interface IServiceBusConfiguration
+	{
+		IIdempotenceService IdempotenceService { get; }
+	}
+
+	public class ServiceBusConfigurator
+	{
+        ServiceBusConfigurator IdempotenceService(IIdempotenceService idempotenceService);
+	}
+```
+
 
 [Encryption]: {{ BASE_PATH }}/encryption/index.html
 [Compression]: {{ BASE_PATH }}/compression/index.html
@@ -333,3 +350,4 @@ Go to the [Modules] documentation.
 [ServiceBusConfigurator]: {{ BASE_PATH }}/service-bus-configurator/index.html
 [TransportMessage]: {{ BASE_PATH }}/transport-message/index.html
 [TransportMessageConfigurator]: {{ BASE_PATH }}/transport-message-configurator/index.html
+[IdempotenceService]: {{ BASE_PATH }}/idempotence-service/index.html

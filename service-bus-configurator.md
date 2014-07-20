@@ -112,6 +112,14 @@ public ServiceBusConfigurator TransactionScopeFactory(ITransactionScopeFactory t
 
 The [ITransactionScopeFactory] instance is used to create `ITransactionScope` instances for placing code within a `TransactionScope`.  *You will probably never specify this*.
 
+### IdempotenceService
+
+``` c#
+public ServiceBusConfigurator IdempotenceService(IIdempotenceService idempotenceService)
+```
+
+The [IdempotenceService] instance is used to ensure that *technically* identical messages (with the same message id) are not processed more than once.  It also ensures that messages sent within a transaction scope are only sent after the transaction scope has been commited.
+
 [Compression]: {{ BASE_PATH }}/compression/index.html
 [Encryption]: {{ BASE_PATH }}/encryption/index.html
 [IMessageHandler]: {{ BASE_PATH }}/message-handler/index.html
@@ -125,3 +133,4 @@ The [ITransactionScopeFactory] instance is used to create `ITransactionScope` in
 [Module]: {{ BASE_PATH }}/modules/index.html
 [ServiceBusConfiguration]: {{ BASE_PATH }}/service-bus-configuration/index.html
 [TransportMessage]: {{ BASE_PATH }}/transport-message/index.html
+[IdempotenceService]: {{ BASE_PATH }}/idempotence-service/index.html
