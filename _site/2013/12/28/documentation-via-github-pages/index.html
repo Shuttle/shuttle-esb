@@ -1,0 +1,445 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Moved documentation over to GitHub Pages</title>
+    
+    <meta name="author" content="Eben Roux">
+
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap styles -->
+    <link href="http://shuttle.github.io/shuttle-esb/assets/themes/shuttle/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Optional theme -->
+    <link href="http://shuttle.github.io/shuttle-esb/assets/themes/shuttle/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+    <!-- Sticky Footer -->
+    <link href="http://shuttle.github.io/shuttle-esb/assets/themes/shuttle/bootstrap/css/bs-sticky-footer.css" rel="stylesheet">
+    
+    <!-- Custom styles -->
+    <link href="http://shuttle.github.io/shuttle-esb/assets/themes/shuttle/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+    <link href="http://shuttle.github.io/shuttle-esb/assets/themes/shuttle/css/jquery.tocify.css" rel="stylesheet" type="text/css" media="all">
+	
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <!-- Update these with your own images
+      <link rel="shortcut icon" href="images/favicon.ico">
+      <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+      <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+      <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    -->
+
+    <!-- atom & rss feed -->
+    <link href="http://shuttle.github.io/shuttle-esb/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="http://shuttle.github.io/shuttle-esb/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+
+  </head>
+
+  <body>
+    <div id="wrap">
+      <nav class="navbar navbar-default" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#jb-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="http://shuttle.github.io/shuttle-esb">shuttle-esb</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="jb-navbar-collapse">
+			<ul class='nav navbar-nav'>
+				<li>
+					<a href='http://shuttle.github.io/shuttle-esb/'>Home</a>
+				</li>
+				<li class='dropdown'>
+					<a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+					Guides
+					<b class='caret'></b>
+					</a>
+					<ul class='dropdown-menu'>
+						<li>
+							<a href='http://shuttle.github.io/shuttle-esb/getting-started'>Getting Started</a>
+						</li>
+						<li class='divider'></li>
+						<li>
+							<a href='http://shuttle.github.io/shuttle-esb/architecture'>Architecture &amp; Patterns</a>
+						</li>
+						<li class='divider'></li>
+						<li>
+							<a href='http://shuttle.github.io/shuttle-esb/modules'>Modules</a>
+						</li>
+					</ul>
+				</li>
+				<li class='dropdown'>
+					<a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+					API
+					<b class='caret'></b>
+					</a>
+					<ul class='dropdown-menu'>
+						<li class='dropdown-header'>Core</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/encryption'>Encryption</a>
+							</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/compression'>Compression</a>
+							</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/idempotence-service'>Idempotence Service</a>
+							</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/message-handler-factory'>Message Handler Factory</a>
+							</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/message-route-provider'>Message Route Provider (+Forwarding)</a>
+							</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/message-sender'>Message Sender</a>
+							</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/pipeline-factory'>Pipeline Factory</a>
+							</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/service-bus-policy'>Policy</a>
+							</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/serializer'>Serializer</a>
+							</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/service-bus'>Service Bus</a>
+							</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/subscription-manager'>Subscription Manager</a>
+							</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/thread-activity-factory'>Thread Activity Factory</a>
+							</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/transactionscope-factory'>TransactionScope Factory</a>
+							</li>
+						<li class='divider'></li>
+						<li class='dropdown-header'>Miscellaneous</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/full-configuration'>Full Configuration</a>
+							</li>
+						</li>
+					</ul>
+				</li>
+				<li class='dropdown'>
+					<a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+					Extensions
+					<b class='caret'></b>
+					</a>
+					<ul class='dropdown-menu'>
+						<li class='dropdown-header'>Queues</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/extensions-rabbitmq'>RabbitMQ</a>
+							</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/extensions-msmq'>MSMQ</a>
+							</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/extensions-sql-server'>Sql Server</a>
+							</li>
+						<li class='divider'></li>
+						<li class='dropdown-header'>Factories</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/extensions-castle-project'>Castle Project</a>
+							</li>
+						</li>
+						<li class='divider'></li>
+						<li class='dropdown-header'>Modules</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/modules-corrupt-messages'>Corrupt Transport Messages</a>
+							</li>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a href='http://www.youtube.com/shuttleservicebus' target='_blank'>Videos</a>
+				</li>
+				<li>
+					<a href='http://shuttle.github.io/shuttle-esb/archive'>Archive</a>
+				</li>
+				
+				
+				
+
+
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="http://shuttle.github.io/shuttle-esb/archive/">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="http://shuttle.github.io/shuttle-esb/categories/">Categories</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="http://shuttle.github.io/shuttle-esb/pages/">Pages</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="http://shuttle.github.io/shuttle-esb/tags/">Tags</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+
+
+
+			</ul>
+          <ul class="nav navbar-nav navbar-right">
+			
+			<li>
+			  <a href="https://github.com/Shuttle/shuttle-esb" class="hidden-xs hidden-sm" target="_blank">GitHub</a>
+			</li>
+			
+		  </ul>
+        </div><!-- /.navbar-collapse -->
+      </nav>
+
+      <div class="container">
+        
+<div class="page-header">
+  <h1>Moved documentation over to GitHub Pages </h1>
+</div>
+
+<div class="row post-full">
+  <div class="col-xs-12">
+    <div class="date">
+      <span>28 December 2013</span>
+    </div>
+    <div class="content">
+      <p>I decided to go with GitHub Pages for our documentation.  Getting Jekyll working locally on Windows 8 was somewhat tricky but I have ended upwith a structure that I am happy with.</p>
+
+<p>Initially I tried using Flatdoc and the HighlightJS for the the -orentied pages but using the templates and syntax highlighting through Jekyll and Pygments directly to produce static pages ended up being a bit simpler.</p>
+
+<p>If you pick up any issues with the dccumentation please log it.  You are also welcome to fork the <a href="https://github.com/Shuttle/shuttle-esb">Shuttle repository</a> and update the documentation before sending a pull request.</p>
+
+    </div>
+
+    
+
+    
+  
+    <hr>
+    <ul class="pagination">
+    
+      <li class="prev disabled"><a>&larr; Previous</a></li>
+    
+      <li><a href="http://shuttle.github.io/shuttle-esb/archive.html">Archive</a></li>
+    
+      <li class="next"><a href="http://shuttle.github.io/shuttle-esb/2014/04/24/shuttle-esb-v3.0.0-rc4/" title="Shuttle ESB v3.0.0-rc4">Next &raquo;</a></li>
+    
+    </ul>
+    <hr>
+    
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    
+    var disqus_shortname = 'jekyllbootstrap'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+  </div>
+</div>
+
+
+      </div>
+
+    </div>
+
+    <div id="footer">
+        <p>&copy; 2014 Eben Roux
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a> / <a href="http://github.com/dhulihan/hooligan" target="_blank">The Hooligan Theme</a>
+        </p>
+    </div id="footer">
+
+    
+
+    <script src="http://shuttle.github.io/shuttle-esb/assets/themes/shuttle/js/jquery.min.js"></script>
+	<script src="http://shuttle.github.io/shuttle-esb/assets/themes/shuttle/js/jquery-ui.js"></script>
+	<script src="http://shuttle.github.io/shuttle-esb/assets/themes/shuttle/bootstrap/js/bootstrap.min.js"></script>
+	<script src="http://shuttle.github.io/shuttle-esb/assets/themes/shuttle/js/jquery.tocify.js"></script>
+	<script src="http://shuttle.github.io/shuttle-esb/assets/themes/shuttle/js/site.js"></script>
+  </body>
+</html>

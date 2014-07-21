@@ -1,0 +1,653 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Architecture & Patterns</title>
+    
+    <meta name="author" content="Eben Roux">
+
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap styles -->
+    <link href="http://shuttle.github.io/shuttle-esb/assets/themes/shuttle/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Optional theme -->
+    <link href="http://shuttle.github.io/shuttle-esb/assets/themes/shuttle/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+    <!-- Sticky Footer -->
+    <link href="http://shuttle.github.io/shuttle-esb/assets/themes/shuttle/bootstrap/css/bs-sticky-footer.css" rel="stylesheet">
+    
+    <!-- Custom styles -->
+    <link href="http://shuttle.github.io/shuttle-esb/assets/themes/shuttle/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+    <link href="http://shuttle.github.io/shuttle-esb/assets/themes/shuttle/css/jquery.tocify.css" rel="stylesheet" type="text/css" media="all">
+	
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <!-- Update these with your own images
+      <link rel="shortcut icon" href="images/favicon.ico">
+      <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+      <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+      <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    -->
+
+    <!-- atom & rss feed -->
+    <link href="http://shuttle.github.io/shuttle-esb/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="http://shuttle.github.io/shuttle-esb/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+
+  </head>
+
+  <body>
+    <div id="wrap">
+      <nav class="navbar navbar-default" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#jb-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="http://shuttle.github.io/shuttle-esb">shuttle-esb</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="jb-navbar-collapse">
+			<ul class='nav navbar-nav'>
+				<li>
+					<a href='http://shuttle.github.io/shuttle-esb/'>Home</a>
+				</li>
+				<li class='dropdown'>
+					<a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+					Guides
+					<b class='caret'></b>
+					</a>
+					<ul class='dropdown-menu'>
+						<li>
+							<a href='http://shuttle.github.io/shuttle-esb/getting-started'>Getting Started</a>
+						</li>
+						<li class='divider'></li>
+						<li>
+							<a href='http://shuttle.github.io/shuttle-esb/architecture'>Architecture &amp; Patterns</a>
+						</li>
+						<li class='divider'></li>
+						<li>
+							<a href='http://shuttle.github.io/shuttle-esb/modules'>Modules</a>
+						</li>
+					</ul>
+				</li>
+				<li class='dropdown'>
+					<a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+					API
+					<b class='caret'></b>
+					</a>
+					<ul class='dropdown-menu'>
+						<li class='dropdown-header'>Core</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/encryption'>Encryption</a>
+							</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/compression'>Compression</a>
+							</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/idempotence-service'>Idempotence Service</a>
+							</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/message-handler-factory'>Message Handler Factory</a>
+							</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/message-route-provider'>Message Route Provider (+Forwarding)</a>
+							</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/message-sender'>Message Sender</a>
+							</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/pipeline-factory'>Pipeline Factory</a>
+							</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/service-bus-policy'>Policy</a>
+							</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/serializer'>Serializer</a>
+							</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/service-bus'>Service Bus</a>
+							</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/subscription-manager'>Subscription Manager</a>
+							</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/thread-activity-factory'>Thread Activity Factory</a>
+							</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/transactionscope-factory'>TransactionScope Factory</a>
+							</li>
+						<li class='divider'></li>
+						<li class='dropdown-header'>Miscellaneous</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/full-configuration'>Full Configuration</a>
+							</li>
+						</li>
+					</ul>
+				</li>
+				<li class='dropdown'>
+					<a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+					Extensions
+					<b class='caret'></b>
+					</a>
+					<ul class='dropdown-menu'>
+						<li class='dropdown-header'>Queues</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/extensions-rabbitmq'>RabbitMQ</a>
+							</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/extensions-msmq'>MSMQ</a>
+							</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/extensions-sql-server'>Sql Server</a>
+							</li>
+						<li class='divider'></li>
+						<li class='dropdown-header'>Factories</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/extensions-castle-project'>Castle Project</a>
+							</li>
+						</li>
+						<li class='divider'></li>
+						<li class='dropdown-header'>Modules</li>
+							<li>
+								<a href='http://shuttle.github.io/shuttle-esb/modules-corrupt-messages'>Corrupt Transport Messages</a>
+							</li>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a href='http://www.youtube.com/shuttleservicebus' target='_blank'>Videos</a>
+				</li>
+				<li>
+					<a href='http://shuttle.github.io/shuttle-esb/archive'>Archive</a>
+				</li>
+				
+				
+				
+
+
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="http://shuttle.github.io/shuttle-esb/archive/">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="http://shuttle.github.io/shuttle-esb/categories/">Categories</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="http://shuttle.github.io/shuttle-esb/pages/">Pages</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="http://shuttle.github.io/shuttle-esb/tags/">Tags</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+
+
+
+			</ul>
+          <ul class="nav navbar-nav navbar-right">
+			
+			<li>
+			  <a href="https://github.com/Shuttle/shuttle-esb" class="hidden-xs hidden-sm" target="_blank">GitHub</a>
+			</li>
+			
+		  </ul>
+        </div><!-- /.navbar-collapse -->
+      </nav>
+
+      <div class="container">
+        
+<div class="row">
+	<div id='toc-container' class='col-md-3'>
+	<div id="toc-anchor"></div> 
+	<div id='toc' class='visible-md visible-lg'></div>
+	</div>
+	<div class='col-md-9'>
+	<h1>Concepts</h1>
+
+<p>Code samples provided on this page do not represent a sample or solution but do show how some of the concepts would be applied in Shuttle ESB.  For help on putting together your first implementation you can take a look at the <a href="/getting-started/index.html">getting started</a> page.</p>
+
+<p>The basic parts of Shuttle ESB consist of:</p>
+
+<ul>
+<li>Messages</li>
+<li>Queues</li>
+<li>Service bus</li>
+</ul>
+
+<p>Every service bus instance is associated with, and therefore processes, only one input queue.  This is the inbox.  All messages received in the inbox are processed by the associated service bus instance.</p>
+
+<h2>Messages</h2>
+
+<p>Shuttle is based on messages.  The messages are data transfer objects that implement a specific message interface, e.g.:</p>
+<div class="highlight"><pre><code class="c# language-c#" data-lang="c#">    <span class="k">public</span> <span class="k">class</span> <span class="nc">ActivateMemberCommand</span>
+    <span class="p">{</span>
+        <span class="kt">string</span> <span class="n">MemberId</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">MemberActivatedEvent</span>
+    <span class="p">{</span>
+        <span class="kt">string</span> <span class="n">MemberId</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div>
+<h2>Queues</h2>
+
+<p>Messages are processed by message handlers that are invoked by Shuttle ESB.  When a service bus is started it starts listening for messages in an inbox queue.  So messages have to end up in the relevant queue to be processed.  The inbox configuration is specified in the application configuration file.</p>
+
+<p>The approach taken is an <strong>at-least-once</strong> delivery.  This differs from an <strong>exactly-once</strong> delivery in that edge cases may result in a message being processed more than once (these should hardly ever occur).  However, for other mechanism edge cases may result in a message loss which is impossible to spot (a duplicate message is easier to spot than no message at all).</p>
+
+<p>It is important to note that all queues are non-destructive and should always be implemented with acknowledgement in mind.  So as soon as a message is retrieved from the queue it should be possible to either acknowledge the message to release the message back onto the queue.</p>
+
+<h2>Service bus</h2>
+
+<p>A service bus instance is required in every application that accesses the service bus.  To configure the service bus a combination of code, the application configuration file, and custom components is used, e.g.:</p>
+<div class="highlight"><pre><code class="c# language-c#" data-lang="c#">    <span class="k">public</span> <span class="k">class</span> <span class="nc">ServiceBusHost</span> <span class="p">:</span> <span class="n">IHost</span><span class="p">,</span> <span class="n">IDisposable</span>
+    <span class="p">{</span>
+        <span class="k">private</span> <span class="k">static</span> <span class="n">IServiceBus</span> <span class="n">bus</span><span class="p">;</span>
+
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">Start</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">bus</span> <span class="p">=</span> <span class="n">ServiceBus</span><span class="p">.</span><span class="n">Create</span><span class="p">().</span><span class="n">Start</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">Dispose</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">bus</span><span class="p">.</span><span class="n">Dispose</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div>
+<p>A service bus instance is created and started on application startup and disposed on exit.  A service bus can be hosted in any type of application but the most typical scenario is to host them as services.  Although you <em>can</em> write your own service to host your service bus it is not a requirement since you may want to make use of the <a href="/generic-host/index.html">generic service host</a>.</p>
+
+<h1>Message Types</h1>
+
+<h2>Command message</h2>
+
+<p>A command message is used to tell another system or component what to do.  This implies that the calling system is aware of the behaviour of the called system.  There is, therefore, a high degree of [behavioural coupling].</p>
+
+<p>A command message always <em><strong>belongs</strong></em> to a single endpoint.  Sending a command will never result in the message going to more than <strong>one</strong> queue.</p>
+
+<p>Although one should aim to minimize these message types they are required in certain situations as will be discussed in the following sections.</p>
+
+<h3>Starting a process</h3>
+
+<p>There are situations where we need to <em>start</em> something off.  Let&#39;s take the case of receiving an order from a client.  In our application we would send a <strong>CreateOrderCommand</strong> to our order service.  This would kick off the relevant processs.</p>
+
+<p>So from the client code:</p>
+<div class="highlight"><pre><code class="c# language-c#" data-lang="c#">    <span class="n">bus</span><span class="p">.</span><span class="n">Send</span><span class="p">(</span><span class="k">new</span> <span class="n">CreateOrderCommand</span><span class="p">(</span><span class="s">&quot;ClientName&quot;</span><span class="p">,</span> <span class="s">&quot;ProductXYZ&quot;</span><span class="p">));</span>
+</code></pre></div>
+<p>The call would fail if there is nowhere to send the message.</p>
+
+<p>Now we could publish an event such as <strong>OrderReceivedEvent</strong> and our order service could subscribe to the event and also kick everything off.</p>
+<div class="highlight"><pre><code class="c# language-c#" data-lang="c#">    <span class="n">bus</span><span class="p">.</span><span class="n">Publish</span><span class="p">(</span><span class="k">new</span> <span class="n">OrderOrderReceivedEvent</span><span class="p">(</span><span class="s">&quot;ClientName&quot;</span><span class="p">,</span> <span class="s">&quot;ProductXYZ&quot;</span><span class="p">));</span>
+</code></pre></div>
+<p>The call would not fail should there be no subscribers.  </p>
+
+<p>So the difference is purely the intent of the message.  When we can use events they should be preferred but when certain actions are <strong>required</strong> in the system a command may be better suited.  Of course, even when using a command approach there may still be some other system interested in knowing that an order has been received so the order service would then publish the event.</p>
+
+<h3>Lower-level functions (RPC)</h3>
+
+<p>In some situations an event will not be able to relay the intent of any particular action.  For instance, we may need to send an e-mail to a manager whenever an order is created (or when the total amount of the order exceeds a set limit).  The e-mail service responsible for sending e-mails via our smtp server will not be able to subscribe to the OrderReceivedEvent since the e-mail system would need to be adapted to accomodate rules from another system.</p>
+
+<p>In this case the e-mail system is responsible for sending e-mails.  Any system that would like to send a mail will need to decide when to do so.  Therefore, the order service would send a <em>command</em> to the e-mail service:</p>
+<div class="highlight"><pre><code class="c# language-c#" data-lang="c#">    <span class="n">bus</span><span class="p">.</span><span class="n">Send</span><span class="p">(</span><span class="k">new</span> <span class="n">SendMailCommand</span>
+                 <span class="p">{</span>
+                     <span class="n">To</span> <span class="p">=</span> <span class="s">&quot;manager@ordercompany.co.za&quot;</span><span class="p">,</span>
+                     <span class="n">From</span> <span class="p">=</span> <span class="s">&quot;orderservice@ordercompany.co.za&quot;</span><span class="p">,</span>
+                     <span class="n">Subject</span> <span class="p">=</span> <span class="s">&quot;Important Order Received&quot;</span><span class="p">,</span>
+                     <span class="n">Body</span> <span class="p">=</span> <span class="s">&quot;Order Details&quot;</span>
+                 <span class="p">});</span>
+</code></pre></div>
+<h2>Event message</h2>
+
+<p>An event message is used to notify any subscribed components that something significant to the business has taken place.  Each component subscribed to an event will get a copy of the event message.  If no subscribers exist for an event then publishing the event will have no effect.</p>
+
+<h2>Document message</h2>
+
+<p>A document message is used to simply send data to an endpoint.  As with the event message it carries no intent and the recipient may do with it as it pleases.  This does not meean that data will be sent to an endpoint for no reason.  An endpoint may request a document from some service.  Or data is automatically sent to some endpoint since it may be a requirement.</p>
+
+<h1>Coupling</h1>
+
+<h2>Behavioural coupling</h2>
+
+<p>Behavioural coupling refers to THE degree one system is aware of the behaviour of another.  When a command is sent to a system you expect it to behave in a particular way.  This represents a high degree of behavioural coupling.  When an event message is published there is no expectation from any subscriber to react in any specific way.  This is a low degree of behavioural coupling.</p>
+
+<p>It is conceivable that there may be an expectation that an event will result in a particular outcome in which case the behavioural coupling increases again.</p>
+
+<h2>Temporal coupling</h2>
+
+<p>Temporal coupling refers to the availability of services <strong>when</strong> they are required.  </p>
+
+<p>Should <em>ServiceA</em> require <em>ServiceB</em> to be available for <em>ServiceA</em> to function there is a high degree of temporal coupling.  Conversely, if <em>ServiceA</em> can continue to operate even though <em>ServiceB</em> is down then there is a low degree of temporal coupling.</p>
+
+<p>A synchronous web-service call is an example of high temporal coupling.</p>
+
+<p>Now you may be wondering how <em>ServiceA</em> can continue to operate even though it requires <em>ServiceB</em> to perform some function.  The answer is asynchronous communication using queues.  One may argue that a web-service call may be made asynchronously but there is a difference.  <em>ServiceA</em> may go down before a required response is received resulting in the web-service call failing.</p>
+
+<p>With messages things always move in one direction at a time.  <em>ServiceA</em> to <em>ServiceB</em> is one operation and will eventually complete.  <em>ServiceB</em> to <em>ServiceA</em> is another movement and will eventually complete.</p>
+
+<h1>Patterns</h1>
+
+<h2>Request / Response</h2>
+
+<p>For some background on <strong>Request/Response</strong> messaging pattern you can have a look at the <a href="http://en.wikipedia.org/wiki/Request-response">Wikipedia article</a>.</p>
+
+<p><img src="/assets/images/Architecture-RequestResponse.png" alt="Request/Response Image" title="Request/Response"></p>
+
+<p>To request an endpoint to perform a certain function you send a command message:</p>
+<div class="highlight"><pre><code class="c# language-c#" data-lang="c#">    <span class="n">bus</span><span class="p">.</span><span class="n">Send</span><span class="p">(</span><span class="k">new</span> <span class="n">RequestMessage</span><span class="p">());</span>
+</code></pre></div>
+<p>Although this is a very simple pattern it results in rather tight behavioural coupling.  This is not necessarily a bad thing and in many instances it is definitely required.</p>
+
+<p>Typically the message handler for the command message goes about its business and processes the message.  But there will be times when a response is required.</p>
+
+<p>The response can then be a command message or an event message and you can simply call the <strong>reply</strong> method on the service bus instance:</p>
+<div class="highlight"><pre><code class="c# language-c#" data-lang="c#">    <span class="n">bus</span><span class="p">.</span><span class="n">Send</span><span class="p">(</span><span class="k">new</span> <span class="n">ResponseMessage</span><span class="p">(),</span> <span class="n">c</span> <span class="p">=&gt;</span> <span class="n">c</span><span class="p">.</span><span class="n">Reply</span><span class="p">());</span>
+</code></pre></div>
+<p>The response may, of course, be decoupled by publishing an event message but it is up to the implementor to decide the mechanism.  This would then no longer be request/response but rather publish/subscribe.  The advantage of request/response isthat it provides the ability to respond to the caller directly whereas publishing a message would result in <strong>all</strong> publishers receiving a copy of the message.</p>
+
+<h2>Publish / Subscribe</h2>
+
+<p>For some background on <strong>Publish/Subscribe</strong> messaging pattern you can have a look at the <a href="http://en.wikipedia.org/wiki/Publish/subscribe">Wikipedia article</a>.</p>
+
+<p><img src="/assets/images/Architecture-PublishSubscribe.png" alt="Publish/Subscribe Image" title="Publish/Subscribe"></p>
+
+<p>This pattern results in no behavioural coupling between the publisher and subscriber(s).  In fact, there may be no subscribers to a particular event message whatsoever but that would not be a typical scenario as an event should be published for some business reason and <em>this</em> implies that there should be <em>at least</em> one subscriber.  To publish an event message you use the following:</p>
+<div class="highlight"><pre><code class="c# language-c#" data-lang="c#">    <span class="n">bus</span><span class="p">.</span><span class="n">Publish</span><span class="p">(</span><span class="k">new</span> <span class="n">EventMessage</span><span class="p">());</span>
+</code></pre></div>
+<p>Each subscriber receives its own copy of the message to process.  This differs substantially from message distribution where a particular message will only be sent to a single worker to handle.</p>
+
+<h2>Message Distribution</h2>
+
+<p>It is conceivable that an endpoint can start falling behind with its processing if it receives too much work.  In such cases it may be changed to distribute messages to worker nodes.</p>
+
+<p><img src="/assets/images/Architecture-MessageDistribution.png" alt="Message Distribution Image" title="Message Distribution"></p>
+
+<p>An endpoint will automatically distribute messages to workers if it receives a worker availability message.  An endpoint can be configured to only distribute messages, and not process, by setting the <code>distribute</code> attribute of the <code>inbox</code> configuration tag to <code>true</code>.</p>
+
+<p>Since message distribution is integrated into the inbox processing the same endpoint simply needs to be installed aa many times as required on different machines as workers.  The endpoint that you would like to have messages distributed on would require a control inbox configuration since all Shuttle messages should be processed without waiting in a queue like the inbox proper behind potentially thousands of messages.  Each worker is identified as such in its configuration and the control inbox of the endpoint performing the distribution is required:</p>
+<div class="highlight"><pre><code class="xml language-xml" data-lang="xml"><span class="nt">&lt;configuration&gt;</span>
+   <span class="nt">&lt;configSections&gt;</span>
+      <span class="nt">&lt;section</span> <span class="na">name=</span><span class="s">&quot;serviceBus&quot;</span> <span class="na">type=</span><span class="s">&quot;Shuttle.ESB.Core.ServiceBusSection, Shuttle.ESB.Core&quot;</span><span class="nt">/&gt;</span>
+   <span class="nt">&lt;/configSections&gt;</span>
+
+   <span class="nt">&lt;serviceBus&gt;</span>
+      <span class="nt">&lt;control</span> 
+          <span class="na">workQueueUri=</span><span class="s">&quot;msmq://./control-inbox-work&quot;</span> 
+          <span class="na">errorQueueUri=</span><span class="s">&quot;msmq://./shuttle-error&quot;</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;inbox</span> 
+          <span class="na">distribute=</span><span class="s">&quot;true&quot;</span>
+          <span class="na">workQueueUri=</span><span class="s">&quot;msmq://./inbox-work&quot;</span> 
+          <span class="na">errorQueueUri=</span><span class="s">&quot;msmq://./shuttle-error&quot;</span><span class="nt">/&gt;</span>
+   <span class="nt">&lt;/serviceBus&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span>
+</code></pre></div>
+<p>Any endpoint that receives messages can be configured to include message distribution.</p>
+
+<p>You then install as many workers as you require on as many machines as you want to and configure them to talk to a distributor.  The physical distributor along with all the related workers form the logical endpoint for a message.  The worker configuration is as follows:</p>
+<div class="highlight"><pre><code class="xml language-xml" data-lang="xml"><span class="nt">&lt;configuration&gt;</span>
+   <span class="nt">&lt;configSections&gt;</span>
+      <span class="nt">&lt;section</span> <span class="na">name=</span><span class="s">&quot;serviceBus&quot;</span> <span class="na">type=</span><span class="s">&quot;Shuttle.ESB.Core.ServiceBusSection, Shuttle.ESB.Core&quot;</span><span class="nt">/&gt;</span>
+   <span class="nt">&lt;/configSections&gt;</span>
+
+   <span class="nt">&lt;serviceBus&gt;</span>
+      <span class="nt">&lt;worker</span>
+         <span class="na">distributorControlWorkQueueUri=</span><span class="s">&quot;msmq:///control-inbox=work&quot;</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;inbox</span>
+         <span class="na">workQueueUri=</span><span class="s">&quot;msmq://./workerN-inbox-work&quot;</span>
+         <span class="na">errorQueueUri=</span><span class="s">&quot;msmq://./shuttle-error&quot;</span>
+         <span class="na">threadCount=</span><span class="s">&quot;15&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;/inbox&gt;</span>
+   <span class="nt">&lt;/serviceBus&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span>
+</code></pre></div>
+<p>As soon as the application configuration file contains the <strong>worker</strong> tag each thread that goes idle will send a message to the distributor to indicate that a thread has become available to perform word.  The distributor will then send a message for each available thread.</p>
+
+<h3>Message Distribution Exceptions</h3>
+
+<p>Some queueing technologies do not require message distribution.  Instead of a worker another instance of the endpoint can consume the same input queue.  This mechanism applies to brokers.  Since brokers manage queues centrally the messages are consumed via consumers typically running per thread.  Where the consumers originates does not matter so the queue can be consumed from various processes.</p>
+
+<p>The broker style differes from something like Msmq or Sql-based queues where the message-handling is managed by the process hosting the thread-consumers.  Here <code>process-A</code> would not be aware of which messages are being consumed by <code>process-B</code> leading to one <em>stealing</em> messages from the other.</p>
+
+<h1>Message Routing</h1>
+
+<p>Typically when sending a message the message is a command.  It does not <em>have</em> to be a command and you <em>can</em> send an event message to a specific endpoint but more-often-than-not you will be sending a command.  Messages are sent by calling one of the relevant overloaded methods on the service bus instance:</p>
+<div class="highlight"><pre><code class="c# language-c#" data-lang="c#">        <span class="n">TransportMessage</span> <span class="nf">Send</span><span class="p">(</span><span class="kt">object</span> <span class="n">message</span><span class="p">);</span>
+        <span class="n">TransportMessage</span> <span class="nf">Send</span><span class="p">(</span><span class="kt">object</span> <span class="n">message</span><span class="p">,</span> <span class="n">Action</span><span class="p">&lt;</span><span class="n">TransportMessageConfigurator</span><span class="p">&gt;</span> <span class="n">configure</span><span class="p">);</span>
+</code></pre></div>
+<p>Only messages that have not <code>RecipientInboxWorkQueueUri</code> set will be routed by the service bus.</p>
+
+<p>The <code>TransportMessage</code> envelope will be returned if you need access to any of the metadata available for the message.</p>
+
+<p>Shuttle ESB uses an implementation of a <code>IMessageRouteProvider</code> to determine where messages are sent.</p>
+<div class="highlight"><pre><code class="c# language-c#" data-lang="c#">    <span class="k">public</span> <span class="k">interface</span> <span class="n">IMessageRouteProvider</span>
+    <span class="p">{</span>
+        <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">GetRouteUris</span><span class="p">(</span><span class="kt">object</span> <span class="n">message</span><span class="p">);</span>   
+    <span class="p">}</span>
+</code></pre></div>
+<p>The message route provider to use is specified when constructing the service bus:</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">    bus = ServiceBus
+        .Create(c =&gt; c.MessageRouteProvider(new DefaultForwardingRouteProvider())
+        .Start();
+</code></pre></div>
+<p>The <code>DefaultMessageRouteProvider</code> makes use of the application configuration file to determine where to send messages:</p>
+<div class="highlight"><pre><code class="xml language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;</span>
+<span class="nt">&lt;configuration&gt;</span>
+   <span class="nt">&lt;configSections&gt;</span>
+      <span class="nt">&lt;section</span> <span class="na">name=</span><span class="s">&quot;serviceBus&quot;</span> <span class="na">type=</span><span class="s">&quot;Shuttle.ESB.Core.ServiceBusSection, Shuttle.ESB.Core&quot;</span><span class="nt">/&gt;</span>
+   <span class="nt">&lt;/configSections&gt;</span>
+
+   <span class="nt">&lt;serviceBus&gt;</span>
+      <span class="nt">&lt;messageRoutes&gt;</span>
+         <span class="nt">&lt;messageRoute</span> <span class="na">uri=</span><span class="s">&quot;msmq://serverA/inbox&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;add</span> <span class="na">specification=</span><span class="s">&quot;StartsWith&quot;</span> <span class="na">value=</span><span class="s">&quot;Shuttle.Messages1&quot;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;add</span> <span class="na">specification=</span><span class="s">&quot;StartsWith&quot;</span> <span class="na">value=</span><span class="s">&quot;Shuttle.Messages2&quot;</span> <span class="nt">/&gt;</span>
+         <span class="nt">&lt;/messageRoute&gt;</span>
+         <span class="nt">&lt;messageRoute</span> <span class="na">uri=</span><span class="s">&quot;sql://serverB/inbox&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;add</span> <span class="na">specification=</span><span class="s">&quot;TypeList&quot;</span> <span class="na">value=</span><span class="s">&quot;DoSomethingCommand, Assembly&quot;</span> <span class="nt">/&gt;</span>
+         <span class="nt">&lt;/messageRoute&gt;</span>
+         <span class="nt">&lt;messageRoute</span> <span class="na">uri=</span><span class="s">&quot;msmq://serverC/inbox&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;add</span> <span class="na">specification=</span><span class="s">&quot;Regex&quot;</span> <span class="na">value=</span><span class="s">&quot;.+[Cc]ommand.+&quot;</span> <span class="nt">/&gt;</span>
+         <span class="nt">&lt;/messageRoute&gt;</span>
+         <span class="nt">&lt;messageRoute</span> <span class="na">uri=</span><span class="s">&quot;sql://serverD/inbox&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;add</span> <span class="na">specification=</span><span class="s">&quot;Assembly&quot;</span> <span class="na">value=</span><span class="s">&quot;TheAssemblyName&quot;</span> <span class="nt">/&gt;</span>
+         <span class="nt">&lt;/messageRoute&gt;</span>
+      <span class="nt">&lt;/messageRoutes&gt;</span>
+   <span class="nt">&lt;/serviceBus&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span>
+</code></pre></div>
+<p>Each implementation of <code>IMessageRouteProvider</code> can determine the routes however it needs to from the given message.  A typical scenario, and the way the <code>DefaultMessageRouteProvider</code> works, is to use the full type name to determine the destination.</p>
+
+<p><strong>Please note</strong>: each message type may only be sent to <em>one</em> endpoint (using <code>Send</code>).</p>
+
+	</div>
+</div>
+
+
+      </div>
+
+    </div>
+
+    <div id="footer">
+        <p>&copy; 2014 Eben Roux
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a> / <a href="http://github.com/dhulihan/hooligan" target="_blank">The Hooligan Theme</a>
+        </p>
+    </div id="footer">
+
+    
+
+    <script src="http://shuttle.github.io/shuttle-esb/assets/themes/shuttle/js/jquery.min.js"></script>
+	<script src="http://shuttle.github.io/shuttle-esb/assets/themes/shuttle/js/jquery-ui.js"></script>
+	<script src="http://shuttle.github.io/shuttle-esb/assets/themes/shuttle/bootstrap/js/bootstrap.min.js"></script>
+	<script src="http://shuttle.github.io/shuttle-esb/assets/themes/shuttle/js/jquery.tocify.js"></script>
+	<script src="http://shuttle.github.io/shuttle-esb/assets/themes/shuttle/js/site.js"></script>
+  </body>
+</html>
