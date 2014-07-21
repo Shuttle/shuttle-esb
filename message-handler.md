@@ -35,5 +35,5 @@ The `<T>` generic argument should be the type of the POCO message you are intere
 	</serviceBus>
 ```
 
-[HandlerContext]: {{ BASE_PATH }}/handler-context/index.html
-[IMessageHandlerFactory]: {{ BASE_PATH }}/message-handler-factory/index.html
+[HandlerContext]: {{ site.baseurl }}/handler-context/index.html
+[IMessageHandlerFactory]: {{ site.baseurl }}/message-handler-factory/index.html

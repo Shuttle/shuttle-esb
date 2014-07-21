@@ -333,21 +333,20 @@ Go to the [IdempotenceService] documentation.
 	}
 ```
 
-
-[Encryption]: {{ BASE_PATH }}/encryption
-[Compression]: {{ BASE_PATH }}/compression
-[HandlerContext]: {{ BASE_PATH }}/handler-context
-[IMessageHandlerFactory]: {{ BASE_PATH }}/message-handler-factory
-[IMessageRouteProvider]: {{ BASE_PATH }}/message-route-provider
-[IPipelineFactory]: {{ BASE_PATH }}/pipeline-factory
-[ISerializer]: {{ BASE_PATH }}/serializer
-[IServiceBusPolicy]: {{ BASE_PATH }}/service-bus-policy
-[ISubscriptionManager]: {{ BASE_PATH }}/subscription-manager
-[IThreadActivityFactory]: {{ BASE_PATH }}/thread-activity-factory
-[ITransactionScopeFactory]: {{ BASE_PATH }}/transactionscope-factory
-[MessageSender]: {{ BASE_PATH }}/message-sender
-[Modules]: {{ BASE_PATH }}/modules
-[ServiceBusConfigurator]: {{ BASE_PATH }}/service-bus-configurator
-[TransportMessage]: {{ BASE_PATH }}/transport-message
-[TransportMessageConfigurator]: {{ BASE_PATH }}/transport-message-configurator
-[IdempotenceService]: {{ BASE_PATH }}/idempotence-service
+[Encryption]: {{ site.baseurl }}/encryption
+[Compression]: {{ site.baseurl }}/compression
+[HandlerContext]: {{ site.baseurl }}/handler-context
+[IMessageHandlerFactory]: {{ site.baseurl }}/message-handler-factory
+[IMessageRouteProvider]: {{ site.baseurl }}/message-route-provider
+[IPipelineFactory]: {{ site.baseurl }}/pipeline-factory
+[ISerializer]: {{ site.baseurl }}/serializer
+[IServiceBusPolicy]: {{ site.baseurl }}/service-bus-policy
+[ISubscriptionManager]: {{ site.baseurl }}/subscription-manager
+[IThreadActivityFactory]: {{ site.baseurl }}/thread-activity-factory
+[ITransactionScopeFactory]: {{ site.baseurl }}/transactionscope-factory
+[MessageSender]: {{ site.baseurl }}/message-sender
+[Modules]: {{ site.baseurl }}/modules
+[ServiceBusConfigurator]: {{ site.baseurl }}/service-bus-configurator
+[TransportMessage]: {{ site.baseurl }}/transport-message
+[TransportMessageConfigurator]: {{ site.baseurl }}/transport-message-configurator
+[IdempotenceService]: {{ site.baseurl }}/idempotence-service

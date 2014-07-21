@@ -11,4 +11,4 @@ You can see a list of the shuttle-esb <a href="http://www.nuget.org/packages?q=s
 
 Since this is a pre-release remember to include pre-releases in your searches/selection:
 
-![Shuttle-ESB Nuget Prerelease Image]({{ BASE_PATH }}/assets/images/nuget-shuttle-esb-prerelease.png "Shuttle-ESB Nuget Prerelease")
+![Shuttle-ESB Nuget Prerelease Image]({{ site.baseurl }}/assets/images/nuget-shuttle-esb-prerelease.png "Shuttle-ESB Nuget Prerelease")

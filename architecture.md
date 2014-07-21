@@ -4,7 +4,7 @@ layout: api
 ---
 # Concepts
 
-Code samples provided on this page do not represent a sample or solution but do show how some of the concepts would be applied in Shuttle ESB.  For help on putting together your first implementation you can take a look at the [getting started]({{ BASE_PATH }}/getting-started/index.html) page.
+Code samples provided on this page do not represent a sample or solution but do show how some of the concepts would be applied in Shuttle ESB.  For help on putting together your first implementation you can take a look at the [getting started]({{ site.baseurl }}/getting-started/index.html) page.
 
 The basic parts of Shuttle ESB consist of:
 
@@ -59,7 +59,7 @@ A service bus instance is required in every application that accesses the servic
     }
 ```
 
-A service bus instance is created and started on application startup and disposed on exit.  A service bus can be hosted in any type of application but the most typical scenario is to host them as services.  Although you _can_ write your own service to host your service bus it is not a requirement since you may want to make use of the [generic service host]({{ BASE_PATH }}/generic-host/index.html).
+A service bus instance is created and started on application startup and disposed on exit.  A service bus can be hosted in any type of application but the most typical scenario is to host them as services.  Although you _can_ write your own service to host your service bus it is not a requirement since you may want to make use of the [generic service host]({{ site.baseurl }}/generic-host/index.html).
 
 # Message Types
 
@@ -143,7 +143,7 @@ With messages things always move in one direction at a time.  *ServiceA* to *Ser
 
 For some background on **Request/Response** messaging pattern you can have a look at the [Wikipedia article](http://en.wikipedia.org/wiki/Request-response).
 
-![Request/Response Image]({{ BASE_PATH }}/assets/images/Architecture-RequestResponse.png "Request/Response")
+![Request/Response Image]({{ site.baseurl }}/assets/images/Architecture-RequestResponse.png "Request/Response")
 
 To request an endpoint to perform a certain function you send a command message:
 
@@ -167,7 +167,7 @@ The response may, of course, be decoupled by publishing an event message but it 
 
 For some background on **Publish/Subscribe** messaging pattern you can have a look at the [Wikipedia article](http://en.wikipedia.org/wiki/Publish/subscribe).
 
-![Publish/Subscribe Image]({{ BASE_PATH }}/assets/images/Architecture-PublishSubscribe.png "Publish/Subscribe")
+![Publish/Subscribe Image]({{ site.baseurl }}/assets/images/Architecture-PublishSubscribe.png "Publish/Subscribe")
 
 This pattern results in no behavioural coupling between the publisher and subscriber(s).  In fact, there may be no subscribers to a particular event message whatsoever but that would not be a typical scenario as an event should be published for some business reason and _this_ implies that there should be _at least_ one subscriber.  To publish an event message you use the following:
 
@@ -181,7 +181,7 @@ Each subscriber receives its own copy of the message to process.  This differs s
 
 It is conceivable that an endpoint can start falling behind with its processing if it receives too much work.  In such cases it may be changed to distribute messages to worker nodes.
 
-![Message Distribution Image]({{ BASE_PATH }}/assets/images/Architecture-MessageDistribution.png "Message Distribution")
+![Message Distribution Image]({{ site.baseurl }}/assets/images/Architecture-MessageDistribution.png "Message Distribution")
 
 An endpoint will automatically distribute messages to workers if it receives a worker availability message.  An endpoint can be configured to only distribute messages, and not process, by setting the `distribute` attribute of the `inbox` configuration tag to `true`.
 

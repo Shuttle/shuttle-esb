@@ -120,17 +120,17 @@ public ServiceBusConfigurator IdempotenceService(IIdempotenceService idempotence
 
 The [IdempotenceService] instance is used to ensure that *technically* identical messages (with the same message id) are not processed more than once.  It also ensures that messages sent within a transaction scope are only sent after the transaction scope has been commited.
 
-[Compression]: {{ BASE_PATH }}/compression/index.html
-[Encryption]: {{ BASE_PATH }}/encryption/index.html
-[IMessageHandler]: {{ BASE_PATH }}/message-handler/index.html
-[IMessageHandlerFactory]: {{ BASE_PATH }}/message-handler-factory/index.html
-[IMessageRouteProvider]: {{ BASE_PATH }}/message-route-provider/index.html
-[IPipelineFactory]: {{ BASE_PATH }}/pipeline-factory/index.html
-[IThreadActivityFactory]: {{ BASE_PATH }}/thread-activity-factory/index.html
-[ITransactionScopeFactory]: {{ BASE_PATH }}/transactionscope-factory/index.html
-[IServiceBusPolicy]: {{ BASE_PATH }}/service-bus-policy/index.html
-[ISubscriptionManager]: {{ BASE_PATH }}/subscription-manager/index.html
-[Module]: {{ BASE_PATH }}/modules/index.html
-[ServiceBusConfiguration]: {{ BASE_PATH }}/service-bus-configuration/index.html
-[TransportMessage]: {{ BASE_PATH }}/transport-message/index.html
-[IdempotenceService]: {{ BASE_PATH }}/idempotence-service/index.html
+[Compression]: {{ site.baseurl }}/compression/index.html
+[Encryption]: {{ site.baseurl }}/encryption/index.html
+[IMessageHandler]: {{ site.baseurl }}/message-handler/index.html
+[IMessageHandlerFactory]: {{ site.baseurl }}/message-handler-factory/index.html
+[IMessageRouteProvider]: {{ site.baseurl }}/message-route-provider/index.html
+[IPipelineFactory]: {{ site.baseurl }}/pipeline-factory/index.html
+[IThreadActivityFactory]: {{ site.baseurl }}/thread-activity-factory/index.html
+[ITransactionScopeFactory]: {{ site.baseurl }}/transactionscope-factory/index.html
+[IServiceBusPolicy]: {{ site.baseurl }}/service-bus-policy/index.html
+[ISubscriptionManager]: {{ site.baseurl }}/subscription-manager/index.html
+[Module]: {{ site.baseurl }}/modules/index.html
+[ServiceBusConfiguration]: {{ site.baseurl }}/service-bus-configuration/index.html
+[TransportMessage]: {{ site.baseurl }}/transport-message/index.html
+[IdempotenceService]: {{ site.baseurl }}/idempotence-service/index.html

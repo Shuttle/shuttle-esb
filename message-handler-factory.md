@@ -38,4 +38,4 @@ IEnumerable<Type> MessageTypesHandled { get; }
 
 Returns a list of the message types that will be handled by the factory.
 
-[MessageHandler]: {{ BASE_PATH }}/message-handler/index.html
+[MessageHandler]: {{ site.baseurl }}/message-handler/index.html

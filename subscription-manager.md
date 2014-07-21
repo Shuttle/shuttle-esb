@@ -10,7 +10,7 @@ There is not *default* implementation of the `ISubscriptionManager` interface as
 
 Current implementations:
 
-- [Sql Server]({{ BASE_PATH }}/extensions-sql-server/index.html#SubscriptionManager)
+- [Sql Server]({{ site.baseurl }}/extensions-sql-server/index.html#SubscriptionManager)
 
 ## Methods
 

@@ -93,6 +93,6 @@ public TransportMessage TransportMessage(IServiceBusConfiguration configuration)
 
 This returns a new [TransportMessage] that contains the configured properties.
 
-[MessageSender]: {{ BASE_PATH }}/message-sender/index.html
-[HandlerContext]: {{ BASE_PATH }}/handler-context/index.html
-[TransportMessage]: {{ BASE_PATH }}/transport-message/index.html
+[MessageSender]: {{ site.baseurl }}/message-sender/index.html
+[HandlerContext]: {{ site.baseurl }}/handler-context/index.html
+[TransportMessage]: {{ site.baseurl }}/transport-message/index.html
