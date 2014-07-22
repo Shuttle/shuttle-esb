@@ -12,7 +12,7 @@ $(function(){
 	};
 	
     var move = function() {
-		var st;
+		var st = $(window).scrollTop();
 		var ot;
 		var s;
 	
@@ -22,7 +22,6 @@ $(function(){
 			return;
 		}
 		
-        st = $(window).scrollTop();
         ot = $("#toc-anchor").offset().top;
         s = $("#toc");
 		
