@@ -1,0 +1,473 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Service Bus Configurator</title>
+    
+    <meta name="author" content="Eben Roux">
+
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap styles -->
+    <link href="/assets/themes/shuttle/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Optional theme -->
+    <link href="/assets/themes/shuttle/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+    <!-- Sticky Footer -->
+    <link href="/assets/themes/shuttle/bootstrap/css/bs-sticky-footer.css" rel="stylesheet">
+    
+    <!-- Custom styles -->
+    <link href="/assets/themes/shuttle/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+    <link href="/assets/themes/shuttle/css/jquery.tocify.css" rel="stylesheet" type="text/css" media="all">
+	
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <!-- Update these with your own images
+      <link rel="shortcut icon" href="images/favicon.ico">
+      <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+      <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+      <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    -->
+
+    <!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+
+  </head>
+
+  <body>
+    <div id="wrap">
+      <nav class="navbar navbar-default" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#jb-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">shuttle-esb</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="jb-navbar-collapse">
+			<ul class='nav navbar-nav'>
+				<li>
+					<a href='/'>Home</a>
+				</li>
+				<li class='dropdown'>
+					<a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+					Guides
+					<b class='caret'></b>
+					</a>
+					<ul class='dropdown-menu'>
+						<li>
+							<a href='/getting-started'>Getting Started</a>
+						</li>
+						<li class='divider'></li>
+						<li>
+							<a href='/architecture'>Architecture &amp; Patterns</a>
+						</li>
+						<li class='divider'></li>
+						<li>
+							<a href='/modules'>Modules</a>
+						</li>
+					</ul>
+				</li>
+				<li class='dropdown'>
+					<a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+					API
+					<b class='caret'></b>
+					</a>
+					<ul class='dropdown-menu'>
+						<li class='dropdown-header'>Core</li>
+							<li>
+								<a href='/encryption'>Encryption</a>
+							</li>
+							<li>
+								<a href='/compression'>Compression</a>
+							</li>
+							<li>
+								<a href='/idempotence-service'>Idempotence Service</a>
+							</li>
+							<li>
+								<a href='/message-handler-factory'>Message Handler Factory</a>
+							</li>
+							<li>
+								<a href='/message-route-provider'>Message Route Provider (+Forwarding)</a>
+							</li>
+							<li>
+								<a href='/message-sender'>Message Sender</a>
+							</li>
+							<li>
+								<a href='/pipeline-factory'>Pipeline Factory</a>
+							</li>
+							<li>
+								<a href='/service-bus-policy'>Policy</a>
+							</li>
+							<li>
+								<a href='/serializer'>Serializer</a>
+							</li>
+							<li>
+								<a href='/service-bus'>Service Bus</a>
+							</li>
+							<li>
+								<a href='/subscription-manager'>Subscription Manager</a>
+							</li>
+							<li>
+								<a href='/thread-activity-factory'>Thread Activity Factory</a>
+							</li>
+							<li>
+								<a href='/transactionscope-factory'>TransactionScope Factory</a>
+							</li>
+						<li class='divider'></li>
+						<li class='dropdown-header'>Miscellaneous</li>
+							<li>
+								<a href='/full-configuration'>Full Configuration</a>
+							</li>
+						</li>
+					</ul>
+				</li>
+				<li class='dropdown'>
+					<a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+					Extensions
+					<b class='caret'></b>
+					</a>
+					<ul class='dropdown-menu'>
+						<li class='dropdown-header'>Queues</li>
+							<li>
+								<a href='/extensions-rabbitmq'>RabbitMQ</a>
+							</li>
+							<li>
+								<a href='/extensions-msmq'>MSMQ</a>
+							</li>
+							<li>
+								<a href='/extensions-sql-server'>Sql Server</a>
+							</li>
+						<li class='divider'></li>
+						<li class='dropdown-header'>Factories</li>
+							<li>
+								<a href='/extensions-castle-project'>Castle Project</a>
+							</li>
+						</li>
+						<li class='divider'></li>
+						<li class='dropdown-header'>Modules</li>
+							<li>
+								<a href='/modules-corrupt-messages'>Corrupt Transport Messages</a>
+							</li>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a href='http://www.youtube.com/shuttleservicebus' target='_blank'>Videos</a>
+				</li>
+				<li>
+					<a href='/archive'>Archive</a>
+				</li>
+				
+				
+				
+
+
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive/">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories/">Categories</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/pages/">Pages</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags/">Tags</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+
+
+
+			</ul>
+          <ul class="nav navbar-nav navbar-right">
+			
+			<li>
+			  <a href="https://github.com/Shuttle/shuttle-esb" class="hidden-xs hidden-sm" target="_blank">GitHub</a>
+			</li>
+			
+		  </ul>
+        </div><!-- /.navbar-collapse -->
+      </nav>
+
+      <div class="container">
+        
+<div class="row">
+	<div id='toc-container' class='col-md-3'>
+	<div id="toc-anchor"></div> 
+	<div id='toc' class='visible-md visible-lg'></div>
+	</div>
+	<div class='col-md-9'>
+	<h1>ServiceBusConfigurator</h1>
+
+<p>A <code>ServiceBusConfigurator</code> is used to configure an instance of the <a href="/service-bus-configuration/index.html">ServiceBusConfiguration</a>.</p>
+
+<h2>Methods</h2>
+
+<h3>Configuration</h3>
+<div class="highlight"><pre><code class="c# language-c#" data-lang="c#"><span class="k">public</span> <span class="n">IServiceBusConfiguration</span> <span class="nf">Configuration</span><span class="p">()</span>
+</code></pre></div>
+<p>Returns the configured <a href="/service-bus-configuration/index.html">ServiceBusConfiguration</a> instance.</p>
+
+<h3>MessageSerializer</h3>
+<div class="highlight"><pre><code class="c# language-c#" data-lang="c#"><span class="k">public</span> <span class="n">ServiceBusConfigurator</span> <span class="nf">MessageSerializer</span><span class="p">(</span><span class="n">ISerializer</span> <span class="n">serializer</span><span class="p">)</span>
+</code></pre></div>
+<p>Specify the [ISerializer] instance that will be used for serialize and deserialize <a href="/transport-message/index.html">TransportMessage</a> and the contained <code>Message</code> instances.</p>
+
+<h3>MessageHandlerFactory</h3>
+<div class="highlight"><pre><code class="c# language-c#" data-lang="c#"><span class="k">public</span> <span class="n">ServiceBusConfigurator</span> <span class="nf">MessageHandlerFactory</span><span class="p">(</span><span class="n">IMessageHandlerFactory</span> <span class="n">messageHandlerFactory</span><span class="p">)</span>
+</code></pre></div>
+<p>Specify the <a href="/message-handler-factory/index.html">IMessageHandlerFactory</a> that will be used to obtain <a href="/message-handler/index.html">IMessageHandler</a> implementations.</p>
+
+<h3>AddCompressionAlgorithm</h3>
+<div class="highlight"><pre><code class="c# language-c#" data-lang="c#"><span class="k">public</span> <span class="n">ServiceBusConfigurator</span> <span class="nf">AddCompressionAlgorithm</span><span class="p">(</span><span class="n">ICompressionAlgorithm</span> <span class="n">algorithm</span><span class="p">)</span>
+</code></pre></div>
+<p>Registers a <a href="/compression/index.html">compression</a> algorithm that may e used to either encrypt outgoing messages or decrypt incomming messages.</p>
+
+<h3>AddEnryptionAlgorithm</h3>
+<div class="highlight"><pre><code class="c# language-c#" data-lang="c#"><span class="k">public</span> <span class="n">ServiceBusConfigurator</span> <span class="nf">AddEnryptionAlgorithm</span><span class="p">(</span><span class="n">IEncryptionAlgorithm</span> <span class="n">algorithm</span><span class="p">)</span>
+</code></pre></div>
+<p>Registers an <a href="/encryption/index.html">encryption</a> alggorithm that may be used to either compress outgoing messages or to decompress incomming messages.</p>
+
+<h3>SubscriptionManager</h3>
+<div class="highlight"><pre><code class="c# language-c#" data-lang="c#"><span class="k">public</span> <span class="n">ServiceBusConfigurator</span> <span class="nf">SubscriptionManager</span><span class="p">(</span><span class="n">ISubscriptionManager</span> <span class="n">manager</span><span class="p">)</span>
+</code></pre></div>
+<p>Specify the <a href="/subscription-manager/index.html">ISubscriptionManager</a> implementation to use for the endpoint.</p>
+
+<h3>AddModule</h3>
+<div class="highlight"><pre><code class="c# language-c#" data-lang="c#"><span class="k">public</span> <span class="n">ServiceBusConfigurator</span> <span class="nf">AddModule</span><span class="p">(</span><span class="n">IModule</span> <span class="n">module</span><span class="p">)</span>
+</code></pre></div>
+<p>Adds a <a href="/modules/index.html">module</a> that can extend a pipeline and respond to pipeline events.</p>
+
+<h3>Policy</h3>
+<div class="highlight"><pre><code class="c# language-c#" data-lang="c#"><span class="k">public</span> <span class="n">ServiceBusConfigurator</span> <span class="nf">Policy</span><span class="p">(</span><span class="n">IServiceBusPolicy</span> <span class="n">policy</span><span class="p">)</span>
+</code></pre></div>
+<p>Specify the <a href="/service-bus-policy/index.html">IServiceBusPolicy</a> implementation that will determine retries.</p>
+
+<h3>MessageRouteProvider</h3>
+<div class="highlight"><pre><code class="c# language-c#" data-lang="c#"><span class="k">public</span> <span class="n">ServiceBusConfigurator</span> <span class="nf">MessageRouteProvider</span><span class="p">(</span><span class="n">IMessageRouteProvider</span> <span class="n">messageRouteProvider</span><span class="p">)</span>
+</code></pre></div>
+<p>The <a href="/message-route-provider/index.html">IMessageRouteProvider</a> instance that is used to determine where to <code>Send</code> a message type to.</p>
+
+<h3>ForwardingRouteProvider</h3>
+<div class="highlight"><pre><code class="c# language-c#" data-lang="c#"><span class="k">public</span> <span class="n">ServiceBusConfigurator</span> <span class="nf">ForwardingRouteProvider</span><span class="p">(</span><span class="n">IMessageRouteProvider</span> <span class="n">forwardingRouteProvider</span><span class="p">)</span>
+</code></pre></div>
+<p>The <a href="/message-route-provider/index.html">IMessageRouteProvider</a> instance that is used to determine where to forward a processed message to.</p>
+
+<h3>ThreadActivityFactory</h3>
+<div class="highlight"><pre><code class="c# language-c#" data-lang="c#"><span class="k">public</span> <span class="n">ServiceBusConfigurator</span> <span class="nf">ThreadActivityFactory</span><span class="p">(</span><span class="n">IThreadActivityFactory</span> <span class="n">factory</span><span class="p">)</span>
+</code></pre></div>
+<p>The <a href="/thread-activity-factory/index.html">IThreadActivityFactory</a> instance that will return <code>ThreadActivity</code> instance.  <em>You will probably never specify this</em>. </p>
+
+<h3>PipelineFactory</h3>
+<div class="highlight"><pre><code class="c# language-c#" data-lang="c#"><span class="k">public</span> <span class="n">ServiceBusConfigurator</span> <span class="nf">PipelineFactory</span><span class="p">(</span><span class="n">IPipelineFactory</span> <span class="n">pipelineFactory</span><span class="p">)</span>
+</code></pre></div>
+<p>Specify the <a href="/pipeline-factory/index.html">IPipelineFactory</a> implementation that will return instances of the relevant <code>MessagePipeline</code>.  <em>You will probably never specify this</em>.</p>
+
+<h3>TransactionScopeFactory</h3>
+<div class="highlight"><pre><code class="c# language-c#" data-lang="c#"><span class="k">public</span> <span class="n">ServiceBusConfigurator</span> <span class="nf">TransactionScopeFactory</span><span class="p">(</span><span class="n">ITransactionScopeFactory</span> <span class="n">transactionScopeFactory</span><span class="p">)</span>
+</code></pre></div>
+<p>The <a href="/transactionscope-factory/index.html">ITransactionScopeFactory</a> instance is used to create <code>ITransactionScope</code> instances for placing code within a <code>TransactionScope</code>.  <em>You will probably never specify this</em>.</p>
+
+<h3>IdempotenceService</h3>
+<div class="highlight"><pre><code class="c# language-c#" data-lang="c#"><span class="k">public</span> <span class="n">ServiceBusConfigurator</span> <span class="nf">IdempotenceService</span><span class="p">(</span><span class="n">IIdempotenceService</span> <span class="n">idempotenceService</span><span class="p">)</span>
+</code></pre></div>
+<p>The <a href="/idempotence-service/index.html">IdempotenceService</a> instance is used to ensure that <em>technically</em> identical messages (with the same message id) are not processed more than once.  It also ensures that messages sent within a transaction scope are only sent after the transaction scope has been commited.</p>
+
+	</div>
+</div>
+
+
+      </div>
+
+    </div>
+
+    <div id="footer">
+        <p>&copy; 2014 Eben Roux
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a> / <a href="http://github.com/dhulihan/hooligan" target="_blank">The Hooligan Theme</a>
+        </p>
+    </div id="footer">
+
+    
+
+    <script src="/assets/themes/shuttle/js/jquery.min.js"></script>
+	<script src="/assets/themes/shuttle/js/jquery-ui.js"></script>
+	<script src="/assets/themes/shuttle/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/assets/themes/shuttle/js/jquery.tocify.js"></script>
+	<script src="/assets/themes/shuttle/js/site.js"></script>
+  </body>
+</html>

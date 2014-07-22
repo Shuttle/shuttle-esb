@@ -1,0 +1,447 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Modules</title>
+    
+    <meta name="author" content="Eben Roux">
+
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap styles -->
+    <link href="/assets/themes/shuttle/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Optional theme -->
+    <link href="/assets/themes/shuttle/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+    <!-- Sticky Footer -->
+    <link href="/assets/themes/shuttle/bootstrap/css/bs-sticky-footer.css" rel="stylesheet">
+    
+    <!-- Custom styles -->
+    <link href="/assets/themes/shuttle/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+    <link href="/assets/themes/shuttle/css/jquery.tocify.css" rel="stylesheet" type="text/css" media="all">
+	
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <!-- Update these with your own images
+      <link rel="shortcut icon" href="images/favicon.ico">
+      <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+      <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+      <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    -->
+
+    <!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+
+  </head>
+
+  <body>
+    <div id="wrap">
+      <nav class="navbar navbar-default" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#jb-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">shuttle-esb</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="jb-navbar-collapse">
+			<ul class='nav navbar-nav'>
+				<li>
+					<a href='/'>Home</a>
+				</li>
+				<li class='dropdown'>
+					<a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+					Guides
+					<b class='caret'></b>
+					</a>
+					<ul class='dropdown-menu'>
+						<li>
+							<a href='/getting-started'>Getting Started</a>
+						</li>
+						<li class='divider'></li>
+						<li>
+							<a href='/architecture'>Architecture &amp; Patterns</a>
+						</li>
+						<li class='divider'></li>
+						<li>
+							<a href='/modules'>Modules</a>
+						</li>
+					</ul>
+				</li>
+				<li class='dropdown'>
+					<a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+					API
+					<b class='caret'></b>
+					</a>
+					<ul class='dropdown-menu'>
+						<li class='dropdown-header'>Core</li>
+							<li>
+								<a href='/encryption'>Encryption</a>
+							</li>
+							<li>
+								<a href='/compression'>Compression</a>
+							</li>
+							<li>
+								<a href='/idempotence-service'>Idempotence Service</a>
+							</li>
+							<li>
+								<a href='/message-handler-factory'>Message Handler Factory</a>
+							</li>
+							<li>
+								<a href='/message-route-provider'>Message Route Provider (+Forwarding)</a>
+							</li>
+							<li>
+								<a href='/message-sender'>Message Sender</a>
+							</li>
+							<li>
+								<a href='/pipeline-factory'>Pipeline Factory</a>
+							</li>
+							<li>
+								<a href='/service-bus-policy'>Policy</a>
+							</li>
+							<li>
+								<a href='/serializer'>Serializer</a>
+							</li>
+							<li>
+								<a href='/service-bus'>Service Bus</a>
+							</li>
+							<li>
+								<a href='/subscription-manager'>Subscription Manager</a>
+							</li>
+							<li>
+								<a href='/thread-activity-factory'>Thread Activity Factory</a>
+							</li>
+							<li>
+								<a href='/transactionscope-factory'>TransactionScope Factory</a>
+							</li>
+						<li class='divider'></li>
+						<li class='dropdown-header'>Miscellaneous</li>
+							<li>
+								<a href='/full-configuration'>Full Configuration</a>
+							</li>
+						</li>
+					</ul>
+				</li>
+				<li class='dropdown'>
+					<a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+					Extensions
+					<b class='caret'></b>
+					</a>
+					<ul class='dropdown-menu'>
+						<li class='dropdown-header'>Queues</li>
+							<li>
+								<a href='/extensions-rabbitmq'>RabbitMQ</a>
+							</li>
+							<li>
+								<a href='/extensions-msmq'>MSMQ</a>
+							</li>
+							<li>
+								<a href='/extensions-sql-server'>Sql Server</a>
+							</li>
+						<li class='divider'></li>
+						<li class='dropdown-header'>Factories</li>
+							<li>
+								<a href='/extensions-castle-project'>Castle Project</a>
+							</li>
+						</li>
+						<li class='divider'></li>
+						<li class='dropdown-header'>Modules</li>
+							<li>
+								<a href='/modules-corrupt-messages'>Corrupt Transport Messages</a>
+							</li>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a href='http://www.youtube.com/shuttleservicebus' target='_blank'>Videos</a>
+				</li>
+				<li>
+					<a href='/archive'>Archive</a>
+				</li>
+				
+				
+				
+
+
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive/">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories/">Categories</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/pages/">Pages</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags/">Tags</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+
+
+
+			</ul>
+          <ul class="nav navbar-nav navbar-right">
+			
+			<li>
+			  <a href="https://github.com/Shuttle/shuttle-esb" class="hidden-xs hidden-sm" target="_blank">GitHub</a>
+			</li>
+			
+		  </ul>
+        </div><!-- /.navbar-collapse -->
+      </nav>
+
+      <div class="container">
+        
+<div class="row">
+	<div id='toc-container' class='col-md-3'>
+	<div id="toc-anchor"></div> 
+	<div id='toc' class='visible-md visible-lg'></div>
+	</div>
+	<div class='col-md-9'>
+	<h1>Concepts</h1>
+
+<p>Shuttle-ESB is extensible via modules.  These typically plug into a relevant pipeline to perform additional tasks within the pipeline.</p>
+
+<h2>Implementation</h2>
+
+<p>A module is an implementation of the <code>IModule</code> interface and this, in turn, implements the <code>IRequireInitialization</code> interface.</p>
+<div class="highlight"><pre><code class="c# language-c#" data-lang="c#">    <span class="k">public</span> <span class="k">class</span> <span class="nc">LogMessageOwnerModule</span> <span class="p">:</span> <span class="n">IModule</span>
+    <span class="p">{</span>
+        <span class="k">private</span> <span class="k">readonly</span> <span class="kt">string</span> <span class="n">_receiveMessagePipelineName</span> <span class="p">=</span> <span class="k">typeof</span><span class="p">(</span><span class="n">ReceiveMessagePipeline</span><span class="p">).</span><span class="n">FullName</span><span class="p">;</span>
+
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">Initialize</span><span class="p">(</span><span class="n">IServiceBus</span> <span class="n">bus</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">Guard</span><span class="p">.</span><span class="n">AgainstNull</span><span class="p">(</span><span class="n">bus</span><span class="p">,</span> <span class="s">&quot;bus&quot;</span><span class="p">);</span>
+
+            <span class="n">bus</span><span class="p">.</span><span class="n">Events</span><span class="p">.</span><span class="n">PipelineCreated</span> <span class="p">+=</span> <span class="n">PipelineCreated</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">private</span> <span class="k">void</span> <span class="nf">PipelineCreated</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">PipelineEventArgs</span> <span class="n">e</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(!</span><span class="n">e</span><span class="p">.</span><span class="n">Pipeline</span><span class="p">.</span><span class="n">GetType</span><span class="p">().</span><span class="n">FullName</span><span class="p">.</span><span class="n">Equals</span><span class="p">(</span><span class="n">_receiveMessagePipelineName</span><span class="p">,</span> <span class="n">StringComparison</span><span class="p">.</span><span class="n">InvariantCultureIgnoreCase</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">e</span><span class="p">.</span><span class="n">Pipeline</span><span class="p">.</span><span class="n">RegisterObserver</span><span class="p">(</span><span class="k">new</span> <span class="n">LogMessageOwnerObserver</span><span class="p">());</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div>
+<p>So here we have create a new module that registers the <code>LogMessageOwnerObserver</code> for each newly create <code>ReceiveMessagePipeline</code>.  Since a pipeline simply rasies <code>PipelineEvent</code> instances the observer will need to listen out for the relevant events.  We will log the message owner after the transport message has been deserialized:</p>
+<div class="highlight"><pre><code class="c# language-c#" data-lang="c#">    <span class="k">public</span> <span class="k">class</span> <span class="nc">LogMessageOwnerObserver</span> <span class="p">:</span> <span class="n">IPipelineObserver</span><span class="p">&lt;</span><span class="n">OnAfterDeserializeTransportMessage</span><span class="p">&gt;</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">Execute</span><span class="p">(</span><span class="n">OnDeserializeTransportMessage</span> <span class="n">pipelineEvent</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">var</span> <span class="n">state</span> <span class="p">=</span> <span class="n">pipelineEvent</span><span class="p">.</span><span class="n">Pipeline</span><span class="p">.</span><span class="n">State</span><span class="p">;</span>
+            <span class="kt">var</span> <span class="n">transportMessage</span> <span class="p">=</span> <span class="n">state</span><span class="p">.</span><span class="n">GetTransportMessage</span><span class="p">();</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">transportMessage</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="n">Console</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;This transport message belongs to &#39;{0}&#39;.&quot;</span><span class="p">,</span> <span class="n">transportMessage</span><span class="p">.</span><span class="n">PrincipalIdentityName</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div>
+<p>Each pipeline has a state that contain various items.  You can add state and there are some extensions on the state that return various well-known items such as <code>GetTransportMessage()</code> that returns the <code>TransportMessage</code> on the pipeline.  Prior to deserializing the transport message it will, of course, be <code>null</code>.</p>
+
+<p>Pipeline are re-used so they are created as needed and returned to a pool.  Should a pipeline be retrieved from the pool it will be re-initialized so that the previous state is removed.</p>
+
+	</div>
+</div>
+
+
+      </div>
+
+    </div>
+
+    <div id="footer">
+        <p>&copy; 2014 Eben Roux
+          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
+          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a> / <a href="http://github.com/dhulihan/hooligan" target="_blank">The Hooligan Theme</a>
+        </p>
+    </div id="footer">
+
+    
+
+    <script src="/assets/themes/shuttle/js/jquery.min.js"></script>
+	<script src="/assets/themes/shuttle/js/jquery-ui.js"></script>
+	<script src="/assets/themes/shuttle/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/assets/themes/shuttle/js/jquery.tocify.js"></script>
+	<script src="/assets/themes/shuttle/js/site.js"></script>
+  </body>
+</html>
