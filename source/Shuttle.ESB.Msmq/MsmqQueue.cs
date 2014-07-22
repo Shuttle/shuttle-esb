@@ -8,7 +8,7 @@ using Shuttle.ESB.Core;
 
 namespace Shuttle.ESB.Msmq
 {
-	public class MsmqQueue : IQueue, ICreateQueue, IDropQueue, IPurgeQueue, IRequireInitialization
+	public class MsmqQueue : IQueue, ICreateQueue, IDropQueue, IPurgeQueue
 	{
 		private readonly TimeSpan _timeout;
 		private readonly MsmqUriParser _parser;
@@ -320,11 +320,6 @@ namespace Shuttle.ESB.Msmq
 			}
 
 			Process.GetCurrentProcess().Kill();
-		}
-
-		public void Initialize(IServiceBus bus)
-		{
-			ReturnJournalMessages();
 		}
 	}
 }

@@ -7,12 +7,12 @@ namespace Shuttle.ESB.Test.Integration.Core
 {
 	public class PipelineExceptionFixture : IntegrationFixture
 	{
-		protected void TestExceptionHandling(string workQueueUriFormat, string errorQueueUriFormat)
+		protected void TestExceptionHandling(string queueUriFormat)
 		{
 			var configuration = DefaultConfiguration(true);
 
-			var inboxWorkQueue = configuration.QueueManager.GetQueue(string.Format(workQueueUriFormat, "test-inbox-work"));
-			var inboxErrorQueue = configuration.QueueManager.GetQueue(string.Format(errorQueueUriFormat, "test-error"));
+			var inboxWorkQueue = configuration.QueueManager.GetQueue(string.Format(queueUriFormat, "test-inbox-work"));
+			var inboxErrorQueue = configuration.QueueManager.GetQueue(string.Format(queueUriFormat, "test-error"));
 
 			configuration.Inbox =
 				new InboxQueueConfiguration

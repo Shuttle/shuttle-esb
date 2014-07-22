@@ -44,7 +44,11 @@ namespace Shuttle.ESB.Test.Integration
 		{
 			using (var queueManager = QueueManager.Default())
 			{
+				queueManager.GetQueue(string.Format(queueUriFormat, "test-worker-work")).AttemptDrop();
+				queueManager.GetQueue(string.Format(queueUriFormat, "test-distributor-work")).AttemptDrop();
+				queueManager.GetQueue(string.Format(queueUriFormat, "test-distributor-control")).AttemptDrop();
 				queueManager.GetQueue(string.Format(queueUriFormat, "test-inbox-work")).AttemptDrop();
+				queueManager.GetQueue(string.Format(queueUriFormat, "test-inbox-deferred")).AttemptDrop();
 				queueManager.GetQueue(string.Format(queueUriFormat, "test-error")).AttemptDrop();
 			}
 		}

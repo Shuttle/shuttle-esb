@@ -10,11 +10,11 @@ namespace Shuttle.ESB.Test.Integration
 {
 	public class ResourceUsageFixture : IntegrationFixture
 	{
-		public void TestResourceUsage(string workQueueUriFormat, string errorQueueUriFormat, bool isTransactional)
+		public void TestResourceUsage(string queueUriFormat, bool isTransactional)
 		{
 			const int threadCount = 5;
 
-			var configuration = GetConfiguration(workQueueUriFormat, errorQueueUriFormat, isTransactional, threadCount);
+			var configuration = GetConfiguration(queueUriFormat, isTransactional, threadCount);
 
 			var cpuCounter = new PerformanceCounterValue(new PerformanceCounter
 				{
@@ -87,13 +87,13 @@ namespace Shuttle.ESB.Test.Integration
 			}
 		}
 
-		private static IServiceBusConfiguration GetConfiguration(string workQueueUriFormat, string errorQueueUriFormat, bool isTransactional, int threadCount)
+		private static IServiceBusConfiguration GetConfiguration(string queueUriFormat, bool isTransactional, int threadCount)
 		{
 			var configuration = DefaultConfiguration(isTransactional);
 
 			var inboxWorkQueue =
-				configuration.QueueManager.GetQueue(string.Format(workQueueUriFormat, "test-inbox-work"));
-			var errorQueue = configuration.QueueManager.GetQueue(string.Format(errorQueueUriFormat, "test-error"));
+				configuration.QueueManager.GetQueue(string.Format(queueUriFormat, "test-inbox-work"));
+			var errorQueue = configuration.QueueManager.GetQueue(string.Format(queueUriFormat, "test-error"));
 
 			configuration.Inbox =
 				new InboxQueueConfiguration

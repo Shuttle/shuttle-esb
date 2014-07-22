@@ -83,6 +83,7 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="FileMQ\FileQueueFactoryTest.cs" />
     <Compile Include="Core\Pipeline\MockAuthenticateObserver.cs" />
     <Compile Include="Core\Pipeline\MockPipelineEvent1.cs" />
     <Compile Include="Core\Pipeline\PipelineTest.cs" />
@@ -112,6 +113,10 @@
     <ProjectReference Include="..\Shuttle.ESB.Core\Shuttle.ESB.Core.csproj">
       <Project>{22D75FD9-0E17-43C8-9BD0-F06CA40840C5}</Project>
       <Name>Shuttle.ESB.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Shuttle.ESB.FileMQ\Shuttle.ESB.FileMQ.csproj">
+      <Project>{3f7d27bb-cb34-46af-953f-0f454236dd40}</Project>
+      <Name>Shuttle.ESB.FileMQ</Name>
     </ProjectReference>
     <ProjectReference Include="..\Shuttle.ESB.Msmq\Shuttle.ESB.Msmq.csproj">
       <Project>{DD6566FD-824C-4275-B4EB-269B0FBC70A8}</Project>

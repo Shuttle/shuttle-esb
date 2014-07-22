@@ -96,6 +96,7 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="BasicQueue\BasicQueueFixture.cs" />
+    <Compile Include="BasicQueue\FileQueueTest.cs" />
     <Compile Include="BasicQueue\MsmqQueueTest.cs" />
     <Compile Include="ConcurrentCommand.cs" />
     <Compile Include="ConcurrentHandler.cs" />
@@ -105,10 +106,14 @@
     <Compile Include="ConfigurationSections\SqlServer\SqlServerSectionTest.cs" />
     <Compile Include="ConfigurationSections\RabbitMQ\RabbitMQSectionFixture.cs" />
     <Compile Include="ConfigurationSections\RabbitMQ\RabbitMQSectionTest.cs" />
+    <Compile Include="Deferred\FileDeferredMessageTest.cs" />
+    <Compile Include="Distributor\FileDistributorTest.cs" />
     <Compile Include="Distributor\SqlDistributorTest.cs" />
     <Compile Include="Distributor\RabbitMQDistributorTest.cs" />
     <Compile Include="Distributor\DistributorFixture.cs" />
     <Compile Include="Distributor\MsmqDistributorTest.cs" />
+    <Compile Include="FileMQExtensions.cs" />
+    <Compile Include="Inbox\FileInboxTest.cs" />
     <Compile Include="Inbox\InboxConcurrencyModule.cs" />
     <Compile Include="Inbox\InboxDeferredModule.cs" />
     <Compile Include="Inbox\InboxFixture.cs" />
@@ -124,6 +129,7 @@
     <Compile Include="Idempotence\IdempotenceMessageHandlerFactory.cs" />
     <Compile Include="Idempotence\IdempotenceMessageRouteProvider.cs" />
     <Compile Include="Idempotence\SqlServer\MsmqIdempotenceTest.cs" />
+    <Compile Include="Outbox\FileOutboxTest.cs" />
     <Compile Include="Outbox\RabbitMQOutboxTest.cs" />
     <Compile Include="BasicQueue\RabbitMQQueueTest.cs" />
     <Compile Include="Outbox\MsmqOutboxTest.cs" />
@@ -153,6 +159,7 @@
     <Compile Include="Outbox\SqlOutboxTest.cs" />
     <Compile Include="IntegrationFixture.cs" />
     <Compile Include="BasicQueue\SqlQueueTest.cs" />
+    <Compile Include="ResourceUsage\FileResourceUsageTest.cs" />
     <Compile Include="ResourceUsage\SqlResourceUsageTest.cs" />
     <Compile Include="ResourceUsage\RabbitMQResourceUsageTest.cs" />
     <Compile Include="ResourceUsage\MsmqResourceUsageTest.cs" />
@@ -163,6 +170,10 @@
     <ProjectReference Include="..\Shuttle.ESB.Core\Shuttle.ESB.Core.csproj">
       <Project>{22D75FD9-0E17-43C8-9BD0-F06CA40840C5}</Project>
       <Name>Shuttle.ESB.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Shuttle.ESB.FileMQ\Shuttle.ESB.FileMQ.csproj">
+      <Project>{3f7d27bb-cb34-46af-953f-0f454236dd40}</Project>
+      <Name>Shuttle.ESB.FileMQ</Name>
     </ProjectReference>
     <ProjectReference Include="..\Shuttle.ESB.Msmq\Shuttle.ESB.Msmq.csproj">
       <Project>{DD6566FD-824C-4275-B4EB-269B0FBC70A8}</Project>

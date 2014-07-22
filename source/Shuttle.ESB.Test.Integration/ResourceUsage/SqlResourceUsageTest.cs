@@ -9,9 +9,7 @@ namespace Shuttle.ESB.Test.Integration
 		[TestCase(true)]
 		public void Should_not_exceeed_normal_resource_usage(bool isTransactionalEndpoint)
 		{
-			const string queueUriFormat = "sql://shuttle/{0}";
-
-			TestResourceUsage(queueUriFormat, queueUriFormat, isTransactionalEndpoint);
+			TestResourceUsage("sql://shuttle/{0}", isTransactionalEndpoint);
 		}
 	}
 }
