@@ -1,11 +1,31 @@
 $(function(){
+	var hasTOC = $("#toc").length > 0;
+	
 	var setTOC = function() {
+		var toc = $("#toc");
+		
+		if (!hasTOC){
+			return;
+		}
+	
 		$("#toc").width($('#toc-container').width())
 	};
+	
     var move = function() {
-        var st = $(window).scrollTop();
-        var ot = $("#toc-anchor").offset().top;
-        var s = $("#toc");
+		var st;
+		var ot;
+		var s;
+	
+		$('#footer').css('position', (st + $(window).height()) < ($(document).height() - $(window).height()) ? 'inherit' : 'fixed');
+
+		if (!hasTOC) {
+			return;
+		}
+		
+        st = $(window).scrollTop();
+        ot = $("#toc-anchor").offset().top;
+        s = $("#toc");
+		
         if(st > ot) {
             s.css({
                 position: "fixed",
@@ -19,18 +39,19 @@ $(function(){
                 });
             }
         }
-		$('#footer').css('position', (st + $(window).height()) < ($(document).height() - $(window).height()) ? 'inherit' : 'fixed');
     };
 	
 	setTOC();
 
 	$(window).resize(setTOC);
 
-	$("#toc")
-		.tocify({
-			theme: 'bootstrap'
-		})
-		.data('toc-tocify');
+	if (hasTOC) {
+		$("#toc")
+			.tocify({
+				theme: 'bootstrap'
+			})
+			.data('toc-tocify');
+	}
 	
 	$('table').addClass('table table-hover table-condensed table-responsive');
 	
