@@ -19,6 +19,7 @@ $(function(){
                 });
             }
         }
+		$('#footer').css('position', (st + $(window).height()) < ($(document).height() - $(window).height()) ? 'inherit' : 'fixed');
     };
 	
 	setTOC();
