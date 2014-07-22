@@ -1,0 +1,15 @@
+C:\development.github\shuttle\shuttle-esb\source\Shuttle.ESB.Modules\bin\Debug\Shuttle.ESB.Modules.dll
+C:\development.github\shuttle\shuttle-esb\source\Shuttle.ESB.Modules\bin\Debug\Shuttle.ESB.Modules.pdb
+C:\development.github\shuttle\shuttle-esb\source\Shuttle.ESB.Modules\bin\Debug\Shuttle.Core.Infrastructure.dll
+C:\development.github\shuttle\shuttle-esb\source\Shuttle.ESB.Modules\bin\Debug\Shuttle.ESB.Core.dll
+C:\development.github\shuttle\shuttle-esb\source\Shuttle.ESB.Modules\bin\Debug\Shuttle.ESB.Core.pdb
+C:\development.github\shuttle\shuttle-esb\source\Shuttle.ESB.Modules\obj\Debug\Shuttle.ESB.Modules.ESBModuleResources.resources
+C:\development.github\shuttle\shuttle-esb\source\Shuttle.ESB.Modules\obj\Debug\Shuttle.ESB.Modules.csproj.GenerateResource.Cache
+C:\development.github\shuttle\shuttle-esb\source\Shuttle.ESB.Modules\obj\Debug\Shuttle.ESB.Modules.dll
+C:\development.github\shuttle\shuttle-esb\source\Shuttle.ESB.Modules\obj\Debug\Shuttle.ESB.Modules.pdb
+C:\development.github\shuttle\shuttle-esb\build\debug\net35-full\Shuttle.ESB.Modules.dll
+C:\development.github\shuttle\shuttle-esb\build\debug\net35-full\Shuttle.ESB.Modules.pdb
+C:\development.github\shuttle\shuttle-esb\build\debug\net40-full\Shuttle.ESB.Modules.dll
+C:\development.github\shuttle\shuttle-esb\build\debug\net40-full\Shuttle.ESB.Modules.pdb
+C:\development.github\shuttle\shuttle-esb\build\debug\net45-full\Shuttle.ESB.Modules.dll
+C:\development.github\shuttle\shuttle-esb\build\debug\net45-full\Shuttle.ESB.Modules.pdb

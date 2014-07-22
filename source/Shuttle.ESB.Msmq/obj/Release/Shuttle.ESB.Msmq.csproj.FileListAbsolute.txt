@@ -1,0 +1,10 @@
+C:\development.github\shuttle\shuttle-esb\build\release\net35-full\Shuttle.ESB.Msmq.dll
+C:\development.github\shuttle\shuttle-esb\build\release\net35-full\Shuttle.ESB.Msmq.pdb
+C:\development.github\shuttle\shuttle-esb\source\Shuttle.ESB.Msmq\obj\Release\Shuttle.ESB.Msmq.MsmqResources.resources
+C:\development.github\shuttle\shuttle-esb\source\Shuttle.ESB.Msmq\obj\Release\Shuttle.ESB.Msmq.csproj.GenerateResource.Cache
+C:\development.github\shuttle\shuttle-esb\source\Shuttle.ESB.Msmq\obj\Release\Shuttle.ESB.Msmq.dll
+C:\development.github\shuttle\shuttle-esb\source\Shuttle.ESB.Msmq\obj\Release\Shuttle.ESB.Msmq.pdb
+C:\development.github\shuttle\shuttle-esb\build\release\net40-full\Shuttle.ESB.Msmq.dll
+C:\development.github\shuttle\shuttle-esb\build\release\net40-full\Shuttle.ESB.Msmq.pdb
+C:\development.github\shuttle\shuttle-esb\build\release\net45-full\Shuttle.ESB.Msmq.dll
+C:\development.github\shuttle\shuttle-esb\build\release\net45-full\Shuttle.ESB.Msmq.pdb

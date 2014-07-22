@@ -1,0 +1,9 @@
+C:\development.github\shuttle\shuttle-esb\build\release\net35-full\Shuttle.ESB.Castle.dll
+C:\development.github\shuttle\shuttle-esb\build\release\net35-full\Shuttle.ESB.Castle.pdb
+C:\development.github\shuttle\shuttle-esb\source\Shuttle.ESB.Castle\obj\Release\Shuttle.ESB.Castle.csprojResolveAssemblyReference.cache
+C:\development.github\shuttle\shuttle-esb\source\Shuttle.ESB.Castle\obj\Release\Shuttle.ESB.Castle.dll
+C:\development.github\shuttle\shuttle-esb\source\Shuttle.ESB.Castle\obj\Release\Shuttle.ESB.Castle.pdb
+C:\development.github\shuttle\shuttle-esb\build\release\net40-full\Shuttle.ESB.Castle.dll
+C:\development.github\shuttle\shuttle-esb\build\release\net40-full\Shuttle.ESB.Castle.pdb
+C:\development.github\shuttle\shuttle-esb\build\release\net45-full\Shuttle.ESB.Castle.dll
+C:\development.github\shuttle\shuttle-esb\build\release\net45-full\Shuttle.ESB.Castle.pdb
