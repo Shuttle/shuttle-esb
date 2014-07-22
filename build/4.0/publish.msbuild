@@ -34,8 +34,6 @@
 
 		<MSBuild Projects="build.msbuild" />
 
-		<MSBuild Projects="$(MSBuildProjectFile)" Targets="DeployBinaries" Properties="Framework=%(Framework.Identity)"/>
-
 		<MSBuild
             Projects="$(MSBuildProjectFile)"
             Targets="NugetDeployments"
@@ -56,34 +54,11 @@
 		<FileUpdate Files="@(NugetFiles)" Regex="\&lt;version\&gt;.*\&lt;/version\&gt;" ReplacementText="&lt;version&gt;$(SemanticVersion)&lt;/version&gt;" />
 	</Target>
 
-	<Target Name="DeployBinaries">
-		<ItemGroup>
-			<DeleteFiles Include="$(ReleaseFolder)\**\*.*" />
-		</ItemGroup>
-
-		<Delete Files="@(DeleteFiles)" />
-		<RemoveDir Directories="$(ReleaseFolder)"/>
-
-		<ItemGroup>
-			<CoreFiles Include="..\..\external-bin\shuttle.core\$(Framework)\*.*" />
-			<CastleFiles Include="..\..\external-bin\castle\*.*" />
-			<Log4NetFiles Include="..\..\external-bin\log4net\*.*" />
-
-			<ESBFiles Include="..\..\build\release\$(Framework)\*.*" />
-			<ScriptFiles Include="..\..\source\Shuttle.ESB.SqlServer\Scripts\**\*.*" />
-		</ItemGroup>
-
-		<Copy SourceFiles="%(CoreFiles.FullPath)" DestinationFolder="$(ReleaseFolder)\shuttle\" SkipUnchangedFiles="false" />
-		<Copy SourceFiles="%(ESBFiles.FullPath)" DestinationFolder="$(ReleaseFolder)\shuttle\" SkipUnchangedFiles="false" />
-		<Copy SourceFiles="%(ScriptFiles.FullPath)" DestinationFolder="$(ReleaseFolder)\shuttle\scripts\%(RecursiveDir)" SkipUnchangedFiles="false" />
-		<Copy SourceFiles="%(CastleFiles.FullPath)" DestinationFolder="$(ReleaseFolder)\castle\" SkipUnchangedFiles="false" />
-		<Copy SourceFiles="%(Log4NetFiles.FullPath)" DestinationFolder="$(ReleaseFolder)\log4net\" SkipUnchangedFiles="false" />
-	</Target>
-
 	<Target Name="NugetDeployments">
 		<MSBuild Projects="publish.msbuild" Targets="NugetDeployment" Properties="PackageId=shuttle-esb-core;include=..\release\**\Shuttle.ESB.Core.dll" Condition="$(PackageId) == '' Or $(PackageId) == 'shuttle-esb-core'"/>
 		<MSBuild Projects="publish.msbuild" Targets="NugetDeployment" Properties="PackageId=shuttle-esb-castle;include=..\release\**\Shuttle.ESB.Castle.dll" Condition="$(PackageId) == '' Or $(PackageId) == 'shuttle-esb-castle'"/>
 		<MSBuild Projects="publish.msbuild" Targets="NugetDeployment" Properties="PackageId=shuttle-esb-modules;include=..\release\**\Shuttle.ESB.Modules.dll" Condition="$(PackageId) == '' Or $(PackageId) == 'shuttle-esb-modules'"/>
+		<MSBuild Projects="publish.msbuild" Targets="NugetDeployment" Properties="PackageId=shuttle-esb-filemq;include=..\release\**\Shuttle.ESB.FileMQ.dll" Condition="$(PackageId) == '' Or $(PackageId) == 'shuttle-esb-filemq'"/>
 		<MSBuild Projects="publish.msbuild" Targets="NugetDeployment" Properties="PackageId=shuttle-esb-msmq;include=..\release\**\Shuttle.ESB.Msmq.dll" Condition="$(PackageId) == '' Or $(PackageId) == 'shuttle-esb-msmq'"/>
 		<MSBuild Projects="publish.msbuild" Targets="NugetDeployment" Properties="PackageId=shuttle-esb-rabbitmq;include=..\release\**\Shuttle.ESB.RabbitMQ.dll" Condition="$(PackageId) == '' Or $(PackageId) == 'shuttle-esb-rabbitmq'"/>
 		<MSBuild Projects="publish.msbuild" Targets="NugetDeployment" Properties="PackageId=shuttle-esb-sqlserver;include=..\release\**\Shuttle.ESB.SqlServer.dll" Condition="$(PackageId) == '' Or $(PackageId) == 'shuttle-esb-sqlserver'"/>

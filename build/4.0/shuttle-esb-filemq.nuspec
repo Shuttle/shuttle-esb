@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0"?>
 <package >
 	<metadata>
-		<id>shuttle-esb-msmq</id>
+		<id>shuttle-esb-filemq</id>
 		<version>3.2.0</version>
 		<authors>Eben Roux</authors>
 		<owners>Eben Roux</owners>
@@ -9,10 +9,10 @@
 		<projectUrl>https://github.com/shuttle/shuttle-esb</projectUrl>
 		<iconUrl>https://raw.githubusercontent.com/Shuttle/shuttle-esb/master/media/logo/logo-core-small.png</iconUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<description>Contains the Msmq queue implementation for Shuttle ESB.</description>
+		<description>Contains the file-based queue implementation for Shuttle ESB.</description>
 		<releaseNotes/>
 		<copyright>Copyright (c) 2011-2014, Eben Roux</copyright>
-		<tags>shuttle-esb enterprise-service-bus esb messaging msmq rabbitmq service-bus soa</tags>
+		<tags>shuttle-esb enterprise-service-bus esb messaging filmq service-bus soa</tags>
 		<dependencies>
 			<dependency id="shuttle-core-infrastructure" version="3.1.3" />
 			<dependency id="shuttle-esb-core" version="3.2.0" />

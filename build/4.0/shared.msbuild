@@ -3,6 +3,7 @@
 		<ProjectReference Include="..\..\source\Shuttle.ESB.Castle\Shuttle.ESB.Castle.csproj" />
 		<ProjectReference Include="..\..\source\Shuttle.ESB.Core\Shuttle.ESB.Core.csproj" />
 		<ProjectReference Include="..\..\source\Shuttle.ESB.Modules\Shuttle.ESB.Modules.csproj" />
+		<ProjectReference Include="..\..\source\Shuttle.ESB.FileMQ\Shuttle.ESB.FileMQ.csproj" />
 		<ProjectReference Include="..\..\source\Shuttle.ESB.Msmq\Shuttle.ESB.Msmq.csproj" />
 		<ProjectReference Include="..\..\source\Shuttle.ESB.RabbitMQ\Shuttle.ESB.RabbitMQ.csproj" />
 		<ProjectReference Include="..\..\source\Shuttle.ESB.SqlServer\Shuttle.ESB.SqlServer.csproj" />

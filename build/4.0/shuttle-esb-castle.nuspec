@@ -2,7 +2,7 @@
 <package >
 	<metadata>
 		<id>shuttle-esb-castle</id>
-		<version>3.1.1</version>
+		<version>3.2.0</version>
 		<authors>Eben Roux</authors>
 		<owners>Eben Roux</owners>
 		<licenseUrl>https://github.com/shuttle/shuttle-esb/raw/master/LICENSE</licenseUrl>
@@ -12,11 +12,11 @@
 		<description>Contains the Castle binaries required to develop a Shuttle ESB solution using the WindsorContainer as the Dependency Injection Container.</description>
 		<releaseNotes/>
 		<copyright>Copyright (c) 2011-2014, Eben Roux</copyright>
-		<tags>enterprise-service-bus esb messaging msmq rabbitmq service-bus soa shuttle-esb</tags>
+		<tags>shuttle-esb enterprise-service-bus esb messaging service-bus soa castle</tags>
 		<dependencies>
 			<dependency id="castle.core" version="3.3.0" />
 			<dependency id="castle.windsor" version="3.3.0" />
-			<dependency id="shuttle-esb-core" version="3.1.1" />
+			<dependency id="shuttle-esb-core" version="3.2.0" />
 		</dependencies>
 	</metadata>
 </package>
