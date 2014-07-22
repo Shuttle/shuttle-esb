@@ -38,11 +38,6 @@ namespace Shuttle.ESB.Core
 		{
 			lock (padlock)
 			{
-				if (Contains(message.Identifier))
-				{
-					return;
-				}
-
 				availableWorkers.Add(new AvailableWorker(message));
 			}
 
@@ -50,11 +45,6 @@ namespace Shuttle.ESB.Core
 			{
 				_log.Trace(string.Format("AvailableWorker: {0}", message.InboxWorkQueueUri));
 			}
-		}
-
-		private bool Contains(Guid identifier)
-		{
-			return availableWorkers.Find(availableWorker => availableWorker.Identifier.Equals(identifier)) != null;
 		}
 
 		public void ReturnAvailableWorker(AvailableWorker availableWorker)
