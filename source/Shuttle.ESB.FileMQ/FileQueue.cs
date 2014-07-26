@@ -94,7 +94,7 @@ namespace Shuttle.ESB.FileMQ
 
 			lock (_padlock)
 			{
-				var message = Directory.GetFiles(_queueFolder, ExtensionMask).FirstOrDefault();
+				var message = Directory.GetFiles(_queueFolder, ExtensionMask).OrderBy(file => new FileInfo(file).CreationTime).FirstOrDefault();
 
 				if (string.IsNullOrEmpty(message))
 				{
@@ -117,7 +117,10 @@ namespace Shuttle.ESB.FileMQ
 
 		public void Acknowledge(object acknowledgementToken)
 		{
-			File.Delete(Path.Combine(_journalFolder, (string)acknowledgementToken));
+			lock (_padlock)
+			{
+				File.Delete(Path.Combine(_journalFolder, (string) acknowledgementToken));
+			}
 		}
 
 		public void Release(object acknowledgementToken)
@@ -131,8 +134,12 @@ namespace Shuttle.ESB.FileMQ
 				return;
 			}
 
-			File.Delete(queueMessage);
-			File.Move(journalMessage, queueMessage);
+			lock (_padlock)
+			{
+				File.Delete(queueMessage);
+				File.Move(journalMessage, queueMessage);
+				File.SetCreationTime(queueMessage, DateTime.Now);
+			}
 		}
 
 		public void Create()
