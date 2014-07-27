@@ -12,24 +12,14 @@
 	</ItemGroup>
 
 	<Target Name="PerformRelease">
-		<Prompt Text="Enter new version number:" Condition="$(DeploymentVersionNumber) == ''">
-			<Output TaskParameter="UserInput" PropertyName="DeploymentVersionNumber" />
-		</Prompt>
-
-		<Error Text="Please enter a version number." Condition="$(DeploymentVersionNumber) == ''" />
-
 		<Prompt Text="Enter semantic version:" Condition="$(SemanticVersion) == ''">
 			<Output TaskParameter="UserInput" PropertyName="SemanticVersion" />
 		</Prompt>
 
-		<PropertyGroup>
-			<SemanticVersion Condition="$(SemanticVersion) == ''">$(DeploymentVersionNumber)</SemanticVersion>
-		</PropertyGroup>
-
 		<MSBuild
             Projects="$(MSBuildProjectFile)"
-            Targets="ApplyDeploymentVersionNumber"
-            Properties="DeploymentVersionNumber=$(DeploymentVersionNumber);SemanticVersion=$(SemanticVersion)"
+            Targets="ApplyVersionNumbers"
+            Properties="SemanticVersion=$(SemanticVersion)"
         />
 
 		<MSBuild Projects="build.msbuild" />
@@ -37,12 +27,12 @@
 		<MSBuild
             Projects="$(MSBuildProjectFile)"
             Targets="NugetDeployments"
-            Properties="DeploymentVersionNumber=$(DeploymentVersionNumber);SemanticVersion=$(SemanticVersion);PackageId=$(PackageId);Operation=$(Operation)"
+            Properties="SemanticVersion=$(SemanticVersion);PackageId=$(PackageId);Operation=$(Operation)"
         />
 	</Target>
 
-	<Target Name="ApplyDeploymentVersionNumber">
-		<Error Text="Please enter a version number." Condition="$(DeploymentVersionNumber) == ''" />
+	<Target Name="ApplyVersionNumbers">
+		<Error Text="Please enter a version number." Condition="$(SemanticVersion) == ''" />
 
 		<ItemGroup>
 			<AssemblyInfoFiles Include="..\..\**\*AssemblyInfo.cs"/>
@@ -50,7 +40,7 @@
 		</ItemGroup>
 
 		<FileUpdate Files="@(AssemblyInfoFiles)" Regex="AssemblyInformationalVersion\s*\(\s*&quot;.*&quot;\s*\)" ReplacementText="AssemblyInformationalVersion(&quot;$(SemanticVersion)&quot;)" />
-		<FileUpdate Files="@(AssemblyInfoFiles)" Regex="AssemblyVersion\s*\(\s*&quot;.*&quot;\s*\)" ReplacementText="AssemblyVersion(&quot;$(DeploymentVersionNumber)&quot;)" />
+		<FileUpdate Files="@(AssemblyInfoFiles)" Regex="AssemblyVersion\s*\(\s*&quot;.*&quot;\s*\)" ReplacementText="AssemblyVersion(&quot;$(SemanticVersion).0&quot;)" />
 		<FileUpdate Files="@(NugetFiles)" Regex="\&lt;version\&gt;.*\&lt;/version\&gt;" ReplacementText="&lt;version&gt;$(SemanticVersion)&lt;/version&gt;" />
 	</Target>
 
