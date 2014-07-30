@@ -3,7 +3,7 @@
 		<Framework Include="net35-full;net40-full;net45-full" />
 	</ItemGroup>
 	<Target Name="Build">
-		<MSBuild Projects="shared.msbuild" Properties="Configuration=Debug;Framework=%(Framework.Identity);OutputPath=$(MSBuildProjectDirectory)\..\debug\%(Framework.Identity)\$(TargetFileName)"/>
-		<MSBuild Projects="shared.msbuild" Properties="Configuration=Release;Framework=%(Framework.Identity);OutputPath=$(MSBuildProjectDirectory)\..\release\%(Framework.Identity)\$(TargetFileName)"/>
+		<MSBuild Projects="shared.msbuild" Properties="Configuration=Debug;Framework=%(Framework.Identity);OutputPath=$(MSBuildProjectDirectory)\..\debug\%(Framework.Identity)"/>
+		<MSBuild Projects="shared.msbuild" Properties="Configuration=Release;Framework=%(Framework.Identity);OutputPath=$(MSBuildProjectDirectory)\..\release\%(Framework.Identity)"/>
 	</Target>
 </Project>
