@@ -13,7 +13,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyTitle("Shuttle.ESB.Core for .NET Framework 4.5")]
 #endif
 
-[assembly: AssemblyVersion("3.2.1.0")]
+[assembly: AssemblyVersion("3.2.2.0")]
 [assembly: InternalsVisibleTo("Shuttle.ESB.Test.Shared")]
 [assembly: InternalsVisibleTo("Shuttle.ESB.Test.Integration")]
 [assembly: InternalsVisibleTo("Shuttle.ESB.Test.Unit")]
