@@ -20,8 +20,6 @@ namespace Shuttle.ESB.Core
 
 			Guard.AgainstNull(messageSenderContext, "messageSenderContext");
 
-			messageSenderContext.TransportMessage.SendDate = DateTime.Now;
-
 			if (messageSenderContext.HasTransportMessageReceived && bus.Configuration.HasIdempotenceService)
 			{
 				try
@@ -45,6 +43,7 @@ namespace Shuttle.ESB.Core
 			if (transportMessage.IsIgnoring() && bus.Configuration.HasDeferredQueue)
 			{
 				bus.Configuration.Inbox.DeferredQueue.Enqueue(transportMessage.MessageId, state.GetTransportMessageStream());
+				bus.Configuration.DeferredMessageProcessor.MessageDeferred(transportMessage.IgnoreTillDate);
 
 				return;
 			}

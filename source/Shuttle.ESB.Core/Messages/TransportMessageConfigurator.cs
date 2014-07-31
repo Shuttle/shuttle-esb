@@ -53,7 +53,8 @@ namespace Shuttle.ESB.Core
 					EncryptionAlgorithm = configuration.EncryptionAlgorithm,
 					CompressionAlgorithm = configuration.CompressionAlgorithm,
 					MessageReceivedId = HasTransportMessageReceived ? _transportMessageReceived.MessageId : Guid.Empty,
-					CorrelationId = _correlationId
+					CorrelationId = _correlationId,
+					SendDate = DateTime.Now
 				};
 
 			result.Headers.Merge(Headers);
