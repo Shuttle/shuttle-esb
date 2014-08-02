@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+ 
+ <title>shuttle-esb</title>
+ <link href="http://shuttle.github.io/shuttle-esb//" rel="self"/>
+ <link href="http://shuttle.github.io/shuttle-esb/"/>
+ <updated>2014-07-20T19:14:34+02:00</updated>
+ <id>http://shuttle.github.io/shuttle-esb/</id>
+ <author>
+   <name>Eben Roux</name>
+   <email>me@ebenroux.co.za</email>
+ </author>
+
+ 
+ <entry>
+   <title>Shuttle ESB v3.0.0-rc11</title>
+   <link href="http://shuttle.github.io/shuttle-esb//2014/06/22/shuttle-esb-v3.0.0-rc11/"/>
+   <updated>2014-06-22T00:00:00+02:00</updated>
+   <id>http://shuttle.github.io/shuttle-esb//2014/06/22/shuttle-esb-v3.0.0-rc11</id>
+   <content type="html">&lt;p&gt;Release Candidate 11 of Shuttle ESB is now available for use.&lt;/p&gt;
+
+&lt;h3&gt;Also available on Nuget&lt;/h3&gt;
+
+&lt;p&gt;You can see a list of the shuttle-esb &lt;a href=&quot;http://www.nuget.org/packages?q=shuttle-esb&quot; target=&quot;_blank&quot;&gt;packages on Nuget&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Since this is a pre-release remember to include pre-releases in your searches/selection:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/nuget-shuttle-esb-prerelease.png&quot; alt=&quot;Shuttle-ESB Nuget Prerelease Image&quot; title=&quot;Shuttle-ESB Nuget Prerelease&quot;&gt;&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Shuttle ESB v3.0.0-rc4</title>
+   <link href="http://shuttle.github.io/shuttle-esb//2014/04/24/shuttle-esb-v3.0.0-rc4/"/>
+   <updated>2014-04-24T00:00:00+02:00</updated>
+   <id>http://shuttle.github.io/shuttle-esb//2014/04/24/shuttle-esb-v3.0.0-rc4</id>
+   <content type="html">&lt;p&gt;Release Candidate 4 of Shuttle ESB is available for use.&lt;/p&gt;
+
+&lt;h3&gt;Also available on Nuget&lt;/h3&gt;
+
+&lt;p&gt;Since this is a pre-release remember to include pre-releases in your searches/selection.&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
+   <title>Moved documentation over to GitHub Pages</title>
+   <link href="http://shuttle.github.io/shuttle-esb//2013/12/28/documentation-via-github-pages/"/>
+   <updated>2013-12-28T00:00:00+02:00</updated>
+   <id>http://shuttle.github.io/shuttle-esb//2013/12/28/documentation-via-github-pages</id>
+   <content type="html">&lt;p&gt;I decided to go with GitHub Pages for our documentation.  Getting Jekyll working locally on Windows 8 was somewhat tricky but I have ended upwith a structure that I am happy with.&lt;/p&gt;
+
+&lt;p&gt;Initially I tried using Flatdoc and the HighlightJS for the the -orentied pages but using the templates and syntax highlighting through Jekyll and Pygments directly to produce static pages ended up being a bit simpler.&lt;/p&gt;
+
+&lt;p&gt;If you pick up any issues with the dccumentation please log it.  You are also welcome to fork the &lt;a href=&quot;https://github.com/Shuttle/shuttle-esb&quot;&gt;Shuttle repository&lt;/a&gt; and update the documentation before sending a pull request.&lt;/p&gt;
+</content>
+ </entry>
+ 
+ 
+</feed>
