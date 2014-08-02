@@ -162,7 +162,7 @@ namespace Shuttle.ESB.Core
 
 		public void Execute(OnStartDeferredMessageProcessing pipelineEvent)
 		{
-			if (!_configuration.HasDeferredQueue || _configuration.IsWorker)
+			if (!_configuration.HasDeferredQueue)
 			{
 				return;
 			}
