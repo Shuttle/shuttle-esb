@@ -150,9 +150,14 @@ namespace Shuttle.ESB.Core
 			}
 			else
 			{
-				InvokeHandler(bus, handler, transportMessage, message, pipelineEvent, message.GetType());
-
-				bus.Configuration.MessageHandlerFactory.ReleaseHandler(handler);
+				try
+				{
+					InvokeHandler(bus, handler, transportMessage, message, pipelineEvent, message.GetType());
+				}
+				finally
+				{
+					bus.Configuration.MessageHandlerFactory.ReleaseHandler(handler);
+				}
 			}
 		}
 	}
