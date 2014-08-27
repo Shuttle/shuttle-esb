@@ -67,7 +67,6 @@ The `inbox` should be specified if the endpoint has message handlers that need t
       workQueueUri="msmq://./inbox-work"
       deferredQueueUri="msmq://./inbox-work-deferred"
       errorQueueUri="msmq://./shuttle-error"
-      workQueueStartupAction="Purge"
       threadCount="25"
       durationToSleepWhenIdle="250ms,10s,30s"
       durationToIgnoreOnFailure="30m,1h"
@@ -78,7 +77,6 @@ The `inbox` should be specified if the endpoint has message handlers that need t
 
 | Attribute						| Default 	| Description	|
 | ---							| ---		| ---			|
-| `workQueueStartupAction`		| 'None'	| <ul><li>QueueStartupAction.None - inbox work queue is left as is.</li><li>QueueStartupAction.Purge - inbox work queue is purged at start-up</li><ul> |
 | `threadCount`					| 5			| The number of worker threads that will service the inbox work queue.  The deferred queue will always be serviced by only 1 thread. |
 | `durationToSleepWhenIdle`		| 250ms\*4,500ms\*2,1s | |
 | `durationToIgnoreOnFailure`	| 5m,10m,15m,30m,60m | |
