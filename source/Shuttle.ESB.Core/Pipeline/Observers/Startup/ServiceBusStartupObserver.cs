@@ -16,7 +16,6 @@ namespace Shuttle.ESB.Core
 		IPipelineObserver<OnInitializeForwardingRouteProvider>,
 		IPipelineObserver<OnInitializePipelineFactory>,
 		IPipelineObserver<OnInitializeSubscriptionManager>,
-		IPipelineObserver<OnInitializeQueueManager>,
 		IPipelineObserver<OnInitializeIdempotenceService>,
 		IPipelineObserver<OnInitializeTransactionScopeFactory>,
 		IPipelineObserver<OnStartInboxProcessing>,
@@ -200,11 +199,6 @@ namespace Shuttle.ESB.Core
 		public void Execute(OnInitializeForwardingRouteProvider pipelineEvent)
 		{
 			_configuration.ForwardingRouteProvider.AttemptInitialization(_bus);
-		}
-
-		public void Execute(OnInitializeQueueManager pipelineEvent)
-		{
-			_configuration.QueueManager.AttemptInitialization(_bus);
 		}
 
 		public void Execute(OnRegisterSharedConfiguration pipelineEvent)

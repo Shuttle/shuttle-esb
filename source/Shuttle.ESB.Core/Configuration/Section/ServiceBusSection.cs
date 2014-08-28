@@ -22,6 +22,12 @@ namespace Shuttle.ESB.Core
 			get { return (MessageRouteElementCollection)this["forwardingRoutes"]; }
         }
 
+		[ConfigurationProperty("queueFactories", IsRequired = false, DefaultValue = null)]
+		public QueueFactoriesElement QueueFactories
+        {
+			get { return (QueueFactoriesElement)this["queueFactories"]; }
+        }
+
         [ConfigurationProperty("inbox", IsRequired = false, DefaultValue = null)]
         public InboxElement Inbox
         {

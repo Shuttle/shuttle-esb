@@ -25,8 +25,6 @@ namespace Shuttle.ESB.Core
 	public class OnAfterInitializeForwardingRouteProvider : PipelineEvent { }
 	public class OnInitializePipelineFactory : PipelineEvent {}
 	public class OnAfterInitializePipelineFactory : PipelineEvent { }
-	public class OnInitializeQueueManager : PipelineEvent {}
-	public class OnAfterInitializeQueueManager : PipelineEvent { }
 	public class OnInitializeSubscriptionManager : PipelineEvent {}
 	public class OnAfterInitializeSubscriptionManager : PipelineEvent { }
 	public class OnInitializeIdempotenceService : PipelineEvent {}

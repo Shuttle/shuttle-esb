@@ -48,13 +48,24 @@ namespace Shuttle.ESB.Core
 					if (!_initialized)
 					{
 						var factoryTypes = new List<Type>();
+						var scan = true;
 
-						foreach (var assembly in _reflectionService.GetAssemblies(AppDomain.CurrentDomain.BaseDirectory))
+						if (ServiceBusConfiguration.ServiceBusSection != null && ServiceBusConfiguration.ServiceBusSection.QueueFactories != null)
 						{
-							factoryTypes.AddRange(_reflectionService.GetTypes<IQueueFactory>(assembly));
+							scan = ServiceBusConfiguration.ServiceBusSection.QueueFactories.Scan;
+
+							foreach (QueueFactoryElement queueFactoryElement in ServiceBusConfiguration.ServiceBusSection.QueueFactories)
+							{
+								factoryTypes.Add(Type.GetType(queueFactoryElement.Type));
+							}
 						}
 
-						foreach (var type in factoryTypes.Union(_reflectionService.GetTypes<IQueueFactory>()))
+						if (scan)
+						{
+							factoryTypes.AddRange(_reflectionService.GetTypes<IQueueFactory>());
+						}
+
+						foreach (var type in factoryTypes)
 						{
 							try
 							{
