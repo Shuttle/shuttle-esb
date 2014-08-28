@@ -77,9 +77,9 @@ JB :
   # These paths are to the main pages Jekyll-Bootstrap ships with.
   # Some JB helpers refer to these paths; change them here if needed.
   #
-  archive_path: /archive.html
-  categories_path : /categories.html
-  tags_path : /tags.html
+  archive_path: /archive/index.html
+  categories_path : /categories/index.html
+  tags_path : /tags/index.html
   atom_path : /atom.xml
   rss_path : /rss.xml
 
@@ -90,7 +90,7 @@ JB :
   comments :
     provider : disqus
     disqus :
-      short_name : jekyllbootstrap
+      short_name : shuttle-esb
     livefyre :
       site_id : 123
     intensedebate :
