@@ -2,7 +2,7 @@
 <package >
 	<metadata>
 		<id>shuttle-esb-castle</id>
-		<version>3.2.3</version>
+		<version>3.2.4</version>
 		<authors>Eben Roux</authors>
 		<owners>Eben Roux</owners>
 		<licenseUrl>https://github.com/shuttle/shuttle-esb/raw/master/LICENSE</licenseUrl>
@@ -14,9 +14,9 @@
 		<copyright>Copyright (c) 2011-2014, Eben Roux</copyright>
 		<tags>shuttle-esb enterprise-service-bus esb messaging service-bus soa castle</tags>
 		<dependencies>
-			<dependency id="castle.core" version="3.3.0" />
-			<dependency id="castle.windsor" version="3.3.0" />
-			<dependency id="shuttle-esb-core" version="3.2.2" />
+			<dependency id="castle.core" version="[3.3.0]" />
+			<dependency id="castle.windsor" version="[3.3.0]" />
+			<dependency id="shuttle-esb-core" version="[3.2.4]" />
 		</dependencies>
 	</metadata>
 </package>

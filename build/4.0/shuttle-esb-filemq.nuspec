@@ -2,7 +2,7 @@
 <package >
 	<metadata>
 		<id>shuttle-esb-filemq</id>
-		<version>3.2.3</version>
+		<version>3.2.4</version>
 		<authors>Eben Roux</authors>
 		<owners>Eben Roux</owners>
 		<licenseUrl>https://github.com/shuttle/shuttle-esb/raw/master/LICENSE</licenseUrl>
@@ -14,8 +14,8 @@
 		<copyright>Copyright (c) 2011-2014, Eben Roux</copyright>
 		<tags>shuttle-esb enterprise-service-bus esb messaging filmq service-bus soa</tags>
 		<dependencies>
-			<dependency id="shuttle-core-infrastructure" version="3.1.3" />
-			<dependency id="shuttle-esb-core" version="3.2.2" />
+			<dependency id="shuttle-core-infrastructure" version="[3.1.3]" />
+			<dependency id="shuttle-esb-core" version="[3.2.4]" />
 		</dependencies>
 	</metadata>
 </package>
