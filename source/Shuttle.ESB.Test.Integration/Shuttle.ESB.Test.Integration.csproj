@@ -66,9 +66,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\log4net.2.0.3\lib\net35-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Moq, Version=4.2.1402.2112, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Moq.4.2.1402.2112\lib\net35\Moq.dll</HintPath>
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq.4.2.1408.0717\lib\net35\Moq.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -104,6 +103,7 @@
     <Compile Include="ConcurrentHandler.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="ConfigurationAvailableEventArgs.cs" />
+    <Compile Include="ConfigurationSections\ServiceBusSection\QueueFactoriesServiceBusSection.cs" />
     <Compile Include="ConfigurationSections\SqlServer\SqlServerSectionFixture.cs" />
     <Compile Include="ConfigurationSections\SqlServer\SqlServerSectionTest.cs" />
     <Compile Include="ConfigurationSections\RabbitMQ\RabbitMQSectionFixture.cs" />
@@ -205,6 +205,22 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="ConfigurationSections\ServiceBusSection\files\Control-Full-Grouped.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ConfigurationSections\ServiceBusSection\files\QueueFactories-EmptyTypes.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ConfigurationSections\ServiceBusSection\files\QueueFactories-Missing.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ConfigurationSections\ServiceBusSection\files\QueueFactories-Grouped.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ConfigurationSections\ServiceBusSection\files\QueueFactories.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
