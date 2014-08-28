@@ -32,6 +32,16 @@ The most pertinent bit is the `serviceBus` tag.
 | `compressionAlgorithm`		| empty	(no compression)	| The name of the compression algorithm to use when sending messages.  Out-of-the-box there is a GZip compression implementation (class `GZipCompressionAlgorithm` with name 'GZip'). |
 | `encryptionAlgorithm`			| empty	(no entryption)		| The name of the encryption algorithm to use when sending messages.  Out-of-the-box there is a Triple DES implementation (class TripleDesEncryptionAlgorithm and name '3DES'). |
 
+Use the `queueFactories` tag configure how you would like to locate queue factories.  By default the current `AppDomain` is canned for implementations of `IQueueFactory` along with all assemblies in the base directory (recursively).
+
+```xml
+<queueFactories>
+	<queueFactories scan="true|false">
+		<add type="Shuttle.QueueFactoryType" />
+	</queueFactories>
+</queueFactories>
+```
+
 Use the `forwardingRoutes` tag to enable message forwarding.  All messages that are received and have been sucessfully handled will be forwarded to the specified queue.
 
 ```xml
