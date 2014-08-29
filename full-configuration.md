@@ -37,7 +37,9 @@ Use the `queueFactories` tag configure how you would like to locate queue factor
 ```xml
 <queueFactories>
 	<queueFactories scan="true|false">
-		<add type="Shuttle.QueueFactoryType" />
+		<add type="Shuttle.ESB.Msmq.MsmqQueueFactory, Shuttle.ESB.Msmq" />
+		<add type="Shuttle.ESB.Msmq.RabbitMQ, Shuttle.ESB.RabbitMQ" />
+		<add type="Shuttle.ESB.Msmq.SqlServer, Shuttle.ESB.SqlServer" />
 	</queueFactories>
 </queueFactories>
 ```
