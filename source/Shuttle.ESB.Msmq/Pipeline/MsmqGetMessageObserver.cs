@@ -84,7 +84,6 @@ namespace Shuttle.ESB.Msmq
 
 		public void Execute(OnSendJournalMessage pipelineEvent)
 		{
-			var parser = pipelineEvent.Pipeline.State.Get<MsmqUriParser>();
 			var journalQueue = pipelineEvent.Pipeline.State.Get<MessageQueue>("journalQueue");
 			var message = pipelineEvent.Pipeline.State.Get<Message>();
 

@@ -101,8 +101,6 @@ namespace Shuttle.ESB.Core
 						_log.Trace(string.Format(ESBResources.TraceMessageHandled, transportMessage.MessageType,
 						                         transportMessage.MessageId));
 
-						pipelineEvent.Pipeline.Abort();
-
 						return;
 					}
 				}

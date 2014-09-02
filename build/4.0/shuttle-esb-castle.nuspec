@@ -2,7 +2,7 @@
 <package >
 	<metadata>
 		<id>shuttle-esb-castle</id>
-		<version>3.2.4</version>
+		<version>{semver}</version>
 		<authors>Eben Roux</authors>
 		<owners>Eben Roux</owners>
 		<licenseUrl>https://github.com/shuttle/shuttle-esb/raw/master/LICENSE</licenseUrl>
@@ -16,7 +16,7 @@
 		<dependencies>
 			<dependency id="castle.core" version="[3.3.0]" />
 			<dependency id="castle.windsor" version="[3.3.0]" />
-			<dependency id="shuttle-esb-core" version="[3.2.4]" />
+			<dependency id="shuttle-esb-core" version="[{semver}]" />
 		</dependencies>
 	</metadata>
 </package>

@@ -40,7 +40,6 @@
 
 		<FileUpdate Files="@(AssemblyInfoFiles)" Regex="AssemblyInformationalVersion\s*\(\s*&quot;.*&quot;\s*\)" ReplacementText="AssemblyInformationalVersion(&quot;$(SemanticVersion)&quot;)" />
 		<FileUpdate Files="@(AssemblyInfoFiles)" Regex="AssemblyVersion\s*\(\s*&quot;.*&quot;\s*\)" ReplacementText="AssemblyVersion(&quot;$(SemanticVersion).0&quot;)" />
-		<FileUpdate Files="@(NugetFiles)" Regex="\&lt;version\&gt;.*\&lt;/version\&gt;" ReplacementText="&lt;version&gt;$(SemanticVersion)&lt;/version&gt;" />
 	</Target>
 
 	<Target Name="NugetDeployments">
@@ -60,6 +59,8 @@
 
 		<Copy SourceFiles="$(PackageId).nuspec" DestinationFolder="$(DeploymentFolder)\nuget\$(PackageId)" SkipUnchangedFiles="false" />
 		<Copy SourceFiles="@(NugetBinaries)" DestinationFolder="$(DeploymentFolder)\nuget\$(PackageId)\lib\%(RecursiveDir)" SkipUnchangedFiles="false" />
+
+		<FileUpdate Files="$(DeploymentFolder)\nuget\$(PackageId)\$(PackageId).nuspec" Regex="\{semver\}" ReplacementText="$(SemanticVersion)" />
 
 		<Exec Command="nuget pack $(PackageId).nuspec" WorkingDirectory="$(DeploymentFolder)\nuget\$(PackageId)" />
 		<Exec Command="nuget push $(DeploymentFolder)\nuget\$(PackageId)\$(PackageId).$(SemanticVersion).nupkg" Condition="$(Operation) != 'pack-only'" />

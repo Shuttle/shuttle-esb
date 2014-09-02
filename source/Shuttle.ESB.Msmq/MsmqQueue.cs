@@ -265,9 +265,12 @@ namespace Shuttle.ESB.Msmq
 
 			try
 			{
-				using (var queue = CreateJournalQueue())
+				lock (_padlock)
 				{
-					queue.ReceiveByCorrelationId(string.Format(@"{0}\1", messageId), MessageQueueTransactionType.Single);
+					using (var queue = CreateJournalQueue())
+					{
+						queue.ReceiveByCorrelationId(string.Format(@"{0}\1", messageId), MessageQueueTransactionType.Single);
+					}
 				}
 			}
 			catch (MessageQueueException ex)
