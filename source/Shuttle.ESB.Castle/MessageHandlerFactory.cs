@@ -27,7 +27,7 @@ namespace Shuttle.ESB.Castle
 		{
 			var all = container.ResolveAll(generic.MakeGenericType(message.GetType()));
 
-			return all.Length == 0 ? (IMessageHandler)all.GetValue(0) : null;
+			return all.Length != 0 ? (IMessageHandler)all.GetValue(0) : null;
 		}
 
 		public override IEnumerable<Type> MessageTypesHandled
