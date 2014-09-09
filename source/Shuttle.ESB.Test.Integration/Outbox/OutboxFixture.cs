@@ -68,7 +68,7 @@ namespace Shuttle.ESB.Test.Integration
 				}
 			}
 
-			using (var queueManager = QueueManager.Default())
+			using (var queueManager = new QueueManager())
 			{
 				var receiverWorkQueue = queueManager.GetQueue(receiverWorkQueueUri);
 

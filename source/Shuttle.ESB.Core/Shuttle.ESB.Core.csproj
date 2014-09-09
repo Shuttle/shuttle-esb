@@ -91,9 +91,14 @@
     <Compile Include="Compression\ICompressionAlgorithm.cs" />
     <Compile Include="Compression\NullCompressionAlgorithm.cs" />
     <Compile Include="Compression\GZipCompressionAlgorithm.cs" />
+    <Compile Include="Configuration\Section\UriResolverItemElement.cs" />
+    <Compile Include="Configuration\Section\UriResolverElement.cs" />
     <Compile Include="Configuration\Section\QueueFactoryElement.cs" />
     <Compile Include="Configuration\Section\QueueFactoriesElement.cs" />
     <Compile Include="Configuration\Section\ShuttleConfigurationSection.cs" />
+    <Compile Include="Queues\DefaultUriResolver.cs" />
+    <Compile Include="Queues\IUriResolver.cs" />
+    <Compile Include="Queues\ResolvedQueue.cs" />
     <Compile Include="ServiceBus\ServiceBusConfigurator.cs" />
     <Compile Include="Configuration\IControlInboxQueueConfiguration.cs" />
     <Compile Include="Configuration\IOutboxQueueConfiguration.cs" />

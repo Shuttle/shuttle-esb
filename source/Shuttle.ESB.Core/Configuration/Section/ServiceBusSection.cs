@@ -81,5 +81,11 @@ namespace Shuttle.ESB.Core
         {
             get { return (string)this["compressionAlgorithm"]; }
         }
-    }
+
+		[ConfigurationProperty("uriResolver", IsRequired = false, DefaultValue = null)]
+		public UriResolverElement UriResolver
+		{
+			get { return (UriResolverElement)this["uriResolver"]; }
+		}
+	}
 }

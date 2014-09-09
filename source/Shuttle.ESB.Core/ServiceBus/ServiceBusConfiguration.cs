@@ -22,7 +22,7 @@ namespace Shuttle.ESB.Core
 			WorkerAvailabilityManager = new WorkerAvailabilityManager();
 			Modules = new ModuleCollection();
 			TransactionScope = new TransactionScopeConfiguration();
-			QueueManager = Core.QueueManager.Default();
+			QueueManager = new QueueManager();
 			Serializer = new DefaultSerializer();
 			MessageHandlerFactory = new DefaultMessageHandlerFactory();
 			MessageRouteProvider = new DefaultMessageRouteProvider();

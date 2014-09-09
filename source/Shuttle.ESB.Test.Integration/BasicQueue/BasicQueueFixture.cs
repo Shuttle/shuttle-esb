@@ -96,7 +96,7 @@ namespace Shuttle.ESB.Test.Integration
 
 		private IQueue GetWorkQueue(string workQueueUriFormat, bool refresh)
 		{
-			using (var queueManager = QueueManager.Default())
+			using (var queueManager = new QueueManager())
 			{
 				var workQueue = queueManager.GetQueue(string.Format(workQueueUriFormat, "test-work"));
 

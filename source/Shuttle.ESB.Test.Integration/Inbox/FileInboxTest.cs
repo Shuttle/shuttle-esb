@@ -14,16 +14,16 @@ namespace Shuttle.ESB.Test.Integration
 		}
 
 		[Test]
-		[TestCase(200, false)]
-		[TestCase(200, true)]
+		[TestCase(100, false)]
+		[TestCase(100, true)]
 		public void Should_be_able_to_process_messages_concurrently(int msToComplete, bool isTransactionalEndpoint)
 		{
 			TestInboxConcurrency(FileMQExtensions.FileUri(), msToComplete, isTransactionalEndpoint);
 		}
 
 		[Test]
-		[TestCase(200, false)]
-		[TestCase(200, true)]
+		[TestCase(100, false)]
+		[TestCase(100, true)]
 		public void Should_be_able_to_process_queue_timeously(int count, bool isTransactionalEndpoint)
 		{
 			TestInboxThroughput(FileMQExtensions.FileUri(), 1000, count, isTransactionalEndpoint);

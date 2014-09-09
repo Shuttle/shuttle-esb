@@ -103,6 +103,7 @@
     <Compile Include="ConcurrentHandler.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="ConfigurationAvailableEventArgs.cs" />
+    <Compile Include="ConfigurationSections\ServiceBusSection\UriResolverServiceBusSection.cs" />
     <Compile Include="ConfigurationSections\ServiceBusSection\QueueFactoriesServiceBusSection.cs" />
     <Compile Include="ConfigurationSections\SqlServer\SqlServerSectionFixture.cs" />
     <Compile Include="ConfigurationSections\SqlServer\SqlServerSectionTest.cs" />
@@ -205,6 +206,14 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="ConfigurationSections\ServiceBusSection\files\Control-Full-Grouped.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ConfigurationSections\ServiceBusSection\files\UriResolver-Grouped.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ConfigurationSections\ServiceBusSection\files\UriResolver.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

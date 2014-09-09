@@ -127,5 +127,14 @@ namespace Shuttle.ESB.Core
 
 			return this;
 		}
+
+		public ServiceBusConfigurator UriResolver(IUriResolver uriResolver)
+		{
+			Guard.AgainstNull(uriResolver, "uriResolver");
+
+			configuration.QueueManager.UriResolver = uriResolver;
+
+			return this;
+		}
 	}
 }

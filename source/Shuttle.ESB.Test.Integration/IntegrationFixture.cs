@@ -42,7 +42,7 @@ namespace Shuttle.ESB.Test.Integration
 
 		protected void AttemptDropQueues(string queueUriFormat)
 		{
-			using (var queueManager = QueueManager.Default())
+			using (var queueManager = new QueueManager())
 			{
 				queueManager.GetQueue(string.Format(queueUriFormat, "test-worker-work")).AttemptDrop();
 				queueManager.GetQueue(string.Format(queueUriFormat, "test-distributor-work")).AttemptDrop();

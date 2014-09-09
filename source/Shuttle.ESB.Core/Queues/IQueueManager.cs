@@ -14,5 +14,7 @@ namespace Shuttle.ESB.Core
         IEnumerable<IQueueFactory> GetQueueFactories();
         void RegisterQueueFactory(IQueueFactory queueFactory);
         bool ContainsQueueFactory(string scheme);
+
+		IUriResolver UriResolver { get; set; }
     }
 }

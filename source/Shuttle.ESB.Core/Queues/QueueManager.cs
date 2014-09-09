@@ -10,7 +10,6 @@ namespace Shuttle.ESB.Core
 	{
 		private bool _initialized;
 		private bool _initializing;
-		private readonly IReflectionService _reflectionService;
 		private static readonly object _padlock = new object();
 
 		private readonly List<IQueue> _queues = new List<IQueue>();
@@ -18,18 +17,11 @@ namespace Shuttle.ESB.Core
 
 		private readonly ILog _log;
 
-		public QueueManager(IReflectionService reflectionService)
+		public QueueManager()
 		{
-			Guard.AgainstNull(reflectionService, "reflectionService");
-
-			_reflectionService = reflectionService;
+			UriResolver = new DefaultUriResolver();
 
 			_log = Log.For(this);
-		}
-
-		public static QueueManager Default()
-		{
-			return new QueueManager(new ReflectionService());
 		}
 
 		private List<IQueueFactory> QueueFactories()
@@ -62,7 +54,7 @@ namespace Shuttle.ESB.Core
 
 						if (scan)
 						{
-							factoryTypes.AddRange(_reflectionService.GetTypes<IQueueFactory>());
+							factoryTypes.AddRange(new ReflectionService().GetTypes<IQueueFactory>());
 						}
 
 						foreach (var type in factoryTypes)
@@ -137,9 +129,28 @@ namespace Shuttle.ESB.Core
 					return queue;
 				}
 
-				var identifier = new Uri(uri);
+				var queueUri = new Uri(uri);
 
-				queue = GetQueueFactory(identifier).Create(identifier);
+				if (queueUri.Scheme.Equals("resolver"))
+				{
+					if (UriResolver == null)
+					{
+						throw new InvalidOperationException(string.Format(ESBResources.NoUriResolverException, uri));
+					}
+
+					var resolvedQueueUri = UriResolver.Get(uri);
+
+					if (resolvedQueueUri == null)
+					{
+						throw new KeyNotFoundException(string.Format(ESBResources.UriNameNotFoundException, UriResolver.GetType().FullName, uri));
+					}
+
+					queue = new ResolvedQueue(GetQueueFactory(resolvedQueueUri).Create(resolvedQueueUri), queueUri);
+				}
+				else
+				{
+					queue = GetQueueFactory(queueUri).Create(queueUri);
+				}
 
 				_queues.Add(queue);
 
@@ -227,6 +238,8 @@ namespace Shuttle.ESB.Core
 		{
 			return GetQueueFactory(scheme) != null;
 		}
+
+		public IUriResolver UriResolver { get; set; }
 
 		public void Dispose()
 		{

@@ -169,7 +169,7 @@
     <comment>{0} = string containing invalid format</comment>
   </data>
   <data name="NoSubscriptionManager" xml:space="preserve">
-    <value>No subscription manager has been specified.</value>
+    <value>No ISubscriptionManager implementation has been configured.</value>
   </data>
   <data name="DefaultConstructorRequired" xml:space="preserve">
     <value>{0} '{1}' has no default constructor.</value>
@@ -297,7 +297,7 @@
     <comment>{0} = queue uri, {1} = exception</comment>
   </data>
   <data name="NoIdempotenceService" xml:space="preserve">
-    <value>No IIdempotenceService implementation has been specified.</value>
+    <value>No IIdempotenceService implementation has been configured.</value>
   </data>
   <data name="TraceMessageHandled" xml:space="preserve">
     <value>[receive message state service] : transport message type '{0}' with id '{1}' has already been handled.</value>
@@ -411,5 +411,13 @@
   <data name="OpenSectionException" xml:space="preserve">
     <value>Could not find a section named '{0}' in configuration file '{1}'.</value>
     <comment>{0} = section name, {1} = configuration file</comment>
+  </data>
+  <data name="UriNameNotFoundException" xml:space="preserve">
+    <value>The IUriResolver type '{0}' could not resolve name '{1}'.</value>
+    <comment>{0} = full type name of the IUriResolver implementation, {1} = the required name</comment>
+  </data>
+  <data name="NoUriResolverException" xml:space="preserve">
+    <value>No IUriResolver implementation has been configured.  Cannot resolve uri name '{0}'.</value>
+    <comment>{0} = the uri name to resolve</comment>
   </data>
 </root>
