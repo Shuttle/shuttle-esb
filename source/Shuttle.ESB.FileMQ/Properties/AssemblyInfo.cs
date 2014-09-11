@@ -16,5 +16,5 @@
 [assembly: AssemblyTitle("Shuttle.ESB.ModFileMQules for .NET Framework 4.5.1")]
 #endif
 
-[assembly: AssemblyVersion("3.3.0.0")]
+[assembly: AssemblyVersion("3.3.1.0")]
 
