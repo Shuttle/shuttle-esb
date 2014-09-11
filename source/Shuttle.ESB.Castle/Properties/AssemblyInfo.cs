@@ -12,5 +12,9 @@
 [assembly: AssemblyTitle("Shuttle.ESB.Castle for .NET Framework 4.5")]
 #endif
 
+#if NET451FULL
+[assembly: AssemblyTitle("Shuttle.ESB.Castle for .NET Framework 4.5.l")]
+#endif
+
 [assembly: AssemblyVersion("3.3.0.0")]
 

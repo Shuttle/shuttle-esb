@@ -12,5 +12,9 @@
 [assembly: AssemblyTitle("Shuttle.ESB.SqlServer for .NET Framework 4.5")]
 #endif
 
+#if NET451FULL
+[assembly: AssemblyTitle("Shuttle.ESB.SqlServer for .NET Framework 4.5.1")]
+#endif
+
 [assembly: AssemblyVersion("3.3.0.0")]
 

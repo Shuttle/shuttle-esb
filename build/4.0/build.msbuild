@@ -1,9 +1,17 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build" ToolsVersion="4.0">
 	<ItemGroup>
-		<Framework Include="net35-full;net40-full;net45-full" />
+		<ProjectReference Include="..\..\source\Shuttle.ESB.Castle\Shuttle.ESB.Castle.csproj" />
+		<ProjectReference Include="..\..\source\Shuttle.ESB.Core\Shuttle.ESB.Core.csproj" />
+		<ProjectReference Include="..\..\source\Shuttle.ESB.Modules\Shuttle.ESB.Modules.csproj" />
+		<ProjectReference Include="..\..\source\Shuttle.ESB.FileMQ\Shuttle.ESB.FileMQ.csproj" />
+		<ProjectReference Include="..\..\source\Shuttle.ESB.Msmq\Shuttle.ESB.Msmq.csproj" />
+		<ProjectReference Include="..\..\source\Shuttle.ESB.RabbitMQ\Shuttle.ESB.RabbitMQ.csproj" />
+		<ProjectReference Include="..\..\source\Shuttle.ESB.SqlServer\Shuttle.ESB.SqlServer.csproj" />
+		<Framework Include="net35-full;net40-full;net45-full;net451-full" />
 	</ItemGroup>
+	
 	<Target Name="Build">
-		<MSBuild Projects="shared.msbuild" Properties="Configuration=Debug;Framework=%(Framework.Identity);OutputPath=$(MSBuildProjectDirectory)\..\debug\%(Framework.Identity)"/>
-		<MSBuild Projects="shared.msbuild" Properties="Configuration=Release;Framework=%(Framework.Identity);OutputPath=$(MSBuildProjectDirectory)\..\release\%(Framework.Identity)"/>
+		<MSBuild Projects="@(ProjectReference)" Targets="Rebuild" Properties="Configuration=Debug;Framework=%(Framework.Identity);OutputPath=$(MSBuildProjectDirectory)\..\debug\%(Framework.Identity)"/>
+		<MSBuild Projects="@(ProjectReference)" Targets="Rebuild" Properties="Configuration=Release;Framework=%(Framework.Identity);OutputPath=$(MSBuildProjectDirectory)\..\debug\%(Framework.Identity)"/>
 	</Target>
 </Project>

@@ -15,7 +15,7 @@
 		<tags>shuttle-esb enterprise-service-bus esb messaging rabbitmq service-bus soa</tags>
 		<dependencies>
 			<dependency id="rabbitmq.client" version="[3.3.5]" />
-			<dependency id="shuttle-core-infrastructure" version="[3.1.3]" />
+			<dependency id="shuttle-core-infrastructure" version="[3.1.4]" />
 			<dependency id="shuttle-esb-core" version="[{semver}]" />
 		</dependencies>
 	</metadata>
