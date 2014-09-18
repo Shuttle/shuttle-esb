@@ -129,6 +129,10 @@
     <value>ActiveToTime '{0}' is not a valid time.</value>
     <comment>{0} = invalid time</comment>
   </data>
+  <data name="IPurgeQueueNotImplemented" xml:space="preserve">
+    <value>Interface 'IPurgeQueue' has not been implemented on queue type '{0}'.</value>
+    <comment>{0} = full type name of queue implementation</comment>
+  </data>
   <data name="MessageTypeHandlerCapabilityEventPublished" xml:space="preserve">
     <value>Published MessageTypeHandlerCapabilityEvent for message type '{0}' on work queue uri '{1}'.</value>
     <comment>{0} = full type name of message handled, {1} = work queue uri</comment>

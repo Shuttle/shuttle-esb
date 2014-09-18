@@ -88,6 +88,15 @@ namespace Shuttle.ESB.Modules {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interface &apos;IPurgeQueue&apos; has not been implemented on queue type &apos;{0}&apos;..
+        /// </summary>
+        public static string IPurgeQueueNotImplemented {
+            get {
+                return ResourceManager.GetString("IPurgeQueueNotImplemented", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Published MessageTypeHandlerCapabilityEvent for message type &apos;{0}&apos; on work queue uri &apos;{1}&apos;..
         /// </summary>
         public static string MessageTypeHandlerCapabilityEventPublished {

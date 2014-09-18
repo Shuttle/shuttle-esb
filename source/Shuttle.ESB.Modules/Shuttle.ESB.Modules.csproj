@@ -72,6 +72,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ESBModuleResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="PurgeInbox\PurgeInboxModule.cs" />
+    <Compile Include="PurgeInbox\PurgeInboxObserver.cs" />
     <Compile Include="SystemException\Events\HandlerExceptionEvent.cs" />
     <Compile Include="SystemException\Events\PipelineExceptionEvent.cs" />
     <Compile Include="SystemException\SystemExceptionModule.cs" />
