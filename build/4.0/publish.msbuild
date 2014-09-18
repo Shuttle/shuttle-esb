@@ -6,10 +6,6 @@
 		<DeploymentFolder>..\deployment</DeploymentFolder>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<Framework Include="net35-full;net40-full;net45-full" />
-	</ItemGroup>
-
 	<Target Name="PerformRelease">
 		<Prompt Text="Enter semantic version:" Condition="$(SemanticVersion) == ''">
 			<Output TaskParameter="UserInput" PropertyName="SemanticVersion" />

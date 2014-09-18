@@ -11,7 +11,7 @@
 	</ItemGroup>
 	
 	<Target Name="Build">
-		<MSBuild Projects="@(ProjectReference)" Targets="Rebuild" Properties="Configuration=Debug;Framework=%(Framework.Identity);OutputPath=$(MSBuildProjectDirectory)\..\debug\%(Framework.Identity)"/>
-		<MSBuild Projects="@(ProjectReference)" Targets="Rebuild" Properties="Configuration=Release;Framework=%(Framework.Identity);OutputPath=$(MSBuildProjectDirectory)\..\debug\%(Framework.Identity)"/>
+		<MSBuild Projects="@(ProjectReference)" Targets="Rebuild" Properties="Configuration=Debug;Framework=%(Framework.Identity);OutputPath=$(MSBuildProjectDirectory)\..\Debug\%(Framework.Identity)"/>
+		<MSBuild Projects="@(ProjectReference)" Targets="Rebuild" Properties="Configuration=Release;Framework=%(Framework.Identity);OutputPath=$(MSBuildProjectDirectory)\..\Release\%(Framework.Identity)"/>
 	</Target>
 </Project>

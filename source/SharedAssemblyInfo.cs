@@ -5,6 +5,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("Shuttle.ESB")]
 [assembly: AssemblyCompany("Shuttle")]
 [assembly: AssemblyConfiguration("Release")]
-[assembly: AssemblyInformationalVersion("3.3.1")]
+[assembly: AssemblyInformationalVersion("3.3.4")]
 [assembly: ComVisible(false)]
 
