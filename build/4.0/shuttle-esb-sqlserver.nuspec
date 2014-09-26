@@ -22,5 +22,6 @@
 	</metadata>
 	<files>
 		<file src="..\..\..\..\source\Shuttle.ESB.SqlServer\Scripts\**\*.sql" target="scripts" />
+		<file src="lib\**\*.*" target="lib" />
 	</files>
 </package>
