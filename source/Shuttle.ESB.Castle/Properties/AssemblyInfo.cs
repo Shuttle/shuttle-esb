@@ -16,5 +16,5 @@
 [assembly: AssemblyTitle("Shuttle.ESB.Castle for .NET Framework 4.5.l")]
 #endif
 
-[assembly: AssemblyVersion("3.3.4.0")]
+[assembly: AssemblyVersion("3.3.5.0")]
 
