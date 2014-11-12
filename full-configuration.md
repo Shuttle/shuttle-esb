@@ -15,6 +15,17 @@ To start off add the `Shuttle.ESB.Core.ServiceBusSection` configuration class fr
   </configSections>
 ```
 
+It is also possible to group the Shuttle configuration in a `shuttle` group:
+
+```xml
+<configuration>
+	<configSections>
+		<sectionGroup name="shuttle">
+			<section name='serviceBus' type="Shuttle.ESB.Core.ServiceBusSection, Shuttle.ESB.Core"/>
+		</sectionGroup>
+	</configSections>
+```
+
 The most pertinent bit is the `serviceBus` tag.
 
 ```xml
@@ -42,20 +53,6 @@ Use the `queueFactories` tag configure how you would like to locate queue factor
 		<add type="Shuttle.ESB.Msmq.SqlServer, Shuttle.ESB.SqlServer" />
 	</queueFactories>
 </queueFactories>
-```
-
-Use the `forwardingRoutes` tag to enable message forwarding.  All messages that are received and have been sucessfully handled will be forwarded to the specified queue.
-
-```xml
-    <forwardingRoutes>
-      <messageRoute uri="msmq://./inbox">
-        <add specification="StartsWith" value="Shuttle.Messages1" />
-        <add specification="StartsWith" value="Shuttle.Messages2" />
-      </messageRoute>
-      <messageRoute uri="sql://./inbox">
-        <add specification="TypeList" value="DoSomethingCommand" />
-      </messageRoute>
-    </forwardingRoutes>
 ```
 
 The `messageRoutes` tag defines the routing for message that are sent using the `IServiceBus.Send` method.  You will notice that the structure is the same as the `forwardingRoutes` tag.
