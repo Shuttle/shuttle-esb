@@ -38,8 +38,8 @@
     -->
 
     <!-- atom & rss feed -->
-    <link href="{{ BASE_PATH }}{{ site.JB.atom_path }}" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
-    <link href="{{ BASE_PATH }}{{ site.JB.rss_path }}" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+    <link href="{{ site.baseurl }}{{ site.JB.atom_path }}" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="{{ site.baseurl }}{{ site.JB.rss_path }}" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
 
   </head>
 
@@ -61,7 +61,7 @@
         <div class="collapse navbar-collapse" id="jb-navbar-collapse">
 			<ul class='nav navbar-nav'>
 				<li>
-					<a href='{{ BASE_PATH }}/'>Home</a>
+					<a href='{{ site.baseurl }}/'>Home</a>
 				</li>
 				<li class='dropdown'>
 					<a class='dropdown-toggle' data-toggle='dropdown' href='#'>
@@ -70,15 +70,15 @@
 					</a>
 					<ul class='dropdown-menu'>
 						<li>
-							<a href='{{ BASE_PATH }}/getting-started'>Getting Started</a>
+							<a href='{{ site.baseurl }}/getting-started'>Getting Started</a>
 						</li>
 						<li class='divider'></li>
 						<li>
-							<a href='{{ BASE_PATH }}/architecture'>Architecture &amp; Patterns</a>
+							<a href='{{ site.baseurl }}/architecture'>Architecture &amp; Patterns</a>
 						</li>
 						<li class='divider'></li>
 						<li>
-							<a href='{{ BASE_PATH }}/modules'>Modules</a>
+							<a href='{{ site.baseurl }}/modules'>Modules</a>
 						</li>
 					</ul>
 				</li>
@@ -90,48 +90,51 @@
 					<ul class='dropdown-menu'>
 						<li class='dropdown-header'>Core</li>
 							<li>
-								<a href='{{ BASE_PATH }}/encryption'>Encryption</a>
+								<a href='{{ site.baseurl }}/encryption'>Encryption</a>
 							</li>
 							<li>
-								<a href='{{ BASE_PATH }}/compression'>Compression</a>
+								<a href='{{ site.baseurl }}/compression'>Compression</a>
 							</li>
 							<li>
-								<a href='{{ BASE_PATH }}/idempotence-service'>Idempotence Service</a>
+								<a href='{{ site.baseurl }}/idempotence-service'>Idempotence Service</a>
 							</li>
 							<li>
-								<a href='{{ BASE_PATH }}/message-handler-factory'>Message Handler Factory</a>
+								<a href='{{ site.baseurl }}/message-handler-factory'>Message Handler Factory</a>
 							</li>
 							<li>
-								<a href='{{ BASE_PATH }}/message-route-provider'>Message Route Provider (+Forwarding)</a>
+								<a href='{{ site.baseurl }}/message-route-provider'>Message Route Provider (+Forwarding)</a>
 							</li>
 							<li>
-								<a href='{{ BASE_PATH }}/message-sender'>Message Sender</a>
+								<a href='{{ site.baseurl }}/message-sender'>Message Sender</a>
 							</li>
 							<li>
-								<a href='{{ BASE_PATH }}/pipeline-factory'>Pipeline Factory</a>
+								<a href='{{ site.baseurl }}/pipeline-factory'>Pipeline Factory</a>
 							</li>
 							<li>
-								<a href='{{ BASE_PATH }}/service-bus-policy'>Policy</a>
+								<a href='{{ site.baseurl }}/service-bus-policy'>Policy</a>
 							</li>
 							<li>
-								<a href='{{ BASE_PATH }}/serializer'>Serializer</a>
+								<a href='{{ site.baseurl }}/serializer'>Serializer</a>
 							</li>
 							<li>
-								<a href='{{ BASE_PATH }}/service-bus'>Service Bus</a>
+								<a href='{{ site.baseurl }}/service-bus'>Service Bus</a>
 							</li>
 							<li>
-								<a href='{{ BASE_PATH }}/subscription-manager'>Subscription Manager</a>
+								<a href='{{ site.baseurl }}/subscription-manager'>Subscription Manager</a>
 							</li>
 							<li>
-								<a href='{{ BASE_PATH }}/thread-activity-factory'>Thread Activity Factory</a>
+								<a href='{{ site.baseurl }}/thread-activity-factory'>Thread Activity Factory</a>
 							</li>
 							<li>
-								<a href='{{ BASE_PATH }}/transactionscope-factory'>TransactionScope Factory</a>
+								<a href='{{ site.baseurl }}/transactionscope-factory'>TransactionScope Factory</a>
+							</li>
+							<li>
+								<a href='{{ site.baseurl }}/uri-resolver'>URI Resolver</a>
 							</li>
 						<li class='divider'></li>
 						<li class='dropdown-header'>Miscellaneous</li>
 							<li>
-								<a href='{{ BASE_PATH }}/full-configuration'>Full Configuration</a>
+								<a href='{{ site.baseurl }}/full-configuration'>Full Configuration</a>
 							</li>
 						</li>
 					</ul>
@@ -144,27 +147,27 @@
 					<ul class='dropdown-menu'>
 						<li class='dropdown-header'>Queues</li>
 							<li>
-								<a href='{{ BASE_PATH }}/extensions-rabbitmq'>RabbitMQ</a>
+								<a href='{{ site.baseurl }}/extensions-rabbitmq'>RabbitMQ</a>
 							</li>
 							<li>
-								<a href='{{ BASE_PATH }}/extensions-msmq'>MSMQ</a>
+								<a href='{{ site.baseurl }}/extensions-msmq'>MSMQ</a>
 							</li>
 							<li>
-								<a href='{{ BASE_PATH }}/extensions-sql-server'>Sql Server</a>
+								<a href='{{ site.baseurl }}/extensions-sql-server'>Sql Server</a>
 							</li>
 						<li class='divider'></li>
 						<li class='dropdown-header'>Factories</li>
 							<li>
-								<a href='{{ BASE_PATH }}/extensions-castle-project'>Castle Project</a>
+								<a href='{{ site.baseurl }}/extensions-castle-project'>Castle Project</a>
 							</li>
 						</li>
 						<li class='divider'></li>
 						<li class='dropdown-header'>Modules</li>
 							<li>
-								<a href='{{ BASE_PATH }}/modules-corrupt-messages'>Corrupt Transport Messages</a>
-								<a href='{{ BASE_PATH }}/modules-message-forwarding'>Message Forwarding</a>
-								<a href='{{ BASE_PATH }}/modules-purge-inbox'>Purge Inbox</a>
-								<a href='{{ BASE_PATH }}/modules-active-time-range'>Active Time Range</a>
+								<a href='{{ site.baseurl }}/modules-corrupt-messages'>Corrupt Transport Messages</a>
+								<a href='{{ site.baseurl }}/modules-message-forwarding'>Message Forwarding</a>
+								<a href='{{ site.baseurl }}/modules-purge-inbox'>Purge Inbox</a>
+								<a href='{{ site.baseurl }}/modules-active-time-range'>Active Time Range</a>
 							</li>
 						</li>
 					</ul>
@@ -173,7 +176,7 @@
 					<a href='http://www.youtube.com/shuttleservicebus' target='_blank'>Videos</a>
 				</li>
 				<li>
-					<a href='{{ BASE_PATH }}/archive'>Archive</a>
+					<a href='{{ site.baseurl }}/archive'>Archive</a>
 				</li>
 				{% assign pages_list = site.pages %}
 				{% assign group = 'navigation' %}
