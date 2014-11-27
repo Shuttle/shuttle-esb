@@ -13,7 +13,7 @@ A module is an implementation of the `IModule` interface and this, in turn, impl
 ``` c#
     public class LogMessageOwnerModule : IModule
     {
-		private readonly string _receiveMessagePipelineName = typeof(ReceiveMessagePipeline).FullName;
+		private readonly string _receiveMessagePipelineName = typeof(InboxMessagePipeline).FullName;
 
 		public void Initialize(IServiceBus bus)
 		{
@@ -24,7 +24,7 @@ A module is an implementation of the `IModule` interface and this, in turn, impl
 
 		private void PipelineCreated(object sender, PipelineEventArgs e)
 		{
-			if (!e.Pipeline.GetType().FullName.Equals(_receiveMessagePipelineName, StringComparison.InvariantCultureIgnoreCase))
+			if (!e.Pipeline.GetType().FullName.Equals(_inboxMessagePipelineName, StringComparison.InvariantCultureIgnoreCase))
 			{
 				return;
 			}
@@ -34,7 +34,7 @@ A module is an implementation of the `IModule` interface and this, in turn, impl
     }
 ```
 
-So here we have create a new module that registers the `LogMessageOwnerObserver` for each newly create `ReceiveMessagePipeline`.  Since a pipeline simply rasies `PipelineEvent` instances the observer will need to listen out for the relevant events.  We will log the message owner after the transport message has been deserialized:
+So here we have create a new module that registers the `LogMessageOwnerObserver` for each newly created `InboxMessagePipeline`.  Since a pipeline simply rasies `PipelineEvent` instances the observer will need to listen out for the relevant events.  We will log the message owner after the transport message has been deserialized:
 
 ``` c#
 	public class LogMessageOwnerObserver : IPipelineObserver<OnAfterDeserializeTransportMessage>
