@@ -67,7 +67,7 @@ The `messageRoutes` tag defines the routing for message that are sent using the 
     </messageRoutes>
 ```
 
-The `inbox` should be specified if the endpoint has message handlers that need to process incoming messages
+The `inbox` should be specified if the endpoint has message handlers that need to process incoming messages.
 
 ```xml
     <inbox
