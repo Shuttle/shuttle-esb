@@ -46,13 +46,11 @@ The most pertinent bit is the `serviceBus` tag.
 Use the `queueFactories` tag to configure how you would like to locate queue factories.  By default the current `AppDomain` is scanned for implementations of `IQueueFactory` along with all assemblies in the base directory (recursively).
 
 ```xml
-<queueFactories>
 	<queueFactories scan="true|false">
 		<add type="Shuttle.ESB.Msmq.MsmqQueueFactory, Shuttle.ESB.Msmq" />
 		<add type="Shuttle.ESB.RabbitMQ.RabbitMQQueueFactory, Shuttle.ESB.RabbitMQ" />
 		<add type="Shuttle.ESB.SqlServer.SqlQueueFactory, Shuttle.ESB.SqlServer" />
 	</queueFactories>
-</queueFactories>
 ```
 
 The `messageRoutes` tag defines the routing for message that are sent using the `IServiceBus.Send` method.  You will notice that the structure is the same as the `forwardingRoutes` tag.
