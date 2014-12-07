@@ -19,7 +19,7 @@ The queue configuration is part of the specified uri, e.g.:
     />
 ```
 
-In addition to this there is also a RabbitMQ specific section (defaults specified here):
+In addition to this there is also a Sql Server specific section (defaults specified here):
 
 ```xml
 <configuration>
