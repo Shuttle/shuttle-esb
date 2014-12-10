@@ -29,6 +29,7 @@ In addition to this there is also a Sql Server specific section (defaults specif
   
   <sqlServer
 	subscriptionManagerConnectionStringName="Subscription"
+	idempotenceServiceConnectionStringName="Idempotence"
 	scriptFolder=""
   />
   .
