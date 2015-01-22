@@ -8,8 +8,159 @@ layout: default
 	<a class='btn btn-info btn-lg' href='http://www.youtube.com/user/shuttleservicebus' target='_blank'>You Tube Channel</a>
 </div>
 
+<h2>Core Components</h2>
+<div class='row'>
+	<div class='col-sm-6 col-md-4'>
+		<div class='thumbnail'>
+			<div class='caption'>
+			<h3>shuttle-esb-core</h3>
+			<p>This is the core assembly is always referenced when requiring a service bus instance.</p>
+			<p>
+				<a href='http://www.nuget.org/packages/shuttle-esb-core' target='_blank' class='btn btn-primary' role='button'>NuGet</a>
+				<a href='https://github.com/Shuttle/shuttle-esb-core' target='_blank' class='btn btn-default' role='button'>GitHub</a>
+				<a href='https://github.com/Shuttle/shuttle-esb-core/issues' target='_blank' class='btn btn-default' role='button'>Issues</a>
+			</p>
+			</div>
+		</div>
+	</div>
+	<div class='col-sm-6 col-md-4'>
+		<div class='thumbnail'>
+			<div class='caption'>
+			<h3>shuttle-core-host</h3>
+			<p>A generic host that can run as a console application or be installed as a Windows service.  Used to host shuttle-esb endpoints but can be used to host any Windows service.</p>
+			<p>
+				<a href='http://www.nuget.org/packages/shuttle-core-host' target='_blank' class='btn btn-primary' role='button'>NuGet</a>
+				<a href='https://github.com/Shuttle/shuttle-core-host' target='_blank' class='btn btn-default' role='button'>GitHub</a>
+				<a href='https://github.com/Shuttle/shuttle-core-host/issues' target='_blank' class='btn btn-default' role='button'>Issues</a>
+			</p>
+			</div>
+		</div>
+	</div>
+	<div class='col-sm-6 col-md-4'>
+		<div class='thumbnail'>
+			<div class='caption'>
+			<h3>shuttle-esb-samples</h3>
+			<p>Although not really a core component you may want to take a look at these samples to get going since they illustrate some basic usage scenarios.</p>
+			<p>
+				<a href='http://www.nuget.org/packages/shuttle-esb-samples' target='_blank' class='btn btn-primary' role='button'>NuGet</a>
+				<a href='https://github.com/Shuttle/shuttle-esb-samples' target='_blank' class='btn btn-default' role='button'>GitHub</a>
+				<a href='https://github.com/Shuttle/shuttle-esb-samples/issues' target='_blank' class='btn btn-default' role='button'>Issues</a>
+			</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<h2>Queues / Subscription / Idempotence</h2>
+<div class='row'>
+	<div class='col-sm-6 col-md-4'>
+		<div class='thumbnail'>
+			<div class='caption'>
+			<h3>shuttle-esb-rabbitmq</h3>
+			<p>Contains a RabbitMQ <strong>queue</strong> implementation.</p>
+			<p>
+				<a href='http://www.nuget.org/packages/shuttle-esb-rabbitmq' target='_blank' class='btn btn-primary' role='button'>NuGet</a>
+				<a href='https://github.com/Shuttle/shuttle-esb-rabbitmq' target='_blank' class='btn btn-default' role='button'>GitHub</a>
+				<a href='https://github.com/Shuttle/shuttle-esb-rabbitmq/issues' target='_blank' class='btn btn-default' role='button'>Issues</a>
+				<a href='http://www.rabbitmq.com/' target='_blank' class='btn btn-default' role='button'>RabbitMQ</a>
+			</p>
+			</div>
+		</div>
+	</div>
+	<div class='col-sm-6 col-md-4'>
+		<div class='thumbnail'>
+			<div class='caption'>
+			<h3>shuttle-esb-msmq</h3>
+			<p>Contains an MSMQ <strong>queue</strong> implementation.</p>
+			<p>
+				<a href='http://www.nuget.org/packages/shuttle-esb-msmq' target='_blank' class='btn btn-primary' role='button'>NuGet</a>
+				<a href='https://github.com/Shuttle/shuttle-esb-msmq' target='_blank' class='btn btn-default' role='button'>GitHub</a>
+				<a href='https://github.com/Shuttle/shuttle-esb-msmq/issues' target='_blank' class='btn btn-default' role='button'>Issues</a>
+			</p>
+			</div>
+		</div>
+	</div>
+	<div class='col-sm-6 col-md-4'>
+		<div class='thumbnail'>
+			<div class='caption'>
+			<h3>shuttle-esb-sqlserver</h3>
+			<p>Contains a Microsoft SqlServer table-based <strong>queue</strong>, <strong>subscription manager</strong>, and <strong>idempotence service</strong> implementation.</p>
+			<p>
+				<a href='http://www.nuget.org/packages/shuttle-esb-sqlserver' target='_blank' class='btn btn-primary' role='button'>NuGet</a>
+				<a href='https://github.com/Shuttle/shuttle-esb-sqlserver' target='_blank' class='btn btn-default' role='button'>GitHub</a>
+				<a href='https://github.com/Shuttle/shuttle-esb-sqlserver/issues' target='_blank' class='btn btn-default' role='button'>Issues</a>
+			</p>
+			</div>
+		</div>
+	</div>
+</div>
+<div class='row'>
+	<div class='col-sm-6 col-md-4'>
+		<div class='thumbnail'>
+			<div class='caption'>
+			<h3>shuttle-esb-filemq</h3>
+			<p>Contains a file-based <strong>queue</strong> implementation.  <em>This is not intended for production use but rather to copy/back-up messages to the file-system</em>.</p>
+			<p>
+				<a href='http://www.nuget.org/packages/shuttle-esb-filemq' target='_blank' class='btn btn-primary' role='button'>NuGet</a>
+				<a href='https://github.com/Shuttle/shuttle-esb-filemq' target='_blank' class='btn btn-default' role='button'>GitHub</a>
+				<a href='https://github.com/Shuttle/shuttle-esb-filemq/issues' target='_blank' class='btn btn-default' role='button'>Issues</a>
+			</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<h2>Dependency Injection Containers</h2>
+<div class='row'>
+	<div class='col-sm-6 col-md-4'>
+		<div class='thumbnail'>
+			<div class='caption'>
+			<h3>shuttle-esb-castle</h3>
+			<p>Contains a <em>WindsorContainer</em> implementation of the <strong>IMessageHandlerFactory</strong> interface.</p>
+			<p>
+				<a href='http://www.nuget.org/packages/shuttle-esb-castle' target='_blank' class='btn btn-primary' role='button'>NuGet</a>
+				<a href='https://github.com/Shuttle/shuttle-esb-castle' target='_blank' class='btn btn-default' role='button'>GitHub</a>
+				<a href='https://github.com/Shuttle/shuttle-esb-castle/issues' target='_blank' class='btn btn-default' role='button'>Issues</a>
+				<a href='http://www.castleproject.org/projects/windsor/' target='_blank' class='btn btn-default' role='button'>Castle</a>
+			</p>
+			</div>
+		</div>
+	</div>
+	<div class='col-sm-6 col-md-4'>
+		<div class='thumbnail'>
+			<div class='caption'>
+			<h3>shuttle-esb-unity</h3>
+			<p>Contains a <em>UnityContainer</em> implementation of the <strong>IMessageHandlerFactory</strong> interface.</p>
+			<p>
+				<a href='http://www.nuget.org/packages/shuttle-esb-unity' target='_blank' class='btn btn-primary' role='button'>NuGet</a>
+				<a href='https://github.com/Shuttle/shuttle-esb-unity' target='_blank' class='btn btn-default' role='button'>GitHub</a>
+				<a href='https://github.com/Shuttle/shuttle-esb-unity/issues' target='_blank' class='btn btn-default' role='button'>Issues</a>
+				<a href='https://unity.codeplex.com/' target='_blank' class='btn btn-default' role='button'>Unity</a>
+			</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<h2>Extensions</h2>
+<div class='row'>
+	<div class='col-sm-6 col-md-4'>
+		<div class='thumbnail'>
+			<div class='caption'>
+			<h3>shuttle-esb-modules</h3>
+			<p>Contains a number of shuttle-esb modules that extend shuttle-esb behaviour.</p>
+			<p>
+				<a href='http://www.nuget.org/packages/shuttle-esb-modules' target='_blank' class='btn btn-primary' role='button'>NuGet</a>
+				<a href='https://github.com/Shuttle/shuttle-esb-modules' target='_blank' class='btn btn-default' role='button'>GitHub</a>
+				<a href='https://github.com/Shuttle/shuttle-esb-modules/issues' target='_blank' class='btn btn-default' role='button'>Issues</a>
+			</p>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class='list-group'>
-	<h4 class="list-group-item-heading">Resources</h4>
+	<h4 class='list-group-item-heading'>Resources</h4>
 	<a class='list-group-item' target='_blank' href='https://github.com/Shuttle/shuttle-esb-samples'>Shuttle ESB Samples</a>
 	<a class='list-group-item' target='_blank' href='http://www.eaipatterns.com/toc.html'>Enterprise Integration Patterns</a>
 	<a class='list-group-item' target='_blank' href='http://msdn.microsoft.com/en-us/library/aa480027.aspx'>Messaging Patterns in Service-Oriented Architecture, Part 1</a>
