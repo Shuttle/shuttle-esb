@@ -56,4 +56,22 @@ So here we have create a new module that registers the `LogMessageOwnerObserver`
 
 Each pipeline has a state that contain various items.  You can add state and there are some extensions on the state that return various well-known items such as `GetTransportMessage()` that returns the `TransportMessage` on the pipeline.  Prior to deserializing the transport message it will, of course, be `null`.
 
-Pipeline are re-used so they are created as needed and returned to a pool.  Should a pipeline be retrieved from the pool it will be re-initialized so that the previous state is removed.
+Pipelines are re-used so they are created as needed and returned to a pool.  Should a pipeline be retrieved from the pool it will be re-initialized so that the previous state is removed.
+
+To use the module it will need to be referenced in the relevant endpoint and added to the `Modules` collection for the service bus configuration
+
+Using code:
+
+``` c#
+	bus = ServiceBus
+		.Create(c => c.AddModule(new LogMessageOwnerModule()))
+		.Start();
+```
+
+Via the configuration file:
+
+``` xml
+	<modules>
+		<add type="Shuttle.ESB.Modules.LogMessageOwnerModule, Shuttle.ESB.Modules" />
+	</modules>
+```
