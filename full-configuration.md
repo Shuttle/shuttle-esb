@@ -43,7 +43,7 @@ The most pertinent bit is the `serviceBus` tag.
 | `compressionAlgorithm`		| empty	(no compression)	| The name of the compression algorithm to use when sending messages.  Out-of-the-box there is a GZip compression implementation (class `GZipCompressionAlgorithm` with name 'GZip'). |
 | `encryptionAlgorithm`			| empty	(no entryption)		| The name of the encryption algorithm to use when sending messages.  Out-of-the-box there is a Triple DES implementation (class TripleDesEncryptionAlgorithm and name '3DES'). |
 
-Use the `queueFactories` tag to configure how you would like to locate queue factories.  By default the current `AppDomain` is scanned for implementations of `IQueueFactory` along with all assemblies in the base directory (recursively).
+Use the `queueFactories` tag to configure how you would like to locate queue factories.  By default the current `AppDomain` is scanned for implementations of `IQueueFactory` along with all assemblies in the base directory (recursively).  These queue factories have to have a parameterless constructor in order to be instantiated.
 
 ```xml
 	<queueFactories scan="true|false">
@@ -157,6 +157,14 @@ Since a worker sends thread availability to the physical distribution master the
 | `durationToSleepWhenIdle`		| 250ms\*4,500ms\*2,1s | |
 | `durationToIgnoreOnFailure`	| 5m,10m,15m,30m,60m | |
 | `maximumFailureCount`			| 5			| The maximum number of failures that are retried before the message is moved to the error queue. |
+
+There is also a `modules` tag to configure modules that can be loaded at runtime.  These modules have to have a parameterless constructor in order to be instantiated.
+
+```xml
+	<modules>
+		<add type="Shuttle.ESB.Modules.ActiveTimeRangeModule, Shuttle.ESB.Modules" />
+	</modules>
+```
 
 Finally just close the relevant tags.
 
