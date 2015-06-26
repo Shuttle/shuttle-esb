@@ -12,7 +12,7 @@ layout: api
 public System.Byte[] Message { get; public set; }
 ```
 
-The actual message stream returned from the [Serializer] represted as a byte array.
+The actual message stream returned from the [Serializer] represented as a byte array.
 
 ### MessageReceivedId
 
@@ -92,7 +92,7 @@ A list of message containing each failure that occurred.
 public string MessageType { get; public set; }
 ```
 
-The `FullName` of the message type represted by the `Message` property.
+The `FullName` of the message type represented by the `Message` property.
 
 ### AssemblyQualifiedName
 
