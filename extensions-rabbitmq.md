@@ -16,7 +16,7 @@ The queue configuration is part of the specified uri, e.g.:
 
 ```xml
     <inbox
-      workQueueUri="rabbitmq://username:password@host:port/virtualhost/queue?prefetchCount=25"
+      workQueueUri="rabbitmq://username:password@host:port/virtualhost/queue?prefetchCount=25&amp;durable=true"
 	  .
 	  .
 	  .
@@ -28,7 +28,8 @@ The queue configuration is part of the specified uri, e.g.:
 | username:password	 | empty|	|
 | virtualhost		 | /	|	|
 | port				 | default	|	|
-| prefectchcount			 | 25		| Specifies the number of messages to prefetch from the queue. |
+| prefetchcount			 | 25		| Specifies the number of messages to prefetch from the queue. |
+| durable			 | true     | Determines whether messages will be persisted.  Note: be very mindful of the possible consequences before setting to 'false'. |
 
 In addition to this there is also a RabbitMQ specific section (defaults specified here):
 
