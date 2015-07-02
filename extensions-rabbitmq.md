@@ -23,13 +23,13 @@ The queue configuration is part of the specified uri, e.g.:
     />
 ```
 
-| Segment / Argument | Default	| Description |
-| ------------------ | ---------	| ----------- |		
-| username:password	 | empty|	|
-| virtualhost		 | /	|	|
-| port				 | default	|	|
-| prefetchcount			 | 25		| Specifies the number of messages to prefetch from the queue. |
-| durable			 | true     | Determines whether messages will be persisted.  Note: be very mindful of the possible consequences before setting to 'false'. |
+| Segment / Argument | Default	| Description | Version Introduced |
+| --- | --- | --- | --- |
+| username:password	 | empty|	| |
+| virtualhost		 | /	|	| |
+| port				 | default	|	| |
+| prefetchcount			 | 25		| Specifies the number of messages to prefetch from the queue. | |
+| durable			 | true     | Determines whether messages will be persisted.  Note: be very mindful of the possible consequences before setting to 'false'. | v3.5.0 |
 
 In addition to this there is also a RabbitMQ specific section (defaults specified here):
 
