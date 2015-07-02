@@ -28,8 +28,7 @@ The queue configuration is part of the specified uri, e.g.:
 | username:password	 | empty|	|
 | virtualhost		 | /	|	|
 | port				 | default	|	|
-| journal			 | true		| Specifies whether a journal queue will be used when returning messages from the queue |
-| transactional		 | true		| Determines whether the queue is transactional or not |
+| prefectchcount			 | 25		| Specifies the number of messages to prefetch from the queue. |
 
 In addition to this there is also a RabbitMQ specific section (defaults specified here):
 
