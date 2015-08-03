@@ -1,6 +1,6 @@
 ---
 title: Modules
-layout: api
+layout: guide
 ---
 # Concepts
 

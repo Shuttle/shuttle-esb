@@ -18,5 +18,7 @@
     {% else %}
       {% capture ASSET_PATH %}{{ BASE_PATH }}/assets/themes/{{ page.theme.name }}{% endcapture %}
     {% endif %}  
+
+	{% capture JS_PATH %}{{ BASE_PATH }}/assets/js/{{ page.theme.name }}{% endcapture %}
   {% endif %}
 {% endcapture %}{% assign jbcache = nil %}

@@ -1,14 +1,18 @@
 $(function(){
-	var hasTOC = $("#toc").length > 0;
+	var i;
+	var item;
+	var hasTOC = $('#toc').length > 0;
+	var tocGuide = $('#toc-guide');
+	var hasTOCGuide = tocGuide.length > 0;
 	
 	var setTOC = function() {
-		var toc = $("#toc");
+		var toc = $('#toc');
 		
 		if (!hasTOC){
 			return;
 		}
 	
-		$("#toc").width($('#toc-container').width())
+		$('#toc').width($('#toc-container').width())
 	};
 	
     var move = function() {
@@ -22,19 +26,19 @@ $(function(){
 			return;
 		}
 		
-        ot = $("#toc-anchor").offset().top;
-        s = $("#toc");
+        ot = $('#toc-anchor').offset().top;
+        s = $('#toc');
 		
         if(st > ot) {
             s.css({
-                position: "fixed",
-                top: "15px"
+                position: 'fixed',
+                top: '15px'
             });
         } else {
             if(st <= ot) {
                 s.css({
-                    position: "relative",
-                    top: ""
+                    position: 'relative',
+                    top: ''
                 });
             }
         }
@@ -45,11 +49,36 @@ $(function(){
 	$(window).resize(setTOC);
 
 	if (hasTOC) {
-		$("#toc")
+		$('#toc')
 			.tocify({
-				theme: 'bootstrap'
+				theme: 'bootstrap',
+				showAndHide: false,
+				showAndHideOnScroll: false
 			})
 			.data('toc-tocify');
+
+		if (hasTOCGuide && shuttle.guideData && shuttle.guideData.items && $.isArray(shuttle.guideData.items)) {
+			for (i = 0; i < shuttle.guideData.items.length; i++){
+				item = shuttle.guideData.items[i];
+
+				if (item.name == (shuttle.guideData.selectedItemName || '')) {
+					continue;
+				}
+				
+				$('#toc-guide-list').append('<li><a href="/' + item.name + '/index.html">' + item.text + '</a></li>');
+			}
+
+			tocGuide.remove();
+			$('#toc').append(tocGuide);
+			
+			if (shuttle.guideData.title) {
+				$('#toc-guide-title').text(shuttle.guideData.title);
+			}
+		} else {
+			if (hasTOCGuide) {
+				tocGuide.remove();
+			}
+		};
 	}
 	
 	$('table').addClass('table table-hover table-condensed table-responsive');

@@ -40,7 +40,7 @@
     <!-- atom & rss feed -->
     <link href="{{ site.baseurl }}{{ site.JB.atom_path }}" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
     <link href="{{ site.baseurl }}{{ site.JB.rss_path }}" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
-
+	<script src="{{ ASSET_PATH }}/js/shuttle.js"></script>
   </head>
 
   <body>
@@ -70,19 +70,30 @@
 					</a>
 					<ul class='dropdown-menu'>
 						<li>
-							<a href='{{ site.baseurl }}/getting-started'>Getting Started</a>
+							<a href='{{ site.baseurl }}/guide-nuget'>Nuget</a>
 						</li>
 						<li class='divider'></li>
 						<li>
-							<a href='{{ site.baseurl }}/publish-subscribe'>Publish/Subscribe</a>
+							<a href='{{ site.baseurl }}/guide-request-response-1'>Request / Response</a>
 						</li>
 						<li class='divider'></li>
+						<li>
+							<a href='{{ site.baseurl }}/guide-modules-1'>Modules</a>
+						</li>
+					</ul>
+				</li>
+				<li class='dropdown'>
+					<a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+					Concepts
+					<b class='caret'></b>
+					</a>
+					<ul class='dropdown-menu'>
 						<li>
 							<a href='{{ site.baseurl }}/architecture'>Architecture &amp; Patterns</a>
 						</li>
 						<li class='divider'></li>
 						<li>
-							<a href='{{ site.baseurl }}/modules'>Modules</a>
+							<a href='{{ site.baseurl }}/publish-subscribe'>Publish / Subscribe</a>
 						</li>
 						<li class='divider'></li>
 						<li>
@@ -223,9 +234,9 @@
     {% include JB/analytics %}
 
     <script src="{{ ASSET_PATH }}/js/jquery.min.js"></script>
-	<script src="{{ ASSET_PATH }}/js/jquery-ui.js"></script>
+	<script src="{{ ASSET_PATH }}/js/jquery-ui.min.js"></script>
 	<script src="{{ ASSET_PATH }}/bootstrap/js/bootstrap.min.js"></script>
-	<script src="{{ ASSET_PATH }}/js/jquery.tocify.js"></script>
+	<script src="{{ ASSET_PATH }}/js/jquery.tocify.min.js"></script>
 	<script src="{{ ASSET_PATH }}/js/site.js"></script>
   </body>
 </html>

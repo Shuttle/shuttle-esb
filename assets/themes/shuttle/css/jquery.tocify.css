@@ -38,7 +38,6 @@
 /* Top level subheader elements.  These are the first nested items underneath a header element. */
 .tocify-subheader {
     text-indent: 20px;
-    display: none;
 }
 
 /* Makes the font smaller for all subheader elements. */
