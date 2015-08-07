@@ -12,7 +12,21 @@ layout: guide
 
 ![New solution]({{ site.baseurl }}/assets/images/guide-request-response-solution.png "New solution")
 
-Preview: [Overview][previous] | Next: [Messages][next]
+## RegisterMemberCommand
+
+We can now rename the `Class1` default file to `RegisterMemberCommand` and add a `UserName` property:
+
+``` c#
+namespace Shuttle.RequestResponse.Messages
+{
+	public class RegisterMemberCommand
+	{
+		public string UserName { get; set; }
+	}
+}
+```
+
+Previous: [Overview][previous] | Next: [Client][next]
 
 [previous]: {{ site.baseurl }}/guide-request-response-overview
-[next]: {{ site.baseurl }}/guide-request-response-messages
+[next]: {{ site.baseurl }}/guide-request-response-client

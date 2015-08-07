@@ -69,4 +69,5 @@ ul.blog-archive { list-style: none; }
   width: 100%;
   border-top: #E7E7E7 solid 1px;
 }
+#footer-space { height: 3em; }
 .construction { color: #ff0000; }

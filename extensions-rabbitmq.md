@@ -4,11 +4,15 @@ layout: api
 ---
 # RabbitMQQueue
 
-RabbitMQ does not provide 2-phase commit out-of-the-box.  Although implementing it is not too much effort the 2PC adds tremendous overhead (as it does for anything).  For this reason we do not use 2PC with RabbitMQ.
+RabbitMQ does not provide 2-phase commit out-of-the-box.  Although implementing it is not too much effort the 2PC adds tremendous overhead (as it does for anything).  For this reason shuttle does not use 2PC with RabbitMQ.
 
 Instead we rely on the [idempotence service]({{ site.baseurl }}/idempotence-service/index.html).
 
 Since RabbitMQ talks directly to a queue on any server it is suggested that you use an outbox that specifies a local queue just in case the remote queue is not immediately available.
+
+## Installation
+
+If you need to install RabbitMQ you can <a target='_blank' href='https://www.rabbitmq.com/install-windows.html'>follow these instructions</a>.
 
 ## Configuration
 

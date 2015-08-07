@@ -1,5 +1,5 @@
 ---
-title: MSMQ Extensions
+title: Msmq Extensions
 layout: api
 ---
 # MsmqQueue
@@ -7,6 +7,12 @@ layout: api
 All MSMQ queues are required to be **transactional**.  In addition to the actual queue a `msmq://host/queue$journal` queue will **always** be used.  If it does not exist it will be created, so if you are creating queues explicitly then remember to create these also.
 
 MSMQ creates outgoing queues internally so it is not necessary to use an outbox.
+
+## Installation / Activation
+
+If you need to install / activate msmq you can [follow these instructions][msmq-installation-activation]
+
+If you need to activate
 
 ## Configuration
 
@@ -40,3 +46,5 @@ In addition to this there is also a MSMQ specific section (defaults specified he
   .
 <configuration>
 ```
+
+[msmq-installation-activation]: {{ site.baseurl }}/msmq-installation-activation/index.html
