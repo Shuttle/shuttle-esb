@@ -21,3 +21,7 @@ layout: guide
 <div class='alert alert-info'>You will observe that the <strong>server</strong> application has processed the message.</div>
 
 ![Request/Response Run - Server]({{ site.baseurl }}/assets/images/guide-request-response-run-server.png "Request/Response Run - Server")
+
+Previous: [Server][previous]
+
+[previous]: {{ site.baseurl }}/guide-request-response-server

@@ -104,3 +104,8 @@ namespace Shuttle.RequestResponse.Server
 <div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bin\debug</strong> folder you may need to build the project.</div>
 
 ![Request/Response Server - Host]({{ site.baseurl }}/assets/images/guide-request-response-server-host.png "Request/Response Server - Host")
+
+Previous: [Client][previous] | Next: [Run][next]
+
+[previous]: {{ site.baseurl }}/guide-request-response-client
+[next]: {{ site.baseurl }}/guide-request-response-run
