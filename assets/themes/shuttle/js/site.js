@@ -84,5 +84,27 @@ $(function(){
 	$('table').addClass('table table-hover table-condensed table-responsive');
 	
     $(window).scroll(move);
-    move();	
+    move();
+	
+	shuttle.notify(shuttle.notifyOptions);
 })
+
+shuttle.notify = function(options) {
+	var notification = $('#notification');
+	var o = options || {};
+	
+	if (o.type == undefined || !notification) {
+		return;
+	}
+	
+	switch (o.type.toLowerCase()) {
+		case 'construction': {
+			notification.text('This documentation is currently being developed and may not yet be complete.');
+			notification.addClass('alert alert-warning');
+			
+			break;
+		}
+	}
+	
+	notification.show();
+}

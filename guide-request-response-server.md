@@ -99,6 +99,8 @@ namespace Shuttle.RequestResponse.Server
 }
 ```
 
+> Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the server project.
 
+<div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bin\debug</strong> folder you may need to build the project.</div>
 
-
+![Request/Response Server - Host]({{ site.baseurl }}/assets/images/guide-request-response-server-host.png "Request/Response Server - Host")
