@@ -30,7 +30,15 @@ namespace Shuttle.RequestResponse.Messages
 
 > Add a new class called `MemberRegisteredEvent` also with a `UserName` property.
 
-
+``` c#
+namespace Shuttle.RequestResponse.Messages
+{
+	public class MemberRegisteredEvent
+	{
+		public string UserName { get; set; }
+	}
+}
+```
 
 Previous: [Overview][previous] | Next: [Client][next]
 

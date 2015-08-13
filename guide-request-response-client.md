@@ -86,6 +86,26 @@ This tell shuttle that all messages that are sent and have a type name starting 
 > Create a new class called `MemberRegisteredHandler` that implements the `IMessageHandler<MemberRegisteredEvent>` interface as follows:
 
 ``` c#
+using System;
+using Shuttle.ESB.Core;
+using Shuttle.RequestResponse.Messages;
+
+namespace Shuttle.RequestResponse.Client
+{
+	public class MemberRegisteredHandler : IMessageHandler<MemberRegisteredEvent>
+	{
+		public void ProcessMessage(HandlerContext<MemberRegisteredEvent> context)
+		{
+			Console.WriteLine();
+			Console.WriteLine("[RESPONSE RECEIVED] : user name = '{0}'", context.Message.UserName);
+			Console.WriteLine();
+		}
+
+		public bool IsReusable {
+			get { return true; } 
+		}
+	}
+}
 ```
 
 Previous: [Messages][previous] | Next: [Server][next]
