@@ -65,7 +65,7 @@ $(function(){
 					continue;
 				}
 				
-				$('#toc-guide-list').append('<li><a href="/' + shuttle.baseurl + (shuttle.baseurl ? '/' : '') + item.name + '/index.html">' + item.text + '</a></li>');
+				$('#toc-guide-list').append('<li><a href="' + shuttle.baseurl + '/' + item.name + '/index.html">' + item.text + '</a></li>');
 			}
 
 			tocGuide.remove();
