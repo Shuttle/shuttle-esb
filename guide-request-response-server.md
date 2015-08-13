@@ -89,6 +89,11 @@ namespace Shuttle.RequestResponse.Server
 			Console.WriteLine();
 			Console.WriteLine("[MEMBER REGISTERED] : user name = '{0}'", context.Message.UserName);
 			Console.WriteLine();
+
+			context.Send(new MemberRegisteredEvent
+			{
+				UserName = context.Message.UserName
+			}, c => c.Reply());
 		}
 
 		public bool IsReusable
@@ -98,6 +103,8 @@ namespace Shuttle.RequestResponse.Server
 	}
 }
 ```
+
+This is write out some information to the console window and send a response back to the sender (client).
 
 > Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the server project.
 

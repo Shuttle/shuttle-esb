@@ -67,6 +67,10 @@ namespace Shuttle.RequestResponse.Client
 				<add specification="StartsWith" value="Shuttle.RequestResponse.Messages" />
 			</messageRoute>
 		</messageRoutes>		
+
+		<inbox
+		   workQueueUri="msmq://./shuttle-client-work"
+		   errorQueueUri="msmq://./shuttle-error" />
 	</serviceBus>
 	
     <startup> 
@@ -76,6 +80,13 @@ namespace Shuttle.RequestResponse.Client
 ```
 
 This tell shuttle that all messages that are sent and have a type name starting with `Shuttle.RequestResponse.Messages`whouls be sent to endpoint `msmq://./shuttle-server-work`.
+
+## MemberRegisteredHandler
+
+> Create a new class called `MemberRegisteredHandler` that implements the `IMessageHandler<MemberRegisteredEvent>` interface as follows:
+
+``` c#
+```
 
 Previous: [Messages][previous] | Next: [Server][next]
 

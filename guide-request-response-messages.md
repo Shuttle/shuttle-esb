@@ -14,7 +14,7 @@ layout: guide
 
 ## RegisterMemberCommand
 
-We can now rename the `Class1` default file to `RegisterMemberCommand` and add a `UserName` property:
+> Rename the `Class1` default file to `RegisterMemberCommand` and add a `UserName` property.
 
 ``` c#
 namespace Shuttle.RequestResponse.Messages
@@ -25,6 +25,12 @@ namespace Shuttle.RequestResponse.Messages
 	}
 }
 ```
+
+## MemberRegisteredEvent
+
+> Add a new class called `MemberRegisteredEvent` also with a `UserName` property.
+
+
 
 Previous: [Overview][previous] | Next: [Client][next]
 

@@ -22,6 +22,12 @@ layout: guide
 
 ![Request/Response Run - Server]({{ site.baseurl }}/assets/images/guide-request-response-run-server.png "Request/Response Run - Server")
 
+<div class='alert alert-info'>The <strong>client</strong> application will then process the response returned by the <strong>server</strong>.</div>
+
+![Request/Response Run - Client Response]({{ site.baseurl }}/assets/images/guide-request-response-run-client-response.png "Request/Response Run - Client Response")
+
+You have now completed a full request / response call chain.
+
 Previous: [Server][previous]
 
 [previous]: {{ site.baseurl }}/guide-request-response-server
