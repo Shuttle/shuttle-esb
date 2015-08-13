@@ -40,7 +40,9 @@
     <!-- atom & rss feed -->
     <link href="{{ site.baseurl }}{{ site.JB.atom_path }}" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
     <link href="{{ site.baseurl }}{{ site.JB.rss_path }}" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
-	<script src="{{ ASSET_PATH }}/js/shuttle.js"></script>
+	<script>
+		var shuttle = { baseurl: '{{ site.baseurl }}' };
+	</script>
   </head>
 
   <body>
