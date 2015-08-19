@@ -6,13 +6,13 @@ layout: guide
 <script>shuttle.guideData.selectedItemName = 'guide-request-response-overview'</script>
 # Overview
 
-In order to get any processing done in shuttle-esb a message will need to be generated and sent to an endpoint for processing.  In this guide we'll create the following projects:
+In order to get any processing done in shuttle-esb a message will need to be generated and sent to an endpoint for processing.  The idea behind a **command** message is that there is exactly **one** endpoint handling the message.  Since it is an instruction the message absolutely ***has*** to be handled and we also need to have only a single endpoint process the message to ensure a consistent result.
 
-- a **Console Application** called `Shuttle.Client`
-- a **Class Library** called `Shuttle.Server`
-- and another **Class Library** called `Shuttle.Messages` that will contain all our message classes
+In this guide we'll create the following projects:
 
-We will create a `RegisterMemberCommand` message that the client application will send to the server for processing.
+- a **Console Application** called `Shuttle.RequestResponse.Client`
+- a **Class Library** called `Shuttle.RequestResponse.Server`
+- and another **Class Library** called `Shuttle.RequestResponse.Messages` that will contain all our message classes
 
 Next: [Messages][next]
 

@@ -24,7 +24,7 @@ The default mechanism used to host an endpoint is by using a Windows service.  H
 
 > Add a reference to the `Shuttle.RequestResponse.Messages` project.
 
-# Host
+## Host
 
 > Rename the default `Class1` file to `Host` and implement the `IHost` and `IDisposabe` interfaces as follows:
 
@@ -52,7 +52,7 @@ namespace Shuttle.RequestResponse.Server
 }
 ```
 
-# App.config
+## App.config
 
 > Add an `Application Configuration File` item to create the `App.config` and populate as follows:
 
@@ -71,7 +71,7 @@ namespace Shuttle.RequestResponse.Server
 </configuration>
 ```
 
-# RegisterMemberHandler
+## RegisterMemberHandler
 
 > Add a new class called `RegisterMemberHandler` that implements the `IMessageHandler<RegisterMemberCommand>` interface as follows:
 
@@ -104,7 +104,7 @@ namespace Shuttle.RequestResponse.Server
 }
 ```
 
-This is write out some information to the console window and send a response back to the sender (client).
+This will write out some information to the console window and send a response back to the sender (client).
 
 > Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the server project.
 

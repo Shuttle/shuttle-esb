@@ -79,7 +79,7 @@ namespace Shuttle.RequestResponse.Client
 </configuration>
 ```
 
-This tell shuttle that all messages that are sent and have a type name starting with `Shuttle.RequestResponse.Messages`whouls be sent to endpoint `msmq://./shuttle-server-work`.
+This tell shuttle that all messages that are sent and have a type name starting with `Shuttle.RequestResponse.Messages` should be sent to endpoint `msmq://./shuttle-server-work`.
 
 ## MemberRegisteredHandler
 
