@@ -75,7 +75,7 @@ namespace Shuttle.PublishSubscribe.Client
 </configuration>
 ```
 
-This tell shuttle that all messages that are sent and have a type name starting with `Shuttle.PublishSubscribe.Messages` should be sent to endpoint `msmq://./shuttle-server-work`.
+This tells shuttle that all messages that are sent and have a type name starting with `Shuttle.PublishSubscribe.Messages` should be sent to endpoint `msmq://./shuttle-server-work`.
 
 Previous: [Messages][previous] | Next: [Server][next]
 
