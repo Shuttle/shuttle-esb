@@ -8,6 +8,8 @@ layout: guide
 
 Deferred messages refer to messages that are not immediately processed when available but are rather set to only process at a given future date.
 
+<div class='alert alert-info'>It is important to note that each endpoint <strong>must</strong> have its own deferred queue.</div>
+
 In this guide we'll create the following projects:
 
 - a **Console Application** called `Shuttle.Deferred.Client`
