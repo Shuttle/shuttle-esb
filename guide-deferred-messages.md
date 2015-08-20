@@ -26,20 +26,6 @@ namespace Shuttle.Deferred.Messages
 }
 ```
 
-## MemberRegisteredEvent
-
-> Add a new class called `MemberRegisteredEvent` also with a `UserName` property.
-
-``` c#
-namespace Shuttle.Deferred.Messages
-{
-	public class MemberRegisteredEvent
-	{
-		public string UserName { get; set; }
-	}
-}
-```
-
 Previous: [Overview][previous] | Next: [Client][next]
 
 [previous]: {{ site.baseurl }}/guide-deferred-overview
