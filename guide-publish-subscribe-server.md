@@ -54,15 +54,17 @@ namespace Shuttle.PublishSubscribe.Subscriber
 
 ## Database
 
-We need a store for our subscriptions.  In this example we will be using **Sql Subscriber**.  If you use the express version remember to change the `data source` value to `.\sqlexpress` from the standard `.`.
+We need a store for our subscriptions.  In this example we will be using **Sql Server**.  If you use the express version remember to change the `data source` value to `.\sqlexpress` from the standard `.`.
 
-When you reference the `shuttle-esb-sqlsubscriber` package a number of scripts are included in the relevant package folder:
+When you reference the `shuttle-esb-sqlserver` package a number of scripts are included in the relevant package folder:
 
-- `.\Shuttle.PublishSubscribe\packages\shuttle-esb-sqlsubscriber.3.4.4\scripts`
+- `.\Shuttle.PublishSubscribe\packages\shuttle-esb-sqlserver.{version}\scripts`
+
+The `{version}` bit will be in a `semver` format.
 
 > Create a new database called **Shuttle** and execute script `SubscriptionManagerCreate.sql` in the newly created database.
 
-Whenever `Publish` is called the registered `ISubscriptionManager` instance is asked for the subscribers to the published message type.  These are retrieved from the Sql Server database for the implementation we are using.
+This will create the required structures that the idempotence service can use to keep track of message processing.
 
 ## App.config
 
@@ -83,7 +85,7 @@ Whenever `Publish` is called the registered `ISubscriptionManager` instance is a
 
 	<serviceBus>
 		 <inbox
-			workQueueUri="msmq://./shuttle-subscriber-work"
+			workQueueUri="msmq://./shuttle-server-work"
 			errorQueueUri="msmq://./shuttle-error" />
 	</serviceBus>
 </configuration>
