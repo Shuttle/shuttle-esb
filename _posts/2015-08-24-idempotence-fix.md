@@ -15,4 +15,4 @@ If you have been using idempotence you will need to drop the following tables fr
 - IdempotenceDeferredMessage
 - IdempotenceHistory
 
-If you have any questions you are welcome to log an issue on [the shuttle-esb-sqlserver issue page](https://github.com/Shuttle/shuttle-esb-sqlserver/issues).
+If you have any questions you are welcome to log an issue on the shuttle-esb-sqlserver [issue page](https://github.com/Shuttle/shuttle-esb-sqlserver/issues).
