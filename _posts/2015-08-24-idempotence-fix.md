@@ -5,7 +5,7 @@ layout: post
 
 # Idempotence fix
 
-Release 3.6.5 of `shuttle-esb-core` and release 3.4.5 of `shuttle-esb-sqlserver` contain a refactor of the idempotence handling.
+Release 3.6.5 of [shuttle-esb-core](https://github.com/Shuttle/shuttle-esb-core/releases/tag/v3.6.5) and release 3.4.5 of [shuttle-esb-sqlserver](https://github.com/Shuttle/shuttle-esb-sqlserver/releases/tag/v3.4.5) contain a refactor of the idempotence handling.
 
 Idempotence is quite tricky to get correct and these releases are aimed at fixing some issues found whilst creating the idempotence guide.
 
