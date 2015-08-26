@@ -1,5 +1,5 @@
 ---
-title: Message Distribution Guide
+title: Message Distribution Guide - Client
 layout: guide
 ---
 <script src="{{ site.baseurl }}/assets/js/guide-distribution.js"></script>

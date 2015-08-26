@@ -1,5 +1,5 @@
 ---
-title: Idempotence Messages Guide
+title: Idempotence Messages Guide - Client
 layout: guide
 ---
 <script src="{{ site.baseurl }}/assets/js/guide-idempotence.js"></script>

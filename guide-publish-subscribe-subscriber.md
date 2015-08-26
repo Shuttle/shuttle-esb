@@ -1,5 +1,5 @@
 ---
-title: Publish / Subscribe Guide
+title: Publish / Subscribe Guide - Subscriber
 layout: guide
 ---
 <script src="{{ site.baseurl }}/assets/js/guide-publish-subscribe.js"></script>

@@ -1,5 +1,5 @@
 ---
-title: Dependency Injection Guide
+title: Dependency Injection Guide - e-mail
 layout: guide
 ---
 <script src="{{ site.baseurl }}/assets/js/guide-dependencyinjection.js"></script>

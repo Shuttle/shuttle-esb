@@ -1,5 +1,5 @@
 ---
-title: Idempotence Guide
+title: Idempotence Guide - Overview
 layout: guide
 ---
 <script src="{{ site.baseurl }}/assets/js/guide-idempotence.js"></script>
