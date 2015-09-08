@@ -20,14 +20,18 @@ The queue configuration is part of the specified uri, e.g.:
 
 ```xml
     <inbox
-      workQueueUri="msmq://host/queue"
+      workQueueUri="msmq://host/queue?useDeadLetterQueue=true"
 	  .
 	  .
 	  .
     />
 ```
 
-So by default the `MsmqQueue` is a transactional queue that utilizes a journal queue when retrieving messages.  Please try not to change the default unless you have carefully considered your choice.  Although there is a slightt performance penalty the defaults provide a reletively risk-free consumption of the queue.
+| Segment / Argument | Default	| Description | Version Introduced |
+| --- | --- | --- | --- |
+| useDeadLetterQueue	 | true | Specifies the value to pass to the 'UseDeadLetterQueue' property of the message sent. | 3.4.3 |
+
+By default the `MsmqQueue` is a transactional queue that utilizes a journal queue when retrieving messages.  Please try not to change the default unless you have carefully considered your choice.  Although there is a slight performance penalty the defaults provide a relatively risk-free consumption of the queue.
 
 In addition to this there is also a MSMQ specific section (defaults specified here):
 
