@@ -10,13 +10,17 @@ In addition to this the idempotence service also defers message sending when mes
 
 ## Methods
 
-### ShouldProcess
+### ProcessingStatus
 
 ``` c#
-bool ShouldProcess(TransportMessage transportMessage);
+ProcessingStatus ProcessingStatus(TransportMessage transportMessage);
 ```
 
-This method must return `false` if the message has previously been processed successfully or if the message is currently being processed; else it should mark the message as being processed and return `true`.
+This method must return the `ProcessingStatus` of the given `TransportMessage`:
+
+- Returns `ProcessingStatus.Ignore` if the message has been **processed** completely and also if it currently being processed by another consumer.
+- Returns `ProcessingStatus.MessageHandled` if the message has already been handled.  There may be deferred messages that need to be sent.
+- Returns `ProcessingStatus.Assigned` if this message is assigned for initial processing.
 
 ### ProcessingCompleted
 
@@ -49,3 +53,11 @@ void DeferredMessageSent(TransportMessage processingTransportMessage, TransportM
 ```
 
 This method should remove the entry associated with the `deferredTransportMessage` as it has been dispatched.
+
+### MessageHandled
+
+``` c#
+void MessageHandled(TransportMessage transportMessage);
+```
+
+Once the message has been successfully handled this method is called to mark the message as handled in the store.
