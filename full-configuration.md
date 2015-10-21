@@ -158,12 +158,21 @@ Since a worker sends thread availability to the physical distribution master the
 | `durationToIgnoreOnFailure`	| 5m,10m,15m,30m,60m | |
 | `maximumFailureCount`			| 5			| The maximum number of failures that are retried before the message is moved to the error queue. |
 
-There is also a `modules` tag to configure modules that can be loaded at runtime.  These modules have to have a parameterless constructor in order to be instantiated.
+Use the `modules` tag to configure modules that can be loaded at runtime.  These modules have to have a parameterless constructor in order to be instantiated; else add them programmatically if you need to specify parameters.
 
 ```xml
 	<modules>
 		<add type="Shuttle.ESB.Modules.ActiveTimeRangeModule, Shuttle.ESB.Modules" />
 	</modules>
+```
+
+If you need to make use of the `DefaultUriResolver` you can specify the mappings as follows:
+
+```xml
+	<uriResolver>
+		<add name="resolver://host/queue-1" uri="msmq://./inbox-work-queue" />
+		<add name="resolver://host/queue-2" uri="rabbitmq://user:password@the-server/inbox-work-queue" />
+	</uriResolver>
 ```
 
 Finally just close the relevant tags.
