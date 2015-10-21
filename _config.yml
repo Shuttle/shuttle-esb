@@ -5,7 +5,7 @@ permalink: pretty
 exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md"]
 
 paginate: 10
-pygments: true
+highlighter: pygments
 
 markdown: redcarpet
 
