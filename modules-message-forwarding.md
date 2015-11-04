@@ -26,3 +26,5 @@ The `MessageForwardingModule` may be found in the `Shuttle.ESB.Modules` assembly
 		.AddModule(new MessageForwardingModule())
 		.Start();
 ```
+
+The specifications are the same specifications used by the `DefaultMessageRouteProvider` implementation.

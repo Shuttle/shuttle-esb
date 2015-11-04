@@ -44,22 +44,6 @@ The `DefaultMessageRouteProvider` obtains its configuration from the application
     </messageRoutes>
 ```
 
-### DefaultForwardingRouteProvider
-
-The `DefaultForwardingRouteProvider` also obtains its configuration from the application configuration file:
-
-```xml
-    <forwardingRoutes>
-      <messageRoute uri="msmq://./inbox">
-        <add specification="StartsWith" value="Shuttle.Messages1" />
-        <add specification="StartsWith" value="Shuttle.Messages2" />
-      </messageRoute>
-      <messageRoute uri="sql://./inbox">
-        <add specification="TypeList" value="DoSomethingCommand" />
-      </messageRoute>
-    </forwardingRoutes>
-```
-
 ### Specifications
 
 For each message route you need to specify the specification to apply to the value.  The [specification](http://en.wikipedia.org/wiki/Specification_pattern) will determine wether the route will be added.
