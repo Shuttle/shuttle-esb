@@ -18,6 +18,14 @@ IEnumerable<string> GetRouteUris(object message);
 
 The method will return the list of uris that the message should be routed to.  All qualifying routes should be added to the resulting collection of uris.
 
+### Add
+
+``` c#
+void Add(IMessageRoute messageRoute);
+```
+
+The method will add a new `IMessageRoute` instance.
+
 ## Implementation
 
 ### DefaultMessageRouteProvider
