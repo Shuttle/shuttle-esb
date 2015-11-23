@@ -9,5 +9,3 @@ shuttle.guideData = {
 		{ 'text': 'Run', 'name': 'guide-publish-subscribe-run' }
 	]
 } 
-
-shuttle.notifyOptions = { type: 'construction'};
