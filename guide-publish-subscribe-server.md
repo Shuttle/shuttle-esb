@@ -106,7 +106,7 @@ namespace Shuttle.PublishSubscribe.Subscriber
 {
 	public class RegisterMemberHandler : IMessageHandler<RegisterMemberCommand>
 	{
-		public void ProcessMessage(HandlerContext<RegisterMemberCommand> context)
+		public void ProcessMessage(IHandlerContext<RegisterMemberCommand> context)
 		{
 			Console.WriteLine();
 			Console.WriteLine("[MEMBER REGISTERED] : user name = '{0}'", context.Message.UserName);
