@@ -1,5 +1,5 @@
 ---
-title: Request / Response Guide - Messages
+title: Publish / Subscribe Guide - Messages
 layout: guide
 ---
 <script src="{{ site.baseurl }}/assets/js/guide-publish-subscribe.js"></script>
