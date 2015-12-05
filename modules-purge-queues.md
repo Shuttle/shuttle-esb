@@ -25,7 +25,9 @@ The relevant queue implementation has to implement the `IPurgeQueue` interface. 
 
 ```c#
 	var bus = ServiceBus
-		.Create()
-		.AddModule(new PurgeQueuesModule())
+		.Create.Create
+		(
+			c => c.AddModule(new PurgeQueuesModule())
+		)
 		.Start();
 ```

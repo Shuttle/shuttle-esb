@@ -8,8 +8,10 @@ The `UnityMessageHandlerFactory` inherits from the abstract `MessageHandlerFacto
 
 ```c#
 	bus = ServiceBus
-		.Create()
-		.MessageHandlerFactory(new UnityMessageHandlerFactory(new UnityContainer()))
+		.Create
+		(
+			c => c.MessageHandlerFactory(new UnityMessageHandlerFactory(new UnityContainer()))
+		)
 		.Start();
 ```
 
@@ -23,8 +25,10 @@ You can use the `RegisterHandlers` method of the `UnityMessageHandlerFactory` in
 
 ```c#
 	bus = ServiceBus
-		.Create()
-		.MessageHandlerFactory(new UnityMessageHandlerFactory(new WindsorContainer()).RegisterHandlers())
+		.Create.Create
+		(
+			c => c.MessageHandlerFactory(new UnityMessageHandlerFactory(new WindsorContainer()).RegisterHandlers())
+		)
 		.Start();
 ```
 

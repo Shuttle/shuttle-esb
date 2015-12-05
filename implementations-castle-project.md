@@ -8,8 +8,10 @@ The `CastleMessageHandlerFactory` inherits from the abstract `MessageHandlerFact
 
 ```c#
 	bus = ServiceBus
-		.Create()
-		.MessageHandlerFactory(new CastleMessageHandlerFactory(new WindsorContainer()))
+		.Create
+		(
+			c => c.MessageHandlerFactory(new CastleMessageHandlerFactory(new WindsorContainer()))
+		)
 		.Start();
 ```
 
@@ -23,8 +25,10 @@ You can use the `RegisterHandlers` method of the `CastleMessageHandlerFactory` i
 
 ```c#
 	bus = ServiceBus
-		.Create()
-		.MessageHandlerFactory(new CastleMessageHandlerFactory(new WindsorContainer()).RegisterHandlers())
+		.Create
+		(
+			c => .MessageHandlerFactory(new CastleMessageHandlerFactory(new WindsorContainer()).RegisterHandlers())
+		)
 		.Start();
 ```
 

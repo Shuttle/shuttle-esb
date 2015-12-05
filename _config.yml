@@ -5,6 +5,7 @@ permalink: pretty
 exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md"]
 
 paginate: 10
+gems: [jekyll-paginate]
 highlighter: pygments
 
 markdown: redcarpet

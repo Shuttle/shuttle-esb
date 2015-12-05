@@ -14,7 +14,9 @@ The `CorruptTransportMessageModule` may be found in the `Shuttle.ESB.Modules` as
 
 ```c#
 	var bus = ServiceBus
-		.Create()
-		.AddModule(new CorruptTransportMessageModule())
+		.Create.Create
+		(
+			c => c.AddModule(new CorruptTransportMessageModule())
+		)
 		.Start();
 ```
