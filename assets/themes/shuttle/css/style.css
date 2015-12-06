@@ -64,7 +64,7 @@ ul.blog-archive { list-style: none; }
 #footer {
   padding: 15px;
   height: auto;
-  position: fixed;
+  /*position: fixed;*/
   bottom: 0px;
   width: 100%;
   border-top: #E7E7E7 solid 1px;

@@ -40,9 +40,11 @@ In a production environment it is recommended that the subscription store be mai
 
 # Shuttle Configuration
 
-All endpoints that belong to the same physical pub/sub store should connect to the same store.  You would have a store for your development environment, perhaps even locally on your own machine.  You would have a separate store for your QA, UAT, and production environments.
+All endpoints that belong to the same physical pub/sub store should connect to the same store.  
 
-# Publishing from a web-site?
+You would have a store for your development environment, perhaps even locally on your own machine.  You would have a separate store for your QA, UAT, and production environments.
+
+## Publishing from a web-site
 
 Typically you would publish events from some processing endpoint, as opposed to a web-site.
 
