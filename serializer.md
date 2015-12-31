@@ -4,25 +4,8 @@ layout: api
 ---
 # ISerializer
 
-An implementation of the `ISerializer` interface is used to serialize objects, typically messages, into a `Stream`.
+The `shuttle-esb-core` package makes use of the `shuttle-core-infrastructure` package's `ISerializer` interface for serializing any objects.
 
-The `DefaultSerializer` makes use of the standard .NET xml serialization functionality.
+For more information you can [visit the relevant documentation page](http://shuttle.github.io/shuttle-core/overview-serializer/).
 
-## Methods
-
-### Serialize
-
-``` c#
-Stream Serialize(object message);
-```
-
-Returns the message `object` as a `Stream`.
-
-### Deserialize
-
-``` c#
-object Deserialize(Type type, Stream stream);
-```
-
-Deserializes the `Stream` into an `obejct` of the given type.
-
+*Please note*: it is recommended that you have a look at the duplicate class name caveat described in above documentation so please remember to explicitly specify you message types.
