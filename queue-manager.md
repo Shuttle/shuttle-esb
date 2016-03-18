@@ -12,18 +12,18 @@ The queue manager cannot be swapped out for your own implementation as it is int
 
 ### GetQueueFactory
 
-``` c#
+~~~ c#
 IQueueFactory GetQueueFactory(string scheme);
 IQueueFactory GetQueueFactory(Uri uri);
-```
+~~~
 
 The method will return an instance of the queue factory registered for the requested `scheme` in the uri.
 
 ### GetQueue
 
-``` c#
+~~~ c#
 IQueue GetQueue(string uri);
-```
+~~~
 
 This method returns an `IQueue` implementation that interacts with the queuing mechanism represented by the `scheme` in the uri.  This method will attempt to return a cached `IQueue` instance.  If none is found a new instance is requested using the `CreateQueue` method.
 
@@ -31,18 +31,18 @@ Should the uri scheme be `resolver` this method will invoke the configured [UriR
 
 ### CreateQueue
 
-``` c#
+~~~ c#
 IQueue CreateQueue(string uri);
 IQueue CreateQueue(Uri uri);
-```
+~~~
 
 The method returns a new instance of the requested queue implementation represented by the uri scheme.
 
 ### CreatePhysicalQueues
 
-``` c#
+~~~ c#
 void CreatePhysicalQueues(IServiceBusConfiguration serviceBusConfiguration);
-```
+~~~
 
 This method will attempt to create the physical queues configured for the inbox, outbox, control inbox, and deferred queues if they are present.  The relevant queue implementation is safe cast to an `ICreateQueue` instance and, if implemented, the queue creation will be attempted.
 
@@ -50,33 +50,33 @@ Please note that the creation may fail for a variety of reasons such as permissi
 
 ### GetQueueFactories
 
-``` c#
+~~~ c#
 IEnumerable<IQueueFactory> GetQueueFactories();
-```
+~~~
 
 Returns the `IQueueFactory` implementations that the queue manager is aware of.
 
 ### RegisterQueueFactory
 
-``` c#
+~~~ c#
 void RegisterQueueFactory(IQueueFactory queueFactory);
-```
+~~~
 
 Use this method to explicitly register a queue factory instance.
 
 ### ContainsQueueFactory
 
-``` c#
+~~~ c#
 bool ContainsQueueFactory(string scheme);
-```
+~~~
 
 This method determines whether the queue manager has a queue factory registered for the given scheme.
 
 ### UriResolver
 
-``` c#
+~~~ c#
 IUriResolver UriResolver { get; set; }
-```
+~~~
 
 Use this property to get or set the relevant [UriResolver].
 

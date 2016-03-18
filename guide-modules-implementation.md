@@ -10,7 +10,7 @@ Shuttle-ESB is extensible via modules.  These typically plug into a relevant pip
 
 A module is an implementation of the `IModule` interface and this, in turn, implements the `IRequireInitialization` interface.
 
-``` c#
+~~~ c#
     public class LogMessageOwnerModule : IModule
     {
 		private readonly string _receiveMessagePipelineName = typeof(InboxMessagePipeline).FullName;
@@ -32,11 +32,11 @@ A module is an implementation of the `IModule` interface and this, in turn, impl
 			e.Pipeline.RegisterObserver(new LogMessageOwnerObserver());
 		}
     }
-```
+~~~
 
 So here we have create a new module that registers the `LogMessageOwnerObserver` for each newly created `InboxMessagePipeline`.  Since a pipeline simply raises `PipelineEvent` instances the observer will need to listen out for the relevant events.  We will log the message owner after the transport message has been deserialized:
 
-``` c#
+~~~ c#
 	public class LogMessageOwnerObserver : IPipelineObserver<OnAfterDeserializeTransportMessage>
 	{
 		public void Execute(OnDeserializeTransportMessage pipelineEvent)
@@ -52,7 +52,7 @@ So here we have create a new module that registers the `LogMessageOwnerObserver`
 			Console.Log("This transport message belongs to '{0}'.", transportMessage.PrincipalIdentityName);
 		}
 	}
-```
+~~~
 
 Each pipeline has a state that contains various items.  You can add state and there are some extensions on the state that return various well-known items such as `GetTransportMessage()` that returns the `TransportMessage` on the pipeline.  Prior to deserializing the transport message it will, of course, be `null`.
 
@@ -62,16 +62,16 @@ To use the module it will need to be referenced in the relevant endpoint and add
 
 Using code:
 
-``` c#
+~~~ c#
 	bus = ServiceBus
 		.Create(c => c.AddModule(new LogMessageOwnerModule()))
 		.Start();
-```
+~~~
 
 Via the configuration file:
 
-``` xml
+~~~ xml
 	<modules>
 		<add type="Shuttle.ESB.Modules.LogMessageOwnerModule, Shuttle.ESB.Modules" />
 	</modules>
-```
+~~~

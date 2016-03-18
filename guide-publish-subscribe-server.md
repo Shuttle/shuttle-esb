@@ -28,7 +28,7 @@ The default mechanism used to host an endpoint is by using a Windows service.  H
 
 > Rename the default `Class1` file to `Host` and implement the `IHost` and `IDisposabe` interfaces as follows:
 
-``` c#
+~~~ c#
 using System;
 using Shuttle.Core.Host;
 using Shuttle.ESB.Core;
@@ -50,7 +50,7 @@ namespace Shuttle.PublishSubscribe.Subscriber
 		}
 	}
 }
-```
+~~~
 
 ## Database
 
@@ -70,7 +70,7 @@ This will create the required structures that the idempotence service can use to
 
 > Add an `Application Configuration File` item to create the `App.config` and populate as follows:
 
-``` xml
+~~~ xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
@@ -89,7 +89,7 @@ This will create the required structures that the idempotence service can use to
 			errorQueueUri="msmq://./shuttle-error" />
 	</serviceBus>
 </configuration>
-```
+~~~
 
 The Sql Server implementation of the `ISubscriptionManager` that we are using by default will try to find a connection string with a name of **Subscription**.  However, you can override this.  See the [Sql Server configuration options][sql-server] for details about how to do this.
 
@@ -97,7 +97,7 @@ The Sql Server implementation of the `ISubscriptionManager` that we are using by
 
 > Add a new class called `RegisterMemberHandler` that implements the `IMessageHandler<RegisterMemberCommand>` interface as follows:
 
-``` c#
+~~~ c#
 using System;
 using Shuttle.ESB.Core;
 using Shuttle.PublishSubscribe.Messages;
@@ -124,7 +124,7 @@ namespace Shuttle.PublishSubscribe.Subscriber
 		}
 	}
 }
-```
+~~~
 
 This will write out some information to the console window and publish the `MemberRegisteredEvent` message.
 

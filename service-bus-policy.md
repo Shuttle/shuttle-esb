@@ -10,18 +10,18 @@ An implementation of the `IServiceBusPolicy` interface is used to evaluate failu
 
 ### EvaluateMessageHandlingFailure
 
-``` c#
+~~~ c#
 MessageFailureAction EvaluateMessageHandlingFailure(OnPipelineException pipelineEvent);
-```
+~~~
 
 ### EvaluateMessageDistributionFailure
 
-``` c#
+~~~ c#
 MessageFailureAction EvaluateMessageDistributionFailure(OnPipelineException pipelineEvent);
-```
+~~~
 
 ### EvaluateOutboxFailure
 
-``` c#
+~~~ c#
 MessageFailureAction EvaluateOutboxFailure(OnPipelineException pipelineEvent);
-```
+~~~

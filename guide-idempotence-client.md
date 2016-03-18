@@ -22,7 +22,7 @@ This will provide access to the Msmq `IQueue` implementation and also include th
 
 > Implement the main client code as follows:
 
-``` c#
+~~~ c#
 using System;
 using Shuttle.ESB.Core;
 using Shuttle.Idempotence.Messages;
@@ -58,7 +58,7 @@ namespace Shuttle.Idempotence.Client
 		}
 	}
 }
-```
+~~~
 
 Keep in mind that the when you `Send` a message a `TransportMessage` envelope is created with a unique message id (`Guid`).  In the above code we first manually create a `TransportMessage` so that we can send technically identical messages.
 
@@ -68,7 +68,7 @@ The next two `Send` operations do not use the `TransportMessage` but rather send
 
 > Create the shuttle configuration as follows:
 
-``` xml
+~~~ xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
@@ -87,7 +87,7 @@ The next two `Send` operations do not use the `TransportMessage` but rather send
         <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5" />
     </startup>
 </configuration>
-```
+~~~
 
 This tells shuttle that all messages that are sent and have a type name starting with `Shuttle.Idempotence.Messages` should be sent to endpoint `msmq://./shuttle-server-work`.
 

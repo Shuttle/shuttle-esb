@@ -16,7 +16,7 @@ layout: guide
 
 > Rename the `Class1` default file to `RegisterMemberCommand` and add a `UserName` property.
 
-``` c#
+~~~ c#
 namespace Shuttle.Distribution.Messages
 {
 	public class RegisterMemberCommand
@@ -24,7 +24,7 @@ namespace Shuttle.Distribution.Messages
 		public string UserName { get; set; }
 	}
 }
-```
+~~~
 
 Previous: [Overview][previous] | Next: [Client][next]
 

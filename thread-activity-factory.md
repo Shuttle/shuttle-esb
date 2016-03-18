@@ -12,25 +12,25 @@ The `DefaultThreadActivityFactory` implementation should suffice.
 
 ### CreateInboxThreadActivity
 
-``` c#
+~~~ c#
 IThreadActivity CreateInboxThreadActivity(IServiceBus bus);
-```
+~~~
 
 Returns a `ThreadActivity` object configured using the `InboxConfiguration`.
 
 ### CreateControlInboxThreadActivity
 
-``` c#
+~~~ c#
 IThreadActivity CreateControlInboxThreadActivity(IServiceBus bus);
-```
+~~~
 
 Returns a `ThreadActivity` object configured using the `ControlInboxConfiguration`.
 
 ### CreateOutboxThreadActivity
 
-``` c#
+~~~ c#
 IThreadActivity CreateOutboxThreadActivity(IServiceBus bus);
-```
+~~~
 
 Returns a `ThreadActivity` object configured using the `OutboxConfiguration`.
 

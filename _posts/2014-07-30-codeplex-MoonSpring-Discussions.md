@@ -158,7 +158,7 @@ First ,I want to know:in class file OrderCompletedEvent.cs,the meaning of the Or
 Do it relate to Serialization thing?
 When I delete this field,It can still run and have no any wrong messages.
 
-``` c#
+~~~ c#
 namespace PublishSubscribe.Messages
 {
 	public class OrderCompletedEvent 
@@ -167,7 +167,7 @@ namespace PublishSubscribe.Messages
 		public String coment { get; set; }
 	}
 }
-```
+~~~
 
 Second,I want to pass "List" type in my project instead of Entity,But it will send me the wrong message about: Serialization
 	
@@ -183,15 +183,15 @@ Shuttle does not do anything special w.r.t. serialization so if it breaks it mea
 
 If you want to consider a namespace mechanism you could go with something like this:
 
-``` c#
+~~~ c#
 namespace Company.BC.Messages.V1
-```
+~~~
 
 As soon as you encounter breaking changes you could have that message under:
 
-``` c#
+~~~ c#
 namespace Company.BC.Messages.V1
-```
+~~~
 
 However, things get rather tricky when it comes to subscriptions and the like so these things need to be carefully considered.
 
@@ -393,7 +393,7 @@ I spent the whole day to find this reason.Now I will try to express it clearly.
 
 ICT.WPF.Client.MainFramework( the Subscriber port ),is one name of my project.It will work with the WCF and arcgis Map Service,so the "App.config" will be like this:
 
-``` xml
+~~~ xml
  <?xml version="1.0" encoding="utf-8" ?>
   <configuration>
    <configSections>
@@ -461,11 +461,11 @@ ICT.WPF.Client.MainFramework( the Subscriber port ),is one name of my project.It
  </client>
 </system.serviceModel>
   </configuration>
-```
+~~~
   
 In the project "ICT.WPF.Client.MainFramework",we have a WPF window form named "MainWindow".When it loaded, we will run this code:
 
-``` c#
+~~~ c#
 	new ConnectionStringService().Approve();
 
 	var subscriptionManager = SubscriptionManager.Default();
@@ -477,7 +477,7 @@ In the project "ICT.WPF.Client.MainFramework",we have a WPF window form named "M
 
 	Console.WriteLine("Sub A started.  Press CTRL+C to stop.");
 	Console.WriteLine();
-```
+~~~
 	
 When the Service Bus instance is created, just like the `var bus = ServiceBus.Create(c => c.SubscriptionManager(subscriptionManager)).Start();`
 It will send me this wrong message.

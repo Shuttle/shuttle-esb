@@ -6,20 +6,20 @@ layout: api
 
 The `ActiveTimeRangeModule` may be found in the `Shuttle.ESB.Modules` assembly.  The module will attach the `ActiveTimeRangeObserver` to the `OnPipelineStarting` event of all pipelines except the `StartupPipeline` and abort the pipeline if the current time is not within the active time range.
 
-```xml
+~~~xml
   <appSettings>
     <add key="ActiveFromTime" value="*"/>
     <add key="ActiveToTime" value="*"/>
   </appSettings>
-```
+~~~
 
 The default value of `*` indicates the whole day and your pipelines will never be stopped.
 
-```c#
+~~~c#
 	var bus = ServiceBus
 		.Create.Create
 		(
 			c => c.AddModule(new ActiveTimeRangeModule())
 		)
 		.Start();
-```
+~~~

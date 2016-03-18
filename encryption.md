@@ -12,10 +12,10 @@ The following algorithms are included out-of-the-box:
 
 All messages that are outgoing will be encrypted using the algorithm name specified in the `serviceBus` configuration section (empty for no encryption):
 
-```xml
+~~~xml
   <serviceBus
     encryptionAlgorithm="">
-```
+~~~
 
 ## Properties
 
@@ -27,16 +27,16 @@ Returns the name of the encryption algorithm.  The name should be unique and it 
 
 ### Encrypt
 
-``` c#
+~~~ c#
 byte[] Encrypt(byte[] bytes);
-```
+~~~
 
 Returns an array of bytes representing the encrypted input.
 
 ### Decrypt
 
-``` c#
+~~~ c#
 byte[] Decrypt(byte[] bytes);
-```
+~~~
 
 Returns an array of bytes representing the unencrypted input.

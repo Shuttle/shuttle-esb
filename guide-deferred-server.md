@@ -30,7 +30,7 @@ We are also adding **Log4Net** to demonstrate how to add a third-party logging m
 
 > Rename the default `Class1` file to `Host` and implement the `IHost` and `IDisposabe` interfaces as follows:
 
-``` c#
+~~~ c#
 using System;
 using log4net;
 using Shuttle.Core.Host;
@@ -57,13 +57,13 @@ namespace Shuttle.Deferred.Server
 		}
 	}
 }
-```
+~~~
 
 ## App.config
 
 > Add an `Application Configuration File` item to create the `App.config` and populate as follows:
 
-``` xml
+~~~ xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
@@ -103,13 +103,13 @@ namespace Shuttle.Deferred.Server
 		   errorQueueUri="msmq://./shuttle-error" />
 	</serviceBus>
 </configuration>
-```
+~~~
 
 ## RegisterMemberHandler
 
 > Add a new class called `RegisterMemberHandler` that implements the `IMessageHandler<RegisterMemberCommand>` interface as follows:
 
-``` c#
+~~~ c#
 using System;
 using Shuttle.ESB.Core;
 using Shuttle.Deferred.Messages;
@@ -131,7 +131,7 @@ namespace Shuttle.Deferred.Server
 		}
 	}
 }
-```
+~~~
 
 This will write out some information to the console window and send a response back to the sender (client).
 

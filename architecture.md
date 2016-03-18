@@ -18,7 +18,7 @@ Every service bus instance is associated with, and therefore processes, only one
 
 Shuttle is based on messages.  The messages are data transfer objects that implement a specific message interface, e.g.:
 
-``` c#
+~~~ c#
     public class ActivateMemberCommand
     {
         string MemberId { get; set; }
@@ -28,7 +28,7 @@ Shuttle is based on messages.  The messages are data transfer objects that imple
     {
         string MemberId { get; set; }
     }
-```
+~~~
 
 ## Queues
 
@@ -42,7 +42,7 @@ It is important to note that all queues are non-destructive and should always be
 
 A service bus instance is required in every application that accesses the service bus.  To configure the service bus a combination of code, the application configuration file, and custom components is used, e.g.:
 
-``` c#
+~~~ c#
     public class ServiceBusHost : IHost, IDisposable
     {
         private static IServiceBus bus;
@@ -57,7 +57,7 @@ A service bus instance is required in every application that accesses the servic
             bus.Dispose();
         }
     }
-```
+~~~
 
 A service bus instance is created and started on application startup and disposed on exit.  A service bus can be hosted in any type of application but the most typical scenario is to host them as services.  Although you _can_ write your own service to host your service bus it is not a requirement since you may want to make use of the [generic service host]({{ site.baseurl }}/generic-host/index.html).
 
@@ -77,17 +77,17 @@ There are situations where we need to _start_ something off.  Let's take the cas
 
 So from the client code:
 
-``` c#
+~~~ c#
     bus.Send(new CreateOrderCommand("ClientName", "ProductXYZ"));
-```
+~~~
 
 The call would fail if there is nowhere to send the message.
 
 Now we could publish an event such as **OrderReceivedEvent** and our order service could subscribe to the event and also kick everything off.
 
-```c#
+~~~c#
     bus.Publish(new OrderOrderReceivedEvent("ClientName", "ProductXYZ"));
-```
+~~~
 
 The call would not fail should there be no subscribers.  
 
@@ -99,7 +99,7 @@ In some situations an event will not be able to relay the intent of any particul
 
 In this case the e-mail system is responsible for sending e-mails.  Any system that would like to send a mail will need to decide when to do so.  Therefore, the order service would send a *command* to the e-mail service:
 
-```c#
+~~~c#
     bus.Send(new SendMailCommand
                  {
                      To = "manager@ordercompany.co.za",
@@ -107,7 +107,7 @@ In this case the e-mail system is responsible for sending e-mails.  Any system t
                      Subject = "Important Order Received",
                      Body = "Order Details"
                  });
-```
+~~~
 
 ## Event message
 
@@ -147,9 +147,9 @@ For some background on **Request/Response** messaging pattern you can have a loo
 
 To request an endpoint to perform a certain function you send a command message:
 
-```c#
+~~~c#
     bus.Send(new RequestMessage());
-```
+~~~
 
 Although this is a very simple pattern it results in rather tight behavioural coupling.  This is not necessarily a bad thing and in many instances it is definitely required.
 
@@ -157,9 +157,9 @@ Typically the message handler for the command message goes about its business an
 
 The response can then be a command message or an event message and you can simply call the **reply** method on the service bus instance:
 
-```c#
+~~~c#
     bus.Send(new ResponseMessage(), c => c.Reply());
-```
+~~~
 
 The response may, of course, be decoupled by publishing an event message but it is up to the implementor to decide the mechanism.  This would then no longer be request/response but rather publish/subscribe.  The advantage of request/response isthat it provides the ability to respond to the caller directly whereas publishing a message would result in **all** publishers receiving a copy of the message.
 
@@ -171,9 +171,9 @@ For some background on **Publish/Subscribe** messaging pattern you can have a lo
 
 This pattern results in no behavioural coupling between the publisher and subscriber(s).  In fact, there may be no subscribers to a particular event message whatsoever but that would not be a typical scenario as an event should be published for some business reason and _this_ implies that there should be _at least_ one subscriber.  To publish an event message you use the following:
 
-```c#
+~~~c#
     bus.Publish(new EventMessage());
-```
+~~~
 
 Each subscriber receives its own copy of the message to process.  This differs substantially from message distribution where a particular message will only be sent to a single worker to handle.
 
@@ -187,7 +187,7 @@ An endpoint will automatically distribute messages to workers if it receives a w
 
 Since message distribution is integrated into the inbox processing the same endpoint simply needs to be installed aa many times as required on different machines as workers.  The endpoint that you would like to have messages distributed on would require a control inbox configuration since all Shuttle messages should be processed without waiting in a queue like the inbox proper behind potentially thousands of messages.  Each worker is identified as such in its configuration and the control inbox of the endpoint performing the distribution is required:
 
-```xml
+~~~xml
 <configuration>
    <configSections>
       <section name="serviceBus" type="Shuttle.ESB.Core.ServiceBusSection, Shuttle.ESB.Core"/>
@@ -203,13 +203,13 @@ Since message distribution is integrated into the inbox processing the same endp
 		  errorQueueUri="msmq://./shuttle-error"/>
    </serviceBus>
 </configuration>
-```
+~~~
 
 Any endpoint that receives messages can be configured to include message distribution.
 
 You then install as many workers as you require on as many machines as you want to and configure them to talk to a distributor.  The physical distributor along with all the related workers form the logical endpoint for a message.  The worker configuration is as follows:
 
-```xml
+~~~xml
 <configuration>
    <configSections>
       <section name="serviceBus" type="Shuttle.ESB.Core.ServiceBusSection, Shuttle.ESB.Core"/>
@@ -225,7 +225,7 @@ You then install as many workers as you require on as many machines as you want 
       </inbox>
    </serviceBus>
 </configuration>
-```
+~~~
 
 As soon as the application configuration file contains the **worker** tag each thread that goes idle will send a message to the distributor to indicate that a thread has become available to perform word.  The distributor will then send a message for each available thread.
 
@@ -239,10 +239,10 @@ The broker style differes from something like Msmq or Sql-based queues where the
 
 Typically when sending a message the message is a command.  It does not _have_ to be a command and you _can_ send an event message to a specific endpoint but more-often-than-not you will be sending a command.  Messages are sent by calling one of the relevant overloaded methods on the service bus instance:
 
-```c#
+~~~c#
 		TransportMessage Send(object message);
 		TransportMessage Send(object message, Action<TransportMessageConfigurator> configure);
-```
+~~~
 
 Only messages that have not `RecipientInboxWorkQueueUri` set will be routed by the service bus.
 
@@ -250,24 +250,24 @@ The `TransportMessage` envelope will be returned if you need access to any of th
 
 Shuttle ESB uses an implementation of a `IMessageRouteProvider` to determine where messages are sent.
 
-```c#
+~~~c#
 	public interface IMessageRouteProvider
 	{
 		IEnumerable<string> GetRouteUris(object message);	
 	}
-```
+~~~
 
 The message route provider to use is specified when constructing the service bus:
 
-```
+~~~
 	bus = ServiceBus
 		.Create(c => c.MessageRouteProvider(new DefaultForwardingRouteProvider())
 		.Start();
-```
+~~~
 
 The `DefaultMessageRouteProvider` makes use of the application configuration file to determine where to send messages:
 
-```xml
+~~~xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
    <configSections>
@@ -292,7 +292,7 @@ The `DefaultMessageRouteProvider` makes use of the application configuration fil
       </messageRoutes>
    </serviceBus>
 </configuration>
-```
+~~~
 
 Each implementation of `IMessageRouteProvider` can determine the routes however it needs to from the given message.  A typical scenario, and the way the `DefaultMessageRouteProvider` works, is to use the full type name to determine the destination.
 

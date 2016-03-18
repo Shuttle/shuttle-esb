@@ -18,14 +18,14 @@ If you need to install RabbitMQ you can <a target='_blank' href='https://www.rab
 
 The queue configuration is part of the specified uri, e.g.:
 
-```xml
+~~~ xml
     <inbox
       workQueueUri="rabbitmq://username:password@host:port/virtualhost/queue?prefetchCount=25&amp;durable=true&amp;persistent=true"
 	  .
 	  .
 	  .
     />
-```
+~~~
 
 | Segment / Argument | Default	| Description | Version Introduced |
 | --- | --- | --- | --- |
@@ -38,7 +38,7 @@ The queue configuration is part of the specified uri, e.g.:
 
 In addition to this there is also a RabbitMQ specific section (defaults specified here):
 
-```xml
+~~~ xml
 <configuration>
   <configSections>
     <section name='rabbitmq' type="Shuttle.ESB.RabbitMQ.RabbitMQSection, Shuttle.ESB.RabbitMQ"/>
@@ -55,4 +55,4 @@ In addition to this there is also a RabbitMQ specific section (defaults specifie
   .
   .
 <configuration>
-```
+~~~

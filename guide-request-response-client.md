@@ -22,7 +22,7 @@ This will provide access to the Msmq `IQueue` implementation and also include th
 
 > Implement the main client code as follows:
 
-``` c#
+~~~ c#
 using System;
 using Shuttle.ESB.Core;
 using Shuttle.RequestResponse.Messages;
@@ -48,13 +48,13 @@ namespace Shuttle.RequestResponse.Client
 		}
 	}
 }
-```
+~~~
 
 ## App.config
 
 > Create the shuttle configuration as follows:
 
-``` xml
+~~~ xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
@@ -77,7 +77,7 @@ namespace Shuttle.RequestResponse.Client
         <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5" />
     </startup>
 </configuration>
-```
+~~~
 
 This tells shuttle that all messages that are sent and have a type name starting with `Shuttle.RequestResponse.Messages` should be sent to endpoint `msmq://./shuttle-server-work`.
 
@@ -85,7 +85,7 @@ This tells shuttle that all messages that are sent and have a type name starting
 
 > Create a new class called `MemberRegisteredHandler` that implements the `IMessageHandler<MemberRegisteredEvent>` interface as follows:
 
-``` c#
+~~~ c#
 using System;
 using Shuttle.ESB.Core;
 using Shuttle.RequestResponse.Messages;
@@ -106,7 +106,7 @@ namespace Shuttle.RequestResponse.Client
 		}
 	}
 }
-```
+~~~
 
 Previous: [Messages][previous] | Next: [Server][next]
 

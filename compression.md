@@ -13,10 +13,10 @@ The following algorithms are included out-of-the-box:
 
 All messages that are outgoing will be compressed using the algorithm name specified in the `serviceBus` configuration section (empty for no compression):
 
-```xml
+~~~xml
   <serviceBus
     compressionAlgorithm="">
-```
+~~~
 
 ## Properties
 
@@ -28,16 +28,16 @@ Returns the name of the compression algorithm.  The name should be unique and it
 
 ### Compress
 
-``` c#
+~~~ c#
 byte[] Compress(byte[] bytes);
-```
+~~~
 
 Returns an array of bytes representing the compressed input.
 
 ### Decompress
 
-``` c#
+~~~ c#
 byte[] Decompress(byte[] bytes);
-```
+~~~
 
 Returns an array of bytes representing the decompressed input.

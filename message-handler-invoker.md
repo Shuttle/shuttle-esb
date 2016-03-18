@@ -12,8 +12,8 @@ If you do not specify your own implementation of the `IMessageHandlerInvoker` th
 
 ### Invoke
 
-``` c#
+~~~ c#
 MessageHandlerInvokeResult Invoke(PipelineEvent pipelineEvent);
-```
+~~~
 
 Invoke the message handler using the data contained in the given `PipelineEvent`.

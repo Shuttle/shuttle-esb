@@ -6,13 +6,10 @@ exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md"]
 
 paginate: 10
 gems: [jekyll-paginate]
-highlighter: pygments
+highlighter: rouge
 
-markdown: redcarpet
+markdown: kramdown
 
-redcarpet:
-  extensions: ["tables"]
-  
 # Themes are encouraged to use these universal variables 
 # so be sure to set them if your theme uses them.
 #

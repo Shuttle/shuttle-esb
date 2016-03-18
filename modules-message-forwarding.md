@@ -6,7 +6,7 @@ layout: api
 
 The `MessageForwardingModule` may be found in the `Shuttle.ESB.Modules` assembly.  The module will attach the `MessageForwardingObserver` to the `OnAfterHandleMessage` and then send the handled message on to any defined endpoints.
 
-```xml
+~~~xml
 	<messageForwarding>
 		<forwardingRoutes>
 			<messageRoute uri="msmq://./inbox">
@@ -18,15 +18,15 @@ The `MessageForwardingModule` may be found in the `Shuttle.ESB.Modules` assembly
 			</messageRoute>
 		</forwardingRoutes>
 	</messageForwarding>
-```
+~~~
 
-```c#
+~~~c#
 	var bus = ServiceBus
 		.Create.Create
 		(
 			c => c.AddModule(new MessageForwardingModule())
 		)
 		.Start();
-```
+~~~
 
 The specifications are the same specifications used by the `DefaultMessageRouteProvider` implementation.

@@ -30,7 +30,7 @@ The default mechanism used to host an endpoint is by using a Windows service.  H
 
 > Rename the default `Class1` file to `Host` and implement the `IHost` and `IDisposabe` interfaces as follows:
 
-``` c#
+~~~ c#
 using System;
 using Shuttle.Core.Host;
 using Shuttle.ESB.Core;
@@ -53,7 +53,7 @@ namespace Shuttle.Idempotence.Server
 		}
 	}
 }
-```
+~~~
 
 ## Database
 
@@ -73,7 +73,7 @@ Whenever `Publish` is called the registered `ISubscriptionManager` instance is a
 
 > Add an `Application Configuration File` item to create the `App.config` and populate as follows:
 
-``` xml
+~~~ xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
@@ -92,13 +92,13 @@ Whenever `Publish` is called the registered `ISubscriptionManager` instance is a
 			errorQueueUri="msmq://./shuttle-error" />
 	</serviceBus>
 </configuration>
-```
+~~~
 
 ## RegisterMemberHandler
 
 > Add a new class called `RegisterMemberHandler` that implements the `IMessageHandler<RegisterMemberCommand>` interface as follows:
 
-``` c#
+~~~ c#
 using System;
 using Shuttle.ESB.Core;
 using Shuttle.Idempotence.Messages;
@@ -122,7 +122,7 @@ namespace Shuttle.Idempotence.Server
 		}
 	}
 }
-```
+~~~
 
 This will write out some information to the console window.
 

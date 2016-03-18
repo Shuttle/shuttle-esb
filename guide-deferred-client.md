@@ -22,7 +22,7 @@ This will provide access to the Msmq `IQueue` implementation and also include th
 
 > Implement the main client code as follows:
 
-``` c#
+~~~ c#
 using System;
 using Shuttle.ESB.Core;
 using Shuttle.Deferred.Messages;
@@ -48,7 +48,7 @@ namespace Shuttle.Deferred.Client
 		}
 	}
 }
-```
+~~~
 
 The message sent will have its `IgnoreTilleDate` set to 5 seconds into the future.  You can have a look at the [TransportMessage][transport-message] for more information on the message structure.
 
@@ -56,7 +56,7 @@ The message sent will have its `IgnoreTilleDate` set to 5 seconds into the futur
 
 > Create the shuttle configuration as follows:
 
-``` xml
+~~~ xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
@@ -75,7 +75,7 @@ The message sent will have its `IgnoreTilleDate` set to 5 seconds into the futur
         <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5" />
     </startup>
 </configuration>
-```
+~~~
 
 This tells shuttle that all messages that are sent and have a type name starting with `Shuttle.Deferred.Messages` should be sent to endpoint `msmq://./shuttle-server-work`.
 

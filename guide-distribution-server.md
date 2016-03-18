@@ -28,7 +28,7 @@ The default mechanism used to host an endpoint is by using a Windows service.  H
 
 > Rename the default `Class1` file to `Host` and implement the `IHost` and `IDisposabe` interfaces as follows:
 
-``` c#
+~~~ c#
 using System;
 using Shuttle.Core.Host;
 using Shuttle.ESB.Core;
@@ -50,13 +50,13 @@ namespace Shuttle.Distribution.Server
 		}
 	}
 }
-```
+~~~
 
 ## App.config
 
 > Add an `Application Configuration File` item to create the `App.config` and populate as follows:
 
-``` xml
+~~~ xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
@@ -74,7 +74,7 @@ namespace Shuttle.Distribution.Server
 		   errorQueueUri="msmq://./shuttle-error" />
 	</serviceBus>
 </configuration>
-```
+~~~
 
 This will instruct the endpoint to ***only** distribute messages since the `distribute` attribute is set to `true`.  If it is set to `false` then the endpoint will process an incoming message if a worker thread is not available.
 

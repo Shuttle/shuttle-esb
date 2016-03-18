@@ -28,7 +28,7 @@ The default mechanism used to host an endpoint is by using a Windows service.  H
 
 > Rename the default `Class1` file to `Host` and implement the `IHost` and `IDisposabe` interfaces as follows:
 
-``` c#
+~~~ c#
 using System;
 using Shuttle.Core.Host;
 using Shuttle.ESB.Core;
@@ -56,7 +56,7 @@ namespace Shuttle.PublishSubscribe.Subscriber
 		}
 	}
 }
-```
+~~~
 
 Here we register the subscription by calling the `subscriptionManager.Subscribe<MemberRegisteredEvent>();` method.  Since we a re using the Sql Server implementation of the `ISubscriptionManager` interface an entry will be created in the **SubscriberMessageType** table associating the inbox work queue uri with the message type.
 
@@ -66,7 +66,7 @@ It is important to note that in a production environment one would not typically
 
 > Add an `Application Configuration File` item to create the `App.config` and populate as follows:
 
-``` xml
+~~~ xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
@@ -85,13 +85,13 @@ It is important to note that in a production environment one would not typically
 			errorQueueUri="msmq://./shuttle-error" />
 	</serviceBus>
 </configuration>
-```
+~~~
 
 ## MemberRegisteredHandler
 
 > Add a new class called `MemberRegisteredHandler` that implements the `IMessageHandler<MemberRegisteredHandler>` interface as follows:
 
-``` c#
+~~~ c#
 using System;
 using Shuttle.ESB.Core;
 using Shuttle.PublishSubscribe.Messages;
@@ -113,7 +113,7 @@ namespace Shuttle.PublishSubscribe.Server
 		}
 	}
 }
-```
+~~~
 
 This will write out some information to the console window.
 

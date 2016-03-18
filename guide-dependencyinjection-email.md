@@ -16,7 +16,7 @@ To demonstrate the dependency injection we will create a fake e-mail service tha
 
 > Add an interface called `IEMailService` and implement it as follows:
 
-``` c#
+~~~ c#
 namespace Shuttle.DependencyInjection.EMail
 {
 	public interface IEMailService
@@ -24,13 +24,13 @@ namespace Shuttle.DependencyInjection.EMail
 		void Send(string name);
 	}
 }
-```
+~~~
 
 ## EMailService
 
 > Rename the default `Class1` file to `EMailService` and implement the `IEMailService` interfaces as follows:
 
-``` c#
+~~~ c#
 using System;
 using System.Threading;
 
@@ -52,7 +52,7 @@ namespace Shuttle.DependencyInjection.EMail
 		}
 	}
 }
-```
+~~~
 
 Previous: [Client][previous] | Next: [Server][next]
 

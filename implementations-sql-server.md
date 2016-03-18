@@ -10,18 +10,18 @@ There is a `IQueue` implementation for Sql Server that enables a table-based que
 
 The queue configuration is part of the specified uri, e.g.:
 
-```xml
+~~~xml
     <inbox
       workQueueUri="sql://connectionstring-name/table-queue"
 	  .
 	  .
 	  .
     />
-```
+~~~
 
 In addition to this there is also a Sql Server specific section (defaults specified here):
 
-```xml
+~~~xml
 <configuration>
   <configSections>
     <section name='sqlServer' type="Shuttle.ESB.SqlServer.SqlServerSection, Shuttle.ESB.SqlServer"/>
@@ -36,7 +36,7 @@ In addition to this there is also a Sql Server specific section (defaults specif
   .
   .
 <configuration>
-```
+~~~
 
 # SubscriptionManager
 

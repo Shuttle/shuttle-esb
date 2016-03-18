@@ -12,10 +12,10 @@ If you do not specify your own implementation of the `IMessageHandlingAssessor` 
 
 ### RegisterAssessor
 
-``` c#
+~~~ c#
 void RegisterAssessor(Func<PipelineEvent, bool> assessor);
 void RegisterAssessor(ISpecification<PipelineEvent> specification);
-```
+~~~
 
 Register either a function or a specification that returns `true` when the message should be processed; else `false` to ignore the message.
 

@@ -18,14 +18,14 @@ If you need to activate
 
 The queue configuration is part of the specified uri, e.g.:
 
-```xml
+~~~xml
     <inbox
       workQueueUri="msmq://host/queue?useDeadLetterQueue=true"
 	  .
 	  .
 	  .
     />
-```
+~~~
 
 | Segment / Argument | Default	| Description | Version Introduced |
 | --- | --- | --- | --- |
@@ -35,7 +35,7 @@ By default the `MsmqQueue` is a transactional queue that utilizes a journal queu
 
 In addition to this there is also a MSMQ specific section (defaults specified here):
 
-```xml
+~~~xml
 <configuration>
   <configSections>
     <section name='msmq' type="Shuttle.ESB.MSMQ.MSMQSection, Shuttle.ESB.MSMQ"/>
@@ -49,6 +49,6 @@ In addition to this there is also a MSMQ specific section (defaults specified he
   .
   .
 <configuration>
-```
+~~~
 
 [msmq-installation-activation]: {{ site.baseurl }}/msmq-installation-activation/index.html
