@@ -1,4 +1,4 @@
-baseurl: "http://shuttle.github.io/shuttle-esb"
+baseurl: "http://shuttle.github.io/Shuttle.Esb"
 
 permalink: pretty
 
@@ -13,7 +13,7 @@ markdown: kramdown
 # Themes are encouraged to use these universal variables 
 # so be sure to set them if your theme uses them.
 #
-title : shuttle-esb
+title : Shuttle.Esb
 tagline: free open-source .net enterprise service bus
 author :
   name : Eben Roux
@@ -30,8 +30,8 @@ author :
 # Else if you are pushing to username.github.io, replace with your username.
 # Finally if you are pushing to a GitHub project page, include the project name at the end.
 #
-production_url : http://shuttle.github.io/shuttle-esb/
-github_repository : https://github.com/Shuttle/shuttle-esb
+production_url : http://shuttle.github.io/Shuttle.Esb/
+github_repository : https://github.com/Shuttle/Shuttle.Esb
 
 # All Jekyll-Bootstrap specific configurations are namespaced into this hash
 #
@@ -60,7 +60,7 @@ JB :
   #   - Only the following values are falsy: ["", null, false]
   #   - When setting BASE_PATH it must be a valid url.
   #     This means always setting the protocol (http|https) or prefixing with "/"
-  BASE_PATH : /shuttle-esb
+  BASE_PATH : /Shuttle.Esb
 
   # By default, the asset_path is automatically defined relative to BASE_PATH plus the enabled theme.
   # ex: [BASE_PATH]/assets/themes/[THEME-NAME]
@@ -70,7 +70,7 @@ JB :
   #   http://s3.amazonaws.com/yoursite/themes/watermelon
   #   /assets
   #
-  ASSET_PATH : false
+  ASSET_PATH : /assets/themes/shuttle/
 
   # These paths are to the main pages Jekyll-Bootstrap ships with.
   # Some JB helpers refer to these paths; change them here if needed.
@@ -88,7 +88,7 @@ JB :
   comments :
     provider : disqus
     disqus :
-      short_name : shuttle-esb
+      short_name : Shuttle.Esb
     livefyre :
       site_id : 123
     intensedebate :

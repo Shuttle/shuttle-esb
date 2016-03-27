@@ -10,7 +10,7 @@ layout: guide
 
 ![Dependency Injection Server]({{ site.baseurl }}/assets/images/guide-dependencyinjection-Server.png "Dependency Injection Server")
 
-> Install both the `shuttle-esb-msmq` and `shuttle-esb-castle` nuget packages.
+> Install both the `Shuttle.Esb.Msmq` and `Shuttle.Esb.Castle` nuget packages.
 
 ![Dependency Injection Server - Nuget Msmq]({{ site.baseurl }}/assets/images/guide-dependencyinjection-server-nuget-esb.png "Dependency Injection Server - Nuget Msmq")
 
@@ -18,7 +18,7 @@ This will provide access to the Msmq `IQueue` implementation and also include th
 
 It will also include the `WindsorContainer` implementation of the `IMessageHandlerFactory`.
 
-> Install the `shuttle-core-host` nuget package.
+> Install the `Shuttle.Core.Host` nuget package.
 
 ![Dependency Injection Server - Nuget Host]({{ site.baseurl }}/assets/images/guide-dependencyinjection-server-nuget-core.png "Dependency Injection Server - Nuget Host")
 
@@ -36,8 +36,8 @@ using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Shuttle.Core.Host;
 using Shuttle.DependencyInjection.EMail;
-using Shuttle.ESB.Castle;
-using Shuttle.ESB.Core;
+using Shuttle.Esb.Castle;
+using Shuttle.Esb;
 
 namespace Shuttle.DependencyInjection.Server
 {
@@ -81,7 +81,7 @@ namespace Shuttle.DependencyInjection.Server
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
-		<section name='serviceBus' type="Shuttle.ESB.Core.ServiceBusSection, Shuttle.ESB.Core"/>
+		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
 	</configSections>
 
 	<serviceBus>
@@ -100,7 +100,7 @@ namespace Shuttle.DependencyInjection.Server
 using System;
 using Shuttle.Core.Infrastructure;
 using Shuttle.DependencyInjection.EMail;
-using Shuttle.ESB.Core;
+using Shuttle.Esb;
 using Shuttle.DependencyInjection.Messages;
 
 namespace Shuttle.DependencyInjection.Server

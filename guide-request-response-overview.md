@@ -6,7 +6,7 @@ layout: guide
 <script>shuttle.guideData.selectedItemName = 'guide-request-response-overview'</script>
 # Overview
 
-In order to get any processing done in shuttle-esb a message will need to be generated and sent to an endpoint for processing.  The idea behind a **command** message is that there is exactly **one** endpoint handling the message.  Since it is an instruction the message absolutely ***has*** to be handled and we also need to have only a single endpoint process the message to ensure a consistent result.
+In order to get any processing done in Shuttle.Esb a message will need to be generated and sent to an endpoint for processing.  The idea behind a **command** message is that there is exactly **one** endpoint handling the message.  Since it is an instruction the message absolutely ***has*** to be handled and we also need to have only a single endpoint process the message to ensure a consistent result.
 
 In this guide we'll create the following projects:
 

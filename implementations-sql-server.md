@@ -24,7 +24,7 @@ In addition to this there is also a Sql Server specific section (defaults specif
 ~~~xml
 <configuration>
   <configSections>
-    <section name='sqlServer' type="Shuttle.ESB.SqlServer.SqlServerSection, Shuttle.ESB.SqlServer"/>
+    <section name='sqlServer' type="Shuttle.Esb.SqlServer.SqlServerSection, Shuttle.Esb.SqlServer"/>
   </configSections>
   
   <sqlServer

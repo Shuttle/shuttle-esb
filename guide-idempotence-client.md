@@ -10,7 +10,7 @@ layout: guide
 
 ![Idempotence Client]({{ site.baseurl }}/assets/images/guide-idempotence-client.png "Idempotence Client")
 
-> Install the `shuttle-esb-msmq` nuget package.
+> Install the `Shuttle.Esb.Msmq` nuget package.
 
 ![Idempotence Client - Nuget]({{ site.baseurl }}/assets/images/guide-idempotence-client-nuget.png "Idempotence Client - Nuget")
 
@@ -24,7 +24,7 @@ This will provide access to the Msmq `IQueue` implementation and also include th
 
 ~~~ c#
 using System;
-using Shuttle.ESB.Core;
+using Shuttle.Esb;
 using Shuttle.Idempotence.Messages;
 
 namespace Shuttle.Idempotence.Client
@@ -72,7 +72,7 @@ The next two `Send` operations do not use the `TransportMessage` but rather send
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
-		<section name='serviceBus' type="Shuttle.ESB.Core.ServiceBusSection, Shuttle.ESB.Core"/>
+		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
 	</configSections>
 
 	<serviceBus>

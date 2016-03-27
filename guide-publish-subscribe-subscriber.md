@@ -10,13 +10,13 @@ layout: guide
 
 ![Publish/Subscribe Subscriber]({{ site.baseurl }}/assets/images/guide-publish-subscribe-subscriber.png "Publish/Subscribe Subscriber")
 
-> Install **both** the `shuttle-esb-msmq` and `shuttle-esb-sqlsubscriber` nuget packages.
+> Install **both** the `Shuttle.Esb.Msmq` and `Shuttle.Esb.SqlServer` nuget packages.
 
 ![Publish/Subscribe Subscriber - Nuget Msmq/Sql]({{ site.baseurl }}/assets/images/guide-publish-subscribe-subscriber-nuget-msmq-sql.png "Publish/Subscribe Subscriber - Nuget Msmq/Sql")
 
 This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.  You are also including the **SqlSubscriber** implementation for the `ISubscriptionManager`.
 
-> Install the `shuttle-core-host` nuget package.
+> Install the `Shuttle.Core.Host` nuget package.
 
 ![Publish/Subscribe Subscriber - Nuget Host]({{ site.baseurl }}/assets/images/guide-publish-subscribe-subscriber-nuget-host.png "Publish/Subscribe Subscriber - Nuget Host")
 
@@ -31,8 +31,8 @@ The default mechanism used to host an endpoint is by using a Windows service.  H
 ~~~ c#
 using System;
 using Shuttle.Core.Host;
-using Shuttle.ESB.Core;
-using Shuttle.ESB.SqlServer;
+using Shuttle.Esb;
+using Shuttle.Esb.SqlServer;
 using Shuttle.PublishSubscribe.Messages;
 
 namespace Shuttle.PublishSubscribe.Subscriber
@@ -70,7 +70,7 @@ It is important to note that in a production environment one would not typically
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
-		<section name='serviceBus' type="Shuttle.ESB.Core.ServiceBusSection, Shuttle.ESB.Core"/>
+		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
 	</configSections>
 
 	<connectionStrings>
@@ -93,7 +93,7 @@ It is important to note that in a production environment one would not typically
 
 ~~~ c#
 using System;
-using Shuttle.ESB.Core;
+using Shuttle.Esb;
 using Shuttle.PublishSubscribe.Messages;
 
 namespace Shuttle.PublishSubscribe.Server

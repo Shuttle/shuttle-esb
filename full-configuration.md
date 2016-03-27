@@ -6,12 +6,12 @@ layout: api
 
 This configuration is the default application configuration file based version.  Some components that you may replace could very well have their own configuration stores.
 
-To start off add the `Shuttle.ESB.Core.ServiceBusSection` configuration class from the `Shuttle.ESB.Core` assembly.
+To start off add the `Shuttle.Esb.ServiceBusSection` configuration class from the `Shuttle.Esb` assembly.
 
 ~~~xml
 <configuration>
   <configSections>
-    <section name='serviceBus' type="Shuttle.ESB.Core.ServiceBusSection, Shuttle.ESB.Core"/>
+    <section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
   </configSections>
 ~~~
 
@@ -21,7 +21,7 @@ It is also possible to group the Shuttle configuration in a `shuttle` group:
 <configuration>
 	<configSections>
 		<sectionGroup name="shuttle">
-			<section name='serviceBus' type="Shuttle.ESB.Core.ServiceBusSection, Shuttle.ESB.Core"/>
+			<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
 		</sectionGroup>
 	</configSections>
 ~~~
@@ -47,9 +47,9 @@ Use the `queueFactories` tag to configure how you would like to locate queue fac
 
 ~~~xml
 	<queueFactories scan="true|false">
-		<add type="Shuttle.ESB.Msmq.MsmqQueueFactory, Shuttle.ESB.Msmq" />
-		<add type="Shuttle.ESB.RabbitMQ.RabbitMQQueueFactory, Shuttle.ESB.RabbitMQ" />
-		<add type="Shuttle.ESB.SqlServer.SqlQueueFactory, Shuttle.ESB.SqlServer" />
+		<add type="Shuttle.Esb.Msmq.MsmqQueueFactory, Shuttle.Esb.Msmq" />
+		<add type="Shuttle.Esb.RabbitMQ.RabbitMQQueueFactory, Shuttle.Esb.RabbitMQ" />
+		<add type="Shuttle.Esb.SqlServer.SqlQueueFactory, Shuttle.Esb.SqlServer" />
 	</queueFactories>
 ~~~
 
@@ -162,7 +162,7 @@ Use the `modules` tag to configure modules that can be loaded at runtime.  These
 
 ~~~xml
 	<modules>
-		<add type="Shuttle.ESB.Modules.ActiveTimeRangeModule, Shuttle.ESB.Modules" />
+		<add type="Shuttle.Esb.Modules.ActiveTimeRangeModule, Shuttle.Esb.Modules" />
 	</modules>
 ~~~
 

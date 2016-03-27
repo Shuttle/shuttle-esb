@@ -10,13 +10,13 @@ layout: guide
 
 ![Publish/Subscribe Server]({{ site.baseurl }}/assets/images/guide-publish-subscribe-server.png "Publish/Subscribe Server")
 
-> Install **both** the `shuttle-esb-msmq` and `shuttle-esb-sqlserver` nuget packages.
+> Install **both** the `Shuttle.Esb.Msmq` and `Shuttle.Esb.SqlServer` nuget packages.
 
 ![Publish/Subscribe Server - Nuget Msmq/Sql]({{ site.baseurl }}/assets/images/guide-publish-subscribe-server-nuget-msmq-sql.png "Publish/Subscribe Server - Nuget Msmq/Sql")
 
 This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.  You are also including the **SqlServer** implementation for the `ISubscriptionManager`.
 
-> Install the `shuttle-core-host` nuget package.
+> Install the `Shuttle.Core.Host` nuget package.
 
 ![Publish/Subscribe Server - Nuget Host]({{ site.baseurl }}/assets/images/guide-publish-subscribe-server-nuget-host.png "Publish/Subscribe Server - Nuget Host")
 
@@ -31,7 +31,7 @@ The default mechanism used to host an endpoint is by using a Windows service.  H
 ~~~ c#
 using System;
 using Shuttle.Core.Host;
-using Shuttle.ESB.Core;
+using Shuttle.Esb;
 
 namespace Shuttle.PublishSubscribe.Subscriber
 {
@@ -56,9 +56,9 @@ namespace Shuttle.PublishSubscribe.Subscriber
 
 We need a store for our subscriptions.  In this example we will be using **Sql Server**.  If you use the express version remember to change the `data source` value to `.\sqlexpress` from the standard `.`.
 
-When you reference the `shuttle-esb-sqlserver` package a number of scripts are included in the relevant package folder:
+When you reference the `Shuttle.Esb.SqlServer` package a number of scripts are included in the relevant package folder:
 
-- `.\Shuttle.PublishSubscribe\packages\shuttle-esb-sqlserver.{version}\scripts`
+- `.\Shuttle.PublishSubscribe\packages\Shuttle.Esb.SqlServer.{version}\scripts`
 
 The `{version}` bit will be in a `semver` format.
 
@@ -74,7 +74,7 @@ This will create the required structures that the idempotence service can use to
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
-		<section name='serviceBus' type="Shuttle.ESB.Core.ServiceBusSection, Shuttle.ESB.Core"/>
+		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
 	</configSections>
 
 	<connectionStrings>
@@ -99,7 +99,7 @@ The Sql Server implementation of the `ISubscriptionManager` that we are using by
 
 ~~~ c#
 using System;
-using Shuttle.ESB.Core;
+using Shuttle.Esb;
 using Shuttle.PublishSubscribe.Messages;
 
 namespace Shuttle.PublishSubscribe.Subscriber

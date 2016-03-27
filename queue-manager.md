@@ -4,9 +4,9 @@ layout: api
 ---
 # IQueueManager
 
-An implementation of the `IQueueManager` interface is used to manage the queues used in shuttle-esb.
+An implementation of the `IQueueManager` interface is used to manage the queues used in Shuttle.Esb.
 
-The queue manager cannot be swapped out for your own implementation as it is integral to the functioning of shuttle-esb and the default implementation should suffice.
+The queue manager cannot be swapped out for your own implementation as it is integral to the functioning of Shuttle.Esb and the default implementation should suffice.
 
 ## Methods
 

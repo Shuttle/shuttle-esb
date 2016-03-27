@@ -10,7 +10,7 @@ layout: guide
 
 ![Deferred Client]({{ site.baseurl }}/assets/images/guide-deferred-client.png "Deferred Client")
 
-> Install the `shuttle-esb-msmq` nuget package.
+> Install the `Shuttle.Esb.Msmq` nuget package.
 
 ![Deferred Client - Nuget]({{ site.baseurl }}/assets/images/guide-deferred-client-nuget.png "Deferred Client - Nuget")
 
@@ -24,7 +24,7 @@ This will provide access to the Msmq `IQueue` implementation and also include th
 
 ~~~ c#
 using System;
-using Shuttle.ESB.Core;
+using Shuttle.Esb;
 using Shuttle.Deferred.Messages;
 
 namespace Shuttle.Deferred.Client
@@ -60,7 +60,7 @@ The message sent will have its `IgnoreTilleDate` set to 5 seconds into the futur
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
-		<section name='serviceBus' type="Shuttle.ESB.Core.ServiceBusSection, Shuttle.ESB.Core"/>
+		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
 	</configSections>
 
 	<serviceBus>

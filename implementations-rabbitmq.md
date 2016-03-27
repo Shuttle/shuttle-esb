@@ -41,7 +41,7 @@ In addition to this there is also a RabbitMQ specific section (defaults specifie
 ~~~ xml
 <configuration>
   <configSections>
-    <section name='rabbitmq' type="Shuttle.ESB.RabbitMQ.RabbitMQSection, Shuttle.ESB.RabbitMQ"/>
+    <section name='rabbitmq' type="Shuttle.Esb.RabbitMQ.RabbitMQSection, Shuttle.Esb.RabbitMQ"/>
   </configSections>
   
   <rabbitmq

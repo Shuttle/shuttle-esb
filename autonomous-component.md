@@ -27,4 +27,4 @@ We could change this process to gather the user information from the front-end a
 * CRM User Registration Service (AC) - subscribes to *UserRegisteredEvent*
  * registers the new user in our CRM
 
-In this way each component can be developed, versioned, and deployed in isolation.  Stopping any of the services for deployment would not result in any process breaking since the queues will continue receiving work.  Even if the entire machine is brought down Shuttle ESB will still store message on the sending machine when using an outbox.
+In this way each component can be developed, versioned, and deployed in isolation.  Stopping any of the services for deployment would not result in any process breaking since the queues will continue receiving work.  Even if the entire machine is brought down Shuttle.Esb will still store message on the sending machine when using an outbox.

@@ -4,9 +4,9 @@ layout: api
 ---
 # Concepts
 
-Code samples provided on this page do not represent a sample or solution but do show how some of the concepts would be applied in Shuttle ESB.  For help on putting together your first implementation you can take a look at the guides.
+Code samples provided on this page do not represent a sample or solution but do show how some of the concepts would be applied in Shuttle.Esb.  For help on putting together your first implementation you can take a look at the guides.
 
-The basic parts of Shuttle ESB consist of:
+The basic parts of Shuttle.Esb consist of:
 
 * Messages
 * Queues
@@ -32,7 +32,7 @@ Shuttle is based on messages.  The messages are data transfer objects that imple
 
 ## Queues
 
-Messages are processed by message handlers that are invoked by Shuttle ESB.  When a service bus is started it starts listening for messages in an inbox queue.  So messages have to end up in the relevant queue to be processed.  The inbox configuration is specified in the application configuration file.
+Messages are processed by message handlers that are invoked by Shuttle.Esb.  When a service bus is started it starts listening for messages in an inbox queue.  So messages have to end up in the relevant queue to be processed.  The inbox configuration is specified in the application configuration file.
 
 The approach taken is an **at-least-once** delivery.  This differs from an **exactly-once** delivery in that edge cases may result in a message being processed more than once (these should hardly ever occur).  However, for other mechanism edge cases may result in a message loss which is impossible to spot (a duplicate message is easier to spot than no message at all).
 
@@ -190,7 +190,7 @@ Since message distribution is integrated into the inbox processing the same endp
 ~~~xml
 <configuration>
    <configSections>
-      <section name="serviceBus" type="Shuttle.ESB.Core.ServiceBusSection, Shuttle.ESB.Core"/>
+      <section name="serviceBus" type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
    </configSections>
 
    <serviceBus>
@@ -212,7 +212,7 @@ You then install as many workers as you require on as many machines as you want 
 ~~~xml
 <configuration>
    <configSections>
-      <section name="serviceBus" type="Shuttle.ESB.Core.ServiceBusSection, Shuttle.ESB.Core"/>
+      <section name="serviceBus" type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
    </configSections>
 
    <serviceBus>
@@ -248,7 +248,7 @@ Only messages that have not `RecipientInboxWorkQueueUri` set will be routed by t
 
 The `TransportMessage` envelope will be returned if you need access to any of the metadata available for the message.
 
-Shuttle ESB uses an implementation of a `IMessageRouteProvider` to determine where messages are sent.
+Shuttle.Esb uses an implementation of a `IMessageRouteProvider` to determine where messages are sent.
 
 ~~~c#
 	public interface IMessageRouteProvider
@@ -271,7 +271,7 @@ The `DefaultMessageRouteProvider` makes use of the application configuration fil
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
    <configSections>
-      <section name="serviceBus" type="Shuttle.ESB.Core.ServiceBusSection, Shuttle.ESB.Core"/>
+      <section name="serviceBus" type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
    </configSections>
 
    <serviceBus>

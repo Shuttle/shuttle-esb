@@ -5,7 +5,7 @@ layout: post
 
 # HandlerContext
 
-Release 5.0.0 of [shuttle-esb-core](https://github.com/Shuttle/shuttle-esb-core/releases/tag/v5.0.0) contains a ***breaking change***.
+Release 5.0.0 of [Shuttle.Esb](https://github.com/Shuttle/Shuttle.Esb/releases/tag/v5.0.0) contains a ***breaking change***.
 
 We have added an `IHandlerContext` interface to assist in testing handlers.
 

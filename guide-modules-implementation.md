@@ -4,7 +4,7 @@ layout: guide
 ---
 # Overview
 
-Shuttle-ESB is extensible via modules.  These typically plug into a relevant pipeline to perform additional tasks within the pipeline.
+Shuttle.Esb is extensible via modules.  These typically plug into a relevant pipeline to perform additional tasks within the pipeline.
 
 ## Implementation
 
@@ -72,6 +72,6 @@ Via the configuration file:
 
 ~~~ xml
 	<modules>
-		<add type="Shuttle.ESB.Modules.LogMessageOwnerModule, Shuttle.ESB.Modules" />
+		<add type="Shuttle.Esb.Modules.LogMessageOwnerModule, Shuttle.Esb.Modules" />
 	</modules>
 ~~~

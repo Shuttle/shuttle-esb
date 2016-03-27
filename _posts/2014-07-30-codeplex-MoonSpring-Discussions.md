@@ -1,6 +1,7 @@
 ---
 title: MoonSpring Discussions
 layout: post
+published: false
 ---
 
 # the Server return message to the Client 
@@ -17,13 +18,13 @@ And then shuttle is new to me. I can't find a API about,can you help me? Thanks 
 	
 Hello,
 
-The shuttle-esb project has moved over to github: https://github.com/Shuttle/shuttle-esb
+The Shuttle.Esb project has moved over to github: https://github.com/Shuttle/Shuttle.Esb
 
-The documentation is here: http://shuttle.github.io/shuttle-esb/
+The documentation is here: http://shuttle.github.io/Shuttle.Esb/
 
 There are also some videos (have a look at the v3 ones): https://www.youtube.com/user/shuttleservicebus
 
-The Request/Response sample (https://github.com/Shuttle/shuttle-esb-samples) does demonstrate the pattern that you are referring to.
+The Request/Response sample (https://github.com/Shuttle/Shuttle.Esb.Samples) does demonstrate the pattern that you are referring to.
 
 Should you experience any issues or have question please do not hesitate to log an issue on GitHub under the relevant repository.
 
@@ -32,7 +33,7 @@ Eben
 	
 ### MoonSpring (Jul 31 at 4:33 AM)
 	
-Thanks very much for your reply.This does help me a lot.I will start my journey about shuttle-esb.It's a good start.Thank you again.
+Thanks very much for your reply.This does help me a lot.I will start my journey about Shuttle.Esb.It's a good start.Thank you again.
 
 ---
 
@@ -82,7 +83,7 @@ do you think so?
 	
 Hi,
 
-Yes, it is definitely a version problem. The shuttle-core was updated and it now contains the AllMessages() extension method. So it seems as though you have newer shuttle-esb with older shuttle-core.
+Yes, it is definitely a version problem. The shuttle-core was updated and it now contains the AllMessages() extension method. So it seems as though you have newer Shuttle.Esb with older shuttle-core.
 
 Perhaps try to a nuget "update-package".
 
@@ -103,7 +104,7 @@ Hi,
 
 What source code are you referring to?
 
-In your own code you will be using the binaries. The nuget packages have binaries for 3.5, 4.0, and 4.5. It isn't a framework version issue but rather an issue between the versions of shuttle-core and shuttle-esb.
+In your own code you will be using the binaries. The nuget packages have binaries for 3.5, 4.0, and 4.5. It isn't a framework version issue but rather an issue between the versions of shuttle-core and Shuttle.Esb.
 
 Have you tried the nuget 'update-package' command? Well, that will only work if you have included your references from nuget.
 
@@ -200,18 +201,18 @@ Eben
 
 ---
 
-# Failed to load the file or assembly“Shuttle.ESB.Core,Version=3.2.3.0,Culture=neutral,PublicKeyToken=null” 
+# Failed to load the file or assembly“Shuttle.Esb,Version=3.2.3.0,Culture=neutral,PublicKeyToken=null” 
 
 ### MoonSpring (Aug 22 at 1:28 PM)
 	
 Hi,
 I have met a exception,like:
 
-> Abnormal untreated:System.TypeInitiallizationException:"ICT.Server.Program" ,The type initializer was an exception.  ------->System.BadImageFormatExeption:Failed to load the file or assembly“Shuttle.ESB.Core,Version=3.2.3.0,Culture=neutral,PublicKeyToken=null” orOne of its dependencies, trying to load is not in the correct format.
+> Abnormal untreated:System.TypeInitiallizationException:"ICT.Server.Program" ,The type initializer was an exception.  ------->System.BadImageFormatExeption:Failed to load the file or assembly“Shuttle.Esb,Version=3.2.3.0,Culture=neutral,PublicKeyToken=null” orOne of its dependencies, trying to load is not in the correct format.
 
 I think this is a version's problem about the .NET Framework.
 
-I created there new project(According to the Pub/Sub demo),and then ,I added the Shuttle ESB's source code I need.
+I created there new project(According to the Pub/Sub demo),and then ,I added the Shuttle.Esb's source code I need.
 I have already changed them to ".NET Framework 4.0"(Because I find all the source code projects are .NET Framework 3.5).
 When I Compile all the code,It succeed.
 
@@ -228,7 +229,7 @@ Hi,
 
 I would, of course, suggest that you rather use Nuget to get the binaries.
 
-I you would like to build them yourself from the code you need to navigate to {base}\shuttle-esb\build\4.0 folder in a VS2012 command window and execute 'msbuild build.msbuild'. The {base}\shuttle-esb\build\ folder will contain a 'debug' and 'release' folder that will have the various framework version binaries.
+I you would like to build them yourself from the code you need to navigate to {base}\Shuttle.Esb\build\4.0 folder in a VS2012 command window and execute 'msbuild build.msbuild'. The {base}\Shuttle.Esb\build\ folder will contain a 'debug' and 'release' folder that will have the various framework version binaries.
 
 Regards,
 Eben
@@ -397,7 +398,7 @@ ICT.WPF.Client.MainFramework( the Subscriber port ),is one name of my project.It
  <?xml version="1.0" encoding="utf-8" ?>
   <configuration>
    <configSections>
- <section name="serviceBus" type="Shuttle.ESB.Core.ServiceBusSection, Shuttle.ESB.Core"/>
+ <section name="serviceBus" type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
   </configSections>
   <connectionStrings>
  <clear/>
@@ -496,7 +497,7 @@ Eben
 	
 Hi,
 
-I've already done a demo: in a WPF project using the Shuttle ESB,it can run normally.
+I've already done a demo: in a WPF project using the Shuttle.Esb,it can run normally.
 
 Now when I add the WCF and Arcgis' configration into "App.config",it will send me some wrong messages,just like what I said above.
 
@@ -566,7 +567,7 @@ What is the actual problem, though. The start-up time should be impacting your p
 Regards,
 Eben
 
-p.s. Is there no way that you can perhaps use the Shuttle ESB issues page on GitHub for your questions as other may find it useful. I do not maintain the CodePlex side anymore and it will be deprecated (deleted) one day. The issue page is here: https://github.com/Shuttle/shuttle-esb/issues
+p.s. Is there no way that you can perhaps use the Shuttle.Esb issues page on GitHub for your questions as other may find it useful. I do not maintain the CodePlex side anymore and it will be deprecated (deleted) one day. The issue page is here: https://github.com/Shuttle/Shuttle.Esb/issues
 	
 ### MoonSpring (Mon at 8:43 AM)
 	

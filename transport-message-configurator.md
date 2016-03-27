@@ -75,7 +75,7 @@ Without a dedicated deferred queue the work queue will contain the deferred mess
 public void TransportMessageReceived(TransportMessage transportMessageReceived)
 ~~~
 
-This will be called by shuttle-esb directly.  The call will add all the received headers to the configurator headers and set the correlation id to the correlation id of the received transport message.
+This will be called by Shuttle.Esb directly.  The call will add all the received headers to the configurator headers and set the correlation id to the correlation id of the received transport message.
 
 ### HasTransportMessageReceived
 

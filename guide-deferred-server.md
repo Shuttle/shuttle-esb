@@ -10,13 +10,13 @@ layout: guide
 
 ![Deferred Server]({{ site.baseurl }}/assets/images/guide-deferred-Server.png "Deferred Server")
 
-> Install the `shuttle-esb-msmq` nuget package.
+> Install the `Shuttle.Esb.Msmq` nuget package.
 
 ![Deferred Server - Nuget Msmq]({{ site.baseurl }}/assets/images/guide-deferred-server-nuget-msmq.png "Deferred Server - Nuget Msmq")
 
 This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.
 
-> Install both the `shuttle-core-host` and `shuttle-core-infrastructure-log4net` nuget packages.
+> Install both the `Shuttle.Core.Host` and `shuttle-core-infrastructure-log4net` nuget packages.
 
 ![Deferred Server - Nuget Host/Logging]({{ site.baseurl }}/assets/images/guide-deferred-server-nuget-host-logging.png "Deferred Server - Nuget Host/Logging")
 
@@ -35,8 +35,8 @@ using System;
 using log4net;
 using Shuttle.Core.Host;
 using Shuttle.Core.Infrastructure;
-using Shuttle.Core.Infrastructure.Log4Net;
-using Shuttle.ESB.Core;
+using Shuttle.Core.Log4Net;
+using Shuttle.Esb;
 
 namespace Shuttle.Deferred.Server
 {
@@ -67,7 +67,7 @@ namespace Shuttle.Deferred.Server
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
-		<section name='serviceBus' type="Shuttle.ESB.Core.ServiceBusSection, Shuttle.ESB.Core"/>
+		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
 		<section name="log4net" type="log4net.Config.Log4NetConfigurationSectionHandler, log4net" />
 	</configSections>
 
@@ -111,7 +111,7 @@ namespace Shuttle.Deferred.Server
 
 ~~~ c#
 using System;
-using Shuttle.ESB.Core;
+using Shuttle.Esb;
 using Shuttle.Deferred.Messages;
 
 namespace Shuttle.Deferred.Server

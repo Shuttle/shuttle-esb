@@ -10,7 +10,7 @@ layout: guide
 
 ![Request/Response Client]({{ site.baseurl }}/assets/images/guide-request-response-client.png "Request/Response Client")
 
-> Install the `shuttle-esb-msmq` nuget package.
+> Install the `Shuttle.Esb.Msmq` nuget package.
 
 ![Request/Response Client - Nuget]({{ site.baseurl }}/assets/images/guide-request-response-client-nuget.png "Request/Response Client - Nuget")
 
@@ -24,7 +24,7 @@ This will provide access to the Msmq `IQueue` implementation and also include th
 
 ~~~ c#
 using System;
-using Shuttle.ESB.Core;
+using Shuttle.Esb;
 using Shuttle.RequestResponse.Messages;
 
 namespace Shuttle.RequestResponse.Client
@@ -58,7 +58,7 @@ namespace Shuttle.RequestResponse.Client
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
-		<section name='serviceBus' type="Shuttle.ESB.Core.ServiceBusSection, Shuttle.ESB.Core"/>
+		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
 	</configSections>
 
 	<serviceBus>
@@ -87,7 +87,7 @@ This tells shuttle that all messages that are sent and have a type name starting
 
 ~~~ c#
 using System;
-using Shuttle.ESB.Core;
+using Shuttle.Esb;
 using Shuttle.RequestResponse.Messages;
 
 namespace Shuttle.RequestResponse.Client

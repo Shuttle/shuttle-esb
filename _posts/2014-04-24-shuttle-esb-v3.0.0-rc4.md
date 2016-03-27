@@ -1,9 +1,10 @@
 ---
-title: Shuttle ESB v3.0.0-rc4
+title: Shuttle.Esb v3.0.0-rc4
 layout: post
+published: false
 ---
 
-Release Candidate 4 of Shuttle ESB is available for use.
+Release Candidate 4 of Shuttle.Esb is available for use.
 
 ###Also available on Nuget
 

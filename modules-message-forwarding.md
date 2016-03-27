@@ -4,7 +4,7 @@ layout: api
 ---
 # Message Forwarding Module
 
-The `MessageForwardingModule` may be found in the `Shuttle.ESB.Modules` assembly.  The module will attach the `MessageForwardingObserver` to the `OnAfterHandleMessage` and then send the handled message on to any defined endpoints.
+The `MessageForwardingModule` may be found in the `Shuttle.Esb.Modules` assembly.  The module will attach the `MessageForwardingObserver` to the `OnAfterHandleMessage` and then send the handled message on to any defined endpoints.
 
 ~~~xml
 	<messageForwarding>

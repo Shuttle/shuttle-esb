@@ -4,12 +4,12 @@ layout: api
 ---
 # Purge Queues Module
 
-The `PurgeQueuesModule` may be found in the `Shuttle.ESB.Modules` assembly.  The module will attach the `PurgeQueuesObserver` to the `OnAfterInitializeQueueFactories` event of the `StartupPipeline` and purges the queues configured in the `purgeQueues` configuration section:
+The `PurgeQueuesModule` may be found in the `Shuttle.Esb.Modules` assembly.  The module will attach the `PurgeQueuesObserver` to the `OnAfterInitializeQueueFactories` event of the `StartupPipeline` and purges the queues configured in the `purgeQueues` configuration section:
 
 ~~~ xml
 <configuration>
 	<configSections>
-		<section name="purgeQueues" type="Shuttle.ESB.Modules.PurgeQueuesSection, Shuttle.ESB.Modules"/>
+		<section name="purgeQueues" type="Shuttle.Esb.Modules.PurgeQueuesSection, Shuttle.Esb.Modules"/>
 	</configSections>
 
 	<purgeQueues>

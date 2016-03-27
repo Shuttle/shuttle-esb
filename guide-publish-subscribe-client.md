@@ -10,7 +10,7 @@ layout: guide
 
 ![Publish/Subscribe Client]({{ site.baseurl }}/assets/images/guide-publish-subscribe-client.png "Publish/Subscribe Client")
 
-> Install the `shuttle-esb-msmq` nuget package.
+> Install the `Shuttle.Esb.Msmq` nuget package.
 
 ![Publish/Subscribe Client - Nuget]({{ site.baseurl }}/assets/images/guide-publish-subscribe-client-nuget.png "Publish/Subscribe Client - Nuget")
 
@@ -24,7 +24,7 @@ This will provide access to the Msmq `IQueue` implementation and also include th
 
 ~~~ c#
 using System;
-using Shuttle.ESB.Core;
+using Shuttle.Esb;
 using Shuttle.PublishSubscribe.Messages;
 
 namespace Shuttle.PublishSubscribe.Client
@@ -58,7 +58,7 @@ namespace Shuttle.PublishSubscribe.Client
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
-		<section name='serviceBus' type="Shuttle.ESB.Core.ServiceBusSection, Shuttle.ESB.Core"/>
+		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
 	</configSections>
 
 	<serviceBus>

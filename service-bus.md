@@ -1,5 +1,5 @@
 ---
-title: Shuttle-ESB API
+title: Shuttle.Esb API
 layout: api
 ---
 # ServiceBus

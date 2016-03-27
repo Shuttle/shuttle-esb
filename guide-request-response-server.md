@@ -10,13 +10,13 @@ layout: guide
 
 ![Request/Response Server]({{ site.baseurl }}/assets/images/guide-request-response-Server.png "Request/Response Server")
 
-> Install the `shuttle-esb-msmq` nuget package.
+> Install the `Shuttle.Esb.Msmq` nuget package.
 
 ![Request/Response Server - Nuget Msmq]({{ site.baseurl }}/assets/images/guide-request-response-server-nuget-msmq.png "Request/Response Server - Nuget Msmq")
 
 This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.
 
-> Install the `shuttle-core-host` nuget package.
+> Install the `Shuttle.Core.Host` nuget package.
 
 ![Request/Response Server - Nuget Host]({{ site.baseurl }}/assets/images/guide-request-response-server-nuget-host.png "Request/Response Server - Nuget Host")
 
@@ -31,7 +31,7 @@ The default mechanism used to host an endpoint is by using a Windows service.  H
 ~~~ c#
 using System;
 using Shuttle.Core.Host;
-using Shuttle.ESB.Core;
+using Shuttle.Esb;
 
 namespace Shuttle.RequestResponse.Server
 {
@@ -60,7 +60,7 @@ namespace Shuttle.RequestResponse.Server
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
-		<section name='serviceBus' type="Shuttle.ESB.Core.ServiceBusSection, Shuttle.ESB.Core"/>
+		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
 	</configSections>
 
 	<serviceBus>
@@ -77,7 +77,7 @@ namespace Shuttle.RequestResponse.Server
 
 ~~~ c#
 using System;
-using Shuttle.ESB.Core;
+using Shuttle.Esb;
 using Shuttle.RequestResponse.Messages;
 
 namespace Shuttle.RequestResponse.Server

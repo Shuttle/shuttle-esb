@@ -10,13 +10,13 @@ layout: guide
 
 ![Distribution Worker]({{ site.baseurl }}/assets/images/guide-distribution-Worker.png "Distribution Worker")
 
-> Install the `shuttle-esb-msmq` nuget package.
+> Install the `Shuttle.Esb.Msmq` nuget package.
 
 ![Distribution Worker - Nuget Msmq]({{ site.baseurl }}/assets/images/guide-distribution-worker-nuget-msmq.png "Distribution Worker - Nuget Msmq")
 
 This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.
 
-> Install the `shuttle-core-host` nuget package.
+> Install the `Shuttle.Core.Host` nuget package.
 
 ![Distribution Worker - Nuget Host]({{ site.baseurl }}/assets/images/guide-distribution-worker-nuget-host.png "Distribution Worker - Nuget Host")
 
@@ -31,7 +31,7 @@ The default mechanism used to host an endpoint is by using a Windows service.  H
 ~~~ c#
 using System;
 using Shuttle.Core.Host;
-using Shuttle.ESB.Core;
+using Shuttle.Esb;
 
 namespace Shuttle.Distribution.Worker
 {
@@ -60,7 +60,7 @@ namespace Shuttle.Distribution.Worker
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
-		<section name='serviceBus' type="Shuttle.ESB.Core.ServiceBusSection, Shuttle.ESB.Core"/>
+		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
 	</configSections>
 
 	<serviceBus>
@@ -82,7 +82,7 @@ This configures the endpoint as a worker and specifies the control inbox of the 
 
 ~~~ c#
 using System;
-using Shuttle.ESB.Core;
+using Shuttle.Esb;
 using Shuttle.Distribution.Messages;
 
 namespace Shuttle.Distribution.Worker

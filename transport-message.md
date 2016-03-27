@@ -36,7 +36,7 @@ The unique Id of this message.
 public string CorrelationId { get; public set; }
 ~~~
 
-The `CorrelationId` is not used by the core shuttle-esb and you are free to use it to correlate your messages.
+The `CorrelationId` is not used by the core Shuttle.Esb and you are free to use it to correlate your messages.
 
 ### SenderInboxWorkQueueUri
 
@@ -121,7 +121,7 @@ The name of the compression algorithm used to compress the message; else empty.
 ### Headers
 
 ~~~ c#
-public List<Shuttle.ESB.Core.TransportHeader> Headers { get; public set; }
+public List<Shuttle.Esb.TransportHeader> Headers { get; public set; }
 ~~~
 
 An arbitrary list of [TransportHeader] objects that may be used to carry information not contained in the `Message` property.

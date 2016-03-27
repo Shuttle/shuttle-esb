@@ -4,7 +4,7 @@ layout: api
 ---
 # Active Time Range Module
 
-The `ActiveTimeRangeModule` may be found in the `Shuttle.ESB.Modules` assembly.  The module will attach the `ActiveTimeRangeObserver` to the `OnPipelineStarting` event of all pipelines except the `StartupPipeline` and abort the pipeline if the current time is not within the active time range.
+The `ActiveTimeRangeModule` may be found in the `Shuttle.Esb.Modules` assembly.  The module will attach the `ActiveTimeRangeObserver` to the `OnPipelineStarting` event of all pipelines except the `StartupPipeline` and abort the pipeline if the current time is not within the active time range.
 
 ~~~xml
   <appSettings>
