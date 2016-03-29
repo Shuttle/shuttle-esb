@@ -49,4 +49,4 @@ Will need to become (else some configuration loading exceptions may occur):
 	</modules>
 ~~~
 
-The same applies to the 
+The same applies to any other configuration sections.
