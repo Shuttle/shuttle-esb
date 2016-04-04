@@ -17,6 +17,6 @@ The default value of `*` indicates the whole day and your pipelines will never b
 
 ~~~c#
 	var bus = ServiceBus
-		.Create	(c => c.AddModule(new ActiveTimeRangeModule()))
+		.Create(c => c.AddModule(new ActiveTimeRangeModule()))
 		.Start();
 ~~~
