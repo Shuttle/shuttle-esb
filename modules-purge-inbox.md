@@ -8,9 +8,6 @@ The `PurgeInboxModule` may be found in the `Shuttle.Esb.Modules` assembly.  The 
 
 ~~~c#
 	var bus = ServiceBus
-		.Create.Create
-		(
-			c => c.AddModule(new PurgeInboxModule())
-		)
+		.Create(c => c.AddModule(new PurgeInboxModule()))
 		.Start();
 ~~~
