@@ -22,10 +22,7 @@ The `MessageForwardingModule` may be found in the `Shuttle.Esb.Modules` assembly
 
 ~~~c#
 	var bus = ServiceBus
-		.Create.Create
-		(
-			c => c.AddModule(new MessageForwardingModule())
-		)
+		.Create(c => c.AddModule(new MessageForwardingModule()))
 		.Start();
 ~~~
 
