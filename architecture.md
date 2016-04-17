@@ -78,7 +78,11 @@ There are situations where we need to _start_ something off.  Let's take the cas
 So from the client code:
 
 ~~~ c#
-    bus.Send(new CreateOrderCommand("ClientName", "ProductXYZ"));
+    bus.Send(new CreateOrderCommand 
+    		{
+    			Name = "ClientName",
+    			Product = "ProductXYZ"
+    		});
 ~~~
 
 The call would fail if there is nowhere to send the message.
@@ -86,7 +90,11 @@ The call would fail if there is nowhere to send the message.
 Now we could publish an event such as **OrderReceivedEvent** and our order service could subscribe to the event and also kick everything off.
 
 ~~~c#
-    bus.Publish(new OrderOrderReceivedEvent("ClientName", "ProductXYZ"));
+    bus.Publish(new OrderOrderReceivedEvent
+    		{
+    			Name = "ClientName",
+    			Product = "ProductXYZ"
+    		});
 ~~~
 
 The call would not fail should there be no subscribers.  
