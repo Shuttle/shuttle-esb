@@ -11,7 +11,7 @@ cd {extraction-folder}\Shuttle.Esb.Samples\Shuttle.PublishSubscribe
 nuget restore
 ~~~
 
-Once you have opened the `Shuttle.PublishSubscribe.sln` solution in Visual Studio set the following two projects as startup projects:
+Once you have opened the `Shuttle.PublishSubscribe.sln` solution in Visual Studio set the following projects as startup projects:
 
 - Shuttle.PublishSubscribe.Client
 - Shuttle.PublishSubscribe.Server
