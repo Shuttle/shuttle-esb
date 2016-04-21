@@ -17,9 +17,11 @@ Once you have opened the `Shuttle.PublishSubscribe.sln` solution in Visual Studi
 - Shuttle.PublishSubscribe.Server
 - Shuttle.PublishSubscribe.Subscriber
 
-<div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bin\debug</strong> folder you may need to build the project.</div>
+<div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bindebug</strong> folder you may need to build the solution.</div>
 
 > Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the server project for the **Shuttle.RequestResponse.Server**, as well as the **Shuttle.RequestResponse.Subscriber** project.
+
+You will also need to create and configure a Sql Server database for this sample and remember to update the **App.config** `connectionString` settings to point to your database.  Please reference the **Database** section below.
 
 # Implementation
 
@@ -189,7 +191,7 @@ The `{version}` bit will be in a `semver` format.
 
 > Create a new database called **Shuttle** and execute script `SubscriptionManagerCreate.sql` in the newly created database.
 
-This will create the required structures that the idempotence service can use to keep track of message processing.
+This will create the required structures that the subscription manager will use to store the subcriptions.
 
 ### App.config
 
@@ -255,7 +257,7 @@ This will write out some information to the console window and publish the `Memb
 
 > Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the server project.
 
-<div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bin\debug</strong> folder you may need to build the project.</div>
+<div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bindebug</strong> folder you may need to build the solution.</div>
 
 ## Subscriber
 
@@ -366,7 +368,7 @@ This will write out some information to the console window.
 
 > Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the subscriber project.
 
-<div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bin\debug</strong> folder you may need to build the project.</div>
+<div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bindebug</strong> folder you may need to build the solution.</div>
 
 ## Run
 
