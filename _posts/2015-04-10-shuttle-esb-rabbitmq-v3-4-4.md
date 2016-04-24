@@ -3,8 +3,6 @@ title: Shuttle.Esb.RabbitMQ v3.4.4
 layout: post
 ---
 
-# Shuttle.Esb.RabbitMQ v3.4.4
-
 A new release of the Shuttle.Esb.RabbitMQ nuget package is available.
 
 Connection failures should be correctly retried with this version.

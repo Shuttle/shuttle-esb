@@ -20,7 +20,7 @@ $(function(){
 		var ot;
 		var s;
 	
-		//$('#footer').css('position', (st + $(window).height()) < ($(document).height() - $(window).height()) ? 'inherit' : 'fixed');
+		$('#footer').css('position', (st + $(window).height()) < ($(document).height() - $(window).height()) ? 'inherit' : 'fixed');
 
 		if (!hasTOC) {
 			return;
@@ -51,9 +51,7 @@ $(function(){
 	if (hasTOC) {
 		$('#toc')
 			.tocify({
-				theme: 'bootstrap',
-				showAndHide: false,
-				showAndHideOnScroll: false
+				theme: 'bootstrap'
 			})
 			.data('toc-tocify');
 

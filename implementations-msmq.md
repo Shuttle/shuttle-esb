@@ -10,9 +10,7 @@ Msmq creates outgoing queues internally so it is not necessary to use an outbox.
 
 ## Installation / Activation
 
-If you need to install / activate msmq you can [follow these instructions][msmq-installation-activation]
-
-If you need to activate
+If you need to install / activate msmq you can [follow these instructions][msmq-installation-activation].
 
 ## Configuration
 
