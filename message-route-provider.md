@@ -59,7 +59,7 @@ The `StartsWithMessageRouteSpecification` will include the route when the messag
       </messageRoute>
     </messageRoutes>
 ~~~
----
+
 #### TypeListMessageRouteSpecification
 
 For the `TypeListMessageRouteSpecification` you need to provide a list of the assembly-qualified name of the type or types (semi-colon delimited).
@@ -71,7 +71,7 @@ For the `TypeListMessageRouteSpecification` you need to provide a list of the as
       </messageRoute>
     </messageRoutes>
 ~~~
----
+
 #### RegexMessageRouteSpecification
 
 For the `RegexMessageRouteSpecification` you need to provide the [regex](http://msdn.microsoft.com/en-us/library/system.text.regularexpressions.regex.aspx) expression to apply to the full name of the type.
@@ -83,7 +83,7 @@ For the `RegexMessageRouteSpecification` you need to provide the [regex](http://
       </messageRoute>
     </messageRoutes>
 ~~~
----
+
 #### AssemblyMessageRouteSpecification
 
 The `AssemblyMessageRouteSpecification` is derived from the `TypeListMessageRouteSpecification` and includes all the types from the assembly represented by `value`.  If the assembly provided by `value` ends with either `.exe` or `.dll` the assembly will be loaded from the given path, else the assembly will be loaded from the `AppDomain` (so it should be referenced).
