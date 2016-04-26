@@ -6,12 +6,12 @@ using (var bus = ServiceBus.Create().Start())
 	bus.Send(new RegisterMemberCommand
 	{
 		UserName = "Mr Resistor",
-		EMailAddress = "ohm@resistor.com"
+		EMailAddress = "ohm@resistor.domain"
 	});
 }
 ~~~
 
-### Publish and event message when something interesting happens
+### Publish an event message when something interesting happens
 
 ~~~ c#
 using (var bus = ServiceBus.Create(c => c.SubscriptionManager(SubscriptionManager.Default())).Start())
