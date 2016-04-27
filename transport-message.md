@@ -70,6 +70,14 @@ public System.DateTime IgnoreTillDate { get; public set; }
 
 The message will not be processed while the current date is before this date.
 
+### ExpiryDate
+
+~~~ c#
+public System.DateTime ExpiryDate { get; public set; }
+~~~
+
+Determines the date that the message will expire.  It will not be processed after this date.  The default value is `DateTime.MaxValue`..
+
 ### SendDate
 
 ~~~ c#
