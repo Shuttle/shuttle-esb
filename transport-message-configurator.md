@@ -69,6 +69,14 @@ Ignores the [TransportMessage] until the given date/time has been reached.  The 
 
 Without a dedicated deferred queue the work queue will contain the deferred message.  This may slow down processing as a deferred message is not regarded as work.  If the queue contains too many deferred messages the queue processing will become very slow and unresponsive.
 
+### WillExpire
+
+~~~ c#
+public TransportMessageConfigurator WillExpire(DateTime expiryDate)
+~~~
+
+The message will only remain valid until this date is reached.  After this is will not be processed but rather immediately acknowledged.  The queuing mechanism may also, should it support message expiry, remove the message internally from the queue.
+
 ### TransportMessageReceived
 
 ~~~ c#
