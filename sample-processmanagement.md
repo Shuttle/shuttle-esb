@@ -37,7 +37,7 @@ You will also need to create and configure a Sql Server database for this sample
 
 # Database
 
-> Create a new database called **ProcessManagement** and execute script `SubscriptionManagerCreate.sql` in the newly created database.
+> Create a new database called **ProcessManagement**.
 
 We need a store for our subscriptions.  In this example we will be using **Sql Server**.  If you use the express version remember to change the `data source` value to `.\sqlexpress` from the standard `.`.
 
@@ -46,6 +46,8 @@ The `Shuttle.Esb.SqlServer` package contains a number of scripts in the followin
 - `.\Shuttle.PublishSubscribe\packages\Shuttle.Esb.SqlServer.{version}\scripts`
 
 The `{version}` bit will be in a `semver` format.
+
+> Execute script `SubscriptionManagerCreate.sql` in the newly created database.
 
 This will create the required structures that the idempotence service can use to keep track of message processing.
 
