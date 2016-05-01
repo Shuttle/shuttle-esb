@@ -31,7 +31,7 @@ Once you have opened the `Shuttle.ProcessManagement.sln` solution in Visual Stud
 
 > Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of each of the server projects.
 
-<div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bindebug</strong> folder you may need to build the solution.</div>
+<div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bin\debug</strong> folder you may need to build the solution.</div>
 
 You will also need to create and configure a Sql Server database for this sample and remember to update the **App.config** `connectionString` settings to point to your database.  Please reference the **Database** section below.
 

@@ -18,7 +18,7 @@ Once you have opened the `Shuttle.RequestResponse.sln` solution in Visual Studio
 
 > Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the server project for the **Shuttle.RequestResponse.Server** project.
 
-<div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bindebug</strong> folder you may need to build the solution.</div>
+<div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bin\debug</strong> folder you may need to build the solution.</div>
 
 # Implementation
 
@@ -262,7 +262,7 @@ This will write out some information to the console window and send a response b
 
 > Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the server project.
 
-<div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bindebug</strong> folder you may need to build the solution.</div>
+<div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bin\debug</strong> folder you may need to build the solution.</div>
 
 ## Run
 
