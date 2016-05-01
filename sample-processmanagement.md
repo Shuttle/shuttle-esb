@@ -49,7 +49,7 @@ The `{version}` bit will be in a `semver` format.
 
 > Execute script `SubscriptionManagerCreate.sql` in the newly created database.
 
-This will create the required structures that the idempotence service can use to keep track of message processing.
+This will create the required structures that the subscription manager will use.
 
 The `Shuttle.Recall.SqlServer` package contains a the following script folder:
 
