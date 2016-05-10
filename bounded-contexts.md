@@ -57,11 +57,11 @@ And the relevant **behaviour** would include:
 
 So, as we can see, even though a physical seat is one thing it can mean very different things to different people.  This is where a *Bounded Context* comes in.  You may even find that a similar concept is called something else in each context.  You may find that an `Employee` in the *HR* BC is called a `User` in the *Identity & Access Control* BC, or an `Author` in the *Collaboration* BC. 
 
-As behaviour is invoked on various objects within each BC the other BCs may need to be informed.  To accomplish this one would need some communication mechanism base on an *Event Driven Architecture*.  That is, of course, where a service bus like Shuttle.Esb would come in handy.
+As behaviour is invoked on various objects within each BC the other BCs may need to be informed.  To accomplish this one would need some communication mechanism based on an *Event Driven Architecture*.  That is, of course, where a service bus like Shuttle.Esb would come in handy.
 
-The *Financial Management* BC could publish a `AssetRegisteredEvent` and the other BCs would determine if they need to register the asset number as an item they are interested in.
+The *Financial Management* BC could publish an `AssetRegisteredEvent` and the other BCs would subscribe to that event and then determine if they need to register the asset number as an item they are interested in.
 
-When the *Maintenance Management* BC remove a seat for maintenance it would publish a `ItemRemovedForMaintenanceEvent` that the *Booking Management* BC would subscribe to in order to exclude the seat as a bookable item for any events until the item is made available again.
+When the *Maintenance Management* BC removes a seat for maintenance it would publish a `ItemRemovedForMaintenanceEvent` that the *Booking Management* BC would subscribe to in order to exclude the seat as a bookable item for any events until the item is made available again.
 
 ## Canonical Models
 
