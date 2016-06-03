@@ -37,7 +37,6 @@ title: Packages
 			<h3>Shuttle.Esb.Samples</h3>
 			<p>Although not really a core component you may want to take a look at these samples to get going since they illustrate some basic usage scenarios.</p>
 			<p>
-				<a href='http://www.nuget.org/packages/Shuttle.Esb.Samples' target='_blank' class='btn btn-primary' role='button'>NuGet</a>
 				<a href='https://github.com/Shuttle/Shuttle.Esb.Samples' target='_blank' class='btn btn-default' role='button'>GitHub</a>
 				<a href='https://github.com/Shuttle/Shuttle.Esb.Samples/issues' target='_blank' class='btn btn-default' role='button'>Issues</a>
 			</p>
