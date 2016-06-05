@@ -189,7 +189,9 @@ When you reference the `Shuttle.Esb.SqlServer` package a number of scripts are i
 
 The `{version}` bit will be in a `semver` format.
 
-> Create a new database called **Shuttle** and execute script `SubscriptionManagerCreate.sql` in the newly created database.
+> Create a new database called **Shuttle**
+
+> For versions of `Shuttle.Esb.SqlServer` *before* v6.0.5 you need to run `SubscriptionManagerCreate.sql` in the newly created database.  **From v6.0.5 this will be done automatically**.
 
 This will create the required structures that the subscription manager will use to store the subcriptions.
 
