@@ -137,7 +137,7 @@ title: Packages
 	<div class='col-sm-6 col-md-4'>
 		<div class='thumbnail'>
 			<div class='caption'>
-			<h3>Shuttle.Esb.Unity</h3>
+			<h3>Shuttle.Esb.Ninject</h3>
 			<p>Contains a <em>Ninject</em> implementation of the <strong>IMessageHandlerFactory</strong> interface.</p>
 			<p>
 				<a href='http://www.nuget.org/packages/Shuttle.Esb.Ninject' target='_blank' class='btn btn-primary' role='button'>NuGet</a>
