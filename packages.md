@@ -129,7 +129,7 @@ title: Packages
 				<a href='http://www.nuget.org/packages/Shuttle.Esb.Unity' target='_blank' class='btn btn-primary' role='button'>NuGet</a>
 				<a href='https://github.com/Shuttle/Shuttle.Esb.Unity' target='_blank' class='btn btn-default' role='button'>GitHub</a>
 				<a href='https://github.com/Shuttle/Shuttle.Esb.Unity/issues' target='_blank' class='btn btn-default' role='button'>Issues</a>
-				<a href='https://unity.codeplex.com/' target='_blank' class='btn btn-default' role='button'>Unity</a>
+				<a href='https://github.com/unitycontainer/unity' target='_blank' class='btn btn-default' role='button'>Unity</a>
 			</p>
 			</div>
 		</div>
