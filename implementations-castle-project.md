@@ -15,21 +15,3 @@ The `CastleMessageHandlerFactory` inherits from the abstract `MessageHandlerFact
 		.Start();
 ~~~
 
-## Note on dependency injection
-
-The `DefaultMessageHandlerFactory` registers all `IMessageHandler<>` implementations in the current `AppDomain`.  As soon as you use a container this responsibility falls on the implementer.
-
-The message distribution makes use of `IMessageHandler<>` implementations in the core and there may be one or more modules, if used, that have message handlers.
-
-You can use the `RegisterHandlers` method of the `CastleMessageHandlerFactory` instance to perform this registration for you:
-
-~~~c#
-	bus = ServiceBus
-		.Create
-		(
-			c => .MessageHandlerFactory(new CastleMessageHandlerFactory(new WindsorContainer()).RegisterHandlers())
-		)
-		.Start();
-~~~
-
-You can also pass a specific `Assembly` to the `RegisterHandlers` method to register only message handlers in the specified assembly.
