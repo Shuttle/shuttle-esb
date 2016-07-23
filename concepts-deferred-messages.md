@@ -50,3 +50,5 @@ An important point to remember is that a deferred queue belongs to the particula
 The deferred queue is processed in single iterations.  It is processed when the endpoint starts up and then only again when required.
 
 Messages never route directly to a deferred queue.  Instead they always go to the work queue and if the work queue sees finds a future `IgnoreTillDate` in the [TransportMessage] then it is moved to the deferred queue and the next date to process the deferred queue is set to this `IngoreTillDate` if it is less than the next deferred queue process date.
+
+[TransportMessage]: {{ site.baseurl }}/transport-message
