@@ -24,7 +24,7 @@ A deferred message is one that cannot/should not be immediately processed.  Ther
 
 The first failure will cause the message to wait for 10 seconds before being tried again.
 
-If there is no deferred queue the message is simply returned to the work queue.  However, the qork queue is designed such that processing can occur as quickly as possible so having deferred messages in the work queue will result in some serious queue thrashing so this should be avoided for all but the simplest samples.
+If there is no deferred queue the message is simply returned to the work queue.  However, the work queue is designed such that processing can occur as quickly as possible so having deferred messages in the work queue will result in some serious queue thrashing so this should be avoided for all but the simplest samples.
 
 ## Deferred Queue
 
