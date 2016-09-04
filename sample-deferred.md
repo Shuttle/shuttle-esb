@@ -237,11 +237,6 @@ namespace Shuttle.Deferred.Server
 			Console.WriteLine("[MEMBER REGISTERED] : user name = '{0}'", context.Message.UserName);
 			Console.WriteLine();
 		}
-
-		public bool IsReusable
-		{
-			get { return true; }
-		}
 	}
 }
 ~~~

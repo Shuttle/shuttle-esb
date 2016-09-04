@@ -39,11 +39,14 @@ The most pertinent bit is the `serviceBus` tag.
 
 | Attribute						| Default 	| Description	| Version Introduced |
 | ---							| ---		| ---			| --- |
-| `cacheQueues`				| true		| Determines whether or not to re-use the identity returned by the `IIdentityProvider`. | [v6.2.0](https://github.com/Shuttle/Shuttle.Esb/releases/tag/v6.2.0) |
+| `registerHandlers`				| true		| Will call the `RegisterHandlers` method on the `IMessageHandlerFactory` implementation if set to `true`. | [v7.0.0](https://github.com/Shuttle/Shuttle.Esb/releases/tag/v7.0.0) |
+| `cacheIdentity`				| true		| Determines whether or not to re-use the identity returned by the `IIdentityProvider`. | [v6.2.0](https://github.com/Shuttle/Shuttle.Esb/releases/tag/v6.2.0) |
 | `createQueues`				| true		| The endpoint will attempt to create all local queues (inbox, outbox, control inbox) | |
 | `removeMessagesNotHandled`	| true		| indicates whether messages received on the endpoint that have no message handler should simply be removed (ignored).  If this attribute is `false` then the message will immmediately be placed in the error queue. | |
 | `compressionAlgorithm`		| empty	(no compression)	| The name of the compression algorithm to use when sending messages.  Out-of-the-box there is a GZip compression implementation (class `GZipCompressionAlgorithm` with name 'GZip'). | |
 | `encryptionAlgorithm`			| empty	(no entryption)		| The name of the encryption algorithm to use when sending messages.  Out-of-the-box there is a Triple DES implementation (class TripleDesEncryptionAlgorithm and name '3DES'). | |
+
+
 
 Use the `queueFactories` tag to configure how you would like to locate queue factories.  By default the current `AppDomain` is scanned for implementations of `IQueueFactory` along with all assemblies in the base directory (recursively).  These queue factories have to have a parameterless constructor in order to be instantiated.
 

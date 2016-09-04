@@ -246,11 +246,6 @@ namespace Shuttle.PublishSubscribe.Subscriber
 				UserName = context.Message.UserName
 			});
 		}
-
-		public bool IsReusable
-		{
-			get { return true; }
-		}
 	}
 }
 ~~~
@@ -356,11 +351,6 @@ namespace Shuttle.PublishSubscribe.Server
 			Console.WriteLine();
 			Console.WriteLine("[EVENT RECEIVED] : user name = '{0}'", context.Message.UserName);
 			Console.WriteLine();
-		}
-
-		public bool IsReusable
-		{
-			get { return true; }
 		}
 	}
 }

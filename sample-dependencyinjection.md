@@ -286,11 +286,6 @@ namespace Shuttle.DependencyInjection.Server
 
 			_emailService.Send(context.Message.UserName);
 		}
-
-		public bool IsReusable
-		{
-			get { return true; }
-		}
 	}
 }
 ~~~

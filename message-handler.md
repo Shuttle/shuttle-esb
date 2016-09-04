@@ -8,13 +8,15 @@ In order to handle a message sent to an endpoint you need to implement the `IMes
 
 ## Properties
 
-### IsReusable
+Although the interface does not have any properties you could implement the `IReusable` interface from the `Shuttle.Core.Infrastructure` package.  If this interface is *not* implemented it the message handler is regarded as stateless and will be poled.
+
+### IReusable.IsReusable
 
 ~~~ c#
 bool IsReusable { get; }
 ~~~
 
-This property is defined on the base interface `IMessageHandler`.  Return `true` from to indicate that the message handler instance can be re-used.  This usually results in faster performance since new message handler do not have to be created by the [IMessageHandlerFactory].  The performance gain will probably be negligible but stateless message handlers are preferred none-the-less.
+Return `true` from to indicate that the message handler instance can be re-used.  This usually results in faster performance since new message handler do not have to be created by the [IMessageHandlerFactory].  The performance gain will probably be negligible but stateless message handlers are preferred none-the-less.
 
 ## Methods
 
