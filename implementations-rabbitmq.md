@@ -33,7 +33,7 @@ The queue configuration is part of the specified uri, e.g.:
 | virtualhost		 | /	|	| |
 | port				 | default	|	| |
 | prefetchcount			 | 25		| Specifies the number of messages to prefetch from the queue. | |
-| durable			 | true     | Determines whether messages will be persisted.  Note: be very mindful of the possible consequences before setting to 'false'. | v3.5.0 |
+| durable			 | true     | Determines whether the queue is durable.  Note: be very mindful of the possible consequences before setting to 'false'. | v3.5.0 |
 | persistent			 | true     | Determines whether messages will be persisted.  Note: be very mindful of the possible consequences before setting to 'false'. | v3.5.3 |
 
 In addition to this there is also a RabbitMQ specific section (defaults specified here):
