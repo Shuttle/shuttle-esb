@@ -31,12 +31,22 @@ In addition to this there is also a Sql Server specific section (defaults specif
 	subscriptionManagerConnectionStringName="Subscription"
 	idempotenceServiceConnectionStringName="Idempotence"
 	scriptFolder=""
+	ignoreSubscribe="false"
   />
   .
   .
   .
 <configuration>
 ~~~
+
+| Attribute | Default	| Description | Version Introduced |
+| --- | --- | --- | --- |
+| subscriptionManagerConnectionStringName	 | Subscription | The name of the `connectionString` to use to connect to the subscription store. | |
+| idempotenceServiceConnectionStringName		 | Idempotence	| The name of the `connectionString` that stores the idempotence data. | |
+| scriptFolder				 | (empty)	| A folder containing any scripts that can be used to override default behaviour by specifying individual scripts that perform the relevant queries.  If empty the [default queries] are used. | |
+| ignoreSubscribe			 | false		| If `true` the `ISubscriptionManager.Subscribe` method is ignored; else new subscription request are honored. | v6.0.9 |
+
+Whenever the endpoint is configured as a worker no new subscriptions will be registered against the endpoint since any published events should be subscribed to only by the distributor endpoint.  However, there may be scenarios where one uses a broker, such as RabbitMQ, and there is no distributor endpoint since each endpoint can consume messages from the inbox queue.  In such situation one would either configure a specific endpoint as a subscriber where new subscriptions can be made, or configure the subscriptions manually using scripts or [Shuttle.Sentinel](https://shuttle.github.io/shuttle-sentinel/).
 
 # SubscriptionManager
 
