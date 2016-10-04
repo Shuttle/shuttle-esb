@@ -13,7 +13,7 @@ A module is an implementation of the `IModule` interface and this, in turn, impl
 ~~~ c#
     public class LogMessageOwnerModule : IModule
     {
-		private readonly string _receiveMessagePipelineName = typeof(InboxMessagePipeline).FullName;
+		private readonly string _inboxMessagePipelineName = typeof(InboxMessagePipeline).FullName;
 
 		public void Initialize(IServiceBus bus)
 		{
@@ -75,3 +75,7 @@ Via the configuration file:
 		<add type="Shuttle.Esb.Modules.LogMessageOwnerModule, Shuttle.Esb.Modules" />
 	</modules>
 ~~~
+
+# Pipelines
+
+You can refernce the [Shuttle.Esb](https://github.com/Shuttle/Shuttle.Esb/tree/master/Shuttle.Esb/Pipeline/Pipelines) code directly to get more information on the available pipelines and the events in those pipelines.
