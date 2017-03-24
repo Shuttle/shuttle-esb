@@ -16,25 +16,25 @@ If you are using a dependency injection container and you would like dependencie
 
 ### GetHandler
 
-~~~ c#
+``` c#
 IMessageHandler GetHandler(object message);
-~~~
+```
 
 The method will return a new or pooled [MessageHandler] for the message.
 
 ### ReleaseHandler
 
-~~~ c#
+``` c#
 void ReleaseHandler(IMessageHandler handler);
-~~~
+```
 
 The method will return the [MessageHandler] to the pool if the message doesn't iomplement `IReusable` or the message handler's `IReusable.IsReusable` returns `true` the message handler will be pooled and re-used upon release. ; else it should be disposed of as necessary.
 
 ### MessageTypesHandled
 
-~~~ c#
+``` c#
 IEnumerable<Type> MessageTypesHandled { get; }
-~~~
+```
 
 Returns a list of the message types that will be handled by the factory.
 

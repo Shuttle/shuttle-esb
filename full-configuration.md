@@ -8,34 +8,34 @@ This configuration is the default application configuration file based version. 
 
 To start off add the `Shuttle.Esb.ServiceBusSection` configuration class from the `Shuttle.Esb` assembly.
 
-~~~xml
+```xml
 <configuration>
   <configSections>
     <section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
   </configSections>
-~~~
+```
 
 It is also possible to group the Shuttle configuration in a `shuttle` group:
 
-~~~xml
+```xml
 <configuration>
 	<configSections>
 		<sectionGroup name="shuttle">
 			<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
 		</sectionGroup>
 	</configSections>
-~~~
+```
 
 The most pertinent bit is the `serviceBus` tag.
 
-~~~xml
+```xml
   <serviceBus
     cacheIdentity="true"  
     createQueues="true"  
     removeMessagesNotHandled="false"
     compressionAlgorithm=""
     encryptionAlgorithm="">
-~~~
+```
 
 | Attribute						| Default 	| Description	| Version Introduced |
 | ---							| ---		| ---			| --- |
@@ -52,17 +52,17 @@ The `IIdentityProvider` implementation is responsible for honouring the `cacheId
 
 Use the `queueFactories` tag to configure how you would like to locate queue factories.  By default the current `AppDomain` is scanned for implementations of `IQueueFactory` along with all assemblies in the base directory (recursively).  These queue factories have to have a parameterless constructor in order to be instantiated.
 
-~~~xml
+```xml
 	<queueFactories scan="true|false">
 		<add type="Shuttle.Esb.Msmq.MsmqQueueFactory, Shuttle.Esb.Msmq" />
 		<add type="Shuttle.Esb.RabbitMQ.RabbitMQQueueFactory, Shuttle.Esb.RabbitMQ" />
 		<add type="Shuttle.Esb.SqlServer.SqlQueueFactory, Shuttle.Esb.SqlServer" />
 	</queueFactories>
-~~~
+```
 
 The `messageRoutes` tag defines the routing for message that are sent using the `IServiceBus.Send` method.  You will notice that the structure is the same as the `forwardingRoutes` tag.
 
-~~~xml
+```xml
     <messageRoutes>
       <messageRoute uri="msmq://./inbox">
         <add specification="StartsWith" value="Shuttle.Messages1" />
@@ -72,11 +72,11 @@ The `messageRoutes` tag defines the routing for message that are sent using the 
         <add specification="TypeList" value="DoSomethingCommand" />
       </messageRoute>
     </messageRoutes>
-~~~
+```
 
 The `inbox` should be specified if the endpoint has message handlers that need to process incoming messages.
 
-~~~xml
+```xml
     <inbox
       workQueueUri="msmq://./inbox-work"
       deferredQueueUri="msmq://./inbox-work-deferred"
@@ -87,7 +87,7 @@ The `inbox` should be specified if the endpoint has message handlers that need t
       maximumFailureCount="25" 
       distribute="true|false" 
       distributeSendCount="5" />
-~~~
+```
 
 | Attribute						| Default 	| Description	|
 | ---							| ---		| ---			|
@@ -101,7 +101,7 @@ The `inbox` should be specified if the endpoint has message handlers that need t
 
 For some queueing technologies the `outbox` may not be required.  Msmq, for instance, create its own outgoing queues.  However, it should be used in scenarios where you need a store-and-forward mechanism for sending messages when the underlying infrastructure does not provide this such as with a SqlServer table-based queue or maybe even the file system.  RabbitMQ will also need an outbox since the destination broker may not be available and it does not have the concept of outgoing queues.
 
-~~~xml
+```xml
     <outbox
       workQueueUri="msmq://./outbox-work"
       errorQueueUri="msmq://./shuttle-error"
@@ -109,7 +109,7 @@ For some queueing technologies the `outbox` may not be required.  Msmq, for inst
       durationToIgnoreOnFailure="30m,1h"
       maximumFailureCount="25"
       threadCount="5" />
-~~~
+```
 
 | Attribute						| Default 	| Description	|
 | ---							| ---		| ---			|
@@ -120,12 +120,12 @@ For some queueing technologies the `outbox` may not be required.  Msmq, for inst
 
 You can also set the transaction scope behaviour by providing the `transactionScope` tag.  If you want your endpoint to be non-transactional then set the `enabled` attribute to `false`.  This will improve performance but messsage delivery and processing cannot be guaranteed.  If the underlying queueing infrastrcuture does not support 2-phase commit message delivery and processing also cannot be guaranteed.
 
-~~~xml
+```xml
     <transactionScope
       enabled="true"
       isolationLevel="ReadCommitted"
       timeoutSeconds="30" />
-~~~
+```
 
 | Attribute				| Default 		| Description	|
 | ---					| ---			| ---			|
@@ -135,11 +135,11 @@ You can also set the transaction scope behaviour by providing the `transactionSc
 
 When the endpoint is not a physical endpoint but rather a worker use the `worker` tag to specify the relevant configuration.
 
-~~~xml
+```xml
     <worker
       distributorControlWorkQueueUri="msmq://./control-inbox-work"
       threadAvailableNotificationIntervalSeconds="5" />
-~~~
+```
 
 | Attribute							| Default 		| Description	|
 | ---								| ---			| ---			|
@@ -148,7 +148,7 @@ When the endpoint is not a physical endpoint but rather a worker use the `worker
 
 Since a worker sends thread availability to the physical distribution master the distributor needs to have a special inbox called the control inbox that is used for these notifications.
 
-~~~xml
+```xml
     <control
       workQueueUri="control-inbox-work"
       errorQueueUri="msmq://./shuttle-error"
@@ -156,7 +156,7 @@ Since a worker sends thread availability to the physical distribution master the
       durationToSleepWhenIdle="250ms,10s,30s"
       durationToIgnoreOnFailure="30m,1h"
       maximumFailureCount="25" />
-~~~
+```
 
 | Attribute						| Default 	| Description	|
 | ---							| ---		| ---			|
@@ -167,24 +167,24 @@ Since a worker sends thread availability to the physical distribution master the
 
 Use the `modules` tag to configure modules that can be loaded at runtime.  These modules have to have a parameterless constructor in order to be instantiated; else add them programmatically if you need to specify parameters.
 
-~~~xml
+```xml
 	<modules>
 		<add type="Shuttle.Esb.Modules.ActiveTimeRangeModule, Shuttle.Esb.Modules" />
 	</modules>
-~~~
+```
 
 If you need to make use of the `DefaultUriResolver` you can specify the mappings as follows:
 
-~~~xml
+```xml
 	<uriResolver>
 		<add name="resolver://host/queue-1" uri="msmq://./inbox-work-queue" />
 		<add name="resolver://host/queue-2" uri="rabbitmq://user:password@the-server/inbox-work-queue" />
 	</uriResolver>
-~~~
+```
 
 Finally just close the relevant tags.
 
-~~~xml
+```xml
   </serviceBus>
 </configuration>
-~~~
+```

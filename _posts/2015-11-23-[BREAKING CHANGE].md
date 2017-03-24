@@ -11,19 +11,19 @@ We have added an `IHandlerContext` interface to assist in testing handlers.
 
 Previously you would implement an `IMessageHandler<Message>` as follows:
 
-~~~ c#
+``` c#
 	public void ProcessMessage(HandlerContext<Message> context) // <-- NOTE: HandlerContext
 	{
 		// your code goes here
 	}
-~~~
+```
 
 From this release goping forward you will need to implemented the message handlers using the `IHandlerContext` interface:
 
-~~~ c#
+``` c#
 	public void ProcessMessage(IHandlerContext<Message> context) // <-- NOTE: IHandlerContext
 	{
 		// your code goes here
 	}
-~~~
+```
 

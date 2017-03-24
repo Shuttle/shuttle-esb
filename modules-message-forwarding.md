@@ -2,11 +2,24 @@
 title: Message Forwarding Module
 layout: api
 ---
-# Message Forwarding Module
+# Shuttle.Esb.Module.MessageForwarding
 
-The `MessageForwardingModule` may be found in the `Shuttle.Esb.Modules` assembly.  The module will attach the `MessageForwardingObserver` to the `OnAfterHandleMessage` and then send the handled message on to any defined endpoints.
+<div class="nuget-badge">
+	<p>
+		<code>Install-Package Shuttle.Esb.Module.MessageForwarding</code>
+	</p>
+</div>
 
-~~~xml
+The MessageForwarding module for Shuttle.Esb will forward any handled messages onto the specified queue(s).
+
+The module will attach the `MessageForwardingObserver` to the `OnAfterHandleMessage` and then send the handled message on to any defined endpoints.
+
+```xml
+<configuration>
+	<configSections>
+		<section name="messageForwarding" type="Shuttle.Esb.Module.MessageForwarding.MessageForwardingSection, Shuttle.Esb.Module.MessageForwarding"/>
+	</configSections>
+
 	<messageForwarding>
 		<forwardingRoutes>
 			<messageRoute uri="msmq://./inbox">
@@ -18,12 +31,7 @@ The `MessageForwardingModule` may be found in the `Shuttle.Esb.Modules` assembly
 			</messageRoute>
 		</forwardingRoutes>
 	</messageForwarding>
-~~~
+</configuration>
+```
 
-~~~c#
-	var bus = ServiceBus
-		.Create(c => c.AddModule(new MessageForwardingModule()))
-		.Start();
-~~~
-
-The specifications are the same specifications used by the `DefaultMessageRouteProvider` implementation.
+The module will register itself using the [container bootstrapping](http://shuttle.github.io/shuttle-core/overview-container/#Bootstrapping).

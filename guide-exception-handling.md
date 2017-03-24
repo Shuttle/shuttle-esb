@@ -6,7 +6,7 @@ layout: guide
 
 When an exception occurs within a pipeline an `OnPipelineException` event is raised on the pipeline and any observers that have hooked onto the event will be called:
 
-~~~ c#
+``` c#
 public class ReceiveExceptionObserver : IPipelineObserver<OnPipelineException>
 {
 	public void Execute(OnPipelineException pipelineEvent)
@@ -20,7 +20,7 @@ public class ReceiveExceptionObserver : IPipelineObserver<OnPipelineException>
 		pipelineEvent.Pipeline.Abort(); // <-- prevents further processing of the pipeline
 	}
 }
-~~~
+```
 
 Typically you would not respond to the `OnPipelineException` event but you need to be cognizant of how it affects the message processing.
 

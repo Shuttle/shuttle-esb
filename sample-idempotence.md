@@ -2,14 +2,17 @@
 title: Idempotence Sample
 layout: api
 ---
+
+<div class='alert alert-info'>Remember to download the samples from the <a href="https://github.com/Shuttle/Shuttle.Esb.Samples" target="_blank">GitHub repository</a>.</div>
+
 # Running
 
 When using Visual Studio 2015+ the NuGet packages should be restored automatically.  If you find that they do not or if you are using an older version of Visual Studio please execute the following in a Visual Studio command prompt:
 
-~~~
+```
 cd {extraction-folder}\Shuttle.Esb.Samples\Shuttle.Idempotence
 nuget restore
-~~~
+```
 
 Once you have opened the `Shuttle.Idempotence.sln` solution in Visual Studio set the following projects as startup projects:
 
@@ -18,7 +21,7 @@ Once you have opened the `Shuttle.Idempotence.sln` solution in Visual Studio set
 
 > Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the server project for the **Shuttle.Idempotence.Server** project.
 
-<div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bin\debug</strong> folder you may need to build the solution.</div>
+<div class='alert alert-warning'>It may be necessary to build the solution before the <strong>Shuttle.Core.Host.exe</strong> executable will be available in the <strong>bin\debug</strong> folder.</div>
 
 You will also need to create and configure a Sql Server database for this sample and remember to update the **App.config** `connectionString` settings to point to your database.  Please reference the **Database** section below.
 
@@ -44,7 +47,7 @@ In this guide we'll create the following projects:
 
 > Rename the `Class1` default file to `RegisterMemberCommand` and add a `UserName` property.
 
-~~~ c#
+``` c#
 namespace Shuttle.Idempotence.Messages
 {
 	public class RegisterMemberCommand
@@ -52,7 +55,7 @@ namespace Shuttle.Idempotence.Messages
 		public string UserName { get; set; }
 	}
 }
-~~~
+```
 
 ## Client
 
@@ -62,16 +65,23 @@ namespace Shuttle.Idempotence.Messages
 
 This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.
 
+> Install the `Shuttle.Core.SimpleInjector` nuget package.
+
+This will add the [SimpleInjector](https://simpleinjector.org/index.html/) implementation of the [component container](http://shuttle.github.io/shuttle-core/overview-container/) interfaces.
+
 > Add a reference to the `Shuttle.Idempotence.Messages` project.
 
 ### Program
 
 > Implement the main client code as follows:
 
-~~~ c#
+``` c#
 using System;
+using Shuttle.Core.Infrastructure;
+using Shuttle.Core.SimpleInjector;
 using Shuttle.Esb;
 using Shuttle.Idempotence.Messages;
+using SimpleInjector;
 
 namespace Shuttle.Idempotence.Client
 {
@@ -79,7 +89,13 @@ namespace Shuttle.Idempotence.Client
 	{
 		static void Main(string[] args)
 		{
-			using (var bus = ServiceBus.Create().Start())
+			var container = new SimpleInjectorComponentContainer(new Container());
+
+			ServiceBus.Register(container);
+
+			var transportMessageFactory = container.Resolve<ITransportMessageFactory>();
+
+			using (var bus = ServiceBus.Create(container).Start())
 			{
 				string userName;
 
@@ -90,7 +106,7 @@ namespace Shuttle.Idempotence.Client
 						UserName = userName
 					};
 
-					var transportMessage = bus.CreateTransportMessage(command, null);
+					var transportMessage = transportMessageFactory.Create(command, c => { });
 
 					for (var i = 0; i < 5; i++)
 					{
@@ -104,7 +120,7 @@ namespace Shuttle.Idempotence.Client
 		}
 	}
 }
-~~~
+```
 
 Keep in mind that the when you `Send` a message a `TransportMessage` envelope is created with a unique message id (`Guid`).  In the above code we first manually create a `TransportMessage` so that we can send technically identical messages.
 
@@ -114,7 +130,7 @@ The next two `Send` operations do not use the `TransportMessage` but rather send
 
 > Create the shuttle configuration as follows:
 
-~~~ xml
+``` xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
@@ -133,7 +149,7 @@ The next two `Send` operations do not use the `TransportMessage` but rather send
         <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5" />
     </startup>
 </configuration>
-~~~
+```
 
 This tells shuttle that all messages that are sent and have a type name starting with `Shuttle.Idempotence.Messages` should be sent to endpoint `msmq://./shuttle-server-work`.
 
@@ -141,15 +157,21 @@ This tells shuttle that all messages that are sent and have a type name starting
 
 > Add a new `Class Library` to the solution called `Shuttle.Idempotence.Server`.
 
-> Install noth the `Shuttle.Esb.Msmq` and `Shuttle.Esb.SqlServer` nuget packages.
+> Install noth the `Shuttle.Esb.Msmq` nuget package.
 
 This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.
 
-We will also have access to the Sql Server implementation of the `IIdempotenceService`.
+> Install noth the `Shuttle.Esb.Msmq` and `Shuttle.Esb.Sql.Idempotence` nuget package.
+
+We will now have access to the Sql implementation of the `IIdempotenceService`.
+
+> Install the `Shuttle.Core.SimpleInjector` nuget package.
+
+This will add the [SimpleInjector](https://simpleinjector.org/index.html/) implementation of the [component container](http://shuttle.github.io/shuttle-core/overview-container/) interfaces.
 
 > Install the `Shuttle.Core.Host` nuget package.
 
-The default mechanism used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.Host` executable we are able to run the endpoint as a console application or register it as a Windows service for deployment.
+The [default mechanism](http://shuttle.github.io/shuttle-core/overview-service-host/) used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.Host` executable we are able to run the endpoint as a console application or register it as a Windows service for deployment.
 
 > Add a reference to the `Shuttle.Idempotence.Messages` project.
 
@@ -157,11 +179,12 @@ The default mechanism used to host an endpoint is by using a Windows service.  H
 
 > Rename the default `Class1` file to `Host` and implement the `IHost` and `IDisposabe` interfaces as follows:
 
-~~~ c#
+``` c#
 using System;
 using Shuttle.Core.Host;
+using Shuttle.Core.SimpleInjector;
 using Shuttle.Esb;
-using Shuttle.Esb.SqlServer.Idempotence;
+using SimpleInjector;
 
 namespace Shuttle.Idempotence.Server
 {
@@ -171,7 +194,11 @@ namespace Shuttle.Idempotence.Server
 
 		public void Start()
 		{
-			_bus = ServiceBus.Create(c=>c.IdempotenceService(IdempotenceService.Default())).Start();
+			var container = new SimpleInjectorComponentContainer(new Container());
+
+			ServiceBus.Register(container);
+
+			_bus = ServiceBus.Create(container).Start();
 		}
 
 		public void Dispose()
@@ -180,7 +207,7 @@ namespace Shuttle.Idempotence.Server
 		}
 	}
 }
-~~~
+```
 
 ### Database
 
@@ -200,7 +227,7 @@ Whenever `Publish` is called the registered `ISubscriptionManager` instance is a
 
 > Add an `Application Configuration File` item to create the `App.config` and populate as follows:
 
-~~~ xml
+``` xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
@@ -219,13 +246,13 @@ Whenever `Publish` is called the registered `ISubscriptionManager` instance is a
 			errorQueueUri="msmq://./shuttle-error" />
 	</serviceBus>
 </configuration>
-~~~
+```
 
 ### RegisterMemberHandler
 
 > Add a new class called `RegisterMemberHandler` that implements the `IMessageHandler<RegisterMemberCommand>` interface as follows:
 
-~~~ c#
+``` c#
 using System;
 using Shuttle.Esb;
 using Shuttle.Idempotence.Messages;
@@ -244,13 +271,13 @@ namespace Shuttle.Idempotence.Server
 		}
 	}
 }
-~~~
+```
 
 This will write out some information to the console window.
 
 > Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the server project.
 
-<div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bin\debug</strong> folder you may need to build the solution.</div>
+<div class='alert alert-warning'>It may be necessary to build the solution before the <strong>Shuttle.Core.Host.exe</strong> executable will be available in the <strong>bin\debug</strong> folder.</div>
 
 ## Run
 

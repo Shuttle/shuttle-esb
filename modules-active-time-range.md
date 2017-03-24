@@ -2,21 +2,28 @@
 title: Active Time Range Module
 layout: api
 ---
-# Active Time Range Module
+# Shuttle.Esb.Module.ActiveTimeRange
 
-The `ActiveTimeRangeModule` may be found in the `Shuttle.Esb.Modules` assembly.  The module will attach the `ActiveTimeRangeObserver` to the `OnPipelineStarting` event of all pipelines except the `StartupPipeline` and abort the pipeline if the current time is not within the active time range.
+<div class="nuget-badge">
+	<p>
+		<code>Install-Package Shuttle.Esb.Module.ActiveTimeRange</code>
+	</p>
+</div>
 
-~~~xml
-  <appSettings>
-    <add key="ActiveFromTime" value="*"/>
-    <add key="ActiveToTime" value="*"/>
-  </appSettings>
-~~~
+The ActiveTimeRange module for Shuttle.Esb aborts pipeline processing when the current date is not within a given time range.
 
-The default value of `*` indicates the whole day and your pipelines will never be stopped.
+The module will attach the `ActiveTimeRangeObserver` to the `OnPipelineStarting` event of all pipelines except the `StartupPipeline` and abort the pipeline if the current time is not within the active time range.
 
-~~~c#
-	var bus = ServiceBus
-		.Create(c => c.AddModule(new ActiveTimeRangeModule()))
-		.Start();
-~~~
+```xml
+<configuration>
+	<configSections>
+		<section name="activeTimeRange" type="Shuttle.Esb.Module.ActiveTimeRange.ActiveTimeRangeSection, Shuttle.Esb.Module.ActiveTimeRange"/>
+	</configSections>
+
+  <activeTimeRange from="8:00" to="23:00" />
+</configuration>
+```
+
+The default value of "\*" ignores the value.  If both `from` and `to` are specified as "\*" no pipeline will be aborted.
+
+The module will register itself using the [container bootstrapping](http://shuttle.github.io/shuttle-core/overview-container/#Bootstrapping).

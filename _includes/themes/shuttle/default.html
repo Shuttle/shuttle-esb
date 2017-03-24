@@ -241,29 +241,34 @@
 					<b class='caret'></b>
 					</a>
 					<ul class='dropdown-menu'>
-						<li class='dropdown-header'>Queues</li>
+						<li class='dropdown-header'>Queue</li>
 							<li>
 								<a href='{{ site.baseurl }}/implementations-rabbitmq'>RabbitMQ</a>
 							</li>
 							<li>
 								<a href='{{ site.baseurl }}/implementations-msmq'>MSMQ</a>
 							</li>
-							<li>
-								<a href='{{ site.baseurl }}/implementations-sql-server'>Sql Server</a>
-							</li>
                             <li>
 								<a href='{{ site.baseurl }}/implementations-filemq'>File MQ</a>
 							</li>
-						<li class='divider'></li>
-						<li class='dropdown-header'>Factories</li>
 							<li>
-								<a href='{{ site.baseurl }}/implementations-castle-project'>Castle Project</a>
-								<a href='{{ site.baseurl }}/implementations-unity'>Unity</a>
-								<a href='{{ site.baseurl }}/implementations-ninject'>Ninject</a>
+								<a href='{{ site.baseurl }}/implementations-sql/#Queue'>Sql</a>
 							</li>
 						</li>
 						<li class='divider'></li>
-						<li class='dropdown-header'>Modules</li>
+						<li class='dropdown-header'>Subscription</li>
+							<li>
+								<a href='{{ site.baseurl }}/implementations-sql/#Subscription'>Sql</a>
+							</li>
+						</li>
+						<li class='divider'></li>
+						<li class='dropdown-header'>Idempotence</li>
+							<li>
+								<a href='{{ site.baseurl }}/implementations-sql/#Idempotence'>Sql</a>
+							</li>
+						</li>
+						<li class='divider'></li>
+						<li class='dropdown-header'>Module</li>
 							<li>
 								<a href='{{ site.baseurl }}/modules-corrupt-messages'>Corrupt Transport Messages</a>
 								<a href='{{ site.baseurl }}/modules-message-forwarding'>Message Forwarding</a>
@@ -281,6 +286,9 @@
 				-->
 			</ul>
           <ul class="nav navbar-nav navbar-right">
+			<li>
+			  <a href="https://www.jetbrains.com/resharper/" class="hidden-xs hidden-sm" target="_blank">ReSharper</a>
+			</li>
 			{% if site.github_repository %}
 			<li>
 			  <a href="{{ site.github_repository }}" class="hidden-xs hidden-sm" target="_blank">GitHub</a>

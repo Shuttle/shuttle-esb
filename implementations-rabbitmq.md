@@ -6,9 +6,9 @@ layout: api
 
 RabbitMQ does not provide 2-phase commit out-of-the-box.  Although implementing it is not too much effort the 2PC adds tremendous overhead (as it does for anything).  For this reason shuttle does not use 2PC with RabbitMQ.
 
-Instead we rely on the [idempotence service]({{ site.baseurl }}/idempotence-service/index.html).
+Instead you can make use of an [idempotence service]({{ site.baseurl }}/idempotence-service/index.html).
 
-Since RabbitMQ talks directly to a queue on any server it is suggested that you use an outbox that specifies a local queue just in case the remote queue is not immediately available.
+RabbitMQ talks directly to a queue on any server it is recommended that you use an outbox that specifies a local queue just in case the remote queue is not immediately available.
 
 ## Installation
 
@@ -18,14 +18,14 @@ If you need to install RabbitMQ you can <a target='_blank' href='https://www.rab
 
 The queue configuration is part of the specified uri, e.g.:
 
-~~~ xml
+``` xml
     <inbox
       workQueueUri="rabbitmq://username:password@host:port/virtualhost/queue?prefetchCount=25&amp;durable=true&amp;persistent=true"
 	  .
 	  .
 	  .
     />
-~~~
+```
 
 | Segment / Argument | Default	| Description | Version Introduced |
 | --- | --- | --- | --- |
@@ -38,7 +38,7 @@ The queue configuration is part of the specified uri, e.g.:
 
 In addition to this there is also a RabbitMQ specific section (defaults specified here):
 
-~~~ xml
+``` xml
 <configuration>
   <configSections>
     <section name='rabbitmq' type="Shuttle.Esb.RabbitMQ.RabbitMQSection, Shuttle.Esb.RabbitMQ"/>
@@ -55,4 +55,6 @@ In addition to this there is also a RabbitMQ specific section (defaults specifie
   .
   .
 <configuration>
-~~~
+```
+
+A `RabbitMQConfiguration` instance implementing the `IRabbitMQConfiguration` interface will be registered using the [container bootstrapping](http://shuttle.github.io/shuttle-core/overview-container/#Bootstrapping).  If you wish to override the configuration you should register your instance before calling the `ServiceBus.Register()` method.

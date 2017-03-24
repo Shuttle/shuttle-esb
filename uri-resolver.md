@@ -12,9 +12,9 @@ The configuration of the `IUriResolver` implementation to use is slightly differ
 
 ### Get
 
-~~~ c#
+``` c#
 Uri Get(string forUri);
-~~~
+```
 
 Returns the resolved uri for the specified uri.  For instance, if the configured uri were `resolver://some-path` it may be mapped to real uri `rabbitmq://shuttle:shuttle!@localhost/my-queue`.
 
@@ -22,11 +22,11 @@ Returns the resolved uri for the specified uri.  For instance, if the configured
 
 The `DefaultUriResolver` makes use of the application configuration file to map the required uris:
 
-~~~ xml
+``` xml
 <uriResolver>
     <add name="resolver://host/queue-1" uri="msmq://./inbox-work-queue" />
     <add name="resolver://host/queue-2" uri="rabbitmq://user:password@the-server/inbox-work-queue" />
 </uriResolver>
-~~~
+```
 
 [QueueManager]: {{ site.baseurl }}/queue-manager

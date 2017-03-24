@@ -4,9 +4,9 @@ layout: api
 ---
 # Simple Service Hosting
 
-The generic service host is implemented by **Shuttle.Core.Host.exe**.  Defined in the assembly is an `IHost` interface:
+The [generic service host](http://shuttle.github.io/shuttle-core/overview-service-host/) is implemented by **Shuttle.Core.Host.exe**.  Defined in the assembly is an `IHost` interface:
 
-~~~ c#
+``` c#
 namespace Shuttle.Core.Host
 {
     public interface IHost
@@ -14,7 +14,7 @@ namespace Shuttle.Core.Host
         void Start();
     }
 }
-~~~
+```
 
 Whenever Shuttle.Core.Host.exe runs it will scan the folder it resides in and find all assemblies that contain a class implementing IHost.  There must be exactly one.  You are also able to specify the specific type to use on the command line.
 
@@ -22,8 +22,8 @@ So to test any projects in Visual Studio that will eventually be hosted as servi
 
 In order to install a service you execute the generic host with the `/install` argument:
 
-~~~
+```
     Shuttle.Core.Host.exe /install
-~~~
+```
 
 There are many options.  To view these execute the generic host with the `/?` argument.

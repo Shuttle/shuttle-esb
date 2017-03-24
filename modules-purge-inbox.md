@@ -2,12 +2,16 @@
 title: Purge Inbox Module
 layout: api
 ---
-# Purge Inbox Module
+# Shuttle.Esb.Module.PurgeInbox
 
-The `PurgeInboxModule` may be found in the `Shuttle.Esb.Modules` assembly.  The module will attach the `PurgeInboxObserver` to the `OnAfterInitializeQueueFactories` event of the `StartupPipeline` and purges the inbox work queue if the relevant queue implementation has implemented the `IPurgeQueue` interface.  If it hasn't a warning is logged.
+<div class="nuget-badge">
+	<p>
+		<code>Install-Package Shuttle.Esb.Module.PurgeInbox</code>
+	</p>
+</div>
 
-~~~c#
-	var bus = ServiceBus
-		.Create(c => c.AddModule(new PurgeInboxModule()))
-		.Start();
-~~~
+The PurgeInbox module for Shuttle.Esb clears the inbox work queue upon startup.
+
+The module will attach the `PurgeInboxObserver` to the `OnAfterInitializeQueueFactories` event of the `StartupPipeline` and purges the inbox work queue if the relevant queue implementation has implemented the `IPurgeQueue` interface.  If the inbox work queue implementation has *not* implemented the `IPurgeQueue` interface only a warning is logged.
+
+The module will register itself using the [container bootstrapping](http://shuttle.github.io/shuttle-core/overview-container/#Bootstrapping).

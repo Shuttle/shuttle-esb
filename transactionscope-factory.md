@@ -10,12 +10,12 @@ This allows messages to be optionally handled within a `TransactionScope`.
 
 If you do not want to make use of a `TransactionScope` you can disable it through configuration:
 
-~~~ xml
+``` xml
     <transactionScope
       enabled="true|false"
       isolationLevel="ReadCommitted"
       timeoutSeconds="30" />
-~~~
+```
 
 It is the responsibility of the `ITransactionScopeFactory` implementation to return a `NullServiceBusTransactionScope` should the transaction scope not be required.  An example can be viewed in the source for the `DefaultServiceBusTransactionScopeFactory`.
 
@@ -23,9 +23,9 @@ It is the responsibility of the `ITransactionScopeFactory` implementation to ret
 
 ### Create
 
-~~~ c#
+``` c#
 ITransactionScope Create(PipelineEvent pipelineEvent)
-~~~
+```
 
 The method returns a new `ITransactionScope` instance.
 

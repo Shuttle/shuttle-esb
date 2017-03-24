@@ -12,9 +12,9 @@ In addition to this the idempotence service also defers message sending when mes
 
 ### ProcessingStatus
 
-~~~ c#
+``` c#
 ProcessingStatus ProcessingStatus(TransportMessage transportMessage);
-~~~
+```
 
 This method must return the `ProcessingStatus` of the given `TransportMessage`:
 
@@ -24,40 +24,40 @@ This method must return the `ProcessingStatus` of the given `TransportMessage`:
 
 ### ProcessingCompleted
 
-~~~ c#
+``` c#
 void ProcessingCompleted(TransportMessage transportMessage);
-~~~
+```
 
 Marks the message as having being processed successfully.
 
 ### AddDeferredMessage
 
-~~~ c#
+``` c#
 void AddDeferredMessage(TransportMessage processingTransportMessage, Stream deferredTransportMessageStream);
-~~~
+```
 
 Saves the `deferredTransportMessageStream` against the given `processingTransportMessage` in order for the service bus to perform the actual dispatching of the deferred message after the messae ahs been handled.
 
 ### GetDeferredMessages
 
-~~~ c#
+``` c#
 IEnumerable<Stream> GetDeferredMessages(TransportMessage transportMessage);
-~~~
+```
 
 Returns all the streams that were sent during the handling of the given `transportMesage`.
 
 ### DeferredMessageSent
 
-~~~ c#
+``` c#
 void DeferredMessageSent(TransportMessage processingTransportMessage, TransportMessage deferredTransportMessage);
-~~~
+```
 
 This method should remove the entry associated with the `deferredTransportMessage` as it has been dispatched.
 
 ### MessageHandled
 
-~~~ c#
+``` c#
 void MessageHandled(TransportMessage transportMessage);
-~~~
+```
 
 Once the message has been successfully handled this method is called to mark the message as handled in the store.

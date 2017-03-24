@@ -41,7 +41,7 @@ Every service bus instance is associated with, and therefore processes, only one
 
 Messages are essentially data transfer objects that implement a specific message structure, e.g.:
 
-~~~ c#
+``` c#
     public class ActivateMemberCommand
     {
         string MemberId { get; set; }
@@ -51,7 +51,7 @@ Messages are essentially data transfer objects that implement a specific message
     {
         string MemberId { get; set; }
     }
-~~~
+```
 
 ## Queues
 
@@ -65,7 +65,7 @@ It is important to note that all queues are non-destructive and should always be
 
 A service bus instance is required in every application that accesses the service bus.  To configure the service bus a combination of code, the application configuration file, and custom components is used, e.g.:
 
-~~~ c#
+``` c#
     public class ServiceBusHost : IHost, IDisposable
     {
         private static IServiceBus bus;
@@ -80,7 +80,7 @@ A service bus instance is required in every application that accesses the servic
             bus.Dispose();
         }
     }
-~~~
+```
 
 A service bus instance is created and started on application startup and disposed on exit.  A service bus can be hosted in any type of application but the most typical scenario is to host them as services.  Although you _can_ write your own service to host your service bus it is not a requirement since you may want to make use of the [generic service host]({{ site.baseurl }}/generic-host/index.html).
 
@@ -98,25 +98,25 @@ There are situations where we need to _start_ something off.  Let's take the cas
 
 So from the client code:
 
-~~~ c#
+``` c#
     bus.Send(new CreateOrderCommand 
     		{
     			Name = "ClientName",
     			Product = "ProductXYZ"
     		});
-~~~
+```
 
 The call would fail if there is nowhere to send the message.
 
 We could publish an event such as **OrderReceivedEvent** and our order service could subscribe to the event.
 
-~~~c#
+```c#
     bus.Publish(new OrderReceivedEvent
     		{
     			Name = "ClientName",
     			Product = "ProductXYZ"
     		});
-~~~
+```
 
 The call would not fail should there be no subscribers.  
 
@@ -128,7 +128,7 @@ In some situations an event will not be able to relay the intent of any particul
 
 In this case the e-mail system is responsible for sending e-mails.  Any system that would like to send a mail will need to decide when to do so.  Therefore, the order service would send a *command* to the e-mail service:
 
-~~~c#
+```c#
     bus.Send(new SendMailCommand
                  {
                      To = "manager@ordercompany.co.za",
@@ -136,7 +136,7 @@ In this case the e-mail system is responsible for sending e-mails.  Any system t
                      Subject = "Important Order Received",
                      Body = "Order Details"
                  });
-~~~
+```
 
 ## Event message
 

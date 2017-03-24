@@ -8,73 +8,104 @@ Shuttle.Esb is extensible via modules.  These typically plug into a relevant pip
 
 ## Implementation
 
-A module is an implementation of the `IModule` interface and this, in turn, implements the `IRequireInitialization` interface.
+A module is an arbitrary class that should use the `IPipelineFactory` implementation to hook onto the relevant pipeline.  The easiest way to accomplish this is to use constructor injection along with [container bootstrapping](http://shuttle.github.io/shuttle-core/overview-container/#Bootstrapping).
 
-~~~ c#
-    public class LogMessageOwnerModule : IModule
-    {
-		private readonly string _inboxMessagePipelineName = typeof(InboxMessagePipeline).FullName;
+``` c#
+public class LogMessageOwnerModule
+{
+	private readonly LogMessageOwnerObserver _logMessageOwnerObserver;
+	private readonly string _inboxMessagePipelineName = typeof(InboxMessagePipeline).FullName;
 
-		public void Initialize(IServiceBus bus)
-		{
-			Guard.AgainstNull(bus, "bus");
-
-			bus.Events.PipelineCreated += PipelineCreated;
-		}
-
-		private void PipelineCreated(object sender, PipelineEventArgs e)
-		{
-			if (!e.Pipeline.GetType().FullName.Equals(_inboxMessagePipelineName, StringComparison.InvariantCultureIgnoreCase))
-			{
-				return;
-			}
-
-			e.Pipeline.RegisterObserver(new LogMessageOwnerObserver());
-		}
-    }
-~~~
-
-So here we have create a new module that registers the `LogMessageOwnerObserver` for each newly created `InboxMessagePipeline`.  Since a pipeline simply raises `PipelineEvent` instances the observer will need to listen out for the relevant events.  We will log the message owner after the transport message has been deserialized:
-
-~~~ c#
-	public class LogMessageOwnerObserver : IPipelineObserver<OnAfterDeserializeTransportMessage>
+	public void Initialize(IPipelineFactory pipelineFactory, LogMessageOwnerObserver logMessageOwnerObserver)
 	{
-		public void Execute(OnDeserializeTransportMessage pipelineEvent)
-		{
-			var state = pipelineEvent.Pipeline.State;
-			var transportMessage = state.GetTransportMessage();
-			
-			if (transportMessage == null)
-			{
-				return;
-			}
-			
-			Console.Log("This transport message belongs to '{0}'.", transportMessage.PrincipalIdentityName);
-		}
+		Guard.AgainstNull(pipelineFactory, "pipelineFactory");
+		Guard.AgainstNull(logMessageOwnerObserver, "logMessageOwnerObserver");
+		
+		_logMessageOwnerObserver = logMessageOwnerObserver;
+
+		bus.Events.PipelineCreated += PipelineCreated;
 	}
-~~~
+
+	private void PipelineCreated(object sender, PipelineEventArgs e)
+	{
+		if (!e.Pipeline.GetType().FullName.Equals(_inboxMessagePipelineName, StringComparison.InvariantCultureIgnoreCase))
+		{
+			return;
+		}
+
+		e.Pipeline.RegisterObserver(_logMessageOwnerObserver);
+	}
+}
+```
+
+You may be wondering where the `LogMessageOwnerObserver` instance would come from.  The `ServiceBus.Regiser()` method registers all observer types that it finds in the application.
+
+Here we have created a new module that registers the `LogMessageOwnerObserver` for each newly created `InboxMessagePipeline`.  Since a pipeline simply raises `PipelineEvent` instances the observer will need to listen out for the relevant events.  We will log the message owner after the transport message has been deserialized:
+
+``` c#
+public class LogMessageOwnerObserver : IPipelineObserver<OnAfterDeserializeTransportMessage>
+{
+	public void Execute(OnDeserializeTransportMessage pipelineEvent)
+	{
+		var state = pipelineEvent.Pipeline.State;
+		var transportMessage = state.GetTransportMessage();
+		
+		if (transportMessage == null)
+		{
+			return;
+		}
+		
+		Console.Log("This transport message belongs to '{0}'.", transportMessage.PrincipalIdentityName);
+	}
+}
+```
 
 Each pipeline has a state that contains various items.  You can add state and there are some extensions on the state that return various well-known items such as `GetTransportMessage()` that returns the `TransportMessage` on the pipeline.  Prior to deserializing the transport message it will, of course, be `null`.
 
 Pipelines are re-used so they are created as needed and returned to a pool.  Should a pipeline be retrieved from the pool it will be re-initialized so that the previous state is removed.
 
-To use the module it will need to be referenced in the relevant endpoint and added to the `Modules` collection for the service bus configuration
+## Using our module
 
-Using code:
+To make using your module easy for anyone needing it you can make use of the [container bootstrapping](http://shuttle.github.io/shuttle-core/overview-container/#Bootstrapping) provided by the `Shuttle.Core.Infrastructure` package.  This will automatically register the module and resolve it in order to wire up everything correctly:
 
-~~~ c#
-	bus = ServiceBus
-		.Create(c => c.AddModule(new LogMessageOwnerModule()))
-		.Start();
-~~~
+``` c#
+public class Bootstrap :
+	IComponentRegistryBootstrap,
+	IComponentResolverBootstrap
+{
+	private static bool _registryBootstrapCalled;
+	private static bool _resolverBootstrapCalled;
 
-Via the configuration file:
+	public void Register(IComponentRegistry registry)
+	{
+		Guard.AgainstNull(registry, "registry");
 
-~~~ xml
-	<modules>
-		<add type="Shuttle.Esb.Modules.LogMessageOwnerModule, Shuttle.Esb.Modules" />
-	</modules>
-~~~
+		if (_registryBootstrapCalled)
+		{
+			return;
+		}
+
+		registry.AttemptRegister<LogMessageOwnerModule>();
+		registry.AttemptRegister<LogMessageOwnerObserver>();
+
+		_registryBootstrapCalled = true;
+	}
+
+	public void Resolve(IComponentResolver resolver)
+	{
+		Guard.AgainstNull(resolver, "resolver");
+
+		if (_resolverBootstrapCalled)
+		{
+			return;
+		}
+
+		resolver.Resolve<LogMessageOwnerModule>();
+
+		_resolverBootstrapCalled = true;
+	}
+}
+```
 
 # Pipelines
 

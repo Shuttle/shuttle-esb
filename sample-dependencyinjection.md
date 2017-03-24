@@ -2,14 +2,17 @@
 title: Dependency Injection Sample
 layout: api
 ---
+
+<div class='alert alert-info'>Remember to download the samples from the <a href="https://github.com/Shuttle/Shuttle.Esb.Samples" target="_blank">GitHub repository</a>.</div>
+
 # Running
 
 When using Visual Studio 2015+ the NuGet packages should be restored automatically.  If you find that they do not or if you are using an older version of Visual Studio please execute the following in a Visual Studio command prompt:
 
-~~~
+```
 cd {extraction-folder}\Shuttle.Esb.Samples\Shuttle.DependencyInjection
 nuget restore
-~~~
+```
 
 Once you have opened the `Shuttle.DependencyInjection.sln` solution in Visual Studio set the following projects as startup projects:
 
@@ -18,7 +21,7 @@ Once you have opened the `Shuttle.DependencyInjection.sln` solution in Visual St
 
 > Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the server project for the **Shuttle.DependencyInjection.Server** project.
 
-<div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bin\debug</strong> folder you may need to build the solution.</div>
+<div class='alert alert-warning'>It may be necessary to build the solution before the <strong>Shuttle.Core.Host.exe</strong> executable will be available in the <strong>bin\debug</strong> folder.</div>
 
 # Implementation
 
@@ -43,7 +46,7 @@ In this guide we'll create the following projects:
 
 > Rename the `Class1` default file to `RegisterMemberCommand` and add a `UserName` property.
 
-~~~ c#
+``` c#
 namespace Shuttle.DependencyInjection.Messages
 {
 	public class RegisterMemberCommand
@@ -51,7 +54,7 @@ namespace Shuttle.DependencyInjection.Messages
 		public string UserName { get; set; }
 	}
 }
-~~~
+```
 
 ## Client
 
@@ -61,16 +64,22 @@ namespace Shuttle.DependencyInjection.Messages
 
 This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.
 
+> Install the `Shuttle.Core.Ninject` nuget package.
+
+This will add the [Ninject](http://www.ninject.org/) implementation of the [component container](http://shuttle.github.io/shuttle-core/overview-container/) interfaces.
+
 > Add a reference to the `Shuttle.DependencyInjection.Messages` project.
 
 ### Program
 
 > Implement the main client code as follows:
 
-~~~ c#
+``` c#
 using System;
-using Shuttle.Esb;
+using Ninject;
+using Shuttle.Core.Ninject;
 using Shuttle.DependencyInjection.Messages;
+using Shuttle.Esb;
 
 namespace Shuttle.DependencyInjection.Client
 {
@@ -78,7 +87,11 @@ namespace Shuttle.DependencyInjection.Client
 	{
 		static void Main(string[] args)
 		{
-			using (var bus = ServiceBus.Create().Start())
+			var container = new NinjectComponentContainer(new StandardKernel());
+
+			ServiceBus.Register(container);
+
+			using (var bus = ServiceBus.Create(container).Start())
 			{
 				string userName;
 
@@ -93,7 +106,7 @@ namespace Shuttle.DependencyInjection.Client
 		}
 	}
 }
-~~~
+```
 
 The message sent will have its `IgnoreTilleDate` set to 5 seconds into the future.  You can have a look at the [TransportMessage][transport-message] for more information on the message structure.
 
@@ -101,7 +114,7 @@ The message sent will have its `IgnoreTilleDate` set to 5 seconds into the futur
 
 > Create the shuttle configuration as follows:
 
-~~~ xml
+``` xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
@@ -120,7 +133,7 @@ The message sent will have its `IgnoreTilleDate` set to 5 seconds into the futur
         <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5" />
     </startup>
 </configuration>
-~~~
+```
 
 This tells shuttle that all messages that are sent and have a type name starting with `Shuttle.DependencyInjection.Messages` should be sent to endpoint `msmq://./shuttle-server-work`.
 
@@ -134,7 +147,7 @@ To demonstrate the dependency injection we will create a fake e-mail service tha
 
 > Add an interface called `IEMailService` and implement it as follows:
 
-~~~ c#
+``` c#
 namespace Shuttle.DependencyInjection.EMail
 {
 	public interface IEMailService
@@ -142,13 +155,13 @@ namespace Shuttle.DependencyInjection.EMail
 		void Send(string name);
 	}
 }
-~~~
+```
 
 ### EMailService
 
 > Rename the default `Class1` file to `EMailService` and implement the `IEMailService` interfaces as follows:
 
-~~~ c#
+``` c#
 using System;
 using System.Threading;
 
@@ -170,21 +183,23 @@ namespace Shuttle.DependencyInjection.EMail
 		}
 	}
 }
-~~~
+```
 
 ## Server
 
 > Add a new `Class Library` to the solution called `Shuttle.DependencyInjection.Server`.
 
-> Install both the `Shuttle.Esb.Msmq` and `Shuttle.Esb.Castle` nuget packages.
+> Install both the `Shuttle.Esb.Msmq` nuget package.
 
 This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.
 
-It will also include the `WindsorContainer` implementation of the `IMessageHandlerFactory`.
+> Install the `Shuttle.Core.Ninject` nuget package.
+
+This will add the [Ninject](http://www.ninject.org/) implementation of the [component container](http://shuttle.github.io/shuttle-core/overview-container/) interfaces.
 
 > Install the `Shuttle.Core.Host` nuget package.
 
-The default mechanism used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.Host` executable we are able to run the endpoint as a console application or register it as a Windows service for deployment.
+The [default mechanism](http://shuttle.github.io/shuttle-core/overview-service-host/) used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.Host` executable we are able to run the endpoint as a console application or register it as a Windows service for deployment.
 
 > Add references to both the `Shuttle.DependencyInjection.Messages` and `Shuttle.DependencyInjection.EMail` projects.
 
@@ -192,54 +207,48 @@ The default mechanism used to host an endpoint is by using a Windows service.  H
 
 > Rename the default `Class1` file to `Host` and implement the `IHost` and `IDisposabe` interfaces as follows:
 
-~~~ c#
+``` c#
 using System;
-using Castle.MicroKernel.Registration;
-using Castle.Windsor;
+using Ninject;
 using Shuttle.Core.Host;
+using Shuttle.Core.Ninject;
 using Shuttle.DependencyInjection.EMail;
-using Shuttle.Esb.Castle;
 using Shuttle.Esb;
 
 namespace Shuttle.DependencyInjection.Server
 {
 	public class Host : IHost, IDisposable
 	{
-		private IServiceBus _bus;
-		private WindsorContainer _container;
+        private IServiceBus _bus;
+        private StandardKernel _kernel;
 
-		public void Start()
-		{
-			_container = new WindsorContainer();
+        public void Start()
+        {
+            _kernel = new StandardKernel();
 
-			_container.Register(Component.For<IEMailService>().ImplementedBy<EMailService>());
+            _kernel.Bind<IEMailService>().To<EMailService>();
 
-			// register all the message handler in this assembly
-			_container.Register(
-				Classes.FromThisAssembly()
-				.BasedOn(typeof(IMessageHandler<>))
-				.WithServiceFromInterface(typeof(IMessageHandler<>))
-				.LifestyleTransient()
-				);
+            var container = new NinjectComponentContainer(_kernel);
 
-			_bus = ServiceBus.Create(
-				c => c.MessageHandlerFactory(new CastleMessageHandlerFactory(_container))
-				).Start();
-		}
+            ServiceBus.Register(container);
 
-		public void Dispose()
-		{
-			_bus.Dispose();
-		}
+            _bus = ServiceBus.Create(container).Start();
+        }
+
+        public void Dispose()
+        {
+            _kernel.Dispose();
+            _bus.Dispose();
+        }
 	}
 }
-~~~
+```
 
 ### App.config
 
 > Add an `Application Configuration File` item to create the `App.config` and populate as follows:
 
-~~~ xml
+``` xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
@@ -252,13 +261,13 @@ namespace Shuttle.DependencyInjection.Server
 		   errorQueueUri="msmq://./shuttle-error" />
 	</serviceBus>
 </configuration>
-~~~
+```
 
 ## RegisterMemberHandler
 
 > Add a new class called `RegisterMemberHandler` that implements the `IMessageHandler<RegisterMemberCommand>` interface as follows:
 
-~~~ c#
+``` c#
 using System;
 using Shuttle.Core.Infrastructure;
 using Shuttle.DependencyInjection.EMail;
@@ -288,13 +297,13 @@ namespace Shuttle.DependencyInjection.Server
 		}
 	}
 }
-~~~
+```
 
 This will write out some information to the console window.  The injected e-mail service will also be invoked and you'll see the result in the console window.
 
 > Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the server project.
 
-<div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bin\debug</strong> folder you may need to build the solution.</div>
+<div class='alert alert-warning'>It may be necessary to build the solution before the <strong>Shuttle.Core.Host.exe</strong> executable will be available in the <strong>bin\debug</strong> folder.</div>
 
 ## Run
 

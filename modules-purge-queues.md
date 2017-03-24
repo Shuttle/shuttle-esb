@@ -2,14 +2,22 @@
 title: Purge Queues Module
 layout: api
 ---
-# Purge Queues Module
+# Shuttle.Esb.Module.PurgeQueues
 
-The `PurgeQueuesModule` may be found in the `Shuttle.Esb.Modules` assembly.  The module will attach the `PurgeQueuesObserver` to the `OnAfterInitializeQueueFactories` event of the `StartupPipeline` and purges the queues configured in the `purgeQueues` configuration section:
+<div class="nuget-badge">
+	<p>
+		<code>Install-Package Shuttle.Esb.Module.PurgeQueues</code>
+	</p>
+</div>
 
-~~~ xml
+The PurgeQueues module for Shuttle.Esb clears the specified queues on startup.
+
+The module will attach the `PurgeQueuesObserver` to the `OnAfterInitializeQueueFactories` event of the `StartupPipeline` and purges the configured queues if the relevant queue implementation has implemented the `IPurgeQueue` interface.  If the relevant queue implementation has *not* implemented the `IPurgeQueue` interface only a warning is logged.
+
+```xml
 <configuration>
 	<configSections>
-		<section name="purgeQueues" type="Shuttle.Esb.Modules.PurgeQueuesSection, Shuttle.Esb.Modules"/>
+		<section name="purgeQueues" type="Shuttle.Esb.Module.PurgeQueues.PurgeQueuesSection, Shuttle.Esb.Module.PurgeQueues"/>
 	</configSections>
 
 	<purgeQueues>
@@ -19,12 +27,6 @@ The `PurgeQueuesModule` may be found in the `Shuttle.Esb.Modules` assembly.  The
 		</queues>
 	</purgeQueues>
 </configuration>
-~~~
+```
 
-The relevant queue implementation has to implement the `IPurgeQueue` interface.  If it doesn't a warning is logged.
-
-~~~c#
-	var bus = ServiceBus
-		.Create(c => c.AddModule(new PurgeQueuesModule()))
-		.Start();
-~~~
+The module will register itself using the [container bootstrapping](http://shuttle.github.io/shuttle-core/overview-container/#Bootstrapping).

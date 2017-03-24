@@ -2,6 +2,9 @@
 title: Process Management Sample
 layout: api
 ---
+
+<div class='alert alert-info'>Remember to download the samples from the <a href="https://github.com/Shuttle/Shuttle.Esb.Samples" target="_blank">GitHub repository</a>.</div>
+
 # Overview
 
 Our sample case is a fictitious online book store where you can order books.  An order allows you 20 seconds to cancel the order before it is accepted.
@@ -12,10 +15,10 @@ In this sample the front-end is a static site implemented using (CanJS)[https://
 
 When using Visual Studio 2015+ the NuGet packages should be restored automatically.  If you find that they do not or if you are using an older version of Visual Studio please execute the following in a powershell command prompt:
 
-~~~
+```
 cd {extraction-folder}\Shuttle.Esb.Samples\Shuttle.ProcessManagement
 nuget-restore.ps1
-~~~
+```
 
 Once you have opened the `Shuttle.ProcessManagement.sln` solution in Visual Studio set the following projects as startup projects:
 
@@ -31,7 +34,7 @@ Once you have opened the `Shuttle.ProcessManagement.sln` solution in Visual Stud
 
 > Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of each of the server projects.
 
-<div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bin\debug</strong> folder you may need to build the solution.</div>
+<div class='alert alert-warning'>It may be necessary to build the solution before the <strong>Shuttle.Core.Host.exe</strong> executable will be available in the <strong>bin\debug</strong> folder.</div>
 
 You will also need to create and configure a Sql Server database for this sample and remember to update the **App.config** `connectionString` settings to point to your database.  Please reference the **Database** section below.
 

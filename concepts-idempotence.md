@@ -12,23 +12,23 @@ When working with messages this means that no matter how many times we apply a m
 
 Let's use the following message structure:
 
-~~~ c#
+``` c#
 public class DebitAccountCommand
 {
 	public string AccountNumber { get; set; }
 	public decimal Amouunt { get; set; }
 }
-~~~
+```
 
 If we send two messages for account number 'A-001' with an amount of '50' the account will be debited with an amount of 100.  This may not be intended.  We can change the structure to the following:
 
-~~~ c#
+``` c#
 public class SetBalanceCommand
 {
 	public string AccountNumber { get; set; }
 	public decimal Amouunt { get; set; }
 }
-~~~
+```
 
 Now if we had the balance before the debit we could apply the change and send the `SetBalanceCommand` message.  Having the message processed twice would solve our issue as the balance would be the same.
 
@@ -36,14 +36,14 @@ However, this means that we need to know the balance up front *and* it does not 
 
 We need to find a way to truly make this message idempotent:
 
-~~~ c#
+``` c#
 public class DebitAccountCommand
 {
 	public Guid TransactionId { get; set; }
 	public string AccountNumber { get; set; }
 	public decimal Amouunt { get; set; }
 }
-~~~
+```
 
 Adding the `TransactionId` means that we can check whether the transaction has been actioned and, if so, ignore any axtra messages.  It means that we have to keep track of this content though.
 

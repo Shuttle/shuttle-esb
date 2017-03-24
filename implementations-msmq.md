@@ -4,6 +4,12 @@ layout: api
 ---
 # MsmqQueue
 
+<div class="nuget-badge">
+	<p>
+		<code>Install-Package Shuttle.Esb.Msmq</code>
+	</p>
+</div>
+
 All Msmq queues are required to be **transactional**.  In addition to the actual queue a `msmq://host/queue$journal` queue will **always** be used.  If it does not exist it will be created, so if you are creating queues explicitly then remember to create these also.
 
 Msmq creates outgoing queues internally so it is not necessary to use an outbox.
@@ -16,14 +22,14 @@ If you need to install / activate msmq you can [follow these instructions][msmq-
 
 The queue configuration is part of the specified uri, e.g.:
 
-~~~xml
+```xml
     <inbox
       workQueueUri="msmq://host/queue?useDeadLetterQueue=true"
 	  .
 	  .
 	  .
     />
-~~~
+```
 
 | Segment / Argument | Default	| Description | Version Introduced |
 | --- | --- | --- | --- |
@@ -33,7 +39,7 @@ By default the `MsmqQueue` is a transactional queue that utilizes a journal queu
 
 In addition to this there is also a Msmq specific section (defaults specified here):
 
-~~~xml
+```xml
 <configuration>
   <configSections>
     <section name='msmq' type="Shuttle.Esb.Msmq.MsmqSection, Shuttle.Esb.Msmq"/>
@@ -47,6 +53,6 @@ In addition to this there is also a Msmq specific section (defaults specified he
   .
   .
 <configuration>
-~~~
+```
 
-[msmq-installation-activation]: {{ site.baseurl }}/msmq-installation-activation/index.html
+A `MsmqConfiguration` instance implementing the `IMsmqConfiguration` interface will be registered using the [container bootstrapping](http://shuttle.github.io/shuttle-core/overview-container/#Bootstrapping).  If you wish to override the configuration you should register your instance before calling the `ServiceBus.Register()` method.

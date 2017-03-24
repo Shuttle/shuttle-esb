@@ -2,14 +2,17 @@
 title: Message Distribution Sample
 layout: api
 ---
+
+<div class='alert alert-info'>Remember to download the samples from the <a href="https://github.com/Shuttle/Shuttle.Esb.Samples" target="_blank">GitHub repository</a>.</div>
+
 # Running
 
 When using Visual Studio 2015+ the NuGet packages should be restored automatically.  If you find that they do not or if you are using an older version of Visual Studio please execute the following in a Visual Studio command prompt:
 
-~~~
+```
 cd {extraction-folder}\Shuttle.Esb.Samples\Shuttle.Distribution
 nuget restore
-~~~
+```
 
 Once you have opened the `Shuttle.Distribution.sln` solution in Visual Studio set the following projects as startup projects:
 
@@ -19,7 +22,7 @@ Once you have opened the `Shuttle.Distribution.sln` solution in Visual Studio se
 
 > Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the server project for the **Shuttle.Distribution.Server**, as well as the **Shuttle.Distribution.Worker**, project.
 
-<div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bin\debug</strong> folder you may need to build the solution.</div>
+<div class='alert alert-warning'>It may be necessary to build the solution before the <strong>Shuttle.Core.Host.exe</strong> executable will be available in the <strong>bin\debug</strong> folder.</div>
 
 # Implementation
 
@@ -48,7 +51,7 @@ In this guide we'll create the following projects:
 
 > Rename the `Class1` default file to `RegisterMemberCommand` and add a `UserName` property.
 
-~~~ c#
+``` c#
 namespace Shuttle.Distribution.Messages
 {
 	public class RegisterMemberCommand
@@ -56,7 +59,7 @@ namespace Shuttle.Distribution.Messages
 		public string UserName { get; set; }
 	}
 }
-~~~
+```
 
 ## Client
 
@@ -66,13 +69,17 @@ namespace Shuttle.Distribution.Messages
 
 This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.
 
+> Install the `Shuttle.Core.Unity` nuget package.
+
+This will add the [Unity](https://github.com/unitycontainer/unity/) implementation of the [component container](http://shuttle.github.io/shuttle-core/overview-container/) interfaces.
+
 > Add a reference to the `Shuttle.Distribution.Messages` project.
 
 ### Program
 
 > Implement the main client code as follows:
 
-~~~ c#
+``` c#
 using System;
 using Shuttle.Esb;
 using Shuttle.Distribution.Messages;
@@ -83,7 +90,11 @@ namespace Shuttle.Distribution.Client
 	{
 		static void Main(string[] args)
 		{
-			using (var bus = ServiceBus.Create().Start())
+			var container = new UnityComponentContainer(new UnityContainer());
+
+			ServiceBus.Register(container);
+
+			using (var bus = ServiceBus.Create(container).Start())
 			{
 				string userName;
 
@@ -98,7 +109,7 @@ namespace Shuttle.Distribution.Client
 		}
 	}
 }
-~~~
+```
 
 The message sent will have its `IgnoreTilleDate` set to 5 seconds into the future.  You can have a look at the [TransportMessage][transport-message] for more information on the message structure.
 
@@ -106,7 +117,7 @@ The message sent will have its `IgnoreTilleDate` set to 5 seconds into the futur
 
 > Create the shuttle configuration as follows:
 
-~~~ xml
+``` xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
@@ -125,7 +136,7 @@ The message sent will have its `IgnoreTilleDate` set to 5 seconds into the futur
         <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5" />
     </startup>
 </configuration>
-~~~
+```
 
 This tells shuttle that all messages that are sent and have a type name starting with `Shuttle.Distribution.Messages` should be sent to endpoint `msmq://./shuttle-server-work`.
 
@@ -137,9 +148,13 @@ This tells shuttle that all messages that are sent and have a type name starting
 
 This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.
 
+> Install the `Shuttle.Core.Unity` nuget package.
+
+This will add the [Unity](https://github.com/unitycontainer/unity/) implementation of the [component container](http://shuttle.github.io/shuttle-core/overview-container/) interfaces.
+
 > Install the `Shuttle.Core.Host` nuget package.
 
-The default mechanism used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.Host` executable we are able to run the endpoint as a console application or register it as a Windows service for deployment.
+The [default mechanism](http://shuttle.github.io/shuttle-core/overview-service-host/) used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.Host` executable we are able to run the endpoint as a console application or register it as a Windows service for deployment.
 
 > Add a reference to the `Shuttle.Distribution.Messages` project.
 
@@ -147,7 +162,7 @@ The default mechanism used to host an endpoint is by using a Windows service.  H
 
 > Rename the default `Class1` file to `Host` and implement the `IHost` and `IDisposabe` interfaces as follows:
 
-~~~ c#
+``` c#
 using System;
 using Shuttle.Core.Host;
 using Shuttle.Esb;
@@ -160,7 +175,11 @@ namespace Shuttle.Distribution.Server
 
 		public void Start()
 		{
-			_bus = ServiceBus.Create().Start();
+			var container = new UnityComponentContainer(new UnityContainer());
+
+			ServiceBus.Register(container);
+
+			_bus = ServiceBus.Create(container).Start();
 		}
 
 		public void Dispose()
@@ -169,13 +188,13 @@ namespace Shuttle.Distribution.Server
 		}
 	}
 }
-~~~
+```
 
 ### App.config
 
 > Add an `Application Configuration File` item to create the `App.config` and populate as follows:
 
-~~~ xml
+``` xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
@@ -193,7 +212,7 @@ namespace Shuttle.Distribution.Server
 		   errorQueueUri="msmq://./shuttle-error" />
 	</serviceBus>
 </configuration>
-~~~
+```
 
 This will instruct the endpoint to ***only** distribute messages since the `distribute` attribute is set to `true`.  If it is set to `false` then the endpoint will process an incoming message if a worker thread is not available.
 
@@ -201,7 +220,7 @@ It also configures the control inbox that the endpoint will use to process admin
 
 > Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the server project.
 
-<div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bin\debug</strong> folder you may need to build the solution.</div>
+<div class='alert alert-warning'>It may be necessary to build the solution before the <strong>Shuttle.Core.Host.exe</strong> executable will be available in the <strong>bin\debug</strong> folder.</div>
 
 ## Worker
 
@@ -211,9 +230,13 @@ It also configures the control inbox that the endpoint will use to process admin
 
 This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.
 
+> Install the `Shuttle.Core.Unity` nuget package.
+
+This will add the [Unity](https://github.com/unitycontainer/unity/) implementation of the [component container](http://shuttle.github.io/shuttle-core/overview-container/) interfaces.
+
 > Install the `Shuttle.Core.Host` nuget package.
 
-The default mechanism used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.Host` executable we are able to run the endpoint as a console application or register it as a Windows service for deployment.
+The [default mechanism](http://shuttle.github.io/shuttle-core/overview-service-host/) used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.Host` executable we are able to run the endpoint as a console application or register it as a Windows service for deployment.
 
 > Add a reference to the `Shuttle.Distribution.Messages` project.
 
@@ -221,7 +244,7 @@ The default mechanism used to host an endpoint is by using a Windows service.  H
 
 > Rename the default `Class1` file to `Host` and implement the `IHost` and `IDisposabe` interfaces as follows:
 
-~~~ c#
+``` c#
 using System;
 using Shuttle.Core.Host;
 using Shuttle.Esb;
@@ -234,7 +257,11 @@ namespace Shuttle.Distribution.Worker
 
 		public void Start()
 		{
-			_bus = ServiceBus.Create().Start();
+			var container = new UnityComponentContainer(new UnityContainer());
+
+			ServiceBus.Register(container);
+
+			_bus = ServiceBus.Create(container).Start();
 		}
 
 		public void Dispose()
@@ -243,13 +270,13 @@ namespace Shuttle.Distribution.Worker
 		}
 	}
 }
-~~~
+```
 
 ### App.config
 
 > Add an `Application Configuration File` item to create the `App.config` and populate as follows:
 
-~~~ xml
+``` xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<configSections>
@@ -265,7 +292,7 @@ namespace Shuttle.Distribution.Worker
 			errorQueueUri="msmq://./shuttle-error" />
 	</serviceBus>
 </configuration>
-~~~
+```
 
 This configures the endpoint as a worker and specifies the control inbox of the distributor to notify when a thread is available to perform work.
 
@@ -273,7 +300,7 @@ This configures the endpoint as a worker and specifies the control inbox of the 
 
 > Add a new class called `RegisterMemberHandler` that implements the `IMessageHandler<RegisterMemberCommand>` interface as follows:
 
-~~~ c#
+``` c#
 using System;
 using Shuttle.Esb;
 using Shuttle.Distribution.Messages;
@@ -290,13 +317,13 @@ namespace Shuttle.Distribution.Worker
 		}
 	}
 }
-~~~
+```
 
 This will write out some information to the console window.
 
 > Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the worker project.
 
-<div class='alert alert-info'>Before the reference <strong>Shuttle.Core.Host.exe</strong> will be available in the <strong>bin\debug</strong> folder you may need to build the solution.</div>
+<div class='alert alert-warning'>It may be necessary to build the solution before the <strong>Shuttle.Core.Host.exe</strong> executable will be available in the <strong>bin\debug</strong> folder.</div>
 
 ## Run
 

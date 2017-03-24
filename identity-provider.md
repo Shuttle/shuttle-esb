@@ -12,9 +12,9 @@ There is a `DefaultIdentityProvider` that is used if no other instance is provid
 
 ### Get
 
-~~~ c#
+``` c#
  IIdentity Get();
-~~~
+```
 
 The method will return the `IIdentity` instance to use.
 

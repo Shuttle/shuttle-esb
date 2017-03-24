@@ -6,7 +6,7 @@ layout: api
 
 A deferred message is one that cannot/should not be immediately processed.  There are two ways in which a message will be deferred.  The first is when the processing of a message fails and the inbox is configured, as follows, to wait between retries:
 
-~~~ xml
+``` xml
 <configuration>
 	<configSections>
 		<section name="serviceBus" type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
@@ -20,7 +20,7 @@ A deferred message is one that cannot/should not be immediately processed.  Ther
 			durationToIgnoreOnFailure="10s,30s,1m" />
 	</serviceBus>
 </configuration>
-~~~
+```
 
 The first failure will cause the message to wait for 10 seconds before being tried again.
 
@@ -30,7 +30,7 @@ If there is no deferred queue the message is simply returned to the work queue. 
 
 A deferred queue may be configured for an inbox:
 
-~~~ xml
+``` xml
 <configuration>
 	<configSections>
 		<section name="serviceBus" type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
@@ -43,7 +43,7 @@ A deferred queue may be configured for an inbox:
 			errorQueueUri="msmq://./shuttle-error"/>
 	</serviceBus>
 </configuration>
-~~~
+```
 
 An important point to remember is that a deferred queue belongs to the particular instance of the endpoint.  **A deferred queue should *never* be shared**.  This means that you should never find a deferred queue uri in more than one configuration.  Even when one may have the same work queue uri across distributed endpoints in the case of a brokered queue (such as RabbitMQ) you would *still not* use the same deferred queue.  It all has to do with how a deferred queue is processed.
 

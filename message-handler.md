@@ -12,9 +12,9 @@ Although the interface does not have any properties you could implement the `IRe
 
 ### IReusable.IsReusable
 
-~~~ c#
+``` c#
 bool IsReusable { get; }
-~~~
+```
 
 Return `true` from to indicate that the message handler instance can be re-used.  This usually results in faster performance since new message handler do not have to be created by the [IMessageHandlerFactory].  The performance gain will probably be negligible but stateless message handlers are preferred none-the-less.
 
@@ -22,20 +22,20 @@ Return `true` from to indicate that the message handler instance can be re-used.
 
 ### ProcessMessage
 
-~~~ c#
+``` c#
 void ProcessMessage(IHandlerContext<T> context);
-~~~
+```
 
 The `<T>` generic argument should be the type of the POCO message you are interested in.  This method will contain the actuall implementation code that reacts to the message that is passed in.  If handler transport scope is enabled then this method will be wrapped in a `TransactionScope`:
 
-~~~xml
+```xml
 	<serviceBus
 		<transactionScope
 			enabled="true"
 			isolationLevel="ReadCommitted"
 			timeoutSeconds="30" />
 	</serviceBus>
-~~~
+```
 
 [HandlerContext]: {{ site.baseurl }}/handler-context/index.html
 [IMessageHandlerFactory]: {{ site.baseurl }}/message-handler-factory/index.html

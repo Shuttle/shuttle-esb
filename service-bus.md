@@ -39,15 +39,15 @@ The `ServiceBusConfiguration` instance contains all the configuration required b
 
 The simplest possible way to create and start a service bus is as follows:
 
-~~~ c#
+``` c#
 	bus = ServiceBus
 		.Create()
 		.Start();
-~~~
+```
 
 All the default options will be used in such as case but there will be rather few occasions where this will suffice.  For instance, when you need to subscribe to an event or publish an event you will need an imeplementation of the [ISubscriptionManager].  A typical call to create and the start a service bus using a Sql Server subscription manager is as follows:
 
-~~~ c#
+``` c#
 	var subscriptionManager = SubscriptionManager.Default();
 
 	subscriptionManager.Subscribe(new[] { typeof(SomeInterestingEvent).FullName });
@@ -55,13 +55,13 @@ All the default options will be used in such as case but there will be rather fe
 	bus = ServiceBus
 		.Create(c => c.SubscriptionManager(subscriptionManager))
 		.Start();
-~~~
+```
 
 ### TransactionScopeFactory
 
 Go to the [ITransactionScopeFactory] documentation.
 
-~~~ c#
+``` c#
 	public interface IServiceBusConfiguration
 	{
 		ITransactionScopeFactory TransactionScopeFactory { get; }
@@ -79,13 +79,13 @@ Go to the [ITransactionScopeFactory] documentation.
 			TransactionScopeFactory = new DefaultTransactionScopeFactory();
 		}
 	}
-~~~
+```
 
 ### PipelineFactory
 
 Go to the [IPipelineFactory] documentation.
 
-~~~ c#
+``` c#
 	public interface IServiceBusConfiguration
 	{
 		IPipelineFactory PipelineFactory { get; }
@@ -103,13 +103,13 @@ Go to the [IPipelineFactory] documentation.
 			PipelineFactory = new DefaultPipelineFactory();
 		}
 	}
-~~~
+```
 
 ### MessageRouteProvider
 
 Go to the [IMessageRouteProvider] documentation.
 
-~~~ c#
+``` c#
 	public interface IServiceBusConfiguration
 	{
 		IMessageRouteProvider MessageRouteProvider { get; }
@@ -127,13 +127,13 @@ Go to the [IMessageRouteProvider] documentation.
 			MessageRouteProvider = new DefaultMessageRouteProvider();
 		}
 	}
-~~~
+```
 
 ### MessageHandlerFactory
 
 Go to the [IMessageHandlerFactory] documentation.
 
-~~~ c#
+``` c#
 	public interface IServiceBusConfiguration
 	{
 		IMessageHandlerFactory MessageHandlerFactory { get; }
@@ -151,13 +151,13 @@ Go to the [IMessageHandlerFactory] documentation.
 			MessageHandlerFactory = new DefaultMessageHandlerFactory();
 		}
 	}
-~~~
+```
 
 ### Serializer
 
 Go to the [ISerializer] documentation.
 
-~~~ c#
+``` c#
 	public interface IServiceBusConfiguration
 	{
 		ISerializer Serializer { get; }
@@ -175,14 +175,14 @@ Go to the [ISerializer] documentation.
 			Serializer = new DefaultSerializer();
 		}
 	}
-~~~
+```
 .
 
 ### ForwardingRouteProvider
 
 Go to the [IMessageRouteProvider] documentation.
 
-~~~ c#
+``` c#
 	public interface IServiceBusConfiguration
 	{
 		IMessageRouteProvider ForwardingRouteProvider { get; }
@@ -200,13 +200,13 @@ Go to the [IMessageRouteProvider] documentation.
 			ForwardingRouteProvider = new DefaultForwardingRouteProvider();
 		}
 	}
-~~~
+```
 
 ### Policy
 
 Go to the [IServiceBusPolicy] documentation.
 
-~~~ c#
+``` c#
 	public interface IServiceBusConfiguration
 	{
 		IServiceBusPolicy Policy { get; }
@@ -224,13 +224,13 @@ Go to the [IServiceBusPolicy] documentation.
 			Policy = new DefaultServiceBusPolicy();
 		}
 	}
-~~~
+```
 
 ### ThreadActivityFactory
 
 Go to the [IThreadActivityFactory] documentation.
 
-~~~ c#
+``` c#
 	public interface IServiceBusConfiguration
 	{
 		IThreadActivityFactory ThreadActivityFactory { get; }
@@ -248,13 +248,13 @@ Go to the [IThreadActivityFactory] documentation.
 			ThreadActivityFactory = new DefaultThreadActivityFactory();
 		}
 	}
-~~~
+```
 
 ### SubscriptionManager
 
 Go to the [ISubscriptionManager] documentation.
 
-~~~ c#
+``` c#
 	public interface IServiceBusConfiguration
 	{
 		ISubscriptionManager SubscriptionManager { get; }
@@ -265,13 +265,13 @@ Go to the [ISubscriptionManager] documentation.
 	{
         ServiceBusConfigurator SubscriptionManager(ISubscriptionManager manager);
 	}
-~~~
+```
 
 ### Encryption
 
 Go to the [Encryption] documentation.
 
-~~~ c#
+``` c#
 	public interface IServiceBusConfiguration
 	{
 		void AddEncryptionAlgorithm(IEncryptionAlgorithm algorithm);
@@ -282,13 +282,13 @@ Go to the [Encryption] documentation.
 	{
         ServiceBusConfigurator AddEnryptionAlgorithm(IEncryptionAlgorithm algorithm);
 	}
-~~~
+```
 
 ### Compression
 
 Go to the [Compression] documentation.
 
-~~~ c#
+``` c#
 	public interface IServiceBusConfiguration
 	{
 		void AddCompressionAlgorithm(ICompressionAlgorithm algorithm);
@@ -299,13 +299,13 @@ Go to the [Compression] documentation.
 	{
         ServiceBusConfigurator AddCompressionAlgorithm(ICompressionAlgorithm algorithm);
 	}
-~~~
+```
 
 ### Modules
 
 Go to the [Modules] documentation.
 
-~~~ c#
+``` c#
 	public interface IServiceBusConfiguration
 	{
 		ModuleCollection Modules { get; }
@@ -315,13 +315,13 @@ Go to the [Modules] documentation.
 	{
         ServiceBusConfigurator AddModule(IModule module);
 	}
-~~~
+```
 .
 ### IdempotenceService
 
 Go to the [IdempotenceService] documentation.
 
-~~~ c#
+``` c#
 	public interface IServiceBusConfiguration
 	{
 		IIdempotenceService IdempotenceService { get; }
@@ -331,7 +331,7 @@ Go to the [IdempotenceService] documentation.
 	{
         ServiceBusConfigurator IdempotenceService(IIdempotenceService idempotenceService);
 	}
-~~~
+```
 
 [Encryption]: {{ site.baseurl }}/encryption
 [Compression]: {{ site.baseurl }}/compression
