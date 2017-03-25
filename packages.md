@@ -77,21 +77,6 @@ title: Packages
 	<div class='col-sm-6 col-md-4'>
 		<div class='thumbnail'>
 			<div class='caption'>
-			<h3>Shuttle.Esb.SqlServer</h3>
-			<p>Contains a Microsoft SqlServer table-based <strong>queue</strong>, <strong>subscription manager</strong>, and <strong>idempotence service</strong> implementation.</p>
-			<p>
-				<a href='http://www.nuget.org/packages/Shuttle.Esb.SqlServer' target='_blank' class='btn btn-primary' role='button'>NuGet</a>
-				<a href='https://github.com/Shuttle/Shuttle.Esb.SqlServer' target='_blank' class='btn btn-default' role='button'>GitHub</a>
-				<a href='https://github.com/Shuttle/Shuttle.Esb.SqlServer/issues' target='_blank' class='btn btn-default' role='button'>Issues</a>
-			</p>
-			</div>
-		</div>
-	</div>
-</div>
-<div class='row'>
-	<div class='col-sm-6 col-md-4'>
-		<div class='thumbnail'>
-			<div class='caption'>
 			<h3>Shuttle.Esb.FileMQ</h3>
 			<p>Contains a file-based <strong>queue</strong> implementation.  <em>This is not intended for production use but rather to copy/back-up messages to the file-system</em>.</p>
 			<p>
@@ -103,19 +88,16 @@ title: Packages
 		</div>
 	</div>
 </div>
-
-<h2>Dependency Injection Containers</h2>
 <div class='row'>
 	<div class='col-sm-6 col-md-4'>
 		<div class='thumbnail'>
 			<div class='caption'>
-			<h3>Shuttle.Esb.Castle</h3>
-			<p>Contains a <em>WindsorContainer</em> implementation of the <strong>IMessageHandlerFactory</strong> interface.</p>
+			<h3>Shuttle.Esb.Sql.Queue</h3>
+			<p>Contains a Sql table-based <strong>queue</strong> implementation.</p>
 			<p>
-				<a href='http://www.nuget.org/packages/Shuttle.Esb.Castle' target='_blank' class='btn btn-primary' role='button'>NuGet</a>
-				<a href='https://github.com/Shuttle/Shuttle.Esb.Castle' target='_blank' class='btn btn-default' role='button'>GitHub</a>
-				<a href='https://github.com/Shuttle/Shuttle.Esb.Castle/issues' target='_blank' class='btn btn-default' role='button'>Issues</a>
-				<a href='http://www.castleproject.org/projects/windsor/' target='_blank' class='btn btn-default' role='button'>Castle</a>
+				<a href='http://www.nuget.org/packages/Shuttle.Esb.Sql.Queue' target='_blank' class='btn btn-primary' role='button'>NuGet</a>
+				<a href='https://github.com/Shuttle/Shuttle.Esb.Sql.Queue' target='_blank' class='btn btn-default' role='button'>GitHub</a>
+				<a href='https://github.com/Shuttle/Shuttle.Esb.Sql.Queue/issues' target='_blank' class='btn btn-default' role='button'>Issues</a>
 			</p>
 			</div>
 		</div>
@@ -123,13 +105,12 @@ title: Packages
 	<div class='col-sm-6 col-md-4'>
 		<div class='thumbnail'>
 			<div class='caption'>
-			<h3>Shuttle.Esb.Unity</h3>
-			<p>Contains a <em>UnityContainer</em> implementation of the <strong>IMessageHandlerFactory</strong> interface.</p>
+			<h3>Shuttle.Esb.Sql.Subscription</h3>
+			<p>Contains a Sql <strong>subscription manager</strong> implementation.</p>
 			<p>
-				<a href='http://www.nuget.org/packages/Shuttle.Esb.Unity' target='_blank' class='btn btn-primary' role='button'>NuGet</a>
-				<a href='https://github.com/Shuttle/Shuttle.Esb.Unity' target='_blank' class='btn btn-default' role='button'>GitHub</a>
-				<a href='https://github.com/Shuttle/Shuttle.Esb.Unity/issues' target='_blank' class='btn btn-default' role='button'>Issues</a>
-				<a href='https://github.com/unitycontainer/unity' target='_blank' class='btn btn-default' role='button'>Unity</a>
+				<a href='http://www.nuget.org/packages/Shuttle.Esb.Sql.Subscription' target='_blank' class='btn btn-primary' role='button'>NuGet</a>
+				<a href='https://github.com/Shuttle/Shuttle.Esb.Sql.Subscription' target='_blank' class='btn btn-default' role='button'>GitHub</a>
+				<a href='https://github.com/Shuttle/Shuttle.Esb.Sql.Subscription/issues' target='_blank' class='btn btn-default' role='button'>Issues</a>
 			</p>
 			</div>
 		</div>
@@ -137,34 +118,22 @@ title: Packages
 	<div class='col-sm-6 col-md-4'>
 		<div class='thumbnail'>
 			<div class='caption'>
-			<h3>Shuttle.Esb.Ninject</h3>
-			<p>Contains a <em>Ninject</em> implementation of the <strong>IMessageHandlerFactory</strong> interface.</p>
+			<h3>Shuttle.Esb.Sql.Idempotence</h3>
+			<p>Contains a Sql <strong>idempotence service</strong> implementation.</p>
 			<p>
-				<a href='http://www.nuget.org/packages/Shuttle.Esb.Ninject' target='_blank' class='btn btn-primary' role='button'>NuGet</a>
-				<a href='https://github.com/Shuttle/Shuttle.Esb.Ninject' target='_blank' class='btn btn-default' role='button'>GitHub</a>
-				<a href='https://github.com/Shuttle/Shuttle.Esb.Ninject/issues' target='_blank' class='btn btn-default' role='button'>Issues</a>
-				<a href='http://www.ninject.org/' target='_blank' class='btn btn-default' role='button'>Ninject</a>
+				<a href='http://www.nuget.org/packages/Shuttle.Esb.Sql.Idempotence' target='_blank' class='btn btn-primary' role='button'>NuGet</a>
+				<a href='https://github.com/Shuttle/Shuttle.Esb.Sql.Idempotence' target='_blank' class='btn btn-default' role='button'>GitHub</a>
+				<a href='https://github.com/Shuttle/Shuttle.Esb.Sql.Idempotence/issues' target='_blank' class='btn btn-default' role='button'>Issues</a>
 			</p>
 			</div>
 		</div>
 	</div>
 </div>
 
-<h2>Extensions</h2>
+
+<h2>Modules / Related</h2>
+
 <div class='row'>
-	<div class='col-sm-6 col-md-4'>
-		<div class='thumbnail'>
-			<div class='caption'>
-			<h3>Shuttle.Esb.Process</h3>
-			<p>Process management using shuttle-recall event sourcing.</p>
-			<p>
-				<a href='http://www.nuget.org/packages/Shuttle.Esb.Process' target='_blank' class='btn btn-primary' role='button'>NuGet</a>
-				<a href='https://github.com/Shuttle/Shuttle.Esb.Process' target='_blank' class='btn btn-default' role='button'>GitHub</a>
-				<a href='https://github.com/Shuttle/Shuttle.Esb.Process/issues' target='_blank' class='btn btn-default' role='button'>Issues</a>
-			</p>
-			</div>
-		</div>
-	</div>
 	<div class='col-sm-6 col-md-4'>
 		<div class='thumbnail'>
 			<div class='caption'>
@@ -178,14 +147,31 @@ title: Packages
 			</div>
 		</div>
 	</div>
+</div>
+
+<div class='row'>
 	<div class='col-sm-6 col-md-4'>
 		<div class='thumbnail'>
 			<div class='caption'>
-			<h3>Shuttle.Esb.Management</h3>
+			<h3>Shuttle.Esb.Process</h3>
+			<p>Process management using Shuttle.Recall event sourcing to store process manager state.</p>
+			<p>
+				<a href='http://www.nuget.org/packages/Shuttle.Esb.Process' target='_blank' class='btn btn-primary' role='button'>NuGet</a>
+				<a href='https://github.com/Shuttle/Shuttle.Esb.Process' target='_blank' class='btn btn-default' role='button'>GitHub</a>
+				<a href='https://github.com/Shuttle/Shuttle.Esb.Process/issues' target='_blank' class='btn btn-default' role='button'>Issues</a>
+			</p>
+			</div>
+		</div>
+	</div>
+	<div class='col-sm-6 col-md-4'>
+		<div class='thumbnail'>
+			<div class='caption'>
+			<h3>Shuttle.Sentinel</h3>
 			<p>Contains a management shell to manage various shuttle-specific bits such as moving messages and configuring subscriptions.</p>
 			<p>
-				<a href='https://github.com/Shuttle/Shuttle.Esb.Management' target='_blank' class='btn btn-default' role='button'>GitHub</a>
-				<a href='https://github.com/Shuttle/Shuttle.Esb.Management/issues' target='_blank' class='btn btn-default' role='button'>Issues</a>
+				<a href='https://github.com/Shuttle/Shuttle.Sentinel' target='_blank' class='btn btn-default' role='button'>GitHub</a>
+				<a href='https://github.com/Shuttle/Shuttle.Sentinel/issues' target='_blank' class='btn btn-default' role='button'>Issues</a>
+				<a href='http://shuttle.github.io/shuttle-recall/' target='_blank' class='btn btn-default' role='button'>Sentinel</a>
 			</p>
 			</div>
 		</div>
