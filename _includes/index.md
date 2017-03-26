@@ -8,7 +8,7 @@ Start a new **Class Library** project and select a Shuttle.Esb queue implementat
 	</p>
 </div>
 
-Now we'll need select one of the [supported containers]({{ site.baseurl }}/supported-containers):
+Now we'll need select one of the [supported containers](http://shuttle.github.io/shuttle-core/overview-container/#Supported):
 
 <div class="nuget-badge">
 	<p>
