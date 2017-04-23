@@ -72,7 +72,11 @@ A bit of configuration is going to be needed to help things along:
 ### Send a command message for processing
 
 ``` c#
-using (var bus = ServiceBus.Create().Start())
+var container = new WindsorComponentContainer(new WindsorContainer());
+
+ServiceBus.Register(container);
+
+using (var bus = ServiceBus.Create(container).Start())
 {
 	bus.Send(new RegisterMemberCommand
 	{
@@ -85,7 +89,16 @@ using (var bus = ServiceBus.Create().Start())
 ### Publish an event message when something interesting happens
 
 ``` c#
-using (var bus = ServiceBus.Create(c => c.SubscriptionManager(SubscriptionManager.Default())).Start())
+var smRegistry = new Registry();
+var registry = new StructureMapComponentRegistry(smRegistry);
+
+ServiceBus.Register(registry); // will using bootstrapping to register SubscriptionManager
+
+using (var bus = ServiceBus
+	.Create(
+		new StructureMapComponentResolver(
+		new Container(smRegistry)))
+	.Start())
 {
 	bus.Publish(new MemberRegisteredEvent
 	{
