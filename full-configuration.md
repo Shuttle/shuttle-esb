@@ -118,21 +118,6 @@ For some queueing technologies the `outbox` may not be required.  Msmq, for inst
 | `durationToIgnoreOnFailure`	| 5m,10m,15m,30m,60m | |
 | `maximumFailureCount`			| 5			| The maximum number of failures that are retried before the message is moved to the error queue. |
 
-You can also set the transaction scope behaviour by providing the `transactionScope` tag.  If you want your endpoint to be non-transactional then set the `enabled` attribute to `false`.  This will improve performance but messsage delivery and processing cannot be guaranteed.  If the underlying queueing infrastrcuture does not support 2-phase commit message delivery and processing also cannot be guaranteed.
-
-```xml
-    <transactionScope
-      enabled="true"
-      isolationLevel="ReadCommitted"
-      timeoutSeconds="30" />
-```
-
-| Attribute				| Default 		| Description	|
-| ---					| ---			| ---			|
-| `enabled`				| true			| If `true` the message handling code in the receiving pipeline is wrapped in a `TransactionScope`. |
-| `isolationLevel`		| ReadCommitted	| The transaction scope isolation level to use. |
-| `timeoutSeconds`		| 30			| The number of seconds before a transaction scope times out. |
-
 When the endpoint is not a physical endpoint but rather a worker use the `worker` tag to specify the relevant configuration.
 
 ```xml
@@ -188,3 +173,5 @@ Finally just close the relevant tags.
   </serviceBus>
 </configuration>
 ```
+
+You may wish to consider using the [TransactionScope](http://shuttle.github.io/shuttle-core/overview-transactionscope/) section to configure transactional behaviour for your endpoint.
