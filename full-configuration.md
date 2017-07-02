@@ -92,7 +92,7 @@ The `inbox` should be specified if the endpoint has message handlers that need t
 | Attribute						| Default 	| Description	|
 | ---							| ---		| ---			|
 | `threadCount`					| 5			| The number of worker threads that will service the inbox work queue.  The deferred queue will always be serviced by only 1 thread. |
-| `durationToSleepWhenIdle`		| 250ms,500ms,1s,5s | Uses the [StringDurationArrayConverter](https://github.com/Shuttle/Shuttle.Core.Infrastructure/blob/master/Shuttle.Core.Infrastructure/StringDurationArrayConverter.cs) to convert to an array of `TimeSpan` instances.  Specify `ms|s|m|hd[\*count]`. |
+| `durationToSleepWhenIdle`		| 250ms,500ms,1s,5s | Uses the [StringDurationArrayConverter](https://github.com/Shuttle/Shuttle.Core.Infrastructure/blob/master/Shuttle.Core.Infrastructure/StringDurationArrayConverter.cs) to convert to an array of `TimeSpan` instances.  Specify `ms\|s\|m\|hd[\*count]`. |
 | `durationToIgnoreOnFailure`	| 5m,30m,60m | Uses the [StringDurationArrayConverter](https://github.com/Shuttle/Shuttle.Core.Infrastructure/blob/master/Shuttle.Core.Infrastructure/StringDurationArrayConverter.cs) to convert to an array of `TimeSpan` instances.  Specify `ms|s|m|hd[\*count]`. |
 | `maximumFailureCount`			| 5			| The maximum number of failures that are retried before the message is moved to the error queue. |
 | `distribute`					| false		| If `true` the endpoint will act as only a distributor.  If `false` the endpoint will distribute messages if a worker is available; else process the message itself. |
