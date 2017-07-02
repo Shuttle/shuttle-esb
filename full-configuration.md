@@ -82,7 +82,7 @@ The `inbox` should be specified if the endpoint has message handlers that need t
       deferredQueueUri="msmq://./inbox-work-deferred"
       errorQueueUri="msmq://./shuttle-error"
       threadCount="25"
-      durationToSleepWhenIdle="250ms,10s,30s"
+      durationToSleepWhenIdle="250ms,500ms,1s,5s"
       durationToIgnoreOnFailure="30m,1h"
       maximumFailureCount="25" 
       distribute="true|false" 
@@ -92,8 +92,8 @@ The `inbox` should be specified if the endpoint has message handlers that need t
 | Attribute						| Default 	| Description	|
 | ---							| ---		| ---			|
 | `threadCount`					| 5			| The number of worker threads that will service the inbox work queue.  The deferred queue will always be serviced by only 1 thread. |
-| `durationToSleepWhenIdle`		| 250ms\*4,500ms\*2,1s | |
-| `durationToIgnoreOnFailure`	| 5m,10m,15m,30m,60m | |
+| `durationToSleepWhenIdle`		| 250ms,500ms,1s,5s | |
+| `durationToIgnoreOnFailure`	| 5m,30m,60m | |
 | `maximumFailureCount`			| 5			| The maximum number of failures that are retried before the message is moved to the error queue. |
 | `distribute`					| false		| If `true` the endpoint will act as only a distributor.  If `false` the endpoint will distribute messages if a worker is available; else process the message itself. |
 | `distributeSendCount` | 5 | The number of messages to send to the work per available thread message received.  If less than 1 the default will be used.  |
