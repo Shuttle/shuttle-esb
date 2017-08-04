@@ -1,6 +1,6 @@
 ### Let's get going!
 
-Start a new **Class Library** project and select a Shuttle.Esb queue implementation from the [supported queues]({{ site.baseurl }}/packages/#queues):
+Start a new **Console Application** project and select a Shuttle.Esb queue implementation from the [supported queues]({{ site.baseurl }}/packages/#queues):
 
 <div class="nuget-badge">
 	<p>
@@ -16,11 +16,11 @@ Now we'll need select one of the [supported containers](http://shuttle.github.io
 	</p>
 </div>
 
-We'll also need to host our endpoint within the [generic host](http://shuttle.github.io/shuttle-core/overview-service-host/):
+We'll also need to host our endpoint using the [service host](http://shuttle.github.io/shuttle-core/overview-service-host/):
 
 <div class="nuget-badge">
 	<p>
-		<code>Install-Package Shuttle.Core.Host</code>
+		<code>Install-Package Shuttle.Core.ServiceHost</code>
 	</p>
 </div>
 
@@ -37,8 +37,10 @@ public class Host : IHost, IDisposable
 		var registry = new AutofacComponentRegistry(containerBuilder);
 
 		ServiceBus.Register(registry);
+		
+		var resolver = new AutofacComponentResolver(containerBuilder.Build());
 
-		_bus = ServiceBus.Create(new AutofacComponentResolver(containerBuilder.Build())).Start();
+		_bus = ServiceBus.Create(resolver).Start();
 	}
 
 	public void Dispose()
@@ -65,14 +67,10 @@ A bit of configuration is going to be needed to help things along:
 </configuration>
 ```
 
-> Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the server project for the **Shuttle.Deferred.Server** project.
-
-<div class='alert alert-warning'>It may be necessary to build the solution before the <strong>Shuttle.Core.Host.exe</strong> executable will be available in the <strong>bin\debug</strong> folder.</div>
-
 ### Send a command message for processing
 
 ``` c#
-using (var bus = ServiceBus.Create().Start())
+using (var bus = ServiceBus.Create(resolver).Start())
 {
 	bus.Send(new RegisterMemberCommand
 	{
@@ -85,7 +83,7 @@ using (var bus = ServiceBus.Create().Start())
 ### Publish an event message when something interesting happens
 
 ``` c#
-using (var bus = ServiceBus.Create(c => c.SubscriptionManager(SubscriptionManager.Default())).Start())
+using (var bus = ServiceBus.Create(resolver).Start())
 {
 	bus.Publish(new MemberRegisteredEvent
 	{
@@ -97,7 +95,7 @@ using (var bus = ServiceBus.Create(c => c.SubscriptionManager(SubscriptionManage
 ### Subscribe to those interesting events
 
 ``` c#
-SubscriptionManager.Default().Subscribe<MemberRegisteredEvent>();
+resolver.Resolve<ISubscriptionManager>().Subscribe<MemberRegisteredEvent>();
 ```
 
 ### Handle any messages
