@@ -27,7 +27,15 @@ We'll also need to host our endpoint within the [generic host](http://shuttle.gi
 Next we'll implement our endpoint in order to start listening on our queue:
 
 ``` c#
-public class Host : IHost, IDisposable
+internal class Program
+{
+	private static void Main()
+	{
+		ServiceHost.Run<Host>();
+	}
+}
+
+public class Host : IServiceHost
 {
 	private IServiceBus _bus;
 
@@ -43,7 +51,7 @@ public class Host : IHost, IDisposable
 		_bus = ServiceBus.Create(resolver).Start();
 	}
 
-	public void Dispose()
+	public void Stop()
 	{
 		_bus.Dispose();
 	}
