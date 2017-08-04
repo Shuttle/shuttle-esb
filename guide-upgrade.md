@@ -203,6 +203,10 @@ To this end the component interfaces have been moved to the `Shuttle.Core.Infras
 
 It is important to note that the ServiceBus registers quite a few components in the call to `ServiceBus.Register(IComponentRegistry registry)` including some null pattern dependencies.  An example of this would be the `ISubscriptionManager` implementation.  Should no implementation be registered for `ISubscriptionManager` the implementation is registered as `NullSubscriptionManager`.
 
+### Configuration
+
+For the most part the configuration has stayed the same apart from the `transactionScope` tag that has been removed from the `serviceBus` section and moved to the `Shuttle.Core.Infrastructure` package.  The [TransactionScope documentation](http://shuttle.github.io/shuttle-core/overview-transactionscope/) has more information.
+
 ### Bootstrapping
 
 When calling `ServiceBus.Register(IComponentRegistry registry)` the registry [container bootstrapping](http://shuttle.github.io/shuttle-core/overview-container/#Bootstrapping) is invoked *before* any components are registered by the `ServiceBus`.  This allows any other modules and boostrapped components to register themselves and *override* any subsequent registrations.

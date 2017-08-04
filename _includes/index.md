@@ -16,7 +16,7 @@ Now we'll need select one of the [supported containers](http://shuttle.github.io
 	</p>
 </div>
 
-We'll also need to host our endpoint using the [service host](http://shuttle.github.io/shuttle-core/overview-service-host/):
+We'll also need to host our endpoint within the [generic host](http://shuttle.github.io/shuttle-core/overview-service-host/):
 
 <div class="nuget-badge">
 	<p>
@@ -37,7 +37,7 @@ public class Host : IHost, IDisposable
 		var registry = new AutofacComponentRegistry(containerBuilder);
 
 		ServiceBus.Register(registry);
-		
+
 		var resolver = new AutofacComponentResolver(containerBuilder.Build());
 
 		_bus = ServiceBus.Create(resolver).Start();
@@ -67,10 +67,18 @@ A bit of configuration is going to be needed to help things along:
 </configuration>
 ```
 
+> Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the server project for the **Shuttle.Deferred.Server** project.
+
+<div class='alert alert-warning'>It may be necessary to build the solution before the <strong>Shuttle.Core.Host.exe</strong> executable will be available in the <strong>bin\debug</strong> folder.</div>
+
 ### Send a command message for processing
 
 ``` c#
-using (var bus = ServiceBus.Create(resolver).Start())
+var container = new WindsorComponentContainer(new WindsorContainer());
+
+ServiceBus.Register(container);
+
+using (var bus = ServiceBus.Create(container).Start())
 {
 	bus.Send(new RegisterMemberCommand
 	{
@@ -83,7 +91,16 @@ using (var bus = ServiceBus.Create(resolver).Start())
 ### Publish an event message when something interesting happens
 
 ``` c#
-using (var bus = ServiceBus.Create(resolver).Start())
+var smRegistry = new Registry();
+var registry = new StructureMapComponentRegistry(smRegistry);
+
+ServiceBus.Register(registry); // will using bootstrapping to register SubscriptionManager
+
+using (var bus = ServiceBus
+	.Create(
+		new StructureMapComponentResolver(
+		new Container(smRegistry)))
+	.Start())
 {
 	bus.Publish(new MemberRegisteredEvent
 	{
