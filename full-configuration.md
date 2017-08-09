@@ -92,8 +92,8 @@ The `inbox` should be specified if the endpoint has message handlers that need t
 | Attribute						| Default 	| Description	|
 | ---							| ---		| ---			|
 | `threadCount`					| 5			| The number of worker threads that will service the inbox work queue.  The deferred queue will always be serviced by only 1 thread. |
-| `durationToSleepWhenIdle`		| 250ms,500ms,1s,5s | Uses the [StringDurationArrayConverter](https://github.com/Shuttle/Shuttle.Core.Infrastructure/blob/master/Shuttle.Core.Infrastructure/StringDurationArrayConverter.cs) to convert to an array of `TimeSpan` instances.  Specify `ms\|s\|m\|hd\[\*count\]`. |
-| `durationToIgnoreOnFailure`	| 5m,30m,60m | Uses the [StringDurationArrayConverter](https://github.com/Shuttle/Shuttle.Core.Infrastructure/blob/master/Shuttle.Core.Infrastructure/StringDurationArrayConverter.cs) to convert to an array of `TimeSpan` instances.  Specify `ms|s|m|hd[\*count]`. |
+| `durationToSleepWhenIdle`		| 250ms,500ms,1s,5s | Uses the [StringDurationArrayConverter](https://github.com/Shuttle/Shuttle.Core.Infrastructure/blob/master/Shuttle.Core.Infrastructure/StringDurationArrayConverter.cs) to convert to an array of `TimeSpan` instances.  Specify `ms\|s\|m\|h\|d[*count]`. |
+| `durationToIgnoreOnFailure`	| 5m,30m,60m | Uses the [StringDurationArrayConverter](https://github.com/Shuttle/Shuttle.Core.Infrastructure/blob/master/Shuttle.Core.Infrastructure/StringDurationArrayConverter.cs) to convert to an array of `TimeSpan` instances.  Specify `ms\|s\|m\|h\|d[*count]`. |
 | `maximumFailureCount`			| 5			| The maximum number of failures that are retried before the message is moved to the error queue. |
 | `distribute`					| false		| If `true` the endpoint will act as only a distributor.  If `false` the endpoint will distribute messages if a worker is available; else process the message itself. |
 | `distributeSendCount` | 5 | The number of messages to send to the work per available thread message received.  If less than 1 the default will be used.  |
@@ -114,8 +114,8 @@ For some queueing technologies the `outbox` may not be required.  Msmq, for inst
 | Attribute						| Default 	| Description	|
 | ---							| ---		| ---			|
 | `threadCount`					| 1			| The number of worker threads that will service the outbox work queue. |
-| `durationToSleepWhenIdle`		| 250ms\*4,500ms\*2,1s |  |
-| `durationToIgnoreOnFailure`	| 5m,10m,15m,30m,60m | |
+| `durationToSleepWhenIdle`		| 250ms,500ms,1s,5s | Uses the [StringDurationArrayConverter](https://github.com/Shuttle/Shuttle.Core.Infrastructure/blob/master/Shuttle.Core.Infrastructure/StringDurationArrayConverter.cs) to convert to an array of `TimeSpan` instances.  Specify `ms\|s\|m\|h\|d[*count]`. |
+| `durationToIgnoreOnFailure`	| 5m,30m,60m | Uses the [StringDurationArrayConverter](https://github.com/Shuttle/Shuttle.Core.Infrastructure/blob/master/Shuttle.Core.Infrastructure/StringDurationArrayConverter.cs) to convert to an array of `TimeSpan` instances.  Specify `ms\|s\|m\|h\|d[*count]`. |
 | `maximumFailureCount`			| 5			| The maximum number of failures that are retried before the message is moved to the error queue. |
 
 When the endpoint is not a physical endpoint but rather a worker use the `worker` tag to specify the relevant configuration.
@@ -146,8 +146,8 @@ Since a worker sends thread availability to the physical distribution master the
 | Attribute						| Default 	| Description	|
 | ---							| ---		| ---			|
 | `threadCount`					| 1			| The number of worker thread that will service the control work queue. |
-| `durationToSleepWhenIdle`		| 250ms\*4,500ms\*2,1s | |
-| `durationToIgnoreOnFailure`	| 5m,10m,15m,30m,60m | |
+| `durationToSleepWhenIdle`		| 250ms,500ms,1s,5s | Uses the [StringDurationArrayConverter](https://github.com/Shuttle/Shuttle.Core.Infrastructure/blob/master/Shuttle.Core.Infrastructure/StringDurationArrayConverter.cs) to convert to an array of `TimeSpan` instances.  Specify `ms\|s\|m\|h\|d[*count]`. |
+| `durationToIgnoreOnFailure`	| 5m,30m,60m | Uses the [StringDurationArrayConverter](https://github.com/Shuttle/Shuttle.Core.Infrastructure/blob/master/Shuttle.Core.Infrastructure/StringDurationArrayConverter.cs) to convert to an array of `TimeSpan` instances.  Specify `ms\|s\|m\|h\|d[*count]`. |
 | `maximumFailureCount`			| 5			| The maximum number of failures that are retried before the message is moved to the error queue. |
 
 Use the `modules` tag to configure modules that can be loaded at runtime.  These modules have to have a parameterless constructor in order to be instantiated; else add them programmatically if you need to specify parameters.
