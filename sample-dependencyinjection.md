@@ -19,10 +19,6 @@ Once you have opened the `Shuttle.DependencyInjection.sln` solution in Visual St
 - Shuttle.DependencyInjection.Client
 - Shuttle.DependencyInjection.Server
 
-> Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the server project for the **Shuttle.DependencyInjection.Server** project.
-
-<div class='alert alert-warning'>It may be necessary to build the solution before the <strong>Shuttle.Core.Host.exe</strong> executable will be available in the <strong>bin\debug</strong> folder.</div>
-
 # Implementation
 
 By default Shuttle.Esb does not require a dependency injection container.  Shuttle makes use of an `IMessageHandlerFactory` implementation to create message handlers.  If no dependency injection container is required one could stick with the `DefaultMessageHandlerFactory` instantiated by default.
@@ -197,30 +193,35 @@ This will provide access to the Msmq `IQueue` implementation and also include th
 
 This will add the [Ninject](http://www.ninject.org/) implementation of the [component container](http://shuttle.github.io/shuttle-core/overview-container/) interfaces.
 
-> Install the `Shuttle.Core.Host` nuget package.
+> Install the `Shuttle.Core.ServiceHost` nuget package.
 
-The [default mechanism](http://shuttle.github.io/shuttle-core/overview-service-host/) used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.Host` executable we are able to run the endpoint as a console application or register it as a Windows service for deployment.
+The [default mechanism](http://shuttle.github.io/shuttle-core/overview-service-host/) used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.ServiceHost` in our console executable we are able to run the endpoint as a console application or register it as a Windows service for deployment.
 
 > Add references to both the `Shuttle.DependencyInjection.Messages` and `Shuttle.DependencyInjection.EMail` projects.
 
 ### Host
 
-> Rename the default `Class1` file to `Host` and implement the `IHost` and `IDisposabe` interfaces as follows:
+> Rename the default `Class1` file to `Host` and implement the `IServiceHost` interface as follows:
 
 ``` c#
-using System;
 using Ninject;
-using Shuttle.Core.Host;
 using Shuttle.Core.Ninject;
+using Shuttle.Core.ServiceHost;
 using Shuttle.DependencyInjection.EMail;
 using Shuttle.Esb;
 
 namespace Shuttle.DependencyInjection.Server
 {
-	public class Host : IHost, IDisposable
-	{
+    public class Host : IServiceHost
+    {
         private IServiceBus _bus;
         private StandardKernel _kernel;
+
+        public void Stop()
+        {
+            _kernel.Dispose();
+            _bus.Dispose();
+        }
 
         public void Start()
         {
@@ -234,13 +235,7 @@ namespace Shuttle.DependencyInjection.Server
 
             _bus = ServiceBus.Create(container).Start();
         }
-
-        public void Dispose()
-        {
-            _kernel.Dispose();
-            _bus.Dispose();
-        }
-	}
+    }
 }
 ```
 
@@ -300,10 +295,6 @@ namespace Shuttle.DependencyInjection.Server
 ```
 
 This will write out some information to the console window.  The injected e-mail service will also be invoked and you'll see the result in the console window.
-
-> Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the server project.
-
-<div class='alert alert-warning'>It may be necessary to build the solution before the <strong>Shuttle.Core.Host.exe</strong> executable will be available in the <strong>bin\debug</strong> folder.</div>
 
 ## Run
 

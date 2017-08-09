@@ -20,10 +20,6 @@ Once you have opened the `Shuttle.Distribution.sln` solution in Visual Studio se
 - Shuttle.Distribution.Server
 - Shuttle.Distribution.Worker
 
-> Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the server project for the **Shuttle.Distribution.Server**, as well as the **Shuttle.Distribution.Worker**, project.
-
-<div class='alert alert-warning'>It may be necessary to build the solution before the <strong>Shuttle.Core.Host.exe</strong> executable will be available in the <strong>bin\debug</strong> folder.</div>
-
 # Implementation
 
 When you find that a single endpoint, even with ample threads, cannot keep up with the required processing and is falling behind you can opt for message distribution.
@@ -152,41 +148,42 @@ This will provide access to the Msmq `IQueue` implementation and also include th
 
 This will add the [Unity](https://github.com/unitycontainer/unity/) implementation of the [component container](http://shuttle.github.io/shuttle-core/overview-container/) interfaces.
 
-> Install the `Shuttle.Core.Host` nuget package.
+> Install the `Shuttle.Core.ServiceHost` nuget package.
 
-The [default mechanism](http://shuttle.github.io/shuttle-core/overview-service-host/) used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.Host` executable we are able to run the endpoint as a console application or register it as a Windows service for deployment.
+The [default mechanism](http://shuttle.github.io/shuttle-core/overview-service-host/) used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.ServiceHost` in our console executable we are able to run the endpoint as a console application or register it as a Windows service for deployment.
 
 > Add a reference to the `Shuttle.Distribution.Messages` project.
 
 ### Host
 
-> Rename the default `Class1` file to `Host` and implement the `IHost` and `IDisposabe` interfaces as follows:
+> Rename the default `Class1` file to `Host` and implement the `IServiceHost` interface as follows:
 
 ``` c#
-using System;
-using Shuttle.Core.Host;
+using Microsoft.Practices.Unity;
+using Shuttle.Core.ServiceHost;
+using Shuttle.Core.Unity;
 using Shuttle.Esb;
 
 namespace Shuttle.Distribution.Server
 {
-	public class Host : IHost, IDisposable
-	{
-		private IServiceBus _bus;
+    public class Host : IServiceHost
+    {
+        private IServiceBus _bus;
 
-		public void Start()
-		{
-			var container = new UnityComponentContainer(new UnityContainer());
+        public void Start()
+        {
+            var container = new UnityComponentContainer(new UnityContainer());
 
-			ServiceBus.Register(container);
+            ServiceBus.Register(container);
 
-			_bus = ServiceBus.Create(container).Start();
-		}
+            _bus = ServiceBus.Create(container).Start();
+        }
 
-		public void Dispose()
-		{
-			_bus.Dispose();
-		}
-	}
+        public void Stop()
+        {
+            _bus.Dispose();
+        }
+    }
 }
 ```
 
@@ -218,10 +215,6 @@ This will instruct the endpoint to ***only** distribute messages since the `dist
 
 It also configures the control inbox that the endpoint will use to process administrative messages.
 
-> Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the server project.
-
-<div class='alert alert-warning'>It may be necessary to build the solution before the <strong>Shuttle.Core.Host.exe</strong> executable will be available in the <strong>bin\debug</strong> folder.</div>
-
 ## Worker
 
 > Add a new `Class Library` to the solution called `Shuttle.Distribution.Worker`.
@@ -234,41 +227,42 @@ This will provide access to the Msmq `IQueue` implementation and also include th
 
 This will add the [Unity](https://github.com/unitycontainer/unity/) implementation of the [component container](http://shuttle.github.io/shuttle-core/overview-container/) interfaces.
 
-> Install the `Shuttle.Core.Host` nuget package.
+> Install the `Shuttle.Core.ServiceHost` nuget package.
 
-The [default mechanism](http://shuttle.github.io/shuttle-core/overview-service-host/) used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.Host` executable we are able to run the endpoint as a console application or register it as a Windows service for deployment.
+The [default mechanism](http://shuttle.github.io/shuttle-core/overview-service-host/) used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.ServiceHost` in our console executable we are able to run the endpoint as a console application or register it as a Windows service for deployment.
 
 > Add a reference to the `Shuttle.Distribution.Messages` project.
 
 ### Host
 
-> Rename the default `Class1` file to `Host` and implement the `IHost` and `IDisposabe` interfaces as follows:
+> Rename the default `Class1` file to `Host` and implement the `IServiceHost` interface as follows:
 
 ``` c#
-using System;
-using Shuttle.Core.Host;
+using Microsoft.Practices.Unity;
+using Shuttle.Core.ServiceHost;
+using Shuttle.Core.Unity;
 using Shuttle.Esb;
 
 namespace Shuttle.Distribution.Worker
 {
-	public class Host : IHost, IDisposable
-	{
-		private IServiceBus _bus;
+    public class Host : IServiceHost
+    {
+        private IServiceBus _bus;
 
-		public void Start()
-		{
-			var container = new UnityComponentContainer(new UnityContainer());
+        public void Start()
+        {
+            var container = new UnityComponentContainer(new UnityContainer());
 
-			ServiceBus.Register(container);
+            ServiceBus.Register(container);
 
-			_bus = ServiceBus.Create(container).Start();
-		}
+            _bus = ServiceBus.Create(container).Start();
+        }
 
-		public void Dispose()
-		{
-			_bus.Dispose();
-		}
-	}
+        public void Stop()
+        {
+            _bus.Dispose();
+        }
+    }
 }
 ```
 
@@ -320,10 +314,6 @@ namespace Shuttle.Distribution.Worker
 ```
 
 This will write out some information to the console window.
-
-> Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the worker project.
-
-<div class='alert alert-warning'>It may be necessary to build the solution before the <strong>Shuttle.Core.Host.exe</strong> executable will be available in the <strong>bin\debug</strong> folder.</div>
 
 ## Run
 

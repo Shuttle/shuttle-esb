@@ -19,10 +19,6 @@ Once you have opened the `Shuttle.Deferred.sln` solution in Visual Studio set th
 - Shuttle.Deferred.Client
 - Shuttle.Deferred.Server
 
-> Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the server project for the **Shuttle.Deferred.Server** project.
-
-<div class='alert alert-warning'>It may be necessary to build the solution before the <strong>Shuttle.Core.Host.exe</strong> executable will be available in the <strong>bin\debug</strong> folder.</div>
-
 # Implementation
 
 Deferred messages refer to messages that are not immediately processed when available but are rather set to only process at a given future date.
@@ -150,9 +146,9 @@ This will provide access to the Msmq `IQueue` implementation and also include th
 
 This will add the [Autofac](https://autofac.org/) implementation of the [component container](http://shuttle.github.io/shuttle-core/overview-container/) interfaces.
 
-> Install both the `Shuttle.Core.Host` and `shuttle-core-infrastructure-log4net` nuget packages.
+> Install both the `Shuttle.Core.ServiceHost` and `Shuttle.Core.Infrastructure.Log4Net` nuget packages.
 
-The [default mechanism](http://shuttle.github.io/shuttle-core/overview-service-host/) used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.Host` executable we are able to run the endpoint as a console application or register it as a Windows service for deployment.
+The [default mechanism](http://shuttle.github.io/shuttle-core/overview-service-host/) used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.ServiceHost` in our console executable we are able to run the endpoint as a console application or register it as a Windows service for deployment.
 
 We are also adding **Log4Net** to demonstrate how to add a third-party logging mechanism to shuttle.
 
@@ -160,39 +156,40 @@ We are also adding **Log4Net** to demonstrate how to add a third-party logging m
 
 ### Host
 
-> Rename the default `Class1` file to `Host` and implement the `IHost` and `IDisposabe` interfaces as follows:
+> Rename the default `Class1` file to `Host` and implement the `IServiceHost` interface as follows:
 
 ``` c#
-using System;
+using Autofac;
 using log4net;
-using Shuttle.Core.Host;
+using Shuttle.Core.Autofac;
 using Shuttle.Core.Infrastructure;
 using Shuttle.Core.Log4Net;
+using Shuttle.Core.ServiceHost;
 using Shuttle.Esb;
 
 namespace Shuttle.Deferred.Server
 {
-	public class Host : IHost, IDisposable
-	{
-		private IServiceBus _bus;
+    public class Host : IServiceHost
+    {
+        private IServiceBus _bus;
 
-		public void Start()
-		{
-			Log.Assign(new Log4NetLog(LogManager.GetLogger(typeof(Host))));
+        public void Stop()
+        {
+            _bus.Dispose();
+        }
 
-			var containerBuilder = new ContainerBuilder();
-			var registry = new AutofacComponentRegistry(containerBuilder);
+        public void Start()
+        {
+            Log.Assign(new Log4NetLog(LogManager.GetLogger(typeof(Host))));
 
-			ServiceBus.Register(registry);
+            var containerBuilder = new ContainerBuilder();
+            var registry = new AutofacComponentRegistry(containerBuilder);
 
-			_bus = ServiceBus.Create(new AutofacComponentResolver(containerBuilder.Build())).Start();
-		}
+            ServiceBus.Register(registry);
 
-		public void Dispose()
-		{
-			_bus.Dispose();
-		}
-	}
+            _bus = ServiceBus.Create(new AutofacComponentResolver(containerBuilder.Build())).Start();
+        }
+    }
 }
 ```
 
@@ -266,10 +263,6 @@ namespace Shuttle.Deferred.Server
 ```
 
 This will write out some information to the console window and send a response back to the sender (client).
-
-> Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the server project.
-
-<div class='alert alert-warning'>It may be necessary to build the solution before the <strong>Shuttle.Core.Host.exe</strong> executable will be available in the <strong>bin\debug</strong> folder.</div>
 
 ## Run
 

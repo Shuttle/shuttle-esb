@@ -20,10 +20,6 @@ Once you have opened the `Shuttle.PublishSubscribe.sln` solution in Visual Studi
 - Shuttle.PublishSubscribe.Server
 - Shuttle.PublishSubscribe.Subscriber
 
-<div class='alert alert-warning'>It may be necessary to build the solution before the <strong>Shuttle.Core.Host.exe</strong> executable will be available in the <strong>bin\debug</strong> folder.</div>
-
-> Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the server project for the **Shuttle.RequestResponse.Server**, as well as the **Shuttle.RequestResponse.Subscriber** project.
-
 You will also need to create and configure a Sql Server database for this sample and remember to update the **App.config** `connectionString` settings to point to your database.  Please reference the **Database** section below.
 
 # Implementation
@@ -164,46 +160,43 @@ This will provide access to the Msmq `IQueue` implementation and also include th
 
 This will add the [StructureMap](http://structuremap.github.io/) implementation of the [component container](http://shuttle.github.io/shuttle-core/overview-container/) interfaces.
 
-> Install the `Shuttle.Core.Host` nuget package.
+> Install the `Shuttle.Core.ServiceHost` nuget package.
 
-The [default mechanism](http://shuttle.github.io/shuttle-core/overview-service-host/) used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.Host` executable we are able to run the endpoint as a console application or register it as a Windows service for deployment.
+The [default mechanism](http://shuttle.github.io/shuttle-core/overview-service-host/) used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.ServiceHost` in our console executable we are able to run the endpoint as a console application or register it as a Windows service for deployment.
 
 > Add a reference to the `Shuttle.PublishSubscribe.Messages` project.
 
 ### Host
 
-> Rename the default `Class1` file to `Host` and implement the `IHost` and `IDisposabe` interfaces as follows:
+> Rename the default `Class1` file to `Host` and implement the `IServiceHost` interface as follows:
 
 ``` c#
-using System;
-using Shuttle.Core.Host;
+using Shuttle.Core.ServiceHost;
+using Shuttle.Core.StructureMap;
 using Shuttle.Esb;
+using StructureMap;
 
-namespace Shuttle.PublishSubscribe.Subscriber
+namespace Shuttle.PublishSubscribe.Server
 {
-	public class Host : IHost, IDisposable
-	{
-		private IServiceBus _bus;
+    public class Host : IServiceHostStart
+    {
+        private IServiceBus _bus;
 
-		public void Start()
-		{
-			var smRegistry = new Registry();
-			var registry = new StructureMapComponentRegistry(smRegistry);
+        public void Start()
+        {
+            var smRegistry = new Registry();
+            var registry = new StructureMapComponentRegistry(smRegistry);
 
-			ServiceBus.Register(registry);
+            ServiceBus.Register(registry);
 
-			_bus = ServiceBus
-				.Create(
-					new StructureMapComponentResolver(
-					new Container(smRegistry)))
-				.Start();
-		}
+            _bus = ServiceBus.Create(new StructureMapComponentResolver(new Container(smRegistry))).Start();
+        }
 
-		public void Dispose()
-		{
-			_bus.Dispose();
-		}
-	}
+        public void Stop()
+        {
+            _bus.Dispose();
+        }
+    }
 }
 ```
 
@@ -280,10 +273,6 @@ namespace Shuttle.PublishSubscribe.Subscriber
 
 This will write out some information to the console window and publish the `MemberRegisteredEvent` message.
 
-> Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the server project.
-
-<div class='alert alert-warning'>It may be necessary to build the solution before the <strong>Shuttle.Core.Host.exe</strong> executable will be available in the <strong>bin\debug</strong> folder.</div>
-
 ## Subscriber
 
 > Add a new `Class Library` to the solution called `Shuttle.PublishSubscribe.Subscriber`.
@@ -296,48 +285,49 @@ This will provide access to the Msmq `IQueue` implementation and also include th
 
 This will add the [StructureMap](http://structuremap.github.io/) implementation of the [component container](http://shuttle.github.io/shuttle-core/overview-container/) interfaces.
 
-> Install the `Shuttle.Core.Host` nuget package.
+> Install the `Shuttle.Core.ServiceHost` nuget package.
 
-The [default mechanism](http://shuttle.github.io/shuttle-core/overview-service-host/) used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.Host` executable we are able to run the endpoint as a console application or register it as a Windows service for deployment.
+The [default mechanism](http://shuttle.github.io/shuttle-core/overview-service-host/) used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.ServiceHost` in our console executable we are able to run the endpoint as a console application or register it as a Windows service for deployment.
 
 > Add a reference to the `Shuttle.PublishSubscribe.Messages` project.
 
 ### Host
 
-> Rename the default `Class1` file to `Host` and implement the `IHost` and `IDisposabe` interfaces as follows:
+> Rename the default `Class1` file to `Host` and implement the `IServiceHost` interface as follows:
 
 ``` c#
-using System;
-using Shuttle.Core.Host;
+using Shuttle.Core.Infrastructure;
+using Shuttle.Core.ServiceHost;
+using Shuttle.Core.StructureMap;
 using Shuttle.Esb;
-using Shuttle.Esb.SqlServer;
 using Shuttle.PublishSubscribe.Messages;
+using StructureMap;
 
 namespace Shuttle.PublishSubscribe.Subscriber
 {
-	public class Host : IHost, IDisposable
-	{
-		private IServiceBus _bus;
+    public class Host : IServiceHostStart
+    {
+        private IServiceBus _bus;
 
-		public void Start()
-		{
-			var structureMapRegistry = new Registry();
-			var registry = new StructureMapComponentRegistry(structureMapRegistry);
+        public void Start()
+        {
+            var structureMapRegistry = new Registry();
+            var registry = new StructureMapComponentRegistry(structureMapRegistry);
 
-			ServiceBus.Register(registry);
+            ServiceBus.Register(registry);
 
-			var resolver = new StructureMapComponentResolver(new Container(structureMapRegistry));
+            var resolver = new StructureMapComponentResolver(new Container(structureMapRegistry));
 
-			resolver.Resolve<ISubscriptionManager>().Subscribe<MemberRegisteredEvent>();
+            resolver.Resolve<ISubscriptionManager>().Subscribe<MemberRegisteredEvent>();
 
-			_bus = ServiceBus.Create(resolver).Start();
-		}
+            _bus = ServiceBus.Create(resolver).Start();
+        }
 
-		public void Dispose()
-		{
-			_bus.Dispose();
-		}
-	}
+        public void Stop()
+        {
+            _bus.Dispose();
+        }
+    }
 }
 ```
 
@@ -394,10 +384,6 @@ namespace Shuttle.PublishSubscribe.Server
 ```
 
 This will write out some information to the console window.
-
-> Set `Shuttle.Core.Host.exe` as the **Start external program** option by navigating to the **bin\debug** folder of the subscriber project.
-
-<div class='alert alert-warning'>It may be necessary to build the solution before the <strong>Shuttle.Core.Host.exe</strong> executable will be available in the <strong>bin\debug</strong> folder.</div>
 
 ## Run
 
