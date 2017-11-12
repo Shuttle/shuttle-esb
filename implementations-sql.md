@@ -41,7 +41,30 @@ Contains a sql-based `ISubscriptionManager` implementation.  The subscription ma
 
 # Supported providers
 
-Currently only the `System.Data.SqlClient` provider name is supported but this can easily be extended.  Feel free to give it a bash and please send a pull request if you *do* go this route.  You are welcome to create an issue and assistance will be provided where able.
+Currently only the following providers are supported:
+
+- System.Data.SqlClient (Sql Server)
+- Npgsql (PostgreSQL - requires registration)
+
+You are welcome to send a pull request with your own SQL database implementation.  If you'd like you may also create an issue and assistance will be provided where able.
+
+## Npgsql (PostgreSQL)
+
+To get this working one first needs to configure the `Npgsql` `DbProviderFactory`.  This is accomplished by adding the following to the application configuration file:
+
+``` xml
+  <system.data>
+    <DbProviderFactories>
+      <add name="Npgsql Data Provider" invariant="Npgsql" support="FF" description=".Net Framework Data Provider for Postgresql" type="Npgsql.NpgsqlFactory, Npgsql" />
+    </DbProviderFactories>
+  </system.data>
+```  
+
+The connection string should be entered using the PostgreSQL structure and `Npgsql` as the `providerName`:
+
+``` xml
+<add name="Subscription" connectionString="Server=localhost;Port=5432;Database=ShuttleEsb;User Id=postgres;Password=password;" providerName="Npgsql"/>
+```
 
 ## Configuration
 
