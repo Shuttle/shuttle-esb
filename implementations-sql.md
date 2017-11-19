@@ -50,6 +50,8 @@ You are welcome to send a pull request with your own SQL database implementation
 
 ## Npgsql (PostgreSQL)
 
+***A big thank you*** to [Vincent Verschuren](https://github.com/hopla) for the PostgreSQL subscription implementation.
+
 To get this working one first needs to configure the `Npgsql` `DbProviderFactory`.  This is accomplished by adding the following to the application configuration file:
 
 ``` xml
