@@ -7,7 +7,7 @@ layout: api
 
 # Running
 
-When using Visual Studio 2015+ the NuGet packages should be restored automatically.  If you find that they do not or if you are using an older version of Visual Studio please execute the following in a Visual Studio command prompt:
+When using Visual Studio 2017 the NuGet packages should be restored automatically.  If you find that they do not or if you are using an older version of Visual Studio please execute the following in a Visual Studio command prompt:
 
 ```
 cd {extraction-folder}\Shuttle.Esb.Samples\Shuttle.RequestResponse
@@ -26,8 +26,8 @@ In order to get any processing done in Shuttle.Esb a message will need to be gen
 In this guide we'll create the following projects:
 
 - a **Console Application** called `Shuttle.RequestResponse.Client`
-- a **Class Library** called `Shuttle.RequestResponse.Server`
-- and another **Class Library** called `Shuttle.RequestResponse.Messages` that will contain all our message classes
+- a **Console Application** called `Shuttle.RequestResponse.Server`
+- a **Class Library** called `Shuttle.RequestResponse.Messages` that will contain all our message classes
 
 ## Messages
 
@@ -73,7 +73,7 @@ This will provide access to the Msmq `IQueue` implementation and also include th
 
 > Install the `Shuttle.Core.Castle` nuget package.
 
-This will add the Castle Project [WindsorContainer](http://www.castleproject.org/projects/windsor/) implementation of the [component container](http://shuttle.github.io/shuttle-core/overview-container/) interfaces.
+This will provide access to the Castle `WindsorContainer` implementation.
 
 > Add a reference to the `Shuttle.RequestResponse.Messages` project.
 
@@ -83,14 +83,16 @@ This will add the Castle Project [WindsorContainer](http://www.castleproject.org
 
 ``` c#
 using System;
+using Castle.Windsor;
+using Shuttle.Core.Castle;
 using Shuttle.Esb;
 using Shuttle.RequestResponse.Messages;
 
 namespace Shuttle.RequestResponse.Client
 {
-	class Program
+	internal class Program
 	{
-		static void Main(string[] args)
+		private static void Main(string[] args)
 		{
 			var container = new WindsorComponentContainer(new WindsorContainer());
 
@@ -105,7 +107,7 @@ namespace Shuttle.RequestResponse.Client
 					bus.Send(new RegisterMemberCommand
 					{
 						UserName = userName
-					});
+					}, c => c.WillExpire(DateTime.Now.AddSeconds(5)));
 				}
 			}
 		}
@@ -135,14 +137,10 @@ namespace Shuttle.RequestResponse.Client
 		   workQueueUri="msmq://./shuttle-client-work"
 		   errorQueueUri="msmq://./shuttle-error" />
 	</serviceBus>
-	
-    <startup> 
-        <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5" />
-    </startup>
 </configuration>
 ```
 
-This tells shuttle that all messages that are sent and have a type name starting with `Shuttle.RequestResponse.Messages` should be sent to endpoint `msmq://./shuttle-server-work`.
+This tells Shuttle that all messages that are sent and have a type name starting with `Shuttle.RequestResponse.Messages` should be sent to endpoint `msmq://./shuttle-server-work`.
 
 ### MemberRegisteredHandler
 
@@ -169,32 +167,55 @@ namespace Shuttle.RequestResponse.Client
 
 ## Server
 
-> Add a new `Class Library` to the solution called `Shuttle.RequestResponse.Server`.
+> Add a new `Console Application` to the solution called `Shuttle.RequestResponse.Server`.
 
 > Install the `Shuttle.Esb.Msmq` nuget package.
 
 This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.
 
-> Install the `Shuttle.Core.Castle` nuget package.
-
-This will add the Castle Project [WindsorContainer](http://www.castleproject.org/projects/windsor/) implementation of the [component container](http://shuttle.github.io/shuttle-core/overview-container/) interfaces.
-
 > Install the `Shuttle.Core.ServiceHost` nuget package.
 
-The [default mechanism](http://shuttle.github.io/shuttle-core/overview-service-host/) used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.ServiceHost` in our console executable we are able to run the endpoint as a console application or register it as a Windows service for deployment.
+The default mechanism used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.ServiceHost` we are able to run the endpoint as a console application or register it as a Windows service for deployment.
+
+> Install the `Shuttle.Core.Castle` nuget package.
+
+This will provide access to the Castle `WindsorContainer` implementation.
+
+> Install the `Shuttle.Core.Log4Net` nuget package.
+
+This will provide access to the `Log4Net` implementation.
 
 > Add a reference to the `Shuttle.RequestResponse.Messages` project.
 
 ### Host
 
-> Rename the default `Class1` file to `Host` and implement the `IServiceHost` interface as follows:
+> Implement the `Program` class as follows:
+
+``` c#
+using Shuttle.Core.ServiceHost;
+
+namespace Shuttle.RequestResponse.Server
+{
+    internal class Program
+    {
+        private static void Main()
+        {
+            ServiceHost.Run<Host>();
+        }
+    }
+}
+```
+
+This will simply instance the `Host` class and get it running.
+
+> Add a `Host` class and implement the `IServiceHost` and `IDisposabe` interfaces as follows:
 
 ``` c#
 using Castle.Windsor;
 using log4net;
 using Shuttle.Core.Castle;
-using Shuttle.Core.Infrastructure;
 using Shuttle.Core.Log4Net;
+using Shuttle.Core.Logging;
 using Shuttle.Core.ServiceHost;
 using Shuttle.Esb;
 
@@ -273,11 +294,9 @@ namespace Shuttle.RequestResponse.Server
 }
 ```
 
-This will write out some information to the console window and send a response back to the sender (client).
-
 ## Run
 
-> Set both the client and server projects as the startup.
+> Set both the client and server projects as startup projects.
 
 ### Execute
 
@@ -290,4 +309,3 @@ This will write out some information to the console window and send a response b
 <div class='alert alert-info'>The <strong>client</strong> application will then process the response returned by the <strong>server</strong>.</div>
 
 You have now completed a full request / response call chain.
-

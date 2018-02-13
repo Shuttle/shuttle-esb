@@ -63,9 +63,6 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="jb-navbar-collapse">
 			<ul class='nav navbar-nav'>
-				<li>
-					<a href='{{ site.baseurl }}/'>Home</a>
-				</li>
 				<li class='dropdown'>
 					<a class='dropdown-toggle' data-toggle='dropdown' href='#'>
 					Guides
@@ -275,26 +272,35 @@
 					<b class='caret'></b>
 					</a>
 					<ul class='dropdown-menu'>
-						<li class='dropdown-header'>Queue</li>
-							<li>
-								<a href='{{ site.baseurl }}/modules-corrupt-messages'>Corrupt Transport Messages</a>
-							</li>
-							<li>
-								<a href='{{ site.baseurl }}/modules-message-forwarding'>Message Forwarding</a>
-							</li>
-                            <li>
-								<a href='{{ site.baseurl }}/modules-purge-inbox'>Purge Inbox</a>
-							</li>
-							<li>
-								<a href='{{ site.baseurl }}/modules-purge-queues'>Purge Queues</a>
-							</li>
-							<li>
-								<a href='{{ site.baseurl }}/modules-active-time-range'>Active Time Range</a>
-							</li>
-							<li>
-								<a href='{{ site.baseurl }}/modules-throttle'>Throttle</a>
-							</li>
-						</li>
+                        <li>
+                            <a href='{{ site.baseurl }}/modules-corrupt-messages'>Corrupt Transport Messages</a>
+                        </li>
+                        <li>
+                            <a href='{{ site.baseurl }}/modules-message-forwarding'>Message Forwarding</a>
+                        </li>
+                        <li>
+                            <a href='{{ site.baseurl }}/modules-purge-inbox'>Purge Inbox</a>
+                        </li>
+                        <li>
+                            <a href='{{ site.baseurl }}/modules-purge-queues'>Purge Queues</a>
+                        </li>
+                        <li>
+                            <a href='{{ site.baseurl }}/modules-active-time-range'>Active Time Range</a>
+                        </li>
+                        <li>
+                            <a href='{{ site.baseurl }}/modules-throttle'>Throttle</a>
+                        </li>
+					</ul>
+				</li>
+				<li class='dropdown'>
+					<a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+					Archive
+					<b class='caret'></b>
+					</a>
+					<ul class='dropdown-menu'>
+                        <li>
+                            <a href='https://shuttle.github.io/shuttle-esb-v7/'>pre-v8.0.0 Documentation</a>
+                        </li>
 					</ul>
 				</li>
 				<!--

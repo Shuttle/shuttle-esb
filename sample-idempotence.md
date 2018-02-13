@@ -7,7 +7,7 @@ layout: api
 
 # Running
 
-When using Visual Studio 2015+ the NuGet packages should be restored automatically.  If you find that they do not or if you are using an older version of Visual Studio please execute the following in a Visual Studio command prompt:
+When using Visual Studio 2017 the NuGet packages should be restored automatically.  If you find that they do not or if you are using an older version of Visual Studio please execute the following in a Visual Studio command prompt:
 
 ```
 cd {extraction-folder}\Shuttle.Esb.Samples\Shuttle.Idempotence
@@ -23,15 +23,15 @@ You will also need to create and configure a Sql Server database for this sample
 
 # Implementation
 
-When operations, or in our case messages, can be applied multiple with the same result they are said to be **idempotent**.  Idempotence is something you should strive to implement directly on your endpoint by keeping track of some unique property of each message and whether the operation has been completed for that unique property.
+When operations, or in our case messages, can be applied multiple times with the same result they are said to be **idempotent**.  Idempotence is something you should strive to implement directly on your endpoint by keeping track of some unique property of each message and whether the operation has been completed for that unique property.
 
-An `IIdempotenceService` implementation can assist with this from a technical point-of-view by allowing a particular message id to be handled only once.  This works fine for our ***at-least-once*** delivery mechanism where, in some edge case, we may receive the same message again.  However, it will not aid us when two messages are going to be sent, each with its own message id, but they have contain the same data.
+An `IIdempotenceService` implementation can assist with this from a technical point-of-view by allowing a particular message id to be handled only once.  This works fine for our ***at-least-once*** delivery mechanism where, in some edge case, we may receive the same message again.  However, it will not aid us when two messages are going to be sent, each with its own message id, but they contain the same data.
 
 In this guide we'll create the following projects:
 
 - a **Console Application** called `Shuttle.Idempotence.Client`
-- a **Class Library** called `Shuttle.Idempotence.Server`
-- and another **Class Library** called `Shuttle.Idempotence.Messages` that will contain all our message classes
+- a **Console Application** called `Shuttle.Idempotence.Server`
+- a **Class Library** called `Shuttle.Idempotence.Messages` that will contain all our message classes
 
 ## Messages
 
@@ -63,7 +63,7 @@ This will provide access to the Msmq `IQueue` implementation and also include th
 
 > Install the `Shuttle.Core.SimpleInjector` nuget package.
 
-This will add the [SimpleInjector](https://simpleinjector.org/index.html/) implementation of the [component container](http://shuttle.github.io/shuttle-core/overview-container/) interfaces.
+This will provide access to the SimpleInjector dependency container.
 
 > Add a reference to the `Shuttle.Idempotence.Messages` project.
 
@@ -73,7 +73,7 @@ This will add the [SimpleInjector](https://simpleinjector.org/index.html/) imple
 
 ``` c#
 using System;
-using Shuttle.Core.Infrastructure;
+using Shuttle.Core.Container;
 using Shuttle.Core.SimpleInjector;
 using Shuttle.Esb;
 using Shuttle.Idempotence.Messages;
@@ -81,9 +81,9 @@ using SimpleInjector;
 
 namespace Shuttle.Idempotence.Client
 {
-	class Program
+	internal class Program
 	{
-		static void Main(string[] args)
+		private static void Main(string[] args)
 		{
 			var container = new SimpleInjectorComponentContainer(new Container());
 
@@ -110,7 +110,7 @@ namespace Shuttle.Idempotence.Client
 					}
 
 					bus.Send(command); // will be processed since it has a new message id
-					bus.Send(command); // will also be processed since it also has a new message id
+					bus.Send(command); // will also be processed since it too has a new message id
 				}
 			}
 		}
@@ -118,7 +118,7 @@ namespace Shuttle.Idempotence.Client
 }
 ```
 
-Keep in mind that the when you `Send` a message a `TransportMessage` envelope is created with a unique message id (`Guid`).  In the above code we first manually create a `TransportMessage` so that we can send technically identical messages.
+Keep in mind that the when you `Send` a message a `TransportMessage` envelope is created with a unique message id (`Guid`).  In the above code we first manually create a `TransportMessage` so that we can send technically identical messages (with the same message id).
 
 The next two `Send` operations do not use the `TransportMessage` but rather send individual messages.  These will each have a `TransportMessage` envelope and, therefore, each have its own unique message id.
 
@@ -140,40 +140,57 @@ The next two `Send` operations do not use the `TransportMessage` but rather send
 			</messageRoute>
 		</messageRoutes>		
 	</serviceBus>
-	
-    <startup> 
-        <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5" />
-    </startup>
 </configuration>
 ```
 
-This tells shuttle that all messages that are sent and have a type name starting with `Shuttle.Idempotence.Messages` should be sent to endpoint `msmq://./shuttle-server-work`.
+This tells Shuttle that all messages that are sent and have a type name starting with `Shuttle.Idempotence.Messages` should be sent to endpoint `msmq://./shuttle-server-work`.
 
 ## Server
 
-> Add a new `Class Library` to the solution called `Shuttle.Idempotence.Server`.
+> Add a new `Console Application` to the solution called `Shuttle.Idempotence.Server`.
 
-> Install noth the `Shuttle.Esb.Msmq` nuget package.
+> Install the `Shuttle.Esb.Msmq` nuget package.
 
 This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.
 
-> Install noth the `Shuttle.Esb.Msmq` and `Shuttle.Esb.Sql.Idempotence` nuget package.
-
-We will now have access to the Sql implementation of the `IIdempotenceService`.
-
 > Install the `Shuttle.Core.SimpleInjector` nuget package.
 
-This will add the [SimpleInjector](https://simpleinjector.org/index.html/) implementation of the [component container](http://shuttle.github.io/shuttle-core/overview-container/) interfaces.
+This will provide access to the SimpleInjector dependency container.
+
+> Install the `Shuttle.Esb.Sql.Idempotence` package. 
+
+We will also have access to the Sql implementation of the `IIdempotenceService`.
 
 > Install the `Shuttle.Core.ServiceHost` nuget package.
 
-The [default mechanism](http://shuttle.github.io/shuttle-core/overview-service-host/) used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.ServiceHost` in our console executable we are able to run the endpoint as a console application or register it as a Windows service for deployment.
+The default mechanism used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.ServiceHost` assembly we are able to run the endpoint as a console application or register it as a Windows service for deployment.
 
 > Add a reference to the `Shuttle.Idempotence.Messages` project.
 
+### Program
+
+Implement the `Program` class as follows:
+
+``` c#
+using Shuttle.Core.ServiceHost;
+
+namespace Shuttle.Idempotence.Server
+{
+    public class Program
+    {
+        public static void Main()
+        {
+            ServiceHost.Run<Host>();
+        }
+    }
+}
+```
+
+This will simply run the `Host` implementation.
+
 ### Host
 
-> Rename the default `Class1` file to `Host` and implement the `IServiceHost` interface as follows:
+> Add a `Host` class and implement the `IServiceHost` interface as follows:
 
 ``` c#
 using Shuttle.Core.ServiceHost;
@@ -208,15 +225,11 @@ namespace Shuttle.Idempotence.Server
 
 We need a store for our idempotence tracking.  In this example we will be using **Sql Server**.  If you use the express version remember to change the `data source` value to `.\sqlexpress` from the standard `.`.
 
-When you reference the `Shuttle.Esb.SqlServer` package a number of scripts are included in the relevant package folder:
-
-- `.\Shuttle.PublishSubscribe\packages\Shuttle.Esb.SqlServer.{version}\scripts`
+When you reference the `Shuttle.Esb.Sql.Idempotence` package a `scripts` folder is included in the relevant package folder.  Click on the Nuget referenced assembly in the `References` or `Dependencies` (depending on your project type) and navigate to the package folder to find the `scripts` folder.
 
 The `{version}` bit will be in a `semver` format.
 
-> Create a new database called **Shuttle** and execute script `IdempotenceServiceCreate.sql` in the newly created database.
-
-Whenever `Publish` is called the registered `ISubscriptionManager` instance is asked for the subscribers to the published message type.  These are retrieved from the Sql Server database for the implementation we are using.
+> Create a new database called **Shuttle** and execute the script `System.Data.SqlClient\IdempotenceServiceCreate.sql` in the newly created database.
 
 ### App.config
 
@@ -283,5 +296,3 @@ This will write out some information to the console window.
 <div class='alert alert-info'>You will need to scroll through the message but you will observe that the <strong>server</strong> application has processed the three messages.</div>
 
 You have now implemented message idempotence.
-
-[transport-message]: {{ site.baseurl }}/transport-message

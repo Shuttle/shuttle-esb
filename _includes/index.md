@@ -1,4 +1,4 @@
-### Let's get going!
+### The broad strokes
 
 Start a new **Console Application** project and select a Shuttle.Esb queue implementation from the [supported queues]({{ site.baseurl }}/packages/#queues):
 

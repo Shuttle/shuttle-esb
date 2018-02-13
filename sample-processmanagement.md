@@ -13,12 +13,7 @@ The process management sample represents something closer to a real-world scenar
 
 In this sample the front-end is a static site implemented using (CanJS)[https://canjs.com/].  The rest api is an asp.net web-api.  There are three physical implementations of the same logical process manager to demonstrate the various options and the read-model is kept updated using CQRS with system messages.  For the event-sourcing side one could just as easily use event processing to update the read model but since the system event messages are being processed it is re-used for the event sourcing implementation also.
 
-When using Visual Studio 2015+ the NuGet packages should be restored automatically.  If you find that they do not or if you are using an older version of Visual Studio please execute the following in a powershell command prompt:
-
-```
-cd {extraction-folder}\Shuttle.Esb.Samples\Shuttle.ProcessManagement
-nuget-restore.ps1
-```
+When using Visual Studio 2017 the NuGet packages should be restored automatically.
 
 Once you have opened the `Shuttle.ProcessManagement.sln` solution in Visual Studio set the following projects as startup projects:
 
@@ -30,13 +25,14 @@ Once you have opened the `Shuttle.ProcessManagement.sln` solution in Visual Stud
 - Shuttle.Process.ESModule.Server
 - Shuttle.Process.QueryServer
 - Shuttle.ProcessManagement.WebApi
-- site
+
+# Front-End (site.canjs)
+
+In order to run the single-page application CanJS front-end you need to host the site using any hosting software.  A simple solution is using node.js and installing the `http-server` package.  You can then host the site from the `site.canjs` folder by opening a command prompt and running `http-server` in the `site.canjs` folder.
 
 You will also need to create and configure a Sql Server database for this sample and remember to update the **App.config** `connectionString` settings to point to your database.  Please reference the **Database** section below.
 
 # Database
-
-> Create a new database called **ProcessManagement**.
 
 We need a store for our subscriptions.  In this example we will be using **Sql Server**.  If you use the express version remember to change the `data source` value to `.\sqlexpress` from the standard `.`.
 
@@ -46,9 +42,9 @@ The `Shuttle.Esb.SqlServer` package contains a number of scripts in the followin
 
 The `{version}` bit will be in a `semver` format.
 
-> Execute script `SubscriptionManagerCreate.sql` in the newly created database.
+> Create a new database called **ProcessManagement** and execute script `SubscriptionManagerCreate.sql` in the newly created database.
 
-This will create the required structures that the subscription manager will use.
+This will create the required structures that the subscription manager can use to publish messages.
 
 The `Shuttle.Recall.SqlServer` package contains a the following script folder:
 

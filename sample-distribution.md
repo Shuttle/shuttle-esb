@@ -7,7 +7,7 @@ layout: api
 
 # Running
 
-When using Visual Studio 2015+ the NuGet packages should be restored automatically.  If you find that they do not or if you are using an older version of Visual Studio please execute the following in a Visual Studio command prompt:
+When using Visual Studio 2017 the NuGet packages should be restored automatically.  If you find that they do not or if you are using an older version of Visual Studio please execute the following in a Visual Studio command prompt:
 
 ```
 cd {extraction-folder}\Shuttle.Esb.Samples\Shuttle.Distribution
@@ -33,9 +33,9 @@ However, for a broker-style queueing mechanism such as *RabbitMQ* you do not nee
 In this guide we'll create the following projects:
 
 - a **Console Application** called `Shuttle.Distribution.Client`
-- a **Class Library** called `Shuttle.Distribution.Server`
-- another **Class Library** called `Shuttle.Distribution.Worker`
-- and another **Class Library** called `Shuttle.Distribution.Messages` that will contain all our message classes
+- a **Console Application** called `Shuttle.Distribution.Server`
+- a **Console Application** called `Shuttle.Distribution.Worker`
+- a **Class Library** called `Shuttle.Distribution.Messages` that will contain all our message classes
 
 ## Messages
 
@@ -67,7 +67,7 @@ This will provide access to the Msmq `IQueue` implementation and also include th
 
 > Install the `Shuttle.Core.Unity` nuget package.
 
-This will add the [Unity](https://github.com/unitycontainer/unity/) implementation of the [component container](http://shuttle.github.io/shuttle-core/overview-container/) interfaces.
+This will provide access to the Unity dependency container implementation.
 
 > Add a reference to the `Shuttle.Distribution.Messages` project.
 
@@ -77,37 +77,37 @@ This will add the [Unity](https://github.com/unitycontainer/unity/) implementati
 
 ``` c#
 using System;
-using Shuttle.Esb;
+using Shuttle.Core.Unity;
 using Shuttle.Distribution.Messages;
+using Shuttle.Esb;
+using Unity;
 
 namespace Shuttle.Distribution.Client
 {
-	class Program
-	{
-		static void Main(string[] args)
-		{
-			var container = new UnityComponentContainer(new UnityContainer());
+    internal class Program
+    {
+        private static void Main(string[] args)
+        {
+            var container = new UnityComponentContainer(new UnityContainer());
 
-			ServiceBus.Register(container);
+            ServiceBus.Register(container);
 
-			using (var bus = ServiceBus.Create(container).Start())
-			{
-				string userName;
+            using (var bus = ServiceBus.Create(container).Start())
+            {
+                string userName;
 
-				while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
-				{
-					bus.Send(new RegisterMemberCommand
-					{
-						UserName = userName
-					});
-				}
-			}
-		}
-	}
+                while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
+                {
+                    bus.Send(new RegisterMemberCommand
+                    {
+                        UserName = userName
+                    });
+                }
+            }
+        }
+    }
 }
 ```
-
-The message sent will have its `IgnoreTilleDate` set to 5 seconds into the future.  You can have a look at the [TransportMessage][transport-message] for more information on the message structure.
 
 ### App.config
 
@@ -127,42 +127,51 @@ The message sent will have its `IgnoreTilleDate` set to 5 seconds into the futur
 			</messageRoute>
 		</messageRoutes>		
 	</serviceBus>
-	
-    <startup> 
-        <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5" />
-    </startup>
 </configuration>
 ```
 
-This tells shuttle that all messages that are sent and have a type name starting with `Shuttle.Distribution.Messages` should be sent to endpoint `msmq://./shuttle-server-work`.
+This tells Shuttle that all messages that are sent and have a type name starting with `Shuttle.Distribution.Messages` should be sent to endpoint `msmq://./shuttle-server-work`.
 
 ## Server
 
-> Add a new `Class Library` to the solution called `Shuttle.Distribution.Server`.
+> Add a new `Console Application` to the solution called `Shuttle.Distribution.Server`.
 
-> Install the `Shuttle.Esb.Msmq` nuget package.
+> Install the `Shuttle.Esb.Msmq` and `Shuttle.Core.Unity` nuget packages.
 
 This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.
 
-> Install the `Shuttle.Core.Unity` nuget package.
-
-This will add the [Unity](https://github.com/unitycontainer/unity/) implementation of the [component container](http://shuttle.github.io/shuttle-core/overview-container/) interfaces.
-
 > Install the `Shuttle.Core.ServiceHost` nuget package.
 
-The [default mechanism](http://shuttle.github.io/shuttle-core/overview-service-host/) used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.ServiceHost` in our console executable we are able to run the endpoint as a console application or register it as a Windows service for deployment.
+The default mechanism used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.ServiceHost` we are able to run the endpoint as a console application or register it as a Windows service for deployment.
 
-> Add a reference to the `Shuttle.Distribution.Messages` project.
+### Program
+
+> Implement the `Program` class as follows:
+
+``` c#
+using Shuttle.Core.ServiceHost;
+
+namespace Shuttle.Distribution.Server
+{
+    public class Program
+    {
+        public static void Main()
+        {
+            ServiceHost.Run<Host>();
+        }
+    }
+}
+```
 
 ### Host
 
-> Rename the default `Class1` file to `Host` and implement the `IServiceHost` interface as follows:
+> Add a `Host` class and implement the `IServiceHost` interface as follows:
 
 ``` c#
-using Microsoft.Practices.Unity;
 using Shuttle.Core.ServiceHost;
 using Shuttle.Core.Unity;
 using Shuttle.Esb;
+using Unity;
 
 namespace Shuttle.Distribution.Server
 {
@@ -217,31 +226,46 @@ It also configures the control inbox that the endpoint will use to process admin
 
 ## Worker
 
-> Add a new `Class Library` to the solution called `Shuttle.Distribution.Worker`.
+> Add a new `Console Application` to the solution called `Shuttle.Distribution.Worker`.
 
-> Install the `Shuttle.Esb.Msmq` nuget package.
+> Install the `Shuttle.Esb.Msmq` and `Shuttle.Core.Unity` nuget packages.
 
 This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.
 
-> Install the `Shuttle.Core.Unity` nuget package.
-
-This will add the [Unity](https://github.com/unitycontainer/unity/) implementation of the [component container](http://shuttle.github.io/shuttle-core/overview-container/) interfaces.
-
 > Install the `Shuttle.Core.ServiceHost` nuget package.
 
-The [default mechanism](http://shuttle.github.io/shuttle-core/overview-service-host/) used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.ServiceHost` in our console executable we are able to run the endpoint as a console application or register it as a Windows service for deployment.
+The default mechanism used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.ServiceHost` we are able to run the endpoint as a console application or register it as a Windows service for deployment.
 
 > Add a reference to the `Shuttle.Distribution.Messages` project.
 
-### Host
+### Program
 
-> Rename the default `Class1` file to `Host` and implement the `IServiceHost` interface as follows:
+> Implement the `Program` class as follows:
 
 ``` c#
-using Microsoft.Practices.Unity;
+using Shuttle.Core.ServiceHost;
+
+namespace Shuttle.Distribution.Worker
+{
+    public class Program
+    {
+        public static void Main()
+        {
+            ServiceHost.Run<Host>();
+        }
+    }
+}
+```
+
+### Host
+
+> Add a `Host` class and implement the `IServiceHost` interface as follows:
+
+``` c#
 using Shuttle.Core.ServiceHost;
 using Shuttle.Core.Unity;
 using Shuttle.Esb;
+using Unity;
 
 namespace Shuttle.Distribution.Worker
 {

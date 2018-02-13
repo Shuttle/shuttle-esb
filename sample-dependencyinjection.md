@@ -7,7 +7,7 @@ layout: api
 
 # Running
 
-When using Visual Studio 2015+ the NuGet packages should be restored automatically.  If you find that they do not or if you are using an older version of Visual Studio please execute the following in a Visual Studio command prompt:
+When using Visual Studio 2017 the NuGet packages should be restored automatically.  If you find that they do not or if you are using an older version of Visual Studio please execute the following in a Visual Studio command prompt:
 
 ```
 cd {extraction-folder}\Shuttle.Esb.Samples\Shuttle.DependencyInjection
@@ -28,9 +28,9 @@ The `DefaultMessageHandlerFactory` requires message handlers that have a default
 In this guide we'll create the following projects:
 
 - a **Console Application** called `Shuttle.DependencyInjection.Client`
-- a **Class Library** called `Shuttle.DependencyInjection.Server`
-- another **Class Library** called `Shuttle.DependencyInjection.EMail` that will contain a fake e-mail service implementation
-- and another **Class Library** called `Shuttle.DependencyInjection.Messages` that will contain all our message classes
+- a **Console Application** called `Shuttle.DependencyInjection.Server`
+- a **Class Library** called `Shuttle.DependencyInjection.EMail` that will contain a fake e-mail service implementation
+- a **Class Library** called `Shuttle.DependencyInjection.Messages` that will contain all our message classes
 
 ## Messages
 
@@ -62,7 +62,7 @@ This will provide access to the Msmq `IQueue` implementation and also include th
 
 > Install the `Shuttle.Core.Ninject` nuget package.
 
-This will add the [Ninject](http://www.ninject.org/) implementation of the [component container](http://shuttle.github.io/shuttle-core/overview-container/) interfaces.
+This will provide access to the Ninject implementation.
 
 > Add a reference to the `Shuttle.DependencyInjection.Messages` project.
 
@@ -79,32 +79,30 @@ using Shuttle.Esb;
 
 namespace Shuttle.DependencyInjection.Client
 {
-	class Program
-	{
-		static void Main(string[] args)
-		{
-			var container = new NinjectComponentContainer(new StandardKernel());
+    internal class Program
+    {
+        private static void Main(string[] args)
+        {
+            var container = new NinjectComponentContainer(new StandardKernel());
 
-			ServiceBus.Register(container);
+            ServiceBus.Register(container);
 
-			using (var bus = ServiceBus.Create(container).Start())
-			{
-				string userName;
+            using (var bus = ServiceBus.Create(container).Start())
+            {
+                string userName;
 
-				while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
-				{
-					bus.Send(new RegisterMemberCommand
-					{
-						UserName = userName
-					});
-				}
-			}
-		}
-	}
+                while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
+                {
+                    bus.Send(new RegisterMemberCommand
+                    {
+                        UserName = userName
+                    });
+                }
+            }
+        }
+    }
 }
 ```
-
-The message sent will have its `IgnoreTilleDate` set to 5 seconds into the future.  You can have a look at the [TransportMessage][transport-message] for more information on the message structure.
 
 ### App.config
 
@@ -124,10 +122,6 @@ The message sent will have its `IgnoreTilleDate` set to 5 seconds into the futur
 			</messageRoute>
 		</messageRoutes>		
 	</serviceBus>
-	
-    <startup> 
-        <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5" />
-    </startup>
 </configuration>
 ```
 
@@ -183,25 +177,44 @@ namespace Shuttle.DependencyInjection.EMail
 
 ## Server
 
-> Add a new `Class Library` to the solution called `Shuttle.DependencyInjection.Server`.
+> Add a new `Console Application` to the solution called `Shuttle.DependencyInjection.Server`.
 
-> Install both the `Shuttle.Esb.Msmq` nuget package.
+> Install both the `Shuttle.Esb.Msmq` and `Shuttle.Core.Ninject` nuget packages.
 
 This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.
 
-> Install the `Shuttle.Core.Ninject` nuget package.
-
-This will add the [Ninject](http://www.ninject.org/) implementation of the [component container](http://shuttle.github.io/shuttle-core/overview-container/) interfaces.
+It will also include the Ninject implementation of the container interfaces.
 
 > Install the `Shuttle.Core.ServiceHost` nuget package.
 
-The [default mechanism](http://shuttle.github.io/shuttle-core/overview-service-host/) used to host an endpoint is by using a Windows service.  However, by using the `Shuttle.Core.ServiceHost` in our console executable we are able to run the endpoint as a console application or register it as a Windows service for deployment.
+This will enable the console application to run as a console or be installed as a Windows service.
 
 > Add references to both the `Shuttle.DependencyInjection.Messages` and `Shuttle.DependencyInjection.EMail` projects.
 
+### Program
+
+> Implement the `Program` class as follows:
+
+``` c#
+using Shuttle.Core.ServiceHost;
+
+namespace Shuttle.DependencyInjection.Server
+{
+    public class Program
+    {
+        public static void Main()
+        {
+            ServiceHost.Run<Host>();
+        }
+    }
+}
+```
+
+This simply executes the `Host` class implementation.
+
 ### Host
 
-> Rename the default `Class1` file to `Host` and implement the `IServiceHost` interface as follows:
+> Add a `Host` class and implement the `IServiceHost` interface as follows:
 
 ``` c#
 using Ninject;
@@ -309,5 +322,3 @@ This will write out some information to the console window.  The injected e-mail
 <div class='alert alert-info'>You will notice that the <strong>server</strong> application has processed the message and simulate sending an e-mail though the <strong>IEMailService</strong> implementation.</div>
 
 You have now implemented dependency injection for message handlers.
-
-[transport-message]: {{ site.baseurl }}/transport-message
