@@ -11,29 +11,27 @@ When you `Send` a *command* shuttle needs to be able to determine the relevant e
 In order to register an endpoint as a subscriber you can either manually configure the subscription store, as recommended for production, or register the subscription using the `ISubscriptionManager` implementation:
 
 ``` c#
-    var subscriptionManager = SubscriptionManager.Default();
+var subscriptionManager = resolver.Resolve<ISubscriptionManager>();
 
-	// using type
-    subscriptionManager.Subscribe(typeof(Event1));
-    subscriptionManager.Subscribe(typeof(Event2));
-	
-	// using a list of types
-    subscriptionManager.Subscribe(new[] { typeof(Event1), typeof(Event2) });
-	
-	// using a full type name
-    subscriptionManager.Subscribe(typeof(Event1).FullName);
-    subscriptionManager.Subscribe(typeof(Event2).FullName);
-	
-	// using a list of full type names
-    subscriptionManager.Subscribe(new[] { typeof(Event1).FullName, typeof(Event2).FullName });
-	
-	// using a generic
-	subscriptionManager.Subscribe<Event1>();
-	subscriptionManager.Subscribe<Event2>();
+// using type
+subscriptionManager.Subscribe(typeof(Event1));
+subscriptionManager.Subscribe(typeof(Event2));
 
-	var bus = ServiceBus
-		.Create(c => c.SubscriptionManager(subscriptionManager))
-		.Start();
+// using a list of types
+subscriptionManager.Subscribe(new[] { typeof(Event1), typeof(Event2) });
+
+// using a full type name
+subscriptionManager.Subscribe(typeof(Event1).FullName);
+subscriptionManager.Subscribe(typeof(Event2).FullName);
+
+// using a list of full type names
+subscriptionManager.Subscribe(new[] { typeof(Event1).FullName, typeof(Event2).FullName });
+
+// using a generic
+subscriptionManager.Subscribe<Event1>();
+subscriptionManager.Subscribe<Event2>();
+
+var bus = ServiceBus.Create(resolver).Start();
 ```
 
 In a production environment it is recommended that the subscription store be maintained manually using an elevated identity.  For the above one could use an identity that has **read-only** permissions.  The `Subscribe` method will fail if the subscription does not exist.  In this way one can ensure that the subscription is not missing from the relevant store.
