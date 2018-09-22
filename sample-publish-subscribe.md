@@ -430,7 +430,7 @@ This will write out some information to the console window.
 
 ## Run
 
-> Set both the client and server projects as the startup.
+> Set the client, server, and subscriber projects as startup projects.
 
 ### Execute
 
