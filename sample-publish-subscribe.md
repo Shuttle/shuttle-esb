@@ -198,7 +198,7 @@ using StructureMap;
 
 namespace Shuttle.PublishSubscribe.Server
 {
-    public class Host : IServiceHostStart
+    public class Host : IServiceHost
     {
         private IServiceBus _bus;
 
@@ -350,7 +350,7 @@ using StructureMap;
 
 namespace Shuttle.PublishSubscribe.Subscriber
 {
-    public class Host : IServiceHostStart
+    public class Host : IServiceHost
     {
         private IServiceBus _bus;
 
