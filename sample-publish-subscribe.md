@@ -295,8 +295,6 @@ This will write out some information to the console window and publish the `Memb
 
 > Add a new `Console Application` to the solution called `Shuttle.PublishSubscribe.Subscriber`.
 
-> Add a new `Console Application` to the solution called `Shuttle.PublishSubscribe.Server`.
-
 > Install the `Shuttle.Esb.Msmq` nuget package.
 
 This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.
