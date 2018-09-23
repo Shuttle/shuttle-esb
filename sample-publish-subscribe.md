@@ -3,6 +3,8 @@ title: Publish / Subscribe Sample
 layout: api
 ---
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/zM9E2Op1fe4" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
 <div class='alert alert-info'>Remember to download the samples from the <a href="https://github.com/Shuttle/Shuttle.Esb.Samples" target="_blank">GitHub repository</a>.</div>
 
 # Running
