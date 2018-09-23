@@ -200,7 +200,7 @@ using StructureMap;
 
 namespace Shuttle.PublishSubscribe.Server
 {
-    public class Host : IServiceHostStart
+    public class Host : IServiceHost
     {
         private IServiceBus _bus;
 
@@ -297,8 +297,6 @@ This will write out some information to the console window and publish the `Memb
 
 > Add a new `Console Application` to the solution called `Shuttle.PublishSubscribe.Subscriber`.
 
-> Add a new `Console Application` to the solution called `Shuttle.PublishSubscribe.Server`.
-
 > Install the `Shuttle.Esb.Msmq` nuget package.
 
 This will provide access to the Msmq `IQueue` implementation and also include the required dependencies.
@@ -352,7 +350,7 @@ using StructureMap;
 
 namespace Shuttle.PublishSubscribe.Subscriber
 {
-    public class Host : IServiceHostStart
+    public class Host : IServiceHost
     {
         private IServiceBus _bus;
 
@@ -434,7 +432,7 @@ This will write out some information to the console window.
 
 ## Run
 
-> Set both the client and server projects as the startup.
+> Set the client, server, and subscriber projects as startup projects.
 
 ### Execute
 
