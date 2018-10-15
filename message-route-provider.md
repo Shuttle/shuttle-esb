@@ -94,7 +94,7 @@ The `AssemblyMessageRouteSpecification` is derived from the `TypeListMessageRout
         <add specification="assembly" value="Shuttle.Messages1" />
       </messageRoute>
       <messageRoute uri="rabbitmq://shuttle:shuttle!@serverA/inbox">
-        <add specification="assembly" value="Shuttle.Messages2.dll" />
+        <add specification="Assembly" value="Shuttle.Messages2.dll" />
       </messageRoute>
     </messageRoutes>
 ```
