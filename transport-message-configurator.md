@@ -77,6 +77,24 @@ public TransportMessageConfigurator WillExpire(DateTime expiryDate)
 
 The message will only remain valid until this date is reached.  After this is will not be processed but rather immediately acknowledged.  The queuing mechanism may also, should it support message expiry, remove the message internally from the queue.
 
+### WithPriority
+
+``` c#
+public TransportMessageConfigurator WithPriority(int priority)
+```
+
+### WithEncryption
+
+``` c#
+public TransportMessageConfigurator WithEncryption(string encryption)
+```
+
+### WithCompression
+
+``` c#
+public TransportMessageConfigurator WithCompression(string compression)
+```
+
 ### TransportMessageReceived
 
 ``` c#
