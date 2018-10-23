@@ -23,7 +23,7 @@ public class LogMessageOwnerModule
 		
 		_logMessageOwnerObserver = logMessageOwnerObserver;
 
-		pipelineFactory.PipelineCreated
+		pipelineFactory.PipelineCreated += PipelineCreated;
 	}
 
 	private void PipelineCreated(object sender, PipelineEventArgs e)
