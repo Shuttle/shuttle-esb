@@ -16,14 +16,14 @@ public class LogMessageOwnerModule
 	private readonly LogMessageOwnerObserver _logMessageOwnerObserver;
 	private readonly string _inboxMessagePipelineName = typeof(InboxMessagePipeline).FullName;
 
-	public void Initialize(IPipelineFactory pipelineFactory, LogMessageOwnerObserver logMessageOwnerObserver)
+	public void LogMessageOwnerModule(IPipelineFactory pipelineFactory, LogMessageOwnerObserver logMessageOwnerObserver)
 	{
 		Guard.AgainstNull(pipelineFactory, "pipelineFactory");
 		Guard.AgainstNull(logMessageOwnerObserver, "logMessageOwnerObserver");
 		
 		_logMessageOwnerObserver = logMessageOwnerObserver;
 
-		bus.Events.PipelineCreated += PipelineCreated;
+		pipelineFactory.PipelineCreated
 	}
 
 	private void PipelineCreated(object sender, PipelineEventArgs e)
