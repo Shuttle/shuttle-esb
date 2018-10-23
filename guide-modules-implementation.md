@@ -14,21 +14,21 @@ A module is an arbitrary class that should use the `IPipelineFactory` implementa
 public class LogMessageOwnerModule
 {
 	private readonly LogMessageOwnerObserver _logMessageOwnerObserver;
-	private readonly string _inboxMessagePipelineName = typeof(InboxMessagePipeline).FullName;
+	private readonly string _inboxMessagePipelineType = typeof(InboxMessagePipeline);
 
-	public void Initialize(IPipelineFactory pipelineFactory, LogMessageOwnerObserver logMessageOwnerObserver)
+	public LogMessageOwnerModule(IPipelineFactory pipelineFactory, LogMessageOwnerObserver logMessageOwnerObserver)
 	{
 		Guard.AgainstNull(pipelineFactory, "pipelineFactory");
 		Guard.AgainstNull(logMessageOwnerObserver, "logMessageOwnerObserver");
 		
 		_logMessageOwnerObserver = logMessageOwnerObserver;
 
-		bus.Events.PipelineCreated += PipelineCreated;
+		pipelineFactory.PipelineCreated += PipelineCreated;
 	}
 
 	private void PipelineCreated(object sender, PipelineEventArgs e)
 	{
-		if (!e.Pipeline.GetType().FullName.Equals(_inboxMessagePipelineName, StringComparison.InvariantCultureIgnoreCase))
+		if (!e.Pipeline.GetType().Equals(_inboxMessagePipelineType))
 		{
 			return;
 		}
