@@ -18,8 +18,8 @@ public class LogMessageOwnerModule
 
 	public LogMessageOwnerModule(IPipelineFactory pipelineFactory, LogMessageOwnerObserver logMessageOwnerObserver)
 	{
-		Guard.AgainstNull(pipelineFactory, "pipelineFactory");
-		Guard.AgainstNull(logMessageOwnerObserver, "logMessageOwnerObserver");
+		Guard.AgainstNull(pipelineFactory, nameof(pipelineFactory));
+		Guard.AgainstNull(logMessageOwnerObserver, nameof(logMessageOwnerObserver));
 		
 		_logMessageOwnerObserver = logMessageOwnerObserver;
 
