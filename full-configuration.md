@@ -33,6 +33,7 @@ The most pertinent bit is the `serviceBus` tag.
     cacheIdentity="true"  
     createQueues="true"  
     removeMessagesNotHandled="false"
+    removeCorruptMessages="false"
     compressionAlgorithm=""
     encryptionAlgorithm="">
 ```
@@ -42,7 +43,8 @@ The most pertinent bit is the `serviceBus` tag.
 | `registerHandlers`				| true		| Will call the `RegisterHandlers` method on the `IMessageHandlerFactory` implementation if set to `true`. | [v7.0.0](https://github.com/Shuttle/Shuttle.Esb/releases/tag/v7.0.0) |
 | `cacheIdentity`				| true		| Determines whether or not to re-use the identity returned by the `IIdentityProvider`. | [v6.2.0](https://github.com/Shuttle/Shuttle.Esb/releases/tag/v6.2.0) |
 | `createQueues`				| true		| The endpoint will attempt to create all local queues (inbox, outbox, control inbox) | |
-| `removeMessagesNotHandled`	| false		| indicates whether messages received on the endpoint that have no message handler should simply be removed (ignored).  If this attribute is `true` the message will simply be acknowledged; else the message will immmediately be placed in the error queue.  *The default changed from **true** to **false** in v7.0.1*. | |
+| `removeMessagesNotHandled`	| false		| Indicates whether messages received on the endpoint that have no message handler should simply be removed (ignored).  If this attribute is `true` the message will simply be acknowledged; else the message will immmediately be placed in the error queue.  *The default changed from **true** to **false** in v7.0.1*. | |
+| `removeCorruptMessages`	| false		| A message is corrupt when the `TransportMessage` retrieved from the queue cannot be deserialized.  If `false` (default) the service bus processed will be killed.  If `true` the messae will be `Acknowledged` with no processing. | 10.1.7 |
 | `compressionAlgorithm`		| empty	(no compression)	| The name of the compression algorithm to use when sending messages.  Out-of-the-box there is a GZip compression implementation (class `GZipCompressionAlgorithm` with name 'GZip'). | |
 | `encryptionAlgorithm`			| empty	(no entryption)		| The name of the encryption algorithm to use when sending messages.  Out-of-the-box there is a Triple DES implementation (class TripleDesEncryptionAlgorithm and name '3DES'). | |
 
