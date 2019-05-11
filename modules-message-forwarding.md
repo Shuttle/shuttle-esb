@@ -4,11 +4,9 @@ layout: api
 ---
 # Shuttle.Esb.Module.MessageForwarding
 
-<div class="nuget-badge">
-	<p>
-		<code>Install-Package Shuttle.Esb.Module.MessageForwarding</code>
-	</p>
-</div>
+```
+PM> Install-Package Shuttle.Esb.Module.MessageForwarding
+```
 
 The MessageForwarding module for Shuttle.Esb will forward any handled messages onto the specified queue(s).
 
@@ -16,21 +14,21 @@ The module will attach the `MessageForwardingObserver` to the `OnAfterHandleMess
 
 ```xml
 <configuration>
-	<configSections>
-		<section name="messageForwarding" type="Shuttle.Esb.Module.MessageForwarding.MessageForwardingSection, Shuttle.Esb.Module.MessageForwarding"/>
-	</configSections>
+    <configSections>
+        <section name="messageForwarding" type="Shuttle.Esb.Module.MessageForwarding.MessageForwardingSection, Shuttle.Esb.Module.MessageForwarding"/>
+    </configSections>
 
-	<messageForwarding>
-		<forwardingRoutes>
-			<messageRoute uri="msmq://./inbox">
-				<add specification="StartsWith" value="Shuttle.Messages1" />
-				<add specification="StartsWith" value="Shuttle.Messages2" />
-			</messageRoute>
-			<messageRoute uri="sql://./inbox">
-				<add specification="TypeList" value="DoSomethingCommand" />
-			</messageRoute>
-		</forwardingRoutes>
-	</messageForwarding>
+    <messageForwarding>
+        <forwardingRoutes>
+            <messageRoute uri="msmq://./inbox">
+                <add specification="StartsWith" value="Shuttle.Messages1" />
+                <add specification="StartsWith" value="Shuttle.Messages2" />
+            </messageRoute>
+            <messageRoute uri="sql://./inbox">
+                <add specification="TypeList" value="DoSomethingCommand" />
+            </messageRoute>
+        </forwardingRoutes>
+    </messageForwarding>
 </configuration>
 ```
 

@@ -2,92 +2,32 @@
 layout: default
 title: Shuttle.Esb Documentation
 ---
-<div class='panel panel-primary'>
-    <div class="panel-heading">
+<div class='card'>
+    <div class="card-header">
         <h3>Shuttle.Esb</h3>
     </div>
-    <div class="panel-body">
-        <p>A highly configurable free open-source enterprise service bus that provides you with a mechanism to create <a href='{{ site.baseurl }}/autonomous-component/index.html'>Autonomous Business Components</a> that are loosely coupled.  This enables you to develop and deploy specific business functionality that can be independently versioned.</p>
+    <div class="card-body">
+        <p>A highly configurable free open-source enterprise service bus that provides you with a mechanism to create <a href='{{ "/autonomous-component" | relative_url }}'>Autonomous Business Components</a> that are loosely coupled.  This enables you to develop and deploy specific business functionality that can be independently versioned.</p>
     </div>
 </div>
-
+<br/>
 <div class="alert alert-success" role="alert">
-    <p>Now supports .Net 4.6+ and .Net Core 2.0+ (from v10.0.0)</p>
+    Now supports .Net 4.6.1+ full framework and .Net Core 2.1+ framework.
 </div>
 
 {% capture include-index %}{% include index.md %}{% endcapture %}
 {{ include-index | markdownify }}
 
 <br/>
-<div class='list-group'>
-    <h4 class='list-group-item-heading'>Resources</h4>
-    <a class='list-group-item' target='_blank' href='https://github.com/Shuttle/Shuttle.Esb.Samples'>Shuttle.Esb Samples</a>
-    <a class='list-group-item' target='_blank' href='http://www.eaipatterns.com/toc.html'>Enterprise Integration Patterns</a>
-    <a class='list-group-item' target='_blank' href='http://msdn.microsoft.com/en-us/library/aa480027.aspx'>Messaging Patterns in Service-Oriented Architecture, Part 1</a>
-    <a class='list-group-item' target='_blank' href='http://msdn.microsoft.com/en-us/library/aa480061.aspx'>Messaging Patterns in Service-Oriented Architecture, Part 2</a>
-</div>
 
-{% for post in paginator.posts %}
-<div class='row'>
-    <div class='col-md-12'>
-        <h2>{{ post.title }}</h2>
-        <h4>{{ post.date | date_to_long_string }}</h4>
-        <p>
-            <a href='{{ site.baseurl }}{{ post.url }}'>Read Post</a>
-        </p>
+<div class="card" style="width: 18rem;">
+    <div class="card-header">
+        Resources
     </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item"><a target='_blank' href='https://github.com/Shuttle/Shuttle.Esb.Samples'>Shuttle.Esb Samples</a></li>
+        <li class="list-group-item"><a target='_blank' href='http://www.eaipatterns.com/toc.html'>Enterprise Integration Patterns</a></li>
+        <li class="list-group-item"><a target='_blank' href='http://msdn.microsoft.com/en-us/library/aa480027.aspx'>Messaging Patterns in Service-Oriented Architecture, Part 1</a></li>
+        <li class="list-group-item"><a target='_blank' href='http://msdn.microsoft.com/en-us/library/aa480061.aspx'>Messaging Patterns in Service-Oriented Architecture, Part 2</a></li>
+    </ul>
 </div>
-{% endfor %}
-<div class='row'>
-    <div class='col-md-12'>
-        <div class='pagination'>
-            <ul class='pagination'>
-        {% if paginator.previous_page %}
-          {% if paginator.previous_page == 1 %}
-                <li>
-                    <a href='/'>&laquo;</a>
-                </li>
-          {% else %}
-                <li>
-                    <a href='/page{{ paginator.previous_page }}'>&laquo;</a>
-                </li>
-          {% endif %}
-        {% else %}
-                <li>
-                    <span class='disabled'>&laquo;</span>
-                </li>
-        {% endif %}
-        {% if paginator.page == 1 %}
-                <li>
-                    <span class='active'>1</span>
-                </li>
-        {% else %}
-                <li>
-                    <a href='/'>1</a>
-                </li>
-        {% endif %}
-        {% for count in (2..paginator.total_pages) %}
-          {% if count == paginator.page %}
-                <li>
-                    <span class='active'>{{ count }}</span>
-                </li>
-          {% else %}
-                <li>
-                    <a href='/page{{ count }}'>{{ count }}</a>
-                </li>
-          {% endif %}
-        {% endfor %}
-        {% if paginator.next_page %}
-                <li>
-                    <a href='/page{{ paginator.next_page }}'>&raquo;</a>
-                </li>
-        {% else %}
-                <li>
-                    <span class='disabled'>&raquo;</span>
-                </li>
-        {% endif %}
-            </ul>
-        </div>
-    </div>
-</div>
-

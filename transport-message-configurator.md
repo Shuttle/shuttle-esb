@@ -59,12 +59,12 @@ public TransportMessageConfigurator Defer(DateTime ignoreTillDate)
 Ignores the [TransportMessage] until the given date/time has been reached.  The [TransportMessage] is sent immediately and it is up to the receiving endpoint to decide how to defer it.  It is recommended that you configure a deferred queue:
 
 ``` xml
-	<serviceBus>
-		<inbox
-		  workQueueUri="msmq://./pubsub-client-inbox-work"
-		  deferredQueueUri="msmq://./pubsub-client-inbox-deferred" <!-- THE DEFERRED QUEUE STORE -->
-		  errorQueueUri="msmq://./shuttle-samples-error" />
-	</serviceBus>
+    <serviceBus>
+        <inbox
+          workQueueUri="msmq://./pubsub-client-inbox-work"
+          deferredQueueUri="msmq://./pubsub-client-inbox-deferred" <!-- THE DEFERRED QUEUE STORE -->
+          errorQueueUri="msmq://./shuttle-samples-error" />
+    </serviceBus>
 ```
 
 Without a dedicated deferred queue the work queue will contain the deferred message.  This may slow down processing as a deferred message is not regarded as work.  If the queue contains too many deferred messages the queue processing will become very slow and unresponsive.
@@ -119,6 +119,6 @@ public TransportMessage TransportMessage(IServiceBusConfiguration configuration)
 
 This returns a new [TransportMessage] that contains the configured properties.
 
-[MessageSender]: {{ site.baseurl }}/message-sender
-[HandlerContext]: {{ site.baseurl }}/handler-context
-[TransportMessage]: {{ site.baseurl }}/transport-message
+[MessageSender]: {{ "/message-sender" | resolver_url }}
+[HandlerContext]: {{ "/handler-context" | resolver_url }}
+[TransportMessage]: {{ "/transport-message" | resolver_url }}

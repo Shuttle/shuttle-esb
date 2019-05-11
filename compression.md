@@ -14,7 +14,7 @@ The following algorithms are included out-of-the-box:
 All messages that are outgoing will be compressed using the algorithm name specified in the `serviceBus` configuration section (empty for no compression):
 
 ```xml
-  <serviceBus
+<serviceBus
     compressionAlgorithm="">
 ```
 

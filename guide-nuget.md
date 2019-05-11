@@ -1,6 +1,6 @@
 ---
 title: NuGet
-layout: guide
+layout: api
 ---
 # NuGet
 
@@ -8,4 +8,4 @@ For the most part you would need the `Shuttle.Esb` assembly in a shuttle project
 
 ## Add NuGet Package
 
-![NuGet Shuttle.Esb]({{ site.baseurl }}/assets/images/guide-nuget-1.png "NuGet")
+![NuGet Shuttle.Esb]({{ "/assets/images/guide-nuget-1.png" | resolver_url }} "NuGet")

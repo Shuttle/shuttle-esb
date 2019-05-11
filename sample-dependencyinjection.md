@@ -45,10 +45,10 @@ In this guide we'll create the following projects:
 ``` c#
 namespace Shuttle.DependencyInjection.Messages
 {
-	public class RegisterMemberCommand
-	{
-		public string UserName { get; set; }
-	}
+    public class RegisterMemberCommand
+    {
+        public string UserName { get; set; }
+    }
 }
 ```
 
@@ -111,17 +111,17 @@ namespace Shuttle.DependencyInjection.Client
 ``` xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
-	<configSections>
-		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
-	</configSections>
+    <configSections>
+        <section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
+    </configSections>
 
-	<serviceBus>
-		<messageRoutes>
-			<messageRoute uri="msmq://./shuttle-server-work">
-				<add specification="StartsWith" value="Shuttle.DependencyInjection.Messages" />
-			</messageRoute>
-		</messageRoutes>		
-	</serviceBus>
+    <serviceBus>
+        <messageRoutes>
+            <messageRoute uri="msmq://./shuttle-server-work">
+                <add specification="StartsWith" value="Shuttle.DependencyInjection.Messages" />
+            </messageRoute>
+        </messageRoutes>        
+    </serviceBus>
 </configuration>
 ```
 
@@ -140,10 +140,10 @@ To demonstrate the dependency injection we will create a fake e-mail service tha
 ``` c#
 namespace Shuttle.DependencyInjection.EMail
 {
-	public interface IEMailService
-	{
-		void Send(string name);
-	}
+    public interface IEMailService
+    {
+        void Send(string name);
+    }
 }
 ```
 
@@ -157,21 +157,21 @@ using System.Threading;
 
 namespace Shuttle.DependencyInjection.EMail
 {
-	public class EMailService : IEMailService
-	{
-		public void Send(string name)
-		{
-			Console.WriteLine();
-			Console.WriteLine("[SENDING E-MAIL] : name = '{0}'", name);
-			Console.WriteLine();
+    public class EMailService : IEMailService
+    {
+        public void Send(string name)
+        {
+            Console.WriteLine();
+            Console.WriteLine("[SENDING E-MAIL] : name = '{0}'", name);
+            Console.WriteLine();
 
-			Thread.Sleep(3000); // simulate communication wait time
+            Thread.Sleep(3000); // simulate communication wait time
 
-			Console.WriteLine();
-			Console.WriteLine("[E-MAIL SENT] : name = '{0}'", name);
-			Console.WriteLine();
-		}
-	}
+            Console.WriteLine();
+            Console.WriteLine("[E-MAIL SENT] : name = '{0}'", name);
+            Console.WriteLine();
+        }
+    }
 }
 ```
 
@@ -259,15 +259,15 @@ namespace Shuttle.DependencyInjection.Server
 ``` xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
-	<configSections>
-		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
-	</configSections>
+    <configSections>
+        <section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
+    </configSections>
 
-	<serviceBus>
-		<inbox
-		   workQueueUri="msmq://./shuttle-server-work"
-		   errorQueueUri="msmq://./shuttle-error" />
-	</serviceBus>
+    <serviceBus>
+        <inbox
+           workQueueUri="msmq://./shuttle-server-work"
+           errorQueueUri="msmq://./shuttle-error" />
+    </serviceBus>
 </configuration>
 ```
 
@@ -284,26 +284,26 @@ using Shuttle.DependencyInjection.Messages;
 
 namespace Shuttle.DependencyInjection.Server
 {
-	public class RegisterMemberHandler : IMessageHandler<RegisterMemberCommand>
-	{
-		private readonly IEMailService _emailService;
+    public class RegisterMemberHandler : IMessageHandler<RegisterMemberCommand>
+    {
+        private readonly IEMailService _emailService;
 
-		public RegisterMemberHandler(IEMailService emailService)
-		{
-			Guard.AgainstNull(emailService, "emailService");
+        public RegisterMemberHandler(IEMailService emailService)
+        {
+            Guard.AgainstNull(emailService, "emailService");
 
-			_emailService = emailService;
-		}
+            _emailService = emailService;
+        }
 
-		public void ProcessMessage(IHandlerContext<RegisterMemberCommand> context)
-		{
-			Console.WriteLine();
-			Console.WriteLine("[MEMBER REGISTERED] : user name = '{0}'", context.Message.UserName);
-			Console.WriteLine();
+        public void ProcessMessage(IHandlerContext<RegisterMemberCommand> context)
+        {
+            Console.WriteLine();
+            Console.WriteLine("[MEMBER REGISTERED] : user name = '{0}'", context.Message.UserName);
+            Console.WriteLine();
 
-			_emailService.Send(context.Message.UserName);
-		}
-	}
+            _emailService.Send(context.Message.UserName);
+        }
+    }
 }
 ```
 

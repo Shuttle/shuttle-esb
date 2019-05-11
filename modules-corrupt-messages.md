@@ -4,12 +4,9 @@ layout: api
 ---
 # Shuttle.Esb.Module.CorruptTransportMessage
 
-<div class="nuget-badge">
-	<p>
-		<code>Install-Package Shuttle.Esb.Module.CorruptTransportMessage</code>
-	</p>
-</div>
-
+```
+PM> Install-Package Shuttle.Esb.Module.CorruptTransportMessage
+```
 
 The CorruptTransportMessage module for Shuttle.Esb writes any transport messages that fail to deserialize to disk.
 
@@ -17,9 +14,9 @@ It will log any transport messages that fail deserailization via the `ServiceBus
 
 ```xml
 <configuration>
-	<configSections>
-		<section name="corruptTransportMessage" type="Shuttle.Esb.Module.CorruptTransportMessage.CorruptTransportMessageSection, Shuttle.Esb.Module.CorruptTransportMessage"/>
-	</configSections>
+    <configSections>
+        <section name="corruptTransportMessage" type="Shuttle.Esb.Module.CorruptTransportMessage.CorruptTransportMessageSection, Shuttle.Esb.Module.CorruptTransportMessage"/>
+    </configSections>
 
   <corruptTransportMessage folder=".\corrupt-transport-messages" />
 </configuration>

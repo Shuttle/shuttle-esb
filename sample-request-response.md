@@ -44,10 +44,10 @@ In this guide we'll create the following projects:
 ``` c#
 namespace Shuttle.RequestResponse.Messages
 {
-	public class RegisterMemberCommand
-	{
-		public string UserName { get; set; }
-	}
+    public class RegisterMemberCommand
+    {
+        public string UserName { get; set; }
+    }
 }
 ```
 
@@ -58,10 +58,10 @@ namespace Shuttle.RequestResponse.Messages
 ``` c#
 namespace Shuttle.RequestResponse.Messages
 {
-	public class MemberRegisteredEvent
-	{
-		public string UserName { get; set; }
-	}
+    public class MemberRegisteredEvent
+    {
+        public string UserName { get; set; }
+    }
 }
 ```
 
@@ -92,28 +92,28 @@ using Shuttle.RequestResponse.Messages;
 
 namespace Shuttle.RequestResponse.Client
 {
-	internal class Program
-	{
-		private static void Main(string[] args)
-		{
-			var container = new WindsorComponentContainer(new WindsorContainer());
+    internal class Program
+    {
+        private static void Main(string[] args)
+        {
+            var container = new WindsorComponentContainer(new WindsorContainer());
 
-			ServiceBus.Register(container);
+            ServiceBus.Register(container);
 
-			using (var bus = ServiceBus.Create(container).Start())
-			{
-				string userName;
+            using (var bus = ServiceBus.Create(container).Start())
+            {
+                string userName;
 
-				while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
-				{
-					bus.Send(new RegisterMemberCommand
-					{
-						UserName = userName
-					}, c => c.WillExpire(DateTime.Now.AddSeconds(5)));
-				}
-			}
-		}
-	}
+                while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
+                {
+                    bus.Send(new RegisterMemberCommand
+                    {
+                        UserName = userName
+                    }, c => c.WillExpire(DateTime.Now.AddSeconds(5)));
+                }
+            }
+        }
+    }
 }
 ```
 
@@ -124,21 +124,21 @@ namespace Shuttle.RequestResponse.Client
 ``` xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
-	<configSections>
-		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
-	</configSections>
+    <configSections>
+        <section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
+    </configSections>
 
-	<serviceBus>
-		<messageRoutes>
-			<messageRoute uri="msmq://./shuttle-server-work">
-				<add specification="StartsWith" value="Shuttle.RequestResponse.Messages" />
-			</messageRoute>
-		</messageRoutes>		
+    <serviceBus>
+        <messageRoutes>
+            <messageRoute uri="msmq://./shuttle-server-work">
+                <add specification="StartsWith" value="Shuttle.RequestResponse.Messages" />
+            </messageRoute>
+        </messageRoutes>        
 
-		<inbox
-		   workQueueUri="msmq://./shuttle-client-work"
-		   errorQueueUri="msmq://./shuttle-error" />
-	</serviceBus>
+        <inbox
+           workQueueUri="msmq://./shuttle-client-work"
+           errorQueueUri="msmq://./shuttle-error" />
+    </serviceBus>
 </configuration>
 ```
 
@@ -155,15 +155,15 @@ using Shuttle.RequestResponse.Messages;
 
 namespace Shuttle.RequestResponse.Client
 {
-	public class MemberRegisteredHandler : IMessageHandler<MemberRegisteredEvent>
-	{
-		public void ProcessMessage(IHandlerContext<MemberRegisteredEvent> context)
-		{
-			Console.WriteLine();
-			Console.WriteLine("[RESPONSE RECEIVED] : user name = '{0}'", context.Message.UserName);
-			Console.WriteLine();
-		}
-	}
+    public class MemberRegisteredHandler : IMessageHandler<MemberRegisteredEvent>
+    {
+        public void ProcessMessage(IHandlerContext<MemberRegisteredEvent> context)
+        {
+            Console.WriteLine();
+            Console.WriteLine("[RESPONSE RECEIVED] : user name = '{0}'", context.Message.UserName);
+            Console.WriteLine();
+        }
+    }
 }
 ```
 
@@ -256,15 +256,15 @@ namespace Shuttle.RequestResponse.Server
 ``` xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
-	<configSections>
-		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
-	</configSections>
+    <configSections>
+        <section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
+    </configSections>
 
-	<serviceBus>
-		 <inbox
-			workQueueUri="msmq://./shuttle-server-work"
-			errorQueueUri="msmq://./shuttle-error" />
-	</serviceBus>
+    <serviceBus>
+         <inbox
+            workQueueUri="msmq://./shuttle-server-work"
+            errorQueueUri="msmq://./shuttle-error" />
+    </serviceBus>
 </configuration>
 ```
 
@@ -279,20 +279,20 @@ using Shuttle.RequestResponse.Messages;
 
 namespace Shuttle.RequestResponse.Server
 {
-	public class RegisterMemberHandler : IMessageHandler<RegisterMemberCommand>
-	{
-		public void ProcessMessage(IHandlerContext<RegisterMemberCommand> context)
-		{
-			Console.WriteLine();
-			Console.WriteLine("[MEMBER REGISTERED] : user name = '{0}'", context.Message.UserName);
-			Console.WriteLine();
+    public class RegisterMemberHandler : IMessageHandler<RegisterMemberCommand>
+    {
+        public void ProcessMessage(IHandlerContext<RegisterMemberCommand> context)
+        {
+            Console.WriteLine();
+            Console.WriteLine("[MEMBER REGISTERED] : user name = '{0}'", context.Message.UserName);
+            Console.WriteLine();
 
-			context.Send(new MemberRegisteredEvent
-			{
-				UserName = context.Message.UserName
-			}, c => c.Reply());
-		}
-	}
+            context.Send(new MemberRegisteredEvent
+            {
+                UserName = context.Message.UserName
+            }, c => c.Reply());
+        }
+    }
 }
 ```
 

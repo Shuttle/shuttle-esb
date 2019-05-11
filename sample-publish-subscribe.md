@@ -48,10 +48,10 @@ In this guide we'll create the following projects:
 ``` c#
 namespace Shuttle.PublishSubscribe.Messages
 {
-	public class RegisterMemberCommand
-	{
-		public string UserName { get; set; }
-	}
+    public class RegisterMemberCommand
+    {
+        public string UserName { get; set; }
+    }
 }
 ```
 
@@ -62,10 +62,10 @@ namespace Shuttle.PublishSubscribe.Messages
 ``` c#
 namespace Shuttle.PublishSubscribe.Messages
 {
-	public class MemberRegisteredEvent
-	{
-		public string UserName { get; set; }
-	}
+    public class MemberRegisteredEvent
+    {
+        public string UserName { get; set; }
+    }
 }
 ```
 
@@ -96,29 +96,29 @@ using StructureMap;
 
 namespace Shuttle.PublishSubscribe.Client
 {
-	internal class Program
-	{
-		private static void Main(string[] args)
-		{
-			var smRegistry = new Registry();
-			var registry = new StructureMapComponentRegistry(smRegistry);
+    internal class Program
+    {
+        private static void Main(string[] args)
+        {
+            var smRegistry = new Registry();
+            var registry = new StructureMapComponentRegistry(smRegistry);
 
-			ServiceBus.Register(registry);
+            ServiceBus.Register(registry);
 
-			using (var bus = ServiceBus.Create(new StructureMapComponentResolver(new Container(smRegistry))).Start())
-			{
-				string userName;
+            using (var bus = ServiceBus.Create(new StructureMapComponentResolver(new Container(smRegistry))).Start())
+            {
+                string userName;
 
-				while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
-				{
-					bus.Send(new RegisterMemberCommand
-					{
-						UserName = userName
-					});
-				}
-			}
-		}
-	}
+                while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
+                {
+                    bus.Send(new RegisterMemberCommand
+                    {
+                        UserName = userName
+                    });
+                }
+            }
+        }
+    }
 }
 ```
 
@@ -129,17 +129,17 @@ namespace Shuttle.PublishSubscribe.Client
 ``` xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
-	<configSections>
-		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
-	</configSections>
+    <configSections>
+        <section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
+    </configSections>
 
-	<serviceBus>
-		<messageRoutes>
-			<messageRoute uri="msmq://./shuttle-server-work">
-				<add specification="StartsWith" value="Shuttle.PublishSubscribe.Messages" />
-			</messageRoute>
-		</messageRoutes>		
-	</serviceBus>
+    <serviceBus>
+        <messageRoutes>
+            <messageRoute uri="msmq://./shuttle-server-work">
+                <add specification="StartsWith" value="Shuttle.PublishSubscribe.Messages" />
+            </messageRoute>
+        </messageRoutes>        
+    </serviceBus>
 </configuration>
 ```
 
@@ -243,21 +243,21 @@ Whenever `Publish` is called the registered `ISubscriptionManager` instance is a
 ``` xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
-	<configSections>
-		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
-	</configSections>
+    <configSections>
+        <section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
+    </configSections>
 
-	<connectionStrings>
-		<add name="Subscription"
-			 connectionString="Data Source=.;Initial Catalog=shuttle;Integrated Security=SSPI;"
-			 providerName="System.Data.SqlClient"/>
-	</connectionStrings>
+    <connectionStrings>
+        <add name="Subscription"
+             connectionString="Data Source=.;Initial Catalog=shuttle;Integrated Security=SSPI;"
+             providerName="System.Data.SqlClient"/>
+    </connectionStrings>
 
-	<serviceBus>
-		 <inbox
-			workQueueUri="msmq://./shuttle-server-work"
-			errorQueueUri="msmq://./shuttle-error" />
-	</serviceBus>
+    <serviceBus>
+         <inbox
+            workQueueUri="msmq://./shuttle-server-work"
+            errorQueueUri="msmq://./shuttle-error" />
+    </serviceBus>
 </configuration>
 ```
 
@@ -274,20 +274,20 @@ using Shuttle.PublishSubscribe.Messages;
 
 namespace Shuttle.PublishSubscribe.Server
 {
-	public class RegisterMemberHandler : IMessageHandler<RegisterMemberCommand>
-	{
-		public void ProcessMessage(IHandlerContext<RegisterMemberCommand> context)
-		{
-			Console.WriteLine();
-			Console.WriteLine("[MEMBER REGISTERED] : user name = '{0}'", context.Message.UserName);
-			Console.WriteLine();
+    public class RegisterMemberHandler : IMessageHandler<RegisterMemberCommand>
+    {
+        public void ProcessMessage(IHandlerContext<RegisterMemberCommand> context)
+        {
+            Console.WriteLine();
+            Console.WriteLine("[MEMBER REGISTERED] : user name = '{0}'", context.Message.UserName);
+            Console.WriteLine();
 
-			context.Publish(new MemberRegisteredEvent
-			{
-				UserName = context.Message.UserName
-			});
-		}
-	}
+            context.Publish(new MemberRegisteredEvent
+            {
+                UserName = context.Message.UserName
+            });
+        }
+    }
 }
 ```
 
@@ -387,21 +387,21 @@ It is important to note that in a production environment one would not typically
 ``` xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
-	<configSections>
-		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
-	</configSections>
+    <configSections>
+        <section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
+    </configSections>
 
-	<connectionStrings>
-		<add name="Subscription"
-			 connectionString="Data Source=.;Initial Catalog=shuttle;Integrated Security=SSPI;"
-			 providerName="System.Data.SqlClient"/>
-	</connectionStrings>
+    <connectionStrings>
+        <add name="Subscription"
+             connectionString="Data Source=.;Initial Catalog=shuttle;Integrated Security=SSPI;"
+             providerName="System.Data.SqlClient"/>
+    </connectionStrings>
 
-	<serviceBus>
-		 <inbox
-			workQueueUri="msmq://./shuttle-subscriber-work"
-			errorQueueUri="msmq://./shuttle-error" />
-	</serviceBus>
+    <serviceBus>
+         <inbox
+            workQueueUri="msmq://./shuttle-subscriber-work"
+            errorQueueUri="msmq://./shuttle-error" />
+    </serviceBus>
 </configuration>
 ```
 
@@ -416,15 +416,15 @@ using Shuttle.PublishSubscribe.Messages;
 
 namespace Shuttle.PublishSubscribe.Server
 {
-	public class MemberRegisteredHandler : IMessageHandler<MemberRegisteredEvent>
-	{
-		public void ProcessMessage(IHandlerContext<MemberRegisteredEvent> context)
-		{
-			Console.WriteLine();
-			Console.WriteLine("[EVENT RECEIVED] : user name = '{0}'", context.Message.UserName);
-			Console.WriteLine();
-		}
-	}
+    public class MemberRegisteredHandler : IMessageHandler<MemberRegisteredEvent>
+    {
+        public void ProcessMessage(IHandlerContext<MemberRegisteredEvent> context)
+        {
+            Console.WriteLine();
+            Console.WriteLine("[EVENT RECEIVED] : user name = '{0}'", context.Message.UserName);
+            Console.WriteLine();
+        }
+    }
 }
 ```
 

@@ -50,10 +50,10 @@ In this guide we'll create the following projects:
 ``` c#
 namespace Shuttle.Distribution.Messages
 {
-	public class RegisterMemberCommand
-	{
-		public string UserName { get; set; }
-	}
+    public class RegisterMemberCommand
+    {
+        public string UserName { get; set; }
+    }
 }
 ```
 
@@ -116,17 +116,17 @@ namespace Shuttle.Distribution.Client
 ``` xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
-	<configSections>
-		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
-	</configSections>
+    <configSections>
+        <section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
+    </configSections>
 
-	<serviceBus>
-		<messageRoutes>
-			<messageRoute uri="msmq://./shuttle-server-work">
-				<add specification="StartsWith" value="Shuttle.Distribution.Messages" />
-			</messageRoute>
-		</messageRoutes>		
-	</serviceBus>
+    <serviceBus>
+        <messageRoutes>
+            <messageRoute uri="msmq://./shuttle-server-work">
+                <add specification="StartsWith" value="Shuttle.Distribution.Messages" />
+            </messageRoute>
+        </messageRoutes>        
+    </serviceBus>
 </configuration>
 ```
 
@@ -203,20 +203,20 @@ namespace Shuttle.Distribution.Server
 ``` xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
-	<configSections>
-		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
-	</configSections>
+    <configSections>
+        <section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
+    </configSections>
 
-	<serviceBus>
-		<control 
-			workQueueUri="msmq://./shuttle-server-control-inbox-work" 
-			errorQueueUri="msmq://./shuttle-samples-error" />
+    <serviceBus>
+        <control 
+            workQueueUri="msmq://./shuttle-server-control-inbox-work" 
+            errorQueueUri="msmq://./shuttle-samples-error" />
 
-		<inbox
-		   distribute="true"
-		   workQueueUri="msmq://./shuttle-server-work"
-		   errorQueueUri="msmq://./shuttle-error" />
-	</serviceBus>
+        <inbox
+           distribute="true"
+           workQueueUri="msmq://./shuttle-server-work"
+           errorQueueUri="msmq://./shuttle-error" />
+    </serviceBus>
 </configuration>
 ```
 
@@ -297,18 +297,18 @@ namespace Shuttle.Distribution.Worker
 ``` xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
-	<configSections>
-		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
-	</configSections>
+    <configSections>
+        <section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
+    </configSections>
 
-	<serviceBus>
-		<worker 
-			distributorControlWorkQueueUri="msmq://./shuttle-server-control-inbox-work" />
-			
-		<inbox
-			workQueueUri="msmq://./shuttle-worker-work"
-			errorQueueUri="msmq://./shuttle-error" />
-	</serviceBus>
+    <serviceBus>
+        <worker 
+            distributorControlWorkQueueUri="msmq://./shuttle-server-control-inbox-work" />
+            
+        <inbox
+            workQueueUri="msmq://./shuttle-worker-work"
+            errorQueueUri="msmq://./shuttle-error" />
+    </serviceBus>
 </configuration>
 ```
 
@@ -325,15 +325,15 @@ using Shuttle.Distribution.Messages;
 
 namespace Shuttle.Distribution.Worker
 {
-	public class RegisterMemberHandler : IMessageHandler<RegisterMemberCommand>
-	{
-		public void ProcessMessage(IHandlerContext<RegisterMemberCommand> context)
-		{
-			Console.WriteLine();
-			Console.WriteLine("[MEMBER REGISTERED --- WORKER] : user name = '{0}'", context.Message.UserName);
-			Console.WriteLine();
-		}
-	}
+    public class RegisterMemberHandler : IMessageHandler<RegisterMemberCommand>
+    {
+        public void ProcessMessage(IHandlerContext<RegisterMemberCommand> context)
+        {
+            Console.WriteLine();
+            Console.WriteLine("[MEMBER REGISTERED --- WORKER] : user name = '{0}'", context.Message.UserName);
+            Console.WriteLine();
+        }
+    }
 }
 ```
 
@@ -355,4 +355,4 @@ This will write out some information to the console window.
 
 You have now implemented message distribution.
 
-[transport-message]: {{ site.baseurl }}/transport-message
+[transport-message]: {{ "/transport-message" | resolver_url }}

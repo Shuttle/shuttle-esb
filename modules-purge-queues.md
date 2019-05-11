@@ -4,11 +4,9 @@ layout: api
 ---
 # Shuttle.Esb.Module.PurgeQueues
 
-<div class="nuget-badge">
-	<p>
-		<code>Install-Package Shuttle.Esb.Module.PurgeQueues</code>
-	</p>
-</div>
+```
+PM> Install-Package Shuttle.Esb.Module.PurgeQueues
+```
 
 The PurgeQueues module for Shuttle.Esb clears the specified queues on startup.
 
@@ -16,16 +14,16 @@ The module will attach the `PurgeQueuesObserver` to the `OnAfterInitializeQueueF
 
 ```xml
 <configuration>
-	<configSections>
-		<section name="purgeQueues" type="Shuttle.Esb.Module.PurgeQueues.PurgeQueuesSection, Shuttle.Esb.Module.PurgeQueues"/>
-	</configSections>
+    <configSections>
+        <section name="purgeQueues" type="Shuttle.Esb.Module.PurgeQueues.PurgeQueuesSection, Shuttle.Esb.Module.PurgeQueues"/>
+    </configSections>
 
-	<purgeQueues>
-		<queues>
-			<queue uri="msmq://./inbox" />
-			<queue uri="sql://./inbox" />
-		</queues>
-	</purgeQueues>
+    <purgeQueues>
+        <queues>
+            <queue uri="msmq://./inbox" />
+            <queue uri="sql://./inbox" />
+        </queues>
+    </purgeQueues>
 </configuration>
 ```
 

@@ -1,0 +1,30 @@
+<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+
+{%- include head.html -%}
+
+<body>
+    <script lang="js">
+        performSearch('{{ site.time | date: '%s' }}');
+    </script>
+
+{%- include header.html -%}
+
+<main class="page-content" aria-label="Content">
+    <div class="wrapper">
+        <div class="row">
+            <div class='col-md-2 d-none d-sm-block'>
+            </div>
+            <div class='col-md-8 pb-5' id="search-results-container">
+            </div>
+            <div class='col-md-2 d-none d-sm-block'>
+            </div>
+        </div>
+    </div>
+</main>
+
+{%- include footer.html -%}
+
+</body>
+
+</html>
+

@@ -46,10 +46,10 @@ In this guide we'll create the following projects:
 ``` c#
 namespace Shuttle.Idempotence.Messages
 {
-	public class RegisterMemberCommand
-	{
-		public string UserName { get; set; }
-	}
+    public class RegisterMemberCommand
+    {
+        public string UserName { get; set; }
+    }
 }
 ```
 
@@ -81,40 +81,40 @@ using SimpleInjector;
 
 namespace Shuttle.Idempotence.Client
 {
-	internal class Program
-	{
-		private static void Main(string[] args)
-		{
-			var container = new SimpleInjectorComponentContainer(new Container());
+    internal class Program
+    {
+        private static void Main(string[] args)
+        {
+            var container = new SimpleInjectorComponentContainer(new Container());
 
-			ServiceBus.Register(container);
+            ServiceBus.Register(container);
 
-			var transportMessageFactory = container.Resolve<ITransportMessageFactory>();
+            var transportMessageFactory = container.Resolve<ITransportMessageFactory>();
 
-			using (var bus = ServiceBus.Create(container).Start())
-			{
-				string userName;
+            using (var bus = ServiceBus.Create(container).Start())
+            {
+                string userName;
 
-				while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
-				{
-					var command = new RegisterMemberCommand
-					{
-						UserName = userName
-					};
+                while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
+                {
+                    var command = new RegisterMemberCommand
+                    {
+                        UserName = userName
+                    };
 
-					var transportMessage = transportMessageFactory.Create(command, c => { });
+                    var transportMessage = transportMessageFactory.Create(command, c => { });
 
-					for (var i = 0; i < 5; i++)
-					{
-						bus.Dispatch(transportMessage); // will be processed once since message id is the same
-					}
+                    for (var i = 0; i < 5; i++)
+                    {
+                        bus.Dispatch(transportMessage); // will be processed once since message id is the same
+                    }
 
-					bus.Send(command); // will be processed since it has a new message id
-					bus.Send(command); // will also be processed since it too has a new message id
-				}
-			}
-		}
-	}
+                    bus.Send(command); // will be processed since it has a new message id
+                    bus.Send(command); // will also be processed since it too has a new message id
+                }
+            }
+        }
+    }
 }
 ```
 
@@ -129,17 +129,17 @@ The next two `Send` operations do not use the `TransportMessage` but rather send
 ``` xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
-	<configSections>
-		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
-	</configSections>
+    <configSections>
+        <section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
+    </configSections>
 
-	<serviceBus>
-		<messageRoutes>
-			<messageRoute uri="msmq://./shuttle-server-work">
-				<add specification="StartsWith" value="Shuttle.Idempotence.Messages" />
-			</messageRoute>
-		</messageRoutes>		
-	</serviceBus>
+    <serviceBus>
+        <messageRoutes>
+            <messageRoute uri="msmq://./shuttle-server-work">
+                <add specification="StartsWith" value="Shuttle.Idempotence.Messages" />
+            </messageRoute>
+        </messageRoutes>        
+    </serviceBus>
 </configuration>
 ```
 
@@ -238,21 +238,21 @@ The `{version}` bit will be in a `semver` format.
 ``` xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
-	<configSections>
-		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
-	</configSections>
+    <configSections>
+        <section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
+    </configSections>
 
-	<connectionStrings>
-		<add name="Idempotence"
-			 connectionString="Data Source=.;Initial Catalog=shuttle;Integrated Security=SSPI;"
-			 providerName="System.Data.SqlClient"/>
-	</connectionStrings>
+    <connectionStrings>
+        <add name="Idempotence"
+             connectionString="Data Source=.;Initial Catalog=shuttle;Integrated Security=SSPI;"
+             providerName="System.Data.SqlClient"/>
+    </connectionStrings>
 
-	<serviceBus>
-		 <inbox
-			workQueueUri="msmq://./shuttle-server-work"
-			errorQueueUri="msmq://./shuttle-error" />
-	</serviceBus>
+    <serviceBus>
+         <inbox
+            workQueueUri="msmq://./shuttle-server-work"
+            errorQueueUri="msmq://./shuttle-error" />
+    </serviceBus>
 </configuration>
 ```
 
@@ -267,17 +267,17 @@ using Shuttle.Idempotence.Messages;
 
 namespace Shuttle.Idempotence.Server
 {
-	public class RegisterMemberHandler : IMessageHandler<RegisterMemberCommand>
-	{
-		public void ProcessMessage(IHandlerContext<RegisterMemberCommand> context)
-		{
-			Console.WriteLine();
-			Console.WriteLine("[MEMBER REGISTERED] : user name = '{0}' / message id = '{1}'",
-				context.Message.UserName,
-				context.TransportMessage.MessageId);
-			Console.WriteLine();
-		}
-	}
+    public class RegisterMemberHandler : IMessageHandler<RegisterMemberCommand>
+    {
+        public void ProcessMessage(IHandlerContext<RegisterMemberCommand> context)
+        {
+            Console.WriteLine();
+            Console.WriteLine("[MEMBER REGISTERED] : user name = '{0}' / message id = '{1}'",
+                context.Message.UserName,
+                context.TransportMessage.MessageId);
+            Console.WriteLine();
+        }
+    }
 }
 ```
 

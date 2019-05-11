@@ -44,7 +44,7 @@ public IServiceBusConfiguration Configuration { get; private set; }
 
 Returns a reference to the [IServiceBusConfiguration].
 
-[IMessageHandler]: {{ site.baseurl }}/message-handler/index.html
-[IServiceBusConfiguration]: {{ site.baseurl }}/service-bus/index.html#ServiceBusConfiguration
-[MessageSender]: {{ site.baseurl }}/message-sender/index.html
-[TransportMessage]: {{ site.baseurl }}/transport-message
+[IMessageHandler]: {{ "/message-handler" | resolver_url }}
+[IServiceBusConfiguration]: {{ "/service-bus/index.html#ServiceBusConfiguration" | resolver_url }}
+[MessageSender]: {{ "/message-sender" | resolver_url }}
+[TransportMessage]: {{ "/transport-message" | resolver_url }}

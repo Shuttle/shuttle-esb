@@ -4,11 +4,9 @@ layout: api
 ---
 # Shuttle.Esb.Module.PurgeInbox
 
-<div class="nuget-badge">
-	<p>
-		<code>Install-Package Shuttle.Esb.Module.PurgeInbox</code>
-	</p>
-</div>
+```
+PM> Install-Package Shuttle.Esb.Module.PurgeInbox
+```
 
 The PurgeInbox module for Shuttle.Esb clears the inbox work queue upon startup.
 

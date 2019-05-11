@@ -9,8 +9,8 @@ Once you have instantiated a message you need to get it to a specific endpoint. 
 Typically when sending a message that message is a command.  It does not _have_ to be a command and you _can_ send an event message to a specific endpoint but more-often-than-not you will be sending a command.  Messages are sent by calling one of the relevant overloaded methods on the service bus instance:
 
 ```c#
-		TransportMessage Send(object message);
-		TransportMessage Send(object message, Action<TransportMessageConfigurator> configure);
+TransportMessage Send(object message);
+TransportMessage Send(object message, Action<TransportMessageConfigurator> configure);
 ```
 
 Only messages that have no `RecipientInboxWorkQueueUri` set will be routed by the service bus.
@@ -20,18 +20,18 @@ The `TransportMessage` envelope will be returned should you need access to any o
 Shuttle.Esb uses an implementation of an `IMessageRouteProvider` to determine where messages are sent.
 
 ```c#
-	public interface IMessageRouteProvider
-	{
-		IEnumerable<string> GetRouteUris(object message);	
-	}
+public interface IMessageRouteProvider
+{
+    IEnumerable<string> GetRouteUris(object message);    
+}
 ```
 
 The message route provider to use is specified when constructing the service bus:
 
-```
-	bus = ServiceBus
-		.Create(c => c.MessageRouteProvider(new DefaultMessageRouteProvider())
-		.Start();
+```c#
+bus = ServiceBus
+    .Create(c => c.MessageRouteProvider(new DefaultMessageRouteProvider())
+    .Start();
 ```
 
 **Please note**: you not have to explicitly configure the `DefaultMessageRouteProvider` as it is instatiated for you.  Only specify the `IMessageRouteProvider` if you need to use an instance other than the default.

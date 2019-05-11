@@ -140,5 +140,4 @@ public List<Shuttle.Esb.TransportHeader> Headers { get; set; }
 
 An arbitrary list of [TransportHeader] objects that may be used to carry information not contained in the `Message` property.
 
-[Serializer]: {{ site.baseurl }}/serializer
-[TransportHeader]: {{ site.baseurl }}/transport-header
+[TransportHeader]: {{ "/transport-header" | resolver_url }}

@@ -52,8 +52,9 @@ public IEnumerable<TransportMessage> Publish(object message, Action<TransportMes
 
 Creates and then dispatches a [TransportMessage] for each uri returned by the registered [ISubscriptionManager] instance.  There should be very few instances where this method will be required.  The newly instantiated [TransportMessage] collection returned with one message for each of relevant `RecipientInboxWorkQueueUri` subscription Uris.
 
-[HandlerContext]: {{ site.baseurl }}/handler-context
-[ISubscriptionManager]: {{ site.baseurl }}/subscription-manager
-[ServiceBus]: {{ site.baseurl }}/service-bus
-[TransportMessage]: {{ site.baseurl }}/transport-message
-[TransportMessageConfigurator]: {{ site.baseurl }}/transport-message-configurator
+
+[HandlerContext]: {{ "/handler-context" | resolver_url }}
+[ISubscriptionManager]: {{ "/subscription-manager" | resolver_url }}
+[ServiceBus]: {{ "/service-bus" | resolver_url }}
+[TransportMessage]: {{ "/transport-message" | resolver_url }}
+[TransportMessageConfigurator]: {{ "/transport-message-configurator" | resolver_url }}

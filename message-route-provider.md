@@ -33,15 +33,15 @@ The method will add a new `IMessageRoute` instance.
 The `DefaultMessageRouteProvider` obtains its configuration from the application configuration file:
 
 ```xml
-    <messageRoutes>
-      <messageRoute uri="msmq://./inbox">
+<messageRoutes>
+    <messageRoute uri="msmq://./inbox">
         <add specification="StartsWith" value="Shuttle.Messages1" />
         <add specification="StartsWith" value="Shuttle.Messages2" />
-      </messageRoute>
-      <messageRoute uri="sql://./inbox">
+    </messageRoute>
+    <messageRoute uri="sql://./inbox">
         <add specification="TypeList" value="DoSomethingCommand" />
-      </messageRoute>
-    </messageRoutes>
+    </messageRoute>
+</messageRoutes>
 ```
 
 ### Specifications
@@ -53,11 +53,11 @@ For each message route you need to specify the specification to apply to the val
 The `StartsWithMessageRouteSpecification` will include the route when the message type's full name starts with the given `value`:
 
 ``` xml
-    <messageRoutes>
-      <messageRoute uri="msmq://./inbox">
+<messageRoutes>
+    <messageRoute uri="msmq://./inbox">
         <add specification="StartsWith" value="Shuttle.Messages1" />
-      </messageRoute>
-    </messageRoutes>
+    </messageRoute>
+</messageRoutes>
 ```
 
 #### TypeListMessageRouteSpecification
@@ -65,11 +65,11 @@ The `StartsWithMessageRouteSpecification` will include the route when the messag
 For the `TypeListMessageRouteSpecification` you need to provide a list of the assembly-qualified name of the type or types (semi-colon delimited).
 
 ```xml
-    <messageRoutes>
-      <messageRoute uri="rabbitmq://shuttle:shuttle!@localhost/inbox">
+<messageRoutes>
+    <messageRoute uri="rabbitmq://shuttle:shuttle!@localhost/inbox">
         <add specification="TypeList" value="Shuttle.Messages1.SomeMessage, Shuttle.Message1;Shuttle.Messages2.SomeMessage, Shuttle.Message2" />
-      </messageRoute>
-    </messageRoutes>
+    </messageRoute>
+</messageRoutes>
 ```
 
 #### RegexMessageRouteSpecification
@@ -77,24 +77,24 @@ For the `TypeListMessageRouteSpecification` you need to provide a list of the as
 For the `RegexMessageRouteSpecification` you need to provide the [regex](http://msdn.microsoft.com/en-us/library/system.text.regularexpressions.regex.aspx) expression to apply to the full name of the type.
 
 ```xml
-    <messageRoutes>
-      <messageRoute uri="rabbitmq://shuttle:shuttle!@serverA/inbox">
+<messageRoutes>
+    <messageRoute uri="rabbitmq://shuttle:shuttle!@serverA/inbox">
         <add specification="Regex" value="^Shuttle\.Messages[12]" />
-      </messageRoute>
-    </messageRoutes>
+    </messageRoute>
+</messageRoutes>
 ```
 
 #### AssemblyMessageRouteSpecification
 
 The `AssemblyMessageRouteSpecification` is derived from the `TypeListMessageRouteSpecification` and includes all the types from the assembly represented by `value`.  If the assembly provided by `value` ends with either `.exe` or `.dll` the assembly will be loaded from the given path, else the assembly will be loaded from the `AppDomain` (so it should be referenced).
 
-``` xml
-    <messageRoutes>
-      <messageRoute uri="msmq://./inbox">
+```xml
+<messageRoutes>
+    <messageRoute uri="msmq://./inbox">
         <add specification="Assembly" value="Shuttle.Messages1" />
-      </messageRoute>
-      <messageRoute uri="rabbitmq://shuttle:shuttle!@serverA/inbox">
+    </messageRoute>
+    <messageRoute uri="rabbitmq://shuttle:shuttle!@serverA/inbox">
         <add specification="Assembly" value="Shuttle.Messages2.dll" />
-      </messageRoute>
-    </messageRoutes>
+    </messageRoute>
+</messageRoutes>
 ```

@@ -15,8 +15,8 @@ Let's use the following message structure:
 ``` c#
 public class DebitAccountCommand
 {
-	public string AccountNumber { get; set; }
-	public decimal Amouunt { get; set; }
+    public string AccountNumber { get; set; }
+    public decimal Amouunt { get; set; }
 }
 ```
 
@@ -25,8 +25,8 @@ If we send two messages for account number 'A-001' with an amount of '50' the ac
 ``` c#
 public class SetBalanceCommand
 {
-	public string AccountNumber { get; set; }
-	public decimal Amouunt { get; set; }
+    public string AccountNumber { get; set; }
+    public decimal Amouunt { get; set; }
 }
 ```
 
@@ -39,9 +39,9 @@ We need to find a way to truly make this message idempotent:
 ``` c#
 public class DebitAccountCommand
 {
-	public Guid TransactionId { get; set; }
-	public string AccountNumber { get; set; }
-	public decimal Amouunt { get; set; }
+    public Guid TransactionId { get; set; }
+    public string AccountNumber { get; set; }
+    public decimal Amouunt { get; set; }
 }
 ```
 
@@ -55,25 +55,25 @@ Some messages are idempotent by their very nature anbd if you can design message
 
 This mechanism requires a distributed transaction that includes the queue.  Since not many queues support distrubuted transactions Shuttle.Esb no longer supports this mechanism from version 3.0.0.  An issue facing Exactly-Once delivery is that when an endpoint is marked as not requiring/supporting a transaction any sent messages will be immediately sent:
 
-![Non-Transactional Image]({{ site.baseurl }}/assets/images/idempotence-eo-non-txn.png "Non-Transactional")
+![Non-Transactional Image]({{ "/assets/images/idempotence-eo-non-txn.png" | resolver_url }} "Non-Transactional")
 
 When using transactions this problem is solved:
 
-![Transactional Image]({{ site.baseurl }}/assets/images/idempotence-eo-txn.png "Transactional")
+![Transactional Image]({{ "/assets/images/idempotence-eo-txn.png" | resolver_url }} "Transactional")
 
 ## At-Least-Once Delivery
 
 Shuttle.Esb supports *at-least-once* delivery when not making use of an `IIdempotenceService` implementation.  This means that in some rare edge cases a trachnically duplicate message can arrive at an endpoint.  You should attempt to design you system in such a way that the message handling remains idempotent.
 
-![No Idempotence Service]({{ site.baseurl }}/assets/images/idempotence-alo.png "No Idempotence Service")
+![No Idempotence Service]({{ "/assets/images/idempotence-alo.png" | resolver_url }} "No Idempotence Service")
 
 ## At-Most-Once Delivery
 
 Shuttle.Esb supports *at-most-once* delivery when making use of an `IIdempotenceService` implementation.  This means that in some rare edge cases a trachnically duplicate message can arrive at an endpoint.  You should attempt to design you system in such a way that the message handling remains idempotent.
 
-![Idempotence Service]({{ site.baseurl }}/assets/images/idempotence-amo.png "Idempotence Service")
+![Idempotence Service]({{ "/assets/images/idempotence-amo.png" | resolver_url }} "Idempotence Service")
 
 In addition to message de-duplication, any messages dispatched from within a message handler will be persisted and only sent after the message has been successfully processed.  Should there be a failure before the deferred messages have been sent but after processing the next time the message is processed the processing (handler) will be skipped and onyl the messages will be sent.
 
-[TransportMessage]: {{ site.baseurl }}/transport-message
+[TransportMessage]: {{ "/transport-message" | resolver_url }}
 

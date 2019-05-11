@@ -1,6 +1,28 @@
----
-theme :
-  name : shuttle
----
-{% include JB/setup %}
-{% include themes/shuttle/default.html %}
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+
+  {%- include head.html -%}
+
+  <body>
+
+    {%- include header.html -%}
+
+    <main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div class="row">
+          <div class='col-md-2 d-none d-sm-block'>
+          </div>
+          <div class='col-md-8 pb-5'>
+            {{ content }}
+          </div>
+          <div class='col-md-2 d-none d-sm-block'>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    {%- include footer.html -%}
+
+  </body>
+
+</html>

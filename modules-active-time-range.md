@@ -4,11 +4,9 @@ layout: api
 ---
 # Shuttle.Esb.Module.ActiveTimeRange
 
-<div class="nuget-badge">
-	<p>
-		<code>Install-Package Shuttle.Esb.Module.ActiveTimeRange</code>
-	</p>
-</div>
+```
+PM> Install-Package Shuttle.Esb.Module.ActiveTimeRange
+```
 
 The ActiveTimeRange module for Shuttle.Esb aborts pipeline processing when the current date is not within a given time range.
 
@@ -16,9 +14,9 @@ The module will attach the `ActiveTimeRangeObserver` to the `OnPipelineStarting`
 
 ```xml
 <configuration>
-	<configSections>
-		<section name="activeTimeRange" type="Shuttle.Esb.Module.ActiveTimeRange.ActiveTimeRangeSection, Shuttle.Esb.Module.ActiveTimeRange"/>
-	</configSections>
+    <configSections>
+        <section name="activeTimeRange" type="Shuttle.Esb.Module.ActiveTimeRange.ActiveTimeRangeSection, Shuttle.Esb.Module.ActiveTimeRange"/>
+    </configSections>
 
   <activeTimeRange from="8:00" to="23:00" />
 </configuration>

@@ -1,6 +1,6 @@
 ---
 title: Modules
-layout: guide
+layout: api
 ---
 # Overview
 
@@ -13,28 +13,28 @@ A module is an arbitrary class that should use the `IPipelineFactory` implementa
 ``` c#
 public class LogMessageOwnerModule
 {
-	private readonly LogMessageOwnerObserver _logMessageOwnerObserver;
-	private readonly string _inboxMessagePipelineName = typeof(InboxMessagePipeline).FullName;
+    private readonly LogMessageOwnerObserver _logMessageOwnerObserver;
+    private readonly string _inboxMessagePipelineName = typeof(InboxMessagePipeline).FullName;
 
-	public void LogMessageOwnerModule(IPipelineFactory pipelineFactory, LogMessageOwnerObserver logMessageOwnerObserver)
-	{
-		Guard.AgainstNull(pipelineFactory, "pipelineFactory");
-		Guard.AgainstNull(logMessageOwnerObserver, "logMessageOwnerObserver");
-		
-		_logMessageOwnerObserver = logMessageOwnerObserver;
+    public void LogMessageOwnerModule(IPipelineFactory pipelineFactory, LogMessageOwnerObserver logMessageOwnerObserver)
+    {
+        Guard.AgainstNull(pipelineFactory, "pipelineFactory");
+        Guard.AgainstNull(logMessageOwnerObserver, "logMessageOwnerObserver");
+        
+        _logMessageOwnerObserver = logMessageOwnerObserver;
 
-		pipelineFactory.PipelineCreated += PipelineCreated;
-	}
+        pipelineFactory.PipelineCreated += PipelineCreated;
+    }
 
-	private void PipelineCreated(object sender, PipelineEventArgs e)
-	{
-		if (!e.Pipeline.GetType().FullName.Equals(_inboxMessagePipelineName, StringComparison.InvariantCultureIgnoreCase))
-		{
-			return;
-		}
+    private void PipelineCreated(object sender, PipelineEventArgs e)
+    {
+        if (!e.Pipeline.GetType().FullName.Equals(_inboxMessagePipelineName, StringComparison.InvariantCultureIgnoreCase))
+        {
+            return;
+        }
 
-		e.Pipeline.RegisterObserver(_logMessageOwnerObserver);
-	}
+        e.Pipeline.RegisterObserver(_logMessageOwnerObserver);
+    }
 }
 ```
 
@@ -45,18 +45,18 @@ Here we have created a new module that registers the `LogMessageOwnerObserver` f
 ``` c#
 public class LogMessageOwnerObserver : IPipelineObserver<OnAfterDeserializeTransportMessage>
 {
-	public void Execute(OnDeserializeTransportMessage pipelineEvent)
-	{
-		var state = pipelineEvent.Pipeline.State;
-		var transportMessage = state.GetTransportMessage();
-		
-		if (transportMessage == null)
-		{
-			return;
-		}
-		
-		Console.Log("This transport message belongs to '{0}'.", transportMessage.PrincipalIdentityName);
-	}
+    public void Execute(OnDeserializeTransportMessage pipelineEvent)
+    {
+        var state = pipelineEvent.Pipeline.State;
+        var transportMessage = state.GetTransportMessage();
+        
+        if (transportMessage == null)
+        {
+            return;
+        }
+        
+        Console.Log("This transport message belongs to '{0}'.", transportMessage.PrincipalIdentityName);
+    }
 }
 ```
 
@@ -70,40 +70,40 @@ To make using your module easy for anyone needing it you can make use of the [co
 
 ``` c#
 public class Bootstrap :
-	IComponentRegistryBootstrap,
-	IComponentResolverBootstrap
+    IComponentRegistryBootstrap,
+    IComponentResolverBootstrap
 {
-	private static bool _registryBootstrapCalled;
-	private static bool _resolverBootstrapCalled;
+    private static bool _registryBootstrapCalled;
+    private static bool _resolverBootstrapCalled;
 
-	public void Register(IComponentRegistry registry)
-	{
-		Guard.AgainstNull(registry, "registry");
+    public void Register(IComponentRegistry registry)
+    {
+        Guard.AgainstNull(registry, "registry");
 
-		if (_registryBootstrapCalled)
-		{
-			return;
-		}
+        if (_registryBootstrapCalled)
+        {
+            return;
+        }
 
-		registry.AttemptRegister<LogMessageOwnerModule>();
-		registry.AttemptRegister<LogMessageOwnerObserver>();
+        registry.AttemptRegister<LogMessageOwnerModule>();
+        registry.AttemptRegister<LogMessageOwnerObserver>();
 
-		_registryBootstrapCalled = true;
-	}
+        _registryBootstrapCalled = true;
+    }
 
-	public void Resolve(IComponentResolver resolver)
-	{
-		Guard.AgainstNull(resolver, "resolver");
+    public void Resolve(IComponentResolver resolver)
+    {
+        Guard.AgainstNull(resolver, "resolver");
 
-		if (_resolverBootstrapCalled)
-		{
-			return;
-		}
+        if (_resolverBootstrapCalled)
+        {
+            return;
+        }
 
-		resolver.Resolve<LogMessageOwnerModule>();
+        resolver.Resolve<LogMessageOwnerModule>();
 
-		_resolverBootstrapCalled = true;
-	}
+        _resolverBootstrapCalled = true;
+    }
 }
 ```
 

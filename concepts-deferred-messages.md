@@ -8,17 +8,17 @@ A deferred message is one that cannot/should not be immediately processed.  Ther
 
 ``` xml
 <configuration>
-	<configSections>
-		<section name="serviceBus" type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
-	</configSections>
+    <configSections>
+        <section name="serviceBus" type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
+    </configSections>
 
-	<serviceBus>
-		<inbox 
-			workQueueUri="msmq://./shuttle-server-work" 
-			deferredQueueUri="msmq://./shuttle-server-deferred" 
-			errorQueueUri="msmq://./shuttle-error"
-			durationToIgnoreOnFailure="10s,30s,1m" />
-	</serviceBus>
+    <serviceBus>
+        <inbox 
+            workQueueUri="msmq://./shuttle-server-work" 
+            deferredQueueUri="msmq://./shuttle-server-deferred" 
+            errorQueueUri="msmq://./shuttle-error"
+            durationToIgnoreOnFailure="10s,30s,1m" />
+    </serviceBus>
 </configuration>
 ```
 
@@ -32,16 +32,16 @@ A deferred queue may be configured for an inbox:
 
 ``` xml
 <configuration>
-	<configSections>
-		<section name="serviceBus" type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
-	</configSections>
+    <configSections>
+        <section name="serviceBus" type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
+    </configSections>
 
-	<serviceBus>
-		<inbox 
-			workQueueUri="msmq://./shuttle-server-work" 
-			deferredQueueUri="msmq://./shuttle-server-deferred" 
-			errorQueueUri="msmq://./shuttle-error"/>
-	</serviceBus>
+    <serviceBus>
+        <inbox 
+            workQueueUri="msmq://./shuttle-server-work" 
+            deferredQueueUri="msmq://./shuttle-server-deferred" 
+            errorQueueUri="msmq://./shuttle-error"/>
+    </serviceBus>
 </configuration>
 ```
 
@@ -51,4 +51,4 @@ The deferred queue is processed in single iterations.  It is processed when the 
 
 Messages never route directly to a deferred queue.  Instead they always go to the work queue and if the work queue sees finds a future `IgnoreTillDate` in the [TransportMessage] then it is moved to the deferred queue and the next date to process the deferred queue is set to this `IngoreTillDate` if it is less than the next deferred queue process date.
 
-[TransportMessage]: {{ site.baseurl }}/transport-message
+[TransportMessage]: {{ "/transport-message" | resolver_url }}

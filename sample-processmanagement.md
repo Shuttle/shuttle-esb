@@ -67,12 +67,12 @@ You should now be able to run the application.
 Once you add books to your order you can place the order using any of the following processes:
 
 - Custom
-	* A hand-rolled process manager storing the process state in custom tables.  This is a more traditional approach to data access.
+    * A hand-rolled process manager storing the process state in custom tables.  This is a more traditional approach to data access.
 - Custom / EventSource
-	* A hand-rolled process manager that stored the process state using the `Shuttle.Recall` event sourcing mechanism directly.
+    * A hand-rolled process manager that stored the process state using the `Shuttle.Recall` event sourcing mechanism directly.
 - EventSource / Module
-	* This uses the `Shuttle.Esb.Process` module to handle the process state storage for you.
-	
+    * This uses the `Shuttle.Esb.Process` module to handle the process state storage for you.
+    
 Once you register an order by clicking on the button the `RegisterOrderProcessCommand` is immeditely sent to the relevant endpoint for processing.  An `AcceptOrderProcessCommand` is then sent locally (to the same endpoint) but it is deferred for 20 seconds.  This allows you time to cancel the order.
 
 The handler processing the `AcceptOrderProcessCommand` will simply ignore the message should the process/order have been cancelled in the meantime; else it sends a `CreateOrderCommand` to the order processing endpoint.  Once the order has been created the process manager receives an `OrderCreatedEvent` and it then sends a `CreateInvoiceCommand` command.

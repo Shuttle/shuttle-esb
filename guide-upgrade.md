@@ -1,6 +1,6 @@
 ---
 title: Upgrade Guide
-layout: guide
+layout: api
 ---
 # Overview
 
@@ -10,11 +10,9 @@ From ***v8.0.0*** of Shuttle.Esb there is a strong focus around a dependency inj
 
 To start off with you'll need to pick one of the [supported containers](http://shuttle.github.io/shuttle-core/overview-container/#Supported):
 
-<div class="nuget-badge">
-	<p>
-		<code>Install-Package Shuttle.Core.Autofac</code>
-	</p>
-</div>
+```
+PM> Install-Package Shuttle.Core.Autofac
+```
 
 ## Shuttle.Esb.SqlServer is obsolete
 
@@ -37,17 +35,17 @@ Change the pre-v8.0 version:
 ``` c#
 public class Host : IHost, IDisposable
 {
-	private IServiceBus _bus;
+    private IServiceBus _bus;
 
-	public void Start()
-	{
-		_bus = ServiceBus.Create().Start();
-	}
+    public void Start()
+    {
+        _bus = ServiceBus.Create().Start();
+    }
 
-	public void Dispose()
-	{
-		_bus.Dispose();
-	}
+    public void Dispose()
+    {
+        _bus.Dispose();
+    }
 }
 ```
 
@@ -56,23 +54,23 @@ To the container focused version (using `WindsorContainer` here):
 ``` c#
 public class Host : IHost, IDisposable
 {
-	private IServiceBus _bus;
+    private IServiceBus _bus;
 
-	public void Start()
-	{
-		var container = new WindsorComponentContainer(new WindsorContainer());
+    public void Start()
+    {
+        var container = new WindsorComponentContainer(new WindsorContainer());
 
-		// ServiceBus.Register(IComponentRegistry registry)
-		ServiceBus.Register(container);
+        // ServiceBus.Register(IComponentRegistry registry)
+        ServiceBus.Register(container);
 
-		// ServiceBus.Create(IComponentResolver resolver)
-		_bus = ServiceBus.Create(container).Start();
-	}
+        // ServiceBus.Create(IComponentResolver resolver)
+        _bus = ServiceBus.Create(container).Start();
+    }
 
-	public void Dispose()
-	{
-		_bus.Dispose();
-	}
+    public void Dispose()
+    {
+        _bus.Dispose();
+    }
 }
 ```
 
@@ -85,25 +83,25 @@ Change the pre-v8.0 version:
 ``` c#
 public class Host : IHost, IDisposable
 {
-	private IServiceBus _bus;
-	private WindsorContainer _container;
+    private IServiceBus _bus;
+    private WindsorContainer _container;
 
-	public void Start()
-	{
-		_container = new WindsorContainer();
+    public void Start()
+    {
+        _container = new WindsorContainer();
 
-		_container.Register(Component.For<IEMailService>().ImplementedBy<EMailService>());
+        _container.Register(Component.For<IEMailService>().ImplementedBy<EMailService>());
 
-		_bus = ServiceBus.Create(
-			c => c.MessageHandlerFactory(new CastleMessageHandlerFactory(_container))
-			).Start();
-	}
+        _bus = ServiceBus.Create(
+            c => c.MessageHandlerFactory(new CastleMessageHandlerFactory(_container))
+            ).Start();
+    }
 
-	public void Dispose()
-	{
-		_bus.Dispose();
-		_container.Dispose();
-	}
+    public void Dispose()
+    {
+        _bus.Dispose();
+        _container.Dispose();
+    }
 }
 ```
 
@@ -112,27 +110,27 @@ To the container focused version (using `Ninject` here):
 ``` c#
 public class Host : IHost, IDisposable
 {
-	private IServiceBus _bus;
-	private StandardKernel _kernel;
+    private IServiceBus _bus;
+    private StandardKernel _kernel;
 
-	public void Dispose()
-	{
-		_kernel.Dispose();
-		_bus.Dispose();
-	}
+    public void Dispose()
+    {
+        _kernel.Dispose();
+        _bus.Dispose();
+    }
 
-	public void Start()
-	{
-		_kernel = new StandardKernel();
+    public void Start()
+    {
+        _kernel = new StandardKernel();
 
-		var container = new NinjectComponentContainer(_kernel);
+        var container = new NinjectComponentContainer(_kernel);
 
-		// ServiceBus.Register(IComponentRegistry registry)
-		ServiceBus.Register(container);
+        // ServiceBus.Register(IComponentRegistry registry)
+        ServiceBus.Register(container);
 
-		// ServiceBus.Create(IComponentResolver resolver)
-		_bus = ServiceBus.Create(container).Start();
-	}
+        // ServiceBus.Create(IComponentResolver resolver)
+        _bus = ServiceBus.Create(container).Start();
+    }
 }
 ```
 
@@ -145,21 +143,21 @@ Change the pre-v8.0 version:
 ``` c#
 public class Host : IHost, IDisposable
 {
-	private IServiceBus _bus;
+    private IServiceBus _bus;
 
-	public void Start()
-	{
-		var subscriptionManager = SubscriptionManager.Default();
-	
-		subscriptionManager.Subscribe<SomeEvent>();
-	
-		_bus = ServiceBus.Create(c => c.SubscriptionManager(subscriptionManager)).Start();
-	}
+    public void Start()
+    {
+        var subscriptionManager = SubscriptionManager.Default();
+    
+        subscriptionManager.Subscribe<SomeEvent>();
+    
+        _bus = ServiceBus.Create(c => c.SubscriptionManager(subscriptionManager)).Start();
+    }
 
-	public void Dispose()
-	{
-		_bus.Dispose();
-	}
+    public void Dispose()
+    {
+        _bus.Dispose();
+    }
 }
 ```
 
@@ -168,28 +166,28 @@ To the container focused version (using `WindsorContainer` here):
 ``` c#
 public class Host : IHost, IDisposable
 {
-	private IServiceBus _bus;
+    private IServiceBus _bus;
 
-	public void Start()
-	{
-		var structureMapRegistry = new Registry();
-		var registry = new StructureMapComponentRegistry(structureMapRegistry);
+    public void Start()
+    {
+        var structureMapRegistry = new Registry();
+        var registry = new StructureMapComponentRegistry(structureMapRegistry);
 
-		// ServiceBus.Register(IComponentRegistry registry)
-		ServiceBus.Register(registry);
+        // ServiceBus.Register(IComponentRegistry registry)
+        ServiceBus.Register(registry);
 
-		var resolver = new StructureMapComponentResolver(new Container(structureMapRegistry));
+        var resolver = new StructureMapComponentResolver(new Container(structureMapRegistry));
 
-		resolver.Resolve<ISubscriptionManager>().Subscribe<SomeEvent>();
+        resolver.Resolve<ISubscriptionManager>().Subscribe<SomeEvent>();
 
-		// ServiceBus.Create(IComponentResolver resolver)
-		_bus = ServiceBus.Create(resolver).Start();
-	}
+        // ServiceBus.Create(IComponentResolver resolver)
+        _bus = ServiceBus.Create(resolver).Start();
+    }
 
-	public void Dispose()
-	{
-		_bus.Dispose();
-	}
+    public void Dispose()
+    {
+        _bus.Dispose();
+    }
 }
 ```
 

@@ -1,6 +1,6 @@
 ---
 title: Exception Handling
-layout: guide
+layout: api
 ---
 # Overview
 
@@ -9,16 +9,16 @@ When an exception occurs within a pipeline an `OnPipelineException` event is rai
 ``` c#
 public class ReceiveExceptionObserver : IPipelineObserver<OnPipelineException>
 {
-	public void Execute(OnPipelineException pipelineEvent)
-	{
-		if (pipelineEvent.Pipeline.ExceptionHandled) // <-- set by calling MarkExceptionHandled
-		{
-			return;
-		}
+    public void Execute(OnPipelineException pipelineEvent)
+    {
+        if (pipelineEvent.Pipeline.ExceptionHandled) // <-- set by calling MarkExceptionHandled
+        {
+            return;
+        }
 
-		pipelineEvent.Pipeline.MarkExceptionHandled(); // <-- sets ExceptionHandled to true
-		pipelineEvent.Pipeline.Abort(); // <-- prevents further processing of the pipeline
-	}
+        pipelineEvent.Pipeline.MarkExceptionHandled(); // <-- sets ExceptionHandled to true
+        pipelineEvent.Pipeline.Abort(); // <-- prevents further processing of the pipeline
+    }
 }
 ```
 
@@ -32,4 +32,4 @@ Should the message be retried the exception message is added to the `FailureMess
 
 **Note**: this is where you may experience some serious queue thrashing if you do not have a `DeferredQueue` configured for your inbox.  When the inbox processor dequeues the message it check to see whether it can be processed by checking the `IgnoreTillDate` value.  If it cannot be processed it is moved to the `DeferredQueue` if there is one; else it is simply re-enqueued in the inbox.  Since the inbox is responsible for processing messages as quickly as possible this processing will continue until the message becomes available for processing.  Given that there is a message to process in the inbox no backing-off will occur.  Please always use a deferred queue for anything that will be executed in a production environment.
 
-[TransportMessage]: {{ site.baseurl }}/transport-message
+[TransportMessage]: {{ "/transport-message" | resolver_url }}

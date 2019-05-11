@@ -23,7 +23,7 @@ So to test any projects in Visual Studio that will eventually be hosted as servi
 In order to install a service you execute the generic host with the `/install` argument:
 
 ```
-    Shuttle.Core.Host.exe /install
+Shuttle.Core.Host.exe /install
 ```
 
 There are many options.  To view these execute the generic host with the `/?` argument.

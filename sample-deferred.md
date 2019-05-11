@@ -44,10 +44,10 @@ In this guide we'll create the following projects:
 ``` c#
 namespace Shuttle.Deferred.Messages
 {
-	public class RegisterMemberCommand
-	{
-		public string UserName { get; set; }
-	}
+    public class RegisterMemberCommand
+    {
+        public string UserName { get; set; }
+    }
 }
 ```
 
@@ -78,29 +78,29 @@ using Shuttle.Esb;
 
 namespace Shuttle.Deferred.Client
 {
-	internal class Program
-	{
-		private static void Main(string[] args)
-		{
-			var containerBuilder = new ContainerBuilder();
-			var registry = new AutofacComponentRegistry(containerBuilder);
+    internal class Program
+    {
+        private static void Main(string[] args)
+        {
+            var containerBuilder = new ContainerBuilder();
+            var registry = new AutofacComponentRegistry(containerBuilder);
 
-			ServiceBus.Register(registry);
+            ServiceBus.Register(registry);
 
-			using (var bus = ServiceBus.Create(new AutofacComponentResolver(containerBuilder.Build())).Start())
-			{
-				string userName;
+            using (var bus = ServiceBus.Create(new AutofacComponentResolver(containerBuilder.Build())).Start())
+            {
+                string userName;
 
-				while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
-				{
-					bus.Send(new RegisterMemberCommand
-					{
-						UserName = userName
-					}, c => c.Defer(DateTime.Now.AddSeconds(5)));
-				}
-			}
-		}
-	}
+                while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
+                {
+                    bus.Send(new RegisterMemberCommand
+                    {
+                        UserName = userName
+                    }, c => c.Defer(DateTime.Now.AddSeconds(5)));
+                }
+            }
+        }
+    }
 }
 ```
 
@@ -113,17 +113,17 @@ The message sent will have its `IgnoreTilleDate` set to 5 seconds into the futur
 ``` xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
-	<configSections>
-		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
-	</configSections>
+    <configSections>
+        <section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
+    </configSections>
 
-	<serviceBus>
-		<messageRoutes>
-			<messageRoute uri="msmq://./shuttle-server-work">
-				<add specification="StartsWith" value="Shuttle.Deferred.Messages" />
-			</messageRoute>
-		</messageRoutes>		
-	</serviceBus>
+    <serviceBus>
+        <messageRoutes>
+            <messageRoute uri="msmq://./shuttle-server-work">
+                <add specification="StartsWith" value="Shuttle.Deferred.Messages" />
+            </messageRoute>
+        </messageRoutes>        
+    </serviceBus>
 </configuration>
 ```
 
@@ -216,42 +216,42 @@ namespace Shuttle.Deferred.Server
 ``` xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
-	<configSections>
-		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
-		<section name="log4net" type="log4net.Config.Log4NetConfigurationSectionHandler, log4net" />
-	</configSections>
+    <configSections>
+        <section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
+        <section name="log4net" type="log4net.Config.Log4NetConfigurationSectionHandler, log4net" />
+    </configSections>
 
-	<log4net>
-		<appender name="ConsoleAppender" type="log4net.Appender.ColoredConsoleAppender">
-			<layout type="log4net.Layout.PatternLayout">
-				<conversionPattern value="%d [%t] %-5p %c - %m%n" />
-			</layout>
-		</appender>
-		<appender name="RollingFileAppender" type="log4net.Appender.RollingFileAppender">
-			<file value="logs\deferred-server" />
-			<appendToFile value="true" />
-			<rollingStyle value="Composite" />
-			<maxSizeRollBackups value="10" />
-			<maximumFileSize value="100000KB" />
-			<datePattern value="-yyyyMMdd.'log'" />
-			<param name="StaticLogFileName" value="false" />
-			<layout type="log4net.Layout.PatternLayout">
-				<conversionPattern value="%d [%t] %-5p %c - %m%n" />
-			</layout>
-		</appender>
-		<root>
-			<level value="TRACE" />
-			<appender-ref ref="ConsoleAppender" />
-			<appender-ref ref="RollingFileAppender" />
-		</root>
-	</log4net>
+    <log4net>
+        <appender name="ConsoleAppender" type="log4net.Appender.ColoredConsoleAppender">
+            <layout type="log4net.Layout.PatternLayout">
+                <conversionPattern value="%d [%t] %-5p %c - %m%n" />
+            </layout>
+        </appender>
+        <appender name="RollingFileAppender" type="log4net.Appender.RollingFileAppender">
+            <file value="logs\deferred-server" />
+            <appendToFile value="true" />
+            <rollingStyle value="Composite" />
+            <maxSizeRollBackups value="10" />
+            <maximumFileSize value="100000KB" />
+            <datePattern value="-yyyyMMdd.'log'" />
+            <param name="StaticLogFileName" value="false" />
+            <layout type="log4net.Layout.PatternLayout">
+                <conversionPattern value="%d [%t] %-5p %c - %m%n" />
+            </layout>
+        </appender>
+        <root>
+            <level value="TRACE" />
+            <appender-ref ref="ConsoleAppender" />
+            <appender-ref ref="RollingFileAppender" />
+        </root>
+    </log4net>
 
-	<serviceBus>
-		<inbox
-		   workQueueUri="msmq://./shuttle-server-work"
-		   deferredQueueUri="msmq://./shuttle-server-deferred"
-		   errorQueueUri="msmq://./shuttle-error" />
-	</serviceBus>
+    <serviceBus>
+        <inbox
+           workQueueUri="msmq://./shuttle-server-work"
+           deferredQueueUri="msmq://./shuttle-server-deferred"
+           errorQueueUri="msmq://./shuttle-error" />
+    </serviceBus>
 </configuration>
 ```
 
@@ -266,20 +266,20 @@ using Shuttle.Deferred.Messages;
 
 namespace Shuttle.Deferred.Server
 {
-	public class RegisterMemberHandler : IMessageHandler<RegisterMemberCommand>
-	{
-	    private readonly ILog _log;
+    public class RegisterMemberHandler : IMessageHandler<RegisterMemberCommand>
+    {
+        private readonly ILog _log;
 
-	    public RegisterMemberHandler()
-	    {
-	        _log = Log.For(this);
-	    }
+        public RegisterMemberHandler()
+        {
+            _log = Log.For(this);
+        }
 
-	    public void ProcessMessage(IHandlerContext<RegisterMemberCommand> context)
-		{
-		    _log.Trace($"[MEMBER REGISTERED] : user name = '{context.Message.UserName}'");
-		}
-	}
+        public void ProcessMessage(IHandlerContext<RegisterMemberCommand> context)
+        {
+            _log.Trace($"[MEMBER REGISTERED] : user name = '{context.Message.UserName}'");
+        }
+    }
 }
 ```
 

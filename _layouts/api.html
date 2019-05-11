@@ -1,7 +1,31 @@
----
-layout: default
-theme :
-  name : shuttle
----
-{% include JB/setup %}
-{% include themes/shuttle/api.html %}
+<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+
+{%- include head.html -%}
+
+<body data-spy="scroll" data-target="#toc">
+
+{%- include header.html -%}
+
+<main class="page-content" aria-label="Content">
+    <div class="wrapper">
+        <div class="row">
+            <div class='col-xl-1 col-lg-1 d-none d-md-block'>
+            </div>
+            <div id='toc-container' class='col-xl-2 col-lg-3 d-none d-lg-block'>
+                <nav id="toc" data-toggle="toc" class="sticky-top"></nav>
+            </div>
+            <div class='col-xl-7 col-lg-6 pb-5'>
+                {{ content }}
+            </div>
+            <div class='col-lg-2 d-none d-md-block'>
+            </div>
+        </div>
+    </div>
+</main>
+
+{%- include footer.html -%}
+
+</body>
+
+</html>
+

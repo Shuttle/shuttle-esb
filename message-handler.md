@@ -26,16 +26,9 @@ Return `true` from to indicate that the message handler instance can be re-used.
 void ProcessMessage(IHandlerContext<T> context);
 ```
 
-The `<T>` generic argument should be the type of the POCO message you are interested in.  This method will contain the actuall implementation code that reacts to the message that is passed in.  If handler transport scope is enabled then this method will be wrapped in a `TransactionScope`:
+The `<T>` generic argument should be the type of the POCO message you are interested in.  This method will contain the actuall implementation code that reacts to the message that is passed in.  If handler transport scope is enabled then this method will be wrapped in a `TransactionScope`.
 
-```xml
-	<serviceBus
-		<transactionScope
-			enabled="true"
-			isolationLevel="ReadCommitted"
-			timeoutSeconds="30" />
-	</serviceBus>
-```
+For more information on the configuration of the transaction scope see the [Shuttle.Core.Transactions](http://shuttle.github.io/shuttle-core/shuttle-core-transactions) documentation.
 
-[HandlerContext]: {{ site.baseurl }}/handler-context/index.html
-[IMessageHandlerFactory]: {{ site.baseurl }}/message-handler-factory/index.html
+[HandlerContext]: {{ "/handler-context/index" | relative_url }}
+[IMessageHandlerFactory]: {{ "/message-handler-factory/index" | relative_url }}

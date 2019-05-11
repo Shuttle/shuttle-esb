@@ -29,4 +29,4 @@ The `DefaultUriResolver` makes use of the application configuration file to map 
 </uriResolver>
 ```
 
-[QueueManager]: {{ site.baseurl }}/queue-manager
+[QueueManager]: {{ "/queue-manager" | resolver_url }}
