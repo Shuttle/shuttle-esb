@@ -51,4 +51,4 @@ The deferred queue is processed in single iterations.  It is processed when the 
 
 Messages never route directly to a deferred queue.  Instead they always go to the work queue and if the work queue sees finds a future `IgnoreTillDate` in the [TransportMessage] then it is moved to the deferred queue and the next date to process the deferred queue is set to this `IngoreTillDate` if it is less than the next deferred queue process date.
 
-[TransportMessage]: {{ "/transport-message" | resolver_url }}
+[TransportMessage]: {{ "/transport-message" | relative_url }}

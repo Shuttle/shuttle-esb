@@ -20,4 +20,4 @@ The method will return the `IIdentity` instance to use.
 
 *Note*: the `IIdentityProvider` implementation is responsible for honouring the `IServiceBusConfiguration.CacheIdentity` property.
 
-[TransportMessage]: {{ "/transport-message" | resolver_url }}
+[TransportMessage]: {{ "/transport-message" | relative_url }}

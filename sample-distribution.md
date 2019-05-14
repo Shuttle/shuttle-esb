@@ -355,4 +355,4 @@ This will write out some information to the console window.
 
 You have now implemented message distribution.
 
-[transport-message]: {{ "/transport-message" | resolver_url }}
+[transport-message]: {{ "/transport-message" | relative_url }}

@@ -38,5 +38,5 @@ IEnumerable<Type> MessageTypesHandled { get; }
 
 Returns a list of the message types that will be handled by the factory.
 
-[MessageHandler]: {{ "/message-handler" | resolver_url }}
-[TransportMessage]: {{ "/transport-message" | resolver_url }}
+[MessageHandler]: {{ "/message-handler" | relative_url }}
+[TransportMessage]: {{ "/transport-message" | relative_url }}

@@ -6,7 +6,7 @@ layout: api
 
 It is conceivable that an endpoint can start falling behind with its processing if it receives too much work.  In such cases it may be changed to distribute messages to worker nodes.
 
-![Message Distribution Image]({{ "/assets/images/Architecture-MessageDistribution.png" | resolver_url }} "Message Distribution")
+![Message Distribution Image]({{ "/assets/images/Architecture-MessageDistribution.png" | relative_url }} "Message Distribution")
 
 An endpoint will automatically distribute messages to workers if it receives a worker availability message.  An endpoint can be configured to only distribute messages, and therefore not process any messages itself, by setting the `distribute` attribute of the `inbox` configuration tag to `true`.
 

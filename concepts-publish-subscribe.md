@@ -6,7 +6,7 @@ layout: api
 
 When you `Send` a *command* shuttle needs to be able to determine the relevant endpoint.  The same applies to publishing an event.  Shuttle would need to know where to `Publish` the event to.  When sending a command there should be 1, and exactly 1, endpoint that receives the command.  When publishing, however, there can be 0 to any number of subscribers.
 
-![Publish/Subscribe Image]({{ "/assets/images/Architecture-PublishSubscribe.png" | resolver_url }} "Publish/Subscribe")
+![Publish/Subscribe Image]({{ "/assets/images/Architecture-PublishSubscribe.png" | relative_url }} "Publish/Subscribe")
 
 In order to register an endpoint as a subscriber you can either manually configure the subscription store, as recommended for production, or register the subscription using the `ISubscriptionManager` implementation:
 

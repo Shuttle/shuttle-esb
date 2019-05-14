@@ -55,25 +55,25 @@ Some messages are idempotent by their very nature anbd if you can design message
 
 This mechanism requires a distributed transaction that includes the queue.  Since not many queues support distrubuted transactions Shuttle.Esb no longer supports this mechanism from version 3.0.0.  An issue facing Exactly-Once delivery is that when an endpoint is marked as not requiring/supporting a transaction any sent messages will be immediately sent:
 
-![Non-Transactional Image]({{ "/assets/images/idempotence-eo-non-txn.png" | resolver_url }} "Non-Transactional")
+![Non-Transactional Image]({{ "/assets/images/idempotence-eo-non-txn.png" | relative_url }} "Non-Transactional")
 
 When using transactions this problem is solved:
 
-![Transactional Image]({{ "/assets/images/idempotence-eo-txn.png" | resolver_url }} "Transactional")
+![Transactional Image]({{ "/assets/images/idempotence-eo-txn.png" | relative_url }} "Transactional")
 
 ## At-Least-Once Delivery
 
 Shuttle.Esb supports *at-least-once* delivery when not making use of an `IIdempotenceService` implementation.  This means that in some rare edge cases a trachnically duplicate message can arrive at an endpoint.  You should attempt to design you system in such a way that the message handling remains idempotent.
 
-![No Idempotence Service]({{ "/assets/images/idempotence-alo.png" | resolver_url }} "No Idempotence Service")
+![No Idempotence Service]({{ "/assets/images/idempotence-alo.png" | relative_url }} "No Idempotence Service")
 
 ## At-Most-Once Delivery
 
 Shuttle.Esb supports *at-most-once* delivery when making use of an `IIdempotenceService` implementation.  This means that in some rare edge cases a trachnically duplicate message can arrive at an endpoint.  You should attempt to design you system in such a way that the message handling remains idempotent.
 
-![Idempotence Service]({{ "/assets/images/idempotence-amo.png" | resolver_url }} "Idempotence Service")
+![Idempotence Service]({{ "/assets/images/idempotence-amo.png" | relative_url }} "Idempotence Service")
 
 In addition to message de-duplication, any messages dispatched from within a message handler will be persisted and only sent after the message has been successfully processed.  Should there be a failure before the deferred messages have been sent but after processing the next time the message is processed the processing (handler) will be skipped and onyl the messages will be sent.
 
-[TransportMessage]: {{ "/transport-message" | resolver_url }}
+[TransportMessage]: {{ "/transport-message" | relative_url }}
 

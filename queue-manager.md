@@ -80,4 +80,4 @@ IUriResolver UriResolver { get; set; }
 
 Use this property to get or set the relevant [UriResolver].
 
-[UriResolver]: {{ "/uri-resolver" | resolver_url }}
+[UriResolver]: {{ "/uri-resolver" | relative_url }}

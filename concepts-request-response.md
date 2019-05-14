@@ -6,7 +6,7 @@ layout: api
 
 For some background on **Request/Response** messaging pattern you can have a look at the [Wikipedia article](http://en.wikipedia.org/wiki/Request-response).
 
-![Request/Response Image]({{ "/assets/images/Architecture-RequestResponse.png" | resolver_url }} "Request/Response")
+![Request/Response Image]({{ "/assets/images/Architecture-RequestResponse.png" | relative_url }} "Request/Response")
 
 To request an endpoint to perform a certain function you send a command message:
 

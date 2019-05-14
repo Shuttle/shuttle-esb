@@ -119,6 +119,6 @@ public TransportMessage TransportMessage(IServiceBusConfiguration configuration)
 
 This returns a new [TransportMessage] that contains the configured properties.
 
-[MessageSender]: {{ "/message-sender" | resolver_url }}
-[HandlerContext]: {{ "/handler-context" | resolver_url }}
-[TransportMessage]: {{ "/transport-message" | resolver_url }}
+[MessageSender]: {{ "/message-sender" | relative_url }}
+[HandlerContext]: {{ "/handler-context" | relative_url }}
+[TransportMessage]: {{ "/transport-message" | relative_url }}

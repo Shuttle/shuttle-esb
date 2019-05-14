@@ -82,7 +82,7 @@ public class ServiceBusHost : IHost, IDisposable
 }
 ```
 
-A service bus instance is created and started on application startup and disposed on exit.  A service bus can be hosted in any type of application but the most typical scenario is to host them as services.  Although you _can_ write your own service to host your service bus it is not a requirement since you may want to make use of the [generic service host]({{ "/generic-host/index.html" | resolver_url }}).
+A service bus instance is created and started on application startup and disposed on exit.  A service bus can be hosted in any type of application but the most typical scenario is to host them as services.  Although you _can_ write your own service to host your service bus it is not a requirement since you may want to make use of the [generic service host]({{ "/generic-host/index.html" | relative_url }}).
 
 # Message Types
 

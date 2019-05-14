@@ -38,5 +38,5 @@ In order to **send** a command or **publish** an event you need an instance of t
 The `ServiceBusConfiguration` instance contains all the configuration required by the `ServiceBus` to operate and is built up from the application configuration file by default.  You can make use of your dependency injection container of choice to inject your own instance of `IServiceBusConfiguration` before creating the service bus in order to provide a custom configuration. 
 
 
-[HandlerContext]: {{ "/handler-context" | resolver_url }}
-[MessageSender]: {{ "/message-sender" | resolver_url }}
+[HandlerContext]: {{ "/handler-context" | relative_url }}
+[MessageSender]: {{ "/message-sender" | relative_url }}
