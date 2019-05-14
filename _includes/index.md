@@ -5,7 +5,6 @@ Start a new **Console Application** project and select a Shuttle.Esb queue imple
 ```
 PM> Install-Package Shuttle.Esb.RabbitMQ
 ```
-`
 
 Now we'll need select one of the [supported containers](http://shuttle.github.io/shuttle-core/shuttle-core-container#supported):
 
