@@ -1,28 +1,23 @@
 ### The broad strokes
 
-Start a new **Console Application** project and select a Shuttle.Esb queue implementation from the [supported queues]({{ site.baseurl }}/packages/#queues):
+Start a new **Console Application** project and select a Shuttle.Esb queue implementation from the supported queues:
 
-<div class="nuget-badge">
-	<p>
-		<code>Install-Package Shuttle.Esb.Msmq</code>
-	</p>
-</div>
+```
+PM> Install-Package Shuttle.Esb.RabbitMQ
+```
+`
 
-Now we'll need select one of the [supported containers](http://shuttle.github.io/shuttle-core/overview-container/#Supported):
+Now we'll need select one of the [supported containers](http://shuttle.github.io/shuttle-core/shuttle-core-container#supported):
 
-<div class="nuget-badge">
-	<p>
-		<code>Install-Package Shuttle.Core.Autofac</code>
-	</p>
-</div>
+```
+PM> Install-Package Shuttle.Core.Autofac
+```
 
-We'll also need to host our endpoint using the [service host](http://shuttle.github.io/shuttle-core/overview-service-host/):
+We'll also need to host our endpoint using the [service host](http://shuttle.github.io/shuttle-core/shuttle-core-servicehost):
 
-<div class="nuget-badge">
-	<p>
-		<code>Install-Package Shuttle.Core.ServiceHost</code>
-	</p>
-</div>
+```
+PM> Install-Package Shuttle.Core.ServiceHost
+```
 
 Next we'll implement our endpoint in order to start listening on our queue:
 
