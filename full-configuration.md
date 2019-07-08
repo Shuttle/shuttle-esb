@@ -176,4 +176,4 @@ Finally just close the relevant tags.
 </configuration>
 ```
 
-You may wish to consider using the [TransactionScope](http://shuttle.github.io/shuttle-core/overview-transactionscope/) section to configure transactional behaviour for your endpoint.
+You may wish to consider using the [TransactionScope](http://shuttle.github.io/shuttle-core/shuttle-core-transactions) section to configure transactional behaviour for your endpoint.
