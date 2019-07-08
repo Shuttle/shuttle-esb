@@ -28,9 +28,9 @@ The module will attach the `ThrottleObserver` to the `OnPipelineStarting` event 
 
 | Attribute                        | Default     | Description    | 
 | ---                            | ---        | ---            | 
-| `cpuUsagePercentage`            | 65        | The CPU usage percentage to start throttling the endpoint pipelines. |
-| `abortCycleCount`                | 5        | The number of times a pipeline will be aborted before running at least once. |
-| `performanceCounterReadInterval`                | 1000        | The number of milliseconds between reading the CPU usage performance counter.  Minimun of 1000 allowed. |
-| `durationToSleepOnAbort`    | 1s        | The duration(s) to sleep when aborting a pipeline.  Cannot be incremented for each abort. |
+| cpuUsagePercentage            | 65        | The CPU usage percentage to start throttling the endpoint pipelines. |
+| abortCycleCount                | 5        | The number of times a pipeline will be aborted before running at least once. |
+| performanceCounterReadInterval                | 1000        | The number of milliseconds between reading the CPU usage performance counter.  Minimun of 1000 allowed. |
+| durationToSleepOnAbort    | 1s        | The duration(s) to sleep when aborting a pipeline.  Cannot be incremented for each abort. |
 
 The module will register/resolve itself using [Shuttle.Core container bootstrapping](http://shuttle.github.io/shuttle-core/overview-container/#bootstrapping).

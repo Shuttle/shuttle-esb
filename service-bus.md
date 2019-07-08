@@ -18,10 +18,10 @@ Some examples of *commands* and *events*:
 
 | Command                     | Event                     |
 | ---                        | ---                        |
-| `SendEMailCommand`        | `EMailSentEvent`            |
-| `CreateCustomerCommand`    | `CustomerCreatedEvent`    |
-| `PlaceOrderCommand`        | `OrderPlacedEvent`        |
-| `CancelOrderCommand`        | `OrderCancelledEvent`        |
+| SendEMailCommand        | EMailSentEvent            |
+| CreateCustomerCommand    | CustomerCreatedEvent    |
+| PlaceOrderCommand        | OrderPlacedEvent        |
+| CancelOrderCommand        | OrderCancelledEvent        |
 
 ## Message structure
 

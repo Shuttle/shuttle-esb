@@ -57,6 +57,8 @@ performSearch = function (version) {
 }
 
 $(function () {
+    $('table').addClass('table table-striped');
+
     $('#search-button').on('click', function (e) {
         e.preventDefault()
 

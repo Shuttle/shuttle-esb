@@ -40,13 +40,13 @@ The most pertinent bit is the `serviceBus` tag.
 
 | Attribute                        | Default     | Description    | Version Introduced |
 | ---                            | ---        | ---            | --- |
-| `registerHandlers`                | true        | Will call the `RegisterHandlers` method on the `IMessageHandlerFactory` implementation if set to `true`. | [v7.0.0](https://github.com/Shuttle/Shuttle.Esb/releases/tag/v7.0.0) |
-| `cacheIdentity`                | true        | Determines whether or not to re-use the identity returned by the `IIdentityProvider`. | [v6.2.0](https://github.com/Shuttle/Shuttle.Esb/releases/tag/v6.2.0) |
-| `createQueues`                | true        | The endpoint will attempt to create all local queues (inbox, outbox, control inbox) | |
-| `removeMessagesNotHandled`    | false        | Indicates whether messages received on the endpoint that have no message handler should simply be removed (ignored).  If this attribute is `true` the message will simply be acknowledged; else the message will immmediately be placed in the error queue.  *The default changed from **true** to **false** in v7.0.1*. | |
-| `removeCorruptMessages`    | false        | A message is corrupt when the `TransportMessage` retrieved from the queue cannot be deserialized.  If `false` (default) the service bus processed will be killed.  If `true` the messae will be `Acknowledged` with no processing. | 10.1.7 |
-| `compressionAlgorithm`        | empty    (no compression)    | The name of the compression algorithm to use when sending messages.  Out-of-the-box there is a GZip compression implementation (class `GZipCompressionAlgorithm` with name 'GZip'). | |
-| `encryptionAlgorithm`            | empty    (no entryption)        | The name of the encryption algorithm to use when sending messages.  Out-of-the-box there is a Triple DES implementation (class TripleDesEncryptionAlgorithm and name '3DES'). | |
+| registerHandlers                | true        | Will call the `RegisterHandlers` method on the `IMessageHandlerFactory` implementation if set to `true`. | [v7.0.0](https://github.com/Shuttle/Shuttle.Esb/releases/tag/v7.0.0) |
+| cacheIdentity                | true        | Determines whether or not to re-use the identity returned by the `IIdentityProvider`. | [v6.2.0](https://github.com/Shuttle/Shuttle.Esb/releases/tag/v6.2.0) |
+| createQueues                | true        | The endpoint will attempt to create all local queues (inbox, outbox, control inbox) | |
+| removeMessagesNotHandled    | false        | Indicates whether messages received on the endpoint that have no message handler should simply be removed (ignored).  If this attribute is `true` the message will simply be acknowledged; else the message will immmediately be placed in the error queue.  *The default changed from **true** to **false** in v7.0.1*. | |
+| removeCorruptMessages    | false        | A message is corrupt when the `TransportMessage` retrieved from the queue cannot be deserialized.  If `false` (default) the service bus processed will be killed.  If `true` the messae will be `Acknowledged` with no processing. | 10.1.7 |
+| compressionAlgorithm        | empty    (no compression)    | The name of the compression algorithm to use when sending messages.  Out-of-the-box there is a GZip compression implementation (class `GZipCompressionAlgorithm` with name 'GZip'). | |
+| encryptionAlgorithm            | empty    (no entryption)        | The name of the encryption algorithm to use when sending messages.  Out-of-the-box there is a Triple DES implementation (class TripleDesEncryptionAlgorithm and name '3DES'). | |
 
 
 
@@ -93,12 +93,12 @@ The `inbox` should be specified if the endpoint has message handlers that need t
 
 | Attribute                        | Default     | Description    |
 | ---                            | ---        | ---            |
-| `threadCount`                    | 5            | The number of worker threads that will service the inbox work queue.  The deferred queue will always be serviced by only 1 thread. |
-| `durationToSleepWhenIdle`        | 250ms,500ms,1s,5s | Uses the [StringDurationArrayConverter](https://github.com/Shuttle/Shuttle.Core.Infrastructure/blob/master/Shuttle.Core.Infrastructure/StringDurationArrayConverter.cs) to convert to an array of `TimeSpan` instances.  Specify `ms` (milliseconds), `s` (seconds), `m` (minutes), `h` (hours), `d` (days) * (times) `count`. |
-| `durationToIgnoreOnFailure`    | 5m,30m,60m | Uses the [StringDurationArrayConverter](https://github.com/Shuttle/Shuttle.Core.Infrastructure/blob/master/Shuttle.Core.Infrastructure/StringDurationArrayConverter.cs) to convert to an array of `TimeSpan` instances.  Specify `ms` (milliseconds), `s` (seconds), `m` (minutes), `h` (hours), `d` (days) * (times) `count`. |
-| `maximumFailureCount`            | 5            | The maximum number of failures that are retried before the message is moved to the error queue. |
-| `distribute`                    | false        | If `true` the endpoint will act as only a distributor.  If `false` the endpoint will distribute messages if a worker is available; else process the message itself. |
-| `distributeSendCount` | 5 | The number of messages to send to the worker per available thread message received.  If less than 1 the default will be used.  |
+| threadCount                    | 5            | The number of worker threads that will service the inbox work queue.  The deferred queue will always be serviced by only 1 thread. |
+| durationToSleepWhenIdle        | 250ms,500ms,1s,5s | Uses the [StringDurationArrayConverter](https://github.com/Shuttle/Shuttle.Core.Infrastructure/blob/master/Shuttle.Core.Infrastructure/StringDurationArrayConverter.cs) to convert to an array of `TimeSpan` instances.  Specify `ms` (milliseconds), `s` (seconds), `m` (minutes), `h` (hours), `d` (days) * (times) `count`. |
+| durationToIgnoreOnFailure    | 5m,30m,60m | Uses the [StringDurationArrayConverter](https://github.com/Shuttle/Shuttle.Core.Infrastructure/blob/master/Shuttle.Core.Infrastructure/StringDurationArrayConverter.cs) to convert to an array of `TimeSpan` instances.  Specify `ms` (milliseconds), `s` (seconds), `m` (minutes), `h` (hours), `d` (days) * (times) `count`. |
+| maximumFailureCount            | 5            | The maximum number of failures that are retried before the message is moved to the error queue. |
+| distribute                    | false        | If `true` the endpoint will act as only a distributor.  If `false` the endpoint will distribute messages if a worker is available; else process the message itself. |
+| distributeSendCount | 5 | The number of messages to send to the worker per available thread message received.  If less than 1 the default will be used.  |
 
 
 For some queueing technologies the `outbox` may not be required.  Msmq, for instance, create its own outgoing queues.  However, it should be used in scenarios where you need a store-and-forward mechanism for sending messages when the underlying infrastructure does not provide this such as with a SqlServer table-based queue or maybe even the file system.  RabbitMQ will also need an outbox since the destination broker may not be available and it does not have the concept of outgoing queues.
@@ -115,10 +115,10 @@ For some queueing technologies the `outbox` may not be required.  Msmq, for inst
 
 | Attribute                        | Default     | Description    |
 | ---                            | ---        | ---            |
-| `threadCount`                    | 1            | The number of worker threads that will service the outbox work queue. |
-| `durationToSleepWhenIdle`        | 250ms,500ms,1s,5s | Uses the [StringDurationArrayConverter](https://github.com/Shuttle/Shuttle.Core.Infrastructure/blob/master/Shuttle.Core.Infrastructure/StringDurationArrayConverter.cs) to convert to an array of `TimeSpan` instances.  Specify `ms` (milliseconds), `s` (seconds), `m` (minutes), `h` (hours), `d` (days) * (times) `count`. |
-| `durationToIgnoreOnFailure`    | 5m,30m,60m | Uses the [StringDurationArrayConverter](https://github.com/Shuttle/Shuttle.Core.Infrastructure/blob/master/Shuttle.Core.Infrastructure/StringDurationArrayConverter.cs) to convert to an array of `TimeSpan` instances.  Specify `ms` (milliseconds), `s` (seconds), `m` (minutes), `h` (hours), `d` (days) * (times) `count`. |
-| `maximumFailureCount`            | 5            | The maximum number of failures that are retried before the message is moved to the error queue. |
+| threadCount                    | 1            | The number of worker threads that will service the outbox work queue. |
+| durationToSleepWhenIdle        | 250ms,500ms,1s,5s | Uses the [StringDurationArrayConverter](https://github.com/Shuttle/Shuttle.Core.Infrastructure/blob/master/Shuttle.Core.Infrastructure/StringDurationArrayConverter.cs) to convert to an array of `TimeSpan` instances.  Specify `ms` (milliseconds), `s` (seconds), `m` (minutes), `h` (hours), `d` (days) * (times) `count`. |
+| durationToIgnoreOnFailure    | 5m,30m,60m | Uses the [StringDurationArrayConverter](https://github.com/Shuttle/Shuttle.Core.Infrastructure/blob/master/Shuttle.Core.Infrastructure/StringDurationArrayConverter.cs) to convert to an array of `TimeSpan` instances.  Specify `ms` (milliseconds), `s` (seconds), `m` (minutes), `h` (hours), `d` (days) * (times) `count`. |
+| maximumFailureCount            | 5            | The maximum number of failures that are retried before the message is moved to the error queue. |
 
 When the endpoint is not a physical endpoint but rather a worker use the `worker` tag to specify the relevant configuration.
 
@@ -130,8 +130,8 @@ When the endpoint is not a physical endpoint but rather a worker use the `worker
 
 | Attribute                            | Default         | Description    |
 | ---                                | ---            | ---            |
-| `distributorControlWorkQueueUri`    | n/a            | The control work queue uri of the distributor endpoint that this endpoint can handle messages for. |
-| `threadAvailableNotificationIntervalSeconds`    | 15    | The number of seconds to wait on an idle thread before notifying the distributor of availability *again* |
+| distributorControlWorkQueueUri    | n/a            | The control work queue uri of the distributor endpoint that this endpoint can handle messages for. |
+| threadAvailableNotificationIntervalSeconds    | 15    | The number of seconds to wait on an idle thread before notifying the distributor of availability *again* |
 
 Since a worker sends thread availability to the physical distribution master the distributor needs to have a special inbox called the control inbox that is used for these notifications.
 
@@ -147,10 +147,10 @@ Since a worker sends thread availability to the physical distribution master the
 
 | Attribute                        | Default     | Description    |
 | ---                            | ---        | ---            |
-| `threadCount`                    | 1            | The number of worker thread that will service the control work queue. |
-| `durationToSleepWhenIdle`        | 250ms,500ms,1s,5s | Uses the [StringDurationArrayConverter](https://github.com/Shuttle/Shuttle.Core.Infrastructure/blob/master/Shuttle.Core.Infrastructure/StringDurationArrayConverter.cs) to convert to an array of `TimeSpan` instances.  Specify `ms` (milliseconds), `s` (seconds), `m` (minutes), `h` (hours), `d` (days) * (times) `count`. |
-| `durationToIgnoreOnFailure`    | 5m,30m,60m | Uses the [StringDurationArrayConverter](https://github.com/Shuttle/Shuttle.Core.Infrastructure/blob/master/Shuttle.Core.Infrastructure/StringDurationArrayConverter.cs) to convert to an array of `TimeSpan` instances.  Specify `ms` (milliseconds), `s` (seconds), `m` (minutes), `h` (hours), `d` (days) * (times) `count`. |
-| `maximumFailureCount`            | 5            | The maximum number of failures that are retried before the message is moved to the error queue. |
+| threadCount                    | 1            | The number of worker thread that will service the control work queue. |
+| durationToSleepWhenIdle        | 250ms,500ms,1s,5s | Uses the [StringDurationArrayConverter](https://github.com/Shuttle/Shuttle.Core.Infrastructure/blob/master/Shuttle.Core.Infrastructure/StringDurationArrayConverter.cs) to convert to an array of `TimeSpan` instances.  Specify `ms` (milliseconds), `s` (seconds), `m` (minutes), `h` (hours), `d` (days) * (times) `count`. |
+| durationToIgnoreOnFailure    | 5m,30m,60m | Uses the [StringDurationArrayConverter](https://github.com/Shuttle/Shuttle.Core.Infrastructure/blob/master/Shuttle.Core.Infrastructure/StringDurationArrayConverter.cs) to convert to an array of `TimeSpan` instances.  Specify `ms` (milliseconds), `s` (seconds), `m` (minutes), `h` (hours), `d` (days) * (times) `count`. |
+| maximumFailureCount            | 5            | The maximum number of failures that are retried before the message is moved to the error queue. |
 
 Use the `modules` tag to configure modules that can be loaded at runtime.  These modules have to have a parameterless constructor in order to be instantiated; else add them programmatically if you need to specify parameters.
 
