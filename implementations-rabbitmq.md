@@ -51,6 +51,7 @@ In addition to this there is also a RabbitMQ specific section (defaults specifie
     connectionCloseTimeoutMilliseconds="1000"
     requestedHeartbeat="30"
     operationRetryCount="3"
+    useBackgroundThreadsForIO="true"
   />
   .
   .
