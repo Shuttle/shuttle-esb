@@ -49,6 +49,10 @@ performSearch = function (version) {
                 headerIndex += 1;
             });
 
+            if (!results.length){
+                $('#search-results').append('<div class="alert alert-info" role="alert">That\'s a miss :(</div>');            
+            }
+
             $('#search-results-container .card-header a').on('click', function(e) { e.stopPropagation(); });
         })
         .fail(function( jqXHR, textStatus, errorThrown){
