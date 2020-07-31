@@ -46,7 +46,7 @@ The most pertinent bit is the `serviceBus` tag.
 | removeMessagesNotHandled    | false        | Indicates whether messages received on the endpoint that have no message handler should simply be removed (ignored).  If this attribute is `true` the message will simply be acknowledged; else the message will immmediately be placed in the error queue.  *The default changed from **true** to **false** in v7.0.1*. | |
 | removeCorruptMessages    | false        | A message is corrupt when the `TransportMessage` retrieved from the queue cannot be deserialized.  If `false` (default) the service bus processed will be killed.  If `true` the messae will be `Acknowledged` with no processing. | 10.1.7 |
 | compressionAlgorithm        | empty    (no compression)    | The name of the compression algorithm to use when sending messages.  Out-of-the-box there is a GZip compression implementation (class `GZipCompressionAlgorithm` with name 'GZip'). | |
-| encryptionAlgorithm            | empty    (no entryption)        | The name of the encryption algorithm to use when sending messages.  Out-of-the-box there is a Triple DES implementation (class TripleDesEncryptionAlgorithm and name '3DES'). | |
+| encryptionAlgorithm            | empty    (no encryption)        | The name of the encryption algorithm to use when sending messages.  Out-of-the-box there is a Triple DES implementation (class TripleDesEncryptionAlgorithm and name '3DES'). | |
 
 
 
