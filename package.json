@@ -5,8 +5,7 @@
   "scripts": {
     "bundle": "steal-tools optimize --dest assets",
     "bundle-development": "steal-tools optimize --dest assets --minify false",
-    "host": "jekyll serve",
-    "open": "start http://127.0.0.1:4000"
+    "serve": "jekyll serve"
   },
   "author": "",
   "license": "ISC",

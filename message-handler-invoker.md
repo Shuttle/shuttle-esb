@@ -17,3 +17,11 @@ MessageHandlerInvokeResult Invoke(PipelineEvent pipelineEvent);
 ```
 
 Invoke the message handler using the data contained in the given `PipelineEvent`.
+
+# DefaultMessageHandlerInvoker
+
+Type `DefaultMessageHandlerInvoker` implements the `IMessageHandlerInvoker` interface and will attempt to find an implementation of the required `IMessageHandler<>` interface.
+
+If no handler can be found the `MessageHandlerInvokeResult` return from the `Invoke` method will have an `Invoked` value of `false`.
+
+A handler is created per thread and re-used.  Should you not want a handler to be re-used, or if you have some condition that determines re-use, you may implement the `IReusability` interface on the message handler and return the relevant `bool` value from the `IsReusable` property.
