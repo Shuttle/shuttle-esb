@@ -1,5 +1,5 @@
 ---
-title: Sql Server Extensions
+title: Sql Server
 layout: api
 ---
 <a name="Queue"></a>

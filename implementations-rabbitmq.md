@@ -1,5 +1,5 @@
 ---
-title: RabbitMQ Extensions
+title: RabbitMQ
 layout: api
 ---
 # RabbitMQQueue

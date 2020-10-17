@@ -1,5 +1,5 @@
 ---
-title: FileMQ Extensions
+title: FileMQ
 layout: api
 ---
 # FileMQ

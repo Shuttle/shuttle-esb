@@ -1,5 +1,5 @@
 ---
-title: Msmq Extensions
+title: MSMQ
 layout: api
 ---
 # MsmqQueue
