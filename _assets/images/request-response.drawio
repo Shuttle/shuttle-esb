@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-07-16T08:05:08.820Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36" etag="zS3JQ3-TyEVPzURnA0fg" version="14.8.6" type="github">
+<mxfile host="app.diagrams.net" modified="2021-07-16T08:23:34.245Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36" etag="rnGmQtlea8raMs2Nf5PK" version="14.8.6" type="github">
   <diagram id="ZamsyW06iMtIl-IfdBVD" name="Page-1">
     <mxGraphModel dx="2031" dy="1007" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -28,8 +28,8 @@
         <mxCell id="NjIfr40OnEK4QTtOGcaU-10" value="Request&lt;br style=&quot;font-size: 18px;&quot;&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fontSize=18;fontFamily=Tahoma;fontColor=#888888;fontStyle=1" vertex="1" parent="NjIfr40OnEK4QTtOGcaU-7">
           <mxGeometry x="370" y="120" width="90" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="NjIfr40OnEK4QTtOGcaU-13" value="Endpoint B (Respnder)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fontSize=18;fontFamily=Tahoma;fontColor=#888888;fontStyle=1" vertex="1" parent="NjIfr40OnEK4QTtOGcaU-7">
-          <mxGeometry x="150" y="90" width="220" height="30" as="geometry" />
+        <mxCell id="NjIfr40OnEK4QTtOGcaU-13" value="Endpoint B (Responder)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fontSize=18;fontFamily=Tahoma;fontColor=#888888;fontStyle=1" vertex="1" parent="NjIfr40OnEK4QTtOGcaU-7">
+          <mxGeometry x="145" y="90" width="230" height="30" as="geometry" />
         </mxCell>
         <mxCell id="NjIfr40OnEK4QTtOGcaU-12" value="Endpoint A (Requester)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fontSize=18;fontFamily=Tahoma;fontColor=#888888;fontStyle=1" vertex="1" parent="1">
           <mxGeometry x="305" y="10" width="230" height="30" as="geometry" />
