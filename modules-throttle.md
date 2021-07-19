@@ -2,7 +2,7 @@
 title: Throttle Module
 layout: api
 ---
-# Shuttle.Esb.Module.Throttle
+# Throttle Module
 
 ```
 PM> Install-Package Shuttle.Esb.Module.Throttle

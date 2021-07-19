@@ -2,7 +2,7 @@
 title: Active Time Range Module
 layout: api
 ---
-# Shuttle.Esb.Module.ActiveTimeRange
+# Active Time Range Module
 
 ```
 PM> Install-Package Shuttle.Esb.Module.ActiveTimeRange

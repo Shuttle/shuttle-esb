@@ -3,52 +3,34 @@
   "version": "1.0.0",
   "description": "Shuttle.Esb",
   "scripts": {
-    "bundle": "steal-tools optimize --dest assets",
-    "bundle-development": "steal-tools optimize --dest assets --minify false",
+    "development-bundle": "webpack --config webpack.development.js",
+    "production-bundle": "webpack --config webpack.production.js",
     "serve": "jekyll serve"
   },
   "author": "",
   "license": "ISC",
-  "steal": {
-    "main": "bundle.js",
-    "plugins": [
-      "steal-css"
-    ],
-    "meta": {
-      "lunr": {
-        "format": "global"
-      },
-      "marked": {
-        "format": "global"
-      },
-      "jquery": {
-        "format": "global"
-      },
-      "popper.js": {
-        "format": "global"
-      },
-      "bootstrap": {
-        "format": "global",
-        "deps": [
-          "jquery",
-          "popper.js"
-        ]
-      }
-    }
-  },
   "devDependencies": {
-    "@fortawesome/fontawesome-free": "^5.8.2",
-    "bootstrap": "^4.3.1",
-    "jquery": "^3.3.1",
-    "lunr": "^2.3.6",
-    "marked": "^0.6.2",
-    "popper.js": "^1.14.7",
-    "steal": "^2.2.1",
-    "steal-css": "^1.3.2",
-    "steal-tools": "^2.2.0"
-  },
-  "dependencies": {
-    "bootstrap-vue": "^2.0.4",
-    "vue": "^2.6.10"
+    "@fortawesome/fontawesome-free": "^5.15.3",
+    "bootstrap": "^4.6.0",
+    "clean-webpack-plugin": "^4.0.0-alpha.0",
+    "css-loader": "^6.1.0",
+    "css-minimizer-webpack-plugin": "^3.0.2",
+    "expose-loader": "^3.0.0",
+    "file-loader": "^6.2.0",
+    "jquery": "^3.6.0",
+    "lunr": "^2.3.9",
+    "marked": "^2.1.3",
+    "mini-css-extract-plugin": "^2.1.0",
+    "node-sass": "^6.0.1",
+    "popper.js": "^1.16.1",
+    "postcss-loader": "^6.1.1",
+    "rollup": "^2.53.2",
+    "sass": "^1.35.2",
+    "sass-loader": "^12.1.0",
+    "style-loader": "^3.1.0",
+    "terser-webpack-plugin": "^5.1.4",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.45.1",
+    "webpack-cli": "^4.7.2"
   }
 }

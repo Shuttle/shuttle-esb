@@ -1,28 +1,28 @@
 <!DOCTYPE html>
-<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+<html lang="{{ page.lang | default: site.lang | default: " en" }}">
 
-  {%- include head.html -%}
+{%- include head.html -%}
 
-  <body>
-
-    {%- include header.html -%}
-
-    <main class="page-content" aria-label="Content">
-      <div class="container-fluid">
-        <div class="row">
-          <div class='col-md-2 d-none d-sm-block'>
+<body>
+  <main class="page-content" aria-label="Content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class='col-lg-1 d-none d-lg-block'>
+        </div>
+        <div class='col-lg-10 pb-5'>
+          <div class="mb-3 sticky-top">
+            {%- include header.html -%}
           </div>
-          <div class='col-md-8 pb-5'>
-            {{ content }}
-          </div>
-          <div class='col-md-2 d-none d-sm-block'>
-          </div>
+          {{ content }}
+        </div>
+        <div class='col-lg-1 d-none d-lg-block'>
         </div>
       </div>
-    </main>
+    </div>
+  </main>
 
-    {%- include footer.html -%}
+  {%- include footer.html -%}
 
-  </body>
+</body>
 
 </html>

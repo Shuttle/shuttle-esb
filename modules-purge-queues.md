@@ -2,7 +2,7 @@
 title: Purge Queues Module
 layout: api
 ---
-# Shuttle.Esb.Module.PurgeQueues
+# Purge Queues Module
 
 ```
 PM> Install-Package Shuttle.Esb.Module.PurgeQueues

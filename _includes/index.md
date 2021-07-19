@@ -1,5 +1,26 @@
 ### The broad strokes
 
+All processing is performed on messages (serialized objects) that are received from a queue and then finding a message handler that can handle the type of the message (`instance.GetType().Name`).  Typically messages are sent to a queue to be processed and this combination of queue and the `ServiceBus` instance that performs the processing is referred to as an *endpoint*:
+
+<div markdown="1" class="image-container">
+![Endpoint Image]({{ "/assets/images/endpoint.png" | relative_url }} "Endpoint")
+</div>
+
+It is important to note that not every `ServiceBus` instance will process messages from and inbox queue.  This happens when the instance is a producer of messages only.  An example may be a `web-api` that receives integration requests that are then sent to a relevant endpoint queue as a `command` message.
+
+Similarly, not every queue is going to be consumed by a `ServiceBus` instance.  An example of this is the error queue where poison messages are routed to.  These queues have to be managed out-of-band to determine the cause of the failure before moving the messages back to the inbox queue for another round of processing.
+
+<div class="alert alert-success" role="alert">
+    Packages currently target <code class="language-plaintext">netstandard2.0</code> and <code class="language-plaintext">netstandard2.1</code> which means that the libraries can be used with the following runtimes:
+	<ul>
+	<li>.NET Core 2.1+</li>
+	<li>.NET Framework 4.6.1+</li>
+	<li>.NET 5.0</li>
+	</ul>
+</div>
+
+### How to get going
+
 Start a new **Console Application** project and select a Shuttle.Esb queue implementation from the supported queues:
 
 ```

@@ -2,7 +2,7 @@
 title: Corrupt Transport Message Module
 layout: api
 ---
-# Shuttle.Esb.Module.CorruptTransportMessage
+# Corrupt Transport Message Module
 
 ```
 PM> Install-Package Shuttle.Esb.Module.CorruptTransportMessage

@@ -2,7 +2,7 @@
 title: Message Forwarding Module
 layout: api
 ---
-# Shuttle.Esb.Module.MessageForwarding
+# Message Forwarding Module
 
 ```
 PM> Install-Package Shuttle.Esb.Module.MessageForwarding

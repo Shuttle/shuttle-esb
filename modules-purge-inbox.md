@@ -2,7 +2,7 @@
 title: Purge Inbox Module
 layout: api
 ---
-# Shuttle.Esb.Module.PurgeInbox
+# Purge Inbox Module
 
 ```
 PM> Install-Package Shuttle.Esb.Module.PurgeInbox

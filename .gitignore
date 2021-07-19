@@ -1,5 +1,10 @@
 _site/*
 _theme_packages/*
+.sass-cache
+.jekyll-metadata
+public
+node_modules
+
 
 node_modules
 build/Release
