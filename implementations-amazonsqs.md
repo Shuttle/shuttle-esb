@@ -45,9 +45,9 @@ This implementation will add all the endpoints provided in the application confi
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration>
-	<configSections>
-		<section name="amazonsqs" type="Shuttle.Esb.AmazonSqs.AmazonSqsSection, Shuttle.Esb.AmazonSqs"/>
-	</configSections>
+    <configSections>
+        <section name="amazonsqs" type="Shuttle.Esb.AmazonSqs.AmazonSqsSection, Shuttle.Esb.AmazonSqs"/>
+    </configSections>
 
     <amazonsqs>
         <endpoints>

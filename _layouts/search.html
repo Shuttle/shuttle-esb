@@ -4,7 +4,9 @@
 
 <body>
     <script lang="js">
-        performSearch('{{ site.time | date: ' % s' }}');
+        $(function () {
+            performSearch();
+        });
     </script>
 
     <main class="page-content" aria-label="Content">

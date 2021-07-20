@@ -12,11 +12,11 @@ Similarly, not every queue is going to be consumed by a `ServiceBus` instance.  
 
 <div class="alert alert-success" role="alert">
     Packages currently target <code class="language-plaintext">netstandard2.0</code> and <code class="language-plaintext">netstandard2.1</code> which means that the libraries can be used with the following runtimes:
-	<ul>
-	<li>.NET Core 2.1+</li>
-	<li>.NET Framework 4.6.1+</li>
-	<li>.NET 5.0</li>
-	</ul>
+    <ul>
+        <li>.NET Core 2.1+</li>
+        <li>.NET Framework 4.6.1+</li>
+        <li>.NET 5.0</li>
+    </ul>
 </div>
 
 ### How to get going

@@ -7,7 +7,7 @@ const site = {
         return e.childNodes[0].nodeValue.replace(/\<\s*br\s*\/\>/g, '\n');
     },
 
-    performSearch(version) {
+    performSearch() {
         var idx;
         var headerIndex = 0;
 
