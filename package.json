@@ -1,13 +1,13 @@
 {
   "name": "shuttle-esb",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Shuttle.Esb",
   "scripts": {
     "development-bundle": "webpack --config webpack.development.js",
     "production-bundle": "webpack --config webpack.production.js",
     "serve": "jekyll serve"
   },
-  "author": "",
+  "author": "Eben Roux",
   "license": "ISC",
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.15.3",
