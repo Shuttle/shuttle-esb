@@ -117,7 +117,7 @@ const site = {
             htmlElement.setAttribute("theme", "dark");
         }
 
-        $("head link#theme-stylesheet").attr('href', baseurl + '/packed/' + theme + '.css');
+        $("head link#theme-stylesheet").attr('href', baseurl + '/packed/' + theme + '.css?' + version);
 
         switch (theme) {
             case "light": {

@@ -1,3 +1,19 @@
+body::-webkit-scrollbar {
+    width: auto;
+}
+body {
+    scrollbar-width: auto;
+    scrollbar-color: $scrollbar-bg $scrollbar-thumb-bg;
+}
+body::-webkit-scrollbar-track {
+    background: $scrollbar-thumb-bg;
+}
+body::-webkit-scrollbar-thumb {
+    background-color: $scrollbar-bg;
+    border-radius: 6px;
+    border: 3px solid $scrollbar-thumb-bg;
+}
+
 .overview {
     font-size: 2em;
 }
