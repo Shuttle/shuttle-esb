@@ -114,7 +114,7 @@ const site = {
         if (!theme) {
             theme = "dark"
             localStorage.setItem("theme", "dark");
-            htmlElement.setAttribute("theme", "dark");
+            document.documentElement.setAttribute("theme", "dark");
         }
 
         $("head link#theme-stylesheet").attr('href', baseurl + '/packed/' + theme + '.css?' + version);
