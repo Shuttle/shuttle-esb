@@ -1,5 +1,5 @@
 import { _ as _export_sfc, c as createElementBlock, o as openBlock, a as createStaticVNode } from "./app.f52045f1.js";
-const __pageData = '{"title":"Shuttle.Core.Json","description":"","frontmatter":{"title":"Shuttle.Core.Json","layout":"api"},"headers":[{"level":2,"title":"Usage","slug":"usage"}],"relativePath":"serialization/shuttle-core-json.md"}';
+const __pageData = '{"title":"Shuttle.Core.Json","description":"","frontmatter":{},"headers":[{"level":2,"title":"Usage","slug":"usage"}],"relativePath":"serialization/shuttle-core-json.md"}';
 const _sfc_main = {};
 const _hoisted_1 = /* @__PURE__ */ createStaticVNode("", 7);
 const _hoisted_8 = [
