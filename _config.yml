@@ -1,7 +1,0 @@
-exclude: [.idea,node_modules,bundle.js,package.json,package-lock.json]
-
-github: https://github.com/Shuttle/shuttle-esb
-name: shuttle-esb
-title: Shuttle.Esb
-email: me@ebenroux.com
-author: Eben Roux

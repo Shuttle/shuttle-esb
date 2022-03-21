@@ -1,36 +1,34 @@
 {
-  "name": "shuttle-esb",
-  "version": "2.0.0",
-  "description": "Shuttle.Esb",
-  "scripts": {
-    "development-bundle": "webpack --config webpack.development.js",
-    "production-bundle": "webpack --config webpack.production.js",
-    "serve": "jekyll serve"
-  },
-  "author": "Eben Roux",
-  "license": "ISC",
-  "devDependencies": {
-    "@fortawesome/fontawesome-free": "^5.15.3",
-    "bootstrap": "^4.6.0",
-    "clean-webpack-plugin": "^4.0.0-alpha.0",
-    "css-loader": "^6.1.0",
-    "css-minimizer-webpack-plugin": "^3.0.2",
-    "expose-loader": "^3.0.0",
-    "file-loader": "^6.2.0",
-    "jquery": "^3.6.0",
-    "lunr": "^2.3.9",
-    "marked": "^2.1.3",
-    "mini-css-extract-plugin": "^2.1.0",
-    "node-sass": "^6.0.1",
-    "popper.js": "^1.16.1",
-    "postcss-loader": "^6.1.1",
-    "rollup": "^2.53.2",
-    "sass": "^1.35.2",
-    "sass-loader": "^12.1.0",
-    "style-loader": "^3.1.0",
-    "terser-webpack-plugin": "^5.1.4",
-    "url-loader": "^4.1.1",
-    "webpack": "^5.45.1",
-    "webpack-cli": "^4.7.2"
-  }
+    "name": "shuttle-esb",
+    "version": "1.0.0",
+    "description": "Documentation for the Shuttle.Esb free open-source .NET enterprise service bus.",
+    "scripts": {
+        "dev": "vitepress dev src",
+        "build": "vitepress build src",
+        "serve": "vitepress serve src"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Shuttle/shuttle-esb.git"
+    },
+    "keywords": [
+        "shuttle",
+        "design-system"
+    ],
+    "author": "Eben Roux",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Shuttle/shuttle-esb/issues"
+    },
+    "homepage": "https://github.com/Shuttle/shuttle-esb#readme",
+    "devDependencies": {
+        "@types/markdown-it": "^12.2.3",
+        "@types/node": "^16.9.1"
+    },
+    "dependencies": {
+        "@vueuse/core": "^8.0.1",
+        "normalize.css": "^8.0.1",
+        "shuttle-theme": "^1.0.10",
+        "vitepress": "^0.22.3"
+    }
 }
