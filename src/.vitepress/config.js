@@ -280,11 +280,11 @@ module.exports = (async () => {
         ],
 
         themeConfig: {
-            // algolia: {
-            //     indexName: 'Shuttle.Core Documentation',
-            //     appId: '42GX712C20',
-            //     apiKey: 'cc059819a5d38ee7a55298f7cf9ed70a'
-            // },
+            algolia: {
+                indexName: 'shuttle-esb',
+                appId: 'VM33RJ87BH',
+                apiKey: 'fc560606a3c14b173d0ddf57a3258c84'
+            },
 
             // carbonAds: {
             //     code: '',
