@@ -27,7 +27,7 @@ import { VTIconShuttle } from 'shuttle-theme'
           />
         </svg>
       </a>
-      <a class="upgrade" href="/guide/quick-start.html">Upgrade to 12.0.0</a>
+      <a class="upgrade" href="/guide/upgrade-12.0.0.html">Upgrade to 12.0.0</a>
     </p>
   </section>
 
