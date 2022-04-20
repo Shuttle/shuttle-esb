@@ -27,7 +27,7 @@ subscriptionManager.Subscribe(new[] { typeof(Event1).FullName, typeof(Event2).Fu
 subscriptionManager.Subscribe<Event1>();
 subscriptionManager.Subscribe<Event2>();
 
-var bus = ServiceBus.Create(resolver).Start();
+var bus = IComponentResolver.Resolve<IServiceBus>().Start();
 ```
 
 In a production environment it is recommended that the subscription store be maintained manually using an elevated identity.  For the above one could use an identity that has **read-only** permissions.  The `Subscribe` method will fail if the subscription does not exist.  In this way one can ensure that the subscription is not missing from the relevant store.
