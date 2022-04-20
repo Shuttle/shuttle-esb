@@ -16,7 +16,7 @@ const _sfc_main$1 = {
     };
   }
 };
-var Home = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-10814776"]]);
+var Home = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-eea53552"]]);
 const __pageData = '{"title":"Home","description":"","frontmatter":{"page":true,"title":"Home"},"headers":[],"relativePath":"index.md"}';
 const __default__ = {};
 const _sfc_main = /* @__PURE__ */ Object.assign(__default__, {
