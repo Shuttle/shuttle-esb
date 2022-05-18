@@ -38,7 +38,7 @@ The `GetConnectionString()` method should return the Azure Storage connection st
 The relevant `IAzureConfiguration` should be registered with the `IComponentRegistry`:
 
 ```c#
-IComponentResolver.Register<IAzureConfiguration, DefaultAzureConfiguration>;
+IComponentResolver.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>;
 ```
 
 ## DefaultAzureConfiguration
