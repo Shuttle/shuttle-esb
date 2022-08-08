@@ -19,6 +19,10 @@ const concepts = [
         text: 'Patterns',
         items: [
             {
+                text: 'Streaming',
+                link: '/concepts/patterns/streaming'
+            },
+            {
                 text: 'Request / Response',
                 link: '/concepts/patterns/request-response'
             },
@@ -255,6 +259,38 @@ const modules = [
     },
 ];
 
+const options = [
+    {
+        text: 'Options',
+        items: [
+            {
+                text: 'Service Bus',
+                link: '/options/servicebus'
+            },
+            {
+                text: 'Inbox',
+                link: '/options/inbox'
+            },
+            {
+                text: 'Message Routes',
+                link: '/options/message-routes'
+            },
+            {
+                text: 'Outbox',
+                link: '/options/outbox'
+            },
+            {
+                text: 'Control Inbox',
+                link: '/options/control-inbox'
+            },
+            {
+                text: 'Worker',
+                link: '/options/worker'
+            },
+        ]
+    },
+];
+
 
 module.exports = (async () => {
     const base = await getBase();
@@ -313,9 +349,9 @@ module.exports = (async () => {
                     link: '/guide/introduction'
                 },
                 {
-                    text: 'Configuration',
-                    activeMatch: `^/configuration/`,
-                    link: '/configuration/full'
+                    text: 'Options',
+                    activeMatch: `^/options/`,
+                    link: '/options/servicebus'
                 },
                 {
                     text: 'Components',
@@ -332,12 +368,17 @@ module.exports = (async () => {
                     activeMatch: `^/modules/`,
                     link: '/modules/overview'
                 },
+                {
+                    text: 'v-previous',
+                    link: 'https://shuttle.github.io/shuttle-esb-v12/'
+                },
             ],
 
             sidebar: {
                 '/concepts/': concepts,
                 '/guide/': guide,
                 '/components/': components,
+                '/options/': options,
                 '/implementations/': implementations,
                 '/modules/': modules
             }

@@ -40,10 +40,10 @@ Creates and then dispatches a `TransportMessage` using the `TransportMessageConf
 public IEnumerable<TransportMessage> Publish(object message)
 ```
 
-Creates and then dispatches a `TransportMessage` for each uri returned by the registered `ISubscriptionManager` instance.  The newly instantiated `TransportMessage` collection returned with one message for each of relevant `RecipientInboxWorkQueueUri` subscription Uris.
+Creates and then dispatches a `TransportMessage` for each uri returned by the registered `ISubscriptionService` instance.  The newly instantiated `TransportMessage` collection returned with one message for each of relevant `RecipientInboxWorkQueueUri` subscription Uris.
 
 ``` c#
 public IEnumerable<TransportMessage> Publish(object message, Action<TransportMessageConfigurator> configure)
 ```
 
-Creates and then dispatches a `TransportMessage` for each uri returned by the registered `ISubscriptionManager` instance.  There should be very few instances where this method will be required.  The newly instantiated `TransportMessage` collection returned with one message for each of relevant `RecipientInboxWorkQueueUri` subscription Uris.
+Creates and then dispatches a `TransportMessage` for each uri returned by the registered `ISubscriptionService` instance.  There should be very few instances where this method will be required.  The newly instantiated `TransportMessage` collection returned with one message for each of relevant `RecipientInboxWorkQueueUri` subscription Uris.

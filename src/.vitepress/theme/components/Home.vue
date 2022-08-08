@@ -4,8 +4,11 @@ import { VTIconDiscord } from 'shuttle-theme';
 </script>
 <template>
     <section id="hero">
+        <p class="upgrade-notice">
+            The latest version of the Shuttle.Esb components now make use of <a href="https://docs.microsoft.com/en-us/dotnet/core/extensions/dependency-injection" target="_blank">.NET dependency injection</a> as well as the <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options?view=aspnetcore-6.0" target="_blank">options pattern</a>.  This is a major departure from the component container adapter pattern used to date.  Please take a look at the <a href="/shuttle-core/upgrade-ms-di.html">upgrade guide</a> to see the <strong>breaking changes</strong>.
+        </p>
         <VTIconShuttle class="logo" />
-        <h1 class="tagline">Autonomous Business Components</h1>
+        <h1 class="tagline">Simple queue and stream processing</h1>
         <p class="description">
             Configurable service bus that provides you with a mechanism to create
             cross-platform endpoints that are loosely coupled, enabling you to develop
@@ -60,6 +63,17 @@ import { VTIconDiscord } from 'shuttle-theme';
 </template>
 
 <style scoped>
+.upgrade-notice {
+    border-radius: 8px;
+    max-width: 960px;
+    margin: 0px auto;
+    color: var(--vt-c-text-2);
+    font-size: .9rem;
+    border: solid 1px var(--vt-c-divider-dark-1);
+    margin-bottom: 2em;
+    background-color: var(--vt-c-bg-soft);
+}
+
 a {
     color: var(--vt-c-orange-dark);
 }

@@ -5,8 +5,7 @@ Once you have instantiated a message you need to get it to a specific endpoint. 
 Typically when sending a message that message is a command.  It does not _have_ to be a command and you _can_ send an event message to a specific endpoint but more-often-than-not you will be sending a command.  Messages are sent by calling one of the relevant overloaded methods on the service bus instance:
 
 ```c#
-TransportMessage Send(object message);
-TransportMessage Send(object message, Action<TransportMessageConfigurator> configure);
+TransportMessage Send(object message, Action<TransportMessageBuilder> builder = null);
 ```
 
 Only messages that have no `RecipientInboxWorkQueueUri` set will be routed by the service bus.
@@ -40,7 +39,7 @@ The `DefaultMessageRouteProvider` is registered if no `IMessageRouteProvider` ha
             <add specification="StartsWith" value="Shuttle.Messages2" />
          </messageRoute>
          <messageRoute uri="sql://serverB/inbox">
-            <add specification="TypeList" value="DoSomethingCommand, Assembly" />
+            <add specification="TypeList" value="DoSomething, Assembly" />
          </messageRoute>
          <messageRoute uri="msmq://serverC/inbox">
             <add specification="Regex" value=".+[Cc]ommand.+" />

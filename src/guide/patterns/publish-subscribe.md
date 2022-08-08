@@ -161,7 +161,7 @@ This will provide access to the StructureMap dependency injection container.
 
 > Install the `Shuttle.Esb.Sql.Subscription` nuget package.
 
-This will provide access to the Sql-based `ISubscriptionManager` implementation.
+This will provide access to the Sql-based `ISubscriptionService` implementation.
 
 > Install the `Microsoft.Data.SqlClient` nuget package.
 
@@ -247,7 +247,7 @@ The `{version}` bit will be in a `semver` format.
 
 This will create the required structures that the subscription manager will use to store the subcriptions.
 
-Whenever the `Publish` method is invoked on the `ServiceBus` instance the registered `ISubscriptionManager` instance is asked for the subscribers to the published message type.  These are retrieved from the Sql Server database for the implementation we are using.
+Whenever the `Publish` method is invoked on the `ServiceBus` instance the registered `ISubscriptionService` instance is asked for the subscribers to the published message type.  These are retrieved from the Sql Server database for the implementation we are using.
 
 ### App.config
 
@@ -279,7 +279,7 @@ Whenever the `Publish` method is invoked on the `ServiceBus` instance the regist
 </configuration>
 ```
 
-The Sql Server implementation of the `ISubscriptionManager` that we are using by default will try to find a connection string with a name of **Subscription**.  However, you can override this.  See the [Sql Server configuration options][sql-server] for details about how to do this.
+The Sql Server implementation of the `ISubscriptionService` that we are using by default will try to find a connection string with a name of **Subscription**.  However, you can override this.  See the [Sql Server configuration options][sql-server] for details about how to do this.
 
 ### RegisterMemberHandler
 
@@ -329,7 +329,7 @@ This will provide access to the StructureMap dependency injection container.
 
 > Install the `Shuttle.Esb.Sql.Subscription` nuget package.
 
-This will provide access to the Sql-based `ISubscriptionManager` implementation.
+This will provide access to the Sql-based `ISubscriptionService` implementation.
 
 > Install the `Microsoft.Data.SqlClient` nuget package.
 
@@ -391,11 +391,13 @@ namespace Shuttle.PublishSubscribe.Subscriber
             componentRegistry.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
             componentRegistry.RegisterDataAccess();
             componentRegistry.RegisterSubscription();
-            componentRegistry.RegisterServiceBus();
+
+            services.AddServiceBus(builder =>
+            {
+                builder.AddSubscription<MemberRegisteredEvent>();
+            });
 
             var resolver = new StructureMapComponentResolver(new Container(registry));
-
-            resolver.Resolve<ISubscriptionManager>().Subscribe<MemberRegisteredEvent>();
 
             _bus = resolver.Resolve<IServiceBus>().Start();
         }
@@ -408,7 +410,7 @@ namespace Shuttle.PublishSubscribe.Subscriber
 }
 ```
 
-Here we register the subscription by calling the `ISubscriptionManager` implementation's `Subscribe<MemberRegisteredEvent>();` method.  Since we are using the Sql Server implementation of the `ISubscriptionManager` interface an entry will be created in the **SubscriberMessageType** table associating the inbox work queue uri with the message type.
+Here we register the subscription by calling the `AddSubscription` method on the `ServiceBusBuiler`.  Since we are using the Sql Server implementation of the `ISubscriptionService` interface an entry will be created in the **SubscriberMessageType** table associating the inbox work queue uri with the message type.
 
 It is important to note that in a production environment one would not typically register subscriptions in this manner as they may be somewhat more sensitive as we do not want any arbitrary subscriber listening in on the messages being published.  For this reason the connection string should be read-only and the subscription should be registered manually or via a deployment script.  Should the subscription **not** yet exist the creation of the subscription will fail, indicating that the subscription should be registered out-of-band.
 

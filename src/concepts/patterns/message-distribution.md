@@ -8,47 +8,46 @@ An endpoint will automatically distribute messages to workers if it receives a w
 
 Since message distribution is integrated into the inbox processing the same endpoint simply needs to be installed aa many times as required on different machines as workers.  The endpoint that you would like to have messages distributed on would require a control inbox configuration since all Shuttle messages should be processed without waiting in a queue like the inbox proper behind potentially thousands of messages.  Each worker is identified as such in its configuration and the control inbox of the endpoint performing the distribution is required:
 
-```xml
-<configuration>
-   <configSections>
-      <section name="serviceBus" type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
-   </configSections>
-
-   <serviceBus>
-      <control 
-          workQueueUri="msmq://./control-inbox-work" 
-          errorQueueUri="msmq://./shuttle-error"/>
-      <inbox 
-          distribute="true"
-          workQueueUri="msmq://./inbox-work" 
-          errorQueueUri="msmq://./shuttle-error"/>
-   </serviceBus>
-</configuration>
+```json
+{
+  "Shuttle": {
+    "ServiceBus": {
+      "ControlInbox": {
+        "WorkQueueUri": "queue://configuration/control-inbox-work",
+        "ErrorQueueUri": "queue://configuration/error",
+      },
+      "Inbox": {
+        "Distribute": true,
+        "WorkQueueUri": "queue://configuration/server-inbox-work",
+        "ErrorQueueUri": "queue://configuration/error"
+      }
+    }
+  }
+}
 ```
 
 Any endpoint that receives messages can be configured to include message distribution.
 
-You then install as many workers as you require on as many machines as you want to and configure them to talk to a distributor.  The physical distributor along with all the related workers form the logical endpoint for a message.  The worker configuration is as follows:
+You then install as many workers as you require on as many machines as you want to and configure them to talk to a distributor.  The physical distributor along with all the related workers form the logical endpoint for a message type.  The worker configuration is as follows:
 
-```xml
-<configuration>
-   <configSections>
-      <section name="serviceBus" type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
-   </configSections>
-
-   <serviceBus>
-      <worker
-         distributorControlWorkQueueUri="msmq:///control-inbox=work" />
-      <inbox
-         workQueueUri="msmq://./workerN-inbox-work"
-         errorQueueUri="msmq://./shuttle-error"
-         threadCount="15">
-      </inbox>
-   </serviceBus>
-</configuration>
+```json
+{
+  "Shuttle": {
+    "ServiceBus": {
+      "Inbox": {
+        "WorkQueueUri": "queue://configuration/worker-work",
+        "ErrorQueueUri": "queue://configuration/error"
+      },
+      "Worker": {
+        "DistributorControlInboxWorkQueueUri": 
+            "queue://configuration/control-inbox-work"
+      } 
+    }
+  }
+}
 ```
 
-As soon as the application configuration file contains the **worker** tag each thread that goes idle will send a message to the distributor to indicate that a thread has become available to perform word.  The distributor will then send one or more message for each available thread.  The number of messages sent for each availability message is configured using the `distributeSendCount` attribute of the `inbox` tag.
+As soon as the service bus contains a **worker** option, each thread that goes idle will send a message to the distributor control inbox to indicate that a thread has become available to perform word.  The distributor will then send one or more message for each available thread.  The number of messages sent for each availability message is configured using the `distributeSendCount` attribute of the `inbox` tag.
 
 ## Message Distribution Exceptions
 

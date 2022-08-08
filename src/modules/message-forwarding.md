@@ -21,7 +21,7 @@ The module will attach the `MessageForwardingObserver` to the `OnAfterHandleMess
 				<add specification="StartsWith" value="Shuttle.Messages2" />
 			</messageRoute>
 			<messageRoute uri="sql://./inbox">
-				<add specification="TypeList" value="DoSomethingCommand" />
+				<add specification="TypeList" value="DoSomething" />
 			</messageRoute>
 		</forwardingRoutes>
 	</messageForwarding>

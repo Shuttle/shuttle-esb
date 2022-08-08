@@ -35,7 +35,7 @@ The `DefaultMessageRouteProvider` obtains its configuration from the application
         <add specification="StartsWith" value="Shuttle.Messages2" />
     </messageRoute>
     <messageRoute uri="sql://./inbox">
-        <add specification="TypeList" value="DoSomethingCommand" />
+        <add specification="TypeList" value="DoSomething" />
     </messageRoute>
 </messageRoutes>
 ```

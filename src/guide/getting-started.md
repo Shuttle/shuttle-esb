@@ -75,7 +75,7 @@ A bit of configuration is going to be needed to help things along:
 ### Send a command message for processing
 
 ``` c#
-bus.Send(new RegisterMemberCommand
+bus.Send(new RegisterMember
 {
     UserName = "user-name",
     EMailAddress = "user@domain.com"
@@ -94,19 +94,22 @@ bus.Publish(new MemberRegisteredEvent
 ### Subscribe to those interesting events
 
 ``` c#
-resolver.Resolve<ISubscriptionManager>().Subscribe<MemberRegisteredEvent>();
+services.AddServiceBus(builder =>
+{
+    builder.AddSubscription<MemberRegisteredEvent>();
+});
 ```
 
 ### Handle any messages
 
 ``` c#
-public class RegisterMemberHandler : IMessageHandler<RegisterMemberCommand>
+public class RegisterMemberHandler : IMessageHandler<RegisterMember>
 {
     public RegisterMemberHandler(IDependency dependency)
     {
     }
 
-	public void ProcessMessage(IHandlerContext<RegisterMemberCommand> context)
+	public void ProcessMessage(IHandlerContext<RegisterMember> context)
 	{
         // perform member registration
 

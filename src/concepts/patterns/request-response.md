@@ -17,7 +17,7 @@ Typically the message handler for the command message goes about its business an
 The response can then be a command message or an event message and you can simply call the **reply** method on the service bus instance:
 
 ```c#
-bus.Send(new ResponseMessage(), c => c.Reply());
+bus.Send(new ResponseMessage(), builder => builder.Reply());
 ```
 
 The response may, of course, be decoupled by publishing an event message but it is up to the implementor to decide the mechanism.  This would then no longer be request/response but rather publish/subscribe.  The advantage of request/response is that it provides the ability to respond to the caller directly whereas publishing a message would result in **all** publishers receiving a copy of the message.

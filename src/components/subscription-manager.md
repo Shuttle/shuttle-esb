@@ -1,8 +1,8 @@
-# Subscription Manager
+# Subscription Service
 
-An implementation of the `ISubscriptionManager` interface is used by endpoints to subscribe to message types and to get the endpoint uris that have subscribed to a message type.
+An implementation of the `ISubscriptionService` interface is used by endpoints to subscribe to message types and to get the endpoint uris that have subscribed to a message type.
 
-There is no *default* implementation of the `ISubscriptionManager` interface as the data has to be persisted in some central data store.
+There is no *default* implementation of the `ISubscriptionService` interface as the data has to be persisted in some central data store.
 
 ## Methods
 
