@@ -23,35 +23,8 @@ public interface IMessageRouteProvider
 
 ## Implementation
 
-The `DefaultMessageRouteProvider` is registered if no `IMessageRouteProvider` has been registered and makes use of the application configuration file to determine where to send messages:
+The `DefaultMessageRouteProvider` is registered if no `IMessageRouteProvider` has been registered and makes use of the [message routing options](/options/message-routes) to determine where to send messages:
 
-```xml
-<?xml version="1.0" encoding="utf-8" ?>
-<configuration>
-   <configSections>
-      <section name="serviceBus" type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
-   </configSections>
+Each implementation of `IMessageRouteProvider` can determine the routes however it needs to, from the given message.  A typical scenario, and the way the `DefaultMessageRouteProvider` works, is to use the full type name to determine the destination.
 
-   <serviceBus>
-      <messageRoutes>
-         <messageRoute uri="msmq://serverA/inbox">
-            <add specification="StartsWith" value="Shuttle.Messages1" />
-            <add specification="StartsWith" value="Shuttle.Messages2" />
-         </messageRoute>
-         <messageRoute uri="sql://serverB/inbox">
-            <add specification="TypeList" value="DoSomething, Assembly" />
-         </messageRoute>
-         <messageRoute uri="msmq://serverC/inbox">
-            <add specification="Regex" value=".+[Cc]ommand.+" />
-         </messageRoute>
-         <messageRoute uri="sql://serverD/inbox">
-            <add specification="Assembly" value="TheAssemblyName" />
-         </messageRoute>
-      </messageRoutes>
-   </serviceBus>
-</configuration>
-```
-
-Each implementation of `IMessageRouteProvider` can determine the routes however it needs to from the given message.  A typical scenario, and the way the `DefaultMessageRouteProvider` works, is to use the full type name to determine the destination.
-
-**Please note**: each message type may only be sent to _one_ endpoint (using `Send`).
+**Please note**: each message type may only be sent to _one_ endpoint using `Send`.
