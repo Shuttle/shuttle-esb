@@ -118,7 +118,7 @@ The call would fail if there is nowhere to send the message.
 We could publish an event such as **OrderReceived** and our ordering service could subscribe to the event.
 
 ```c#
-bus.Publish(new OrderReceivedEvent
+bus.Publish(new OrderReceived
         {
             Name = "ClientName",
             Product = "ProductXYZ"
@@ -131,7 +131,7 @@ The difference lies purely in the intent of the message.  Events indicate that s
 
 ### Lower-level functions (RPC)
 
-In some situations an event will not be able to relay the intent of any particular action.  For instance, we may need to send an e-mail to a manager whenever an order is created (or when the total amount of the order exceeds a set limit).  The e-mail service responsible for sending e-mails via our smtp server will not be able to subscribe to the `OrderReceivedEvent` since the e-mail system would need to be adapted to accomodate rules from another system; which isn't what we want as it would be too closely coupled to any system that makes use of e-mails.
+In some situations an event will not be able to relay the intent of any particular action.  For instance, we may need to send an e-mail to a manager whenever an order is created (or when the total amount of the order exceeds a set limit).  The e-mail service responsible for sending e-mails via our smtp server will not be able to subscribe to the `OrderReceived` since the e-mail system would need to be adapted to accomodate rules from another system; which isn't what we want as it would be too closely coupled to any system that makes use of e-mails.
 
 In this case the e-mail system is responsible for sending e-mails.  Any system that would like to send a mail will need to decide when to do so.  Therefore, the ordering service would send a *command* to the e-mail service:
 

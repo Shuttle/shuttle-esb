@@ -15,12 +15,12 @@ We could change this process to gather the user information from the front-end a
 * User Registration Service (AC) - handles *RegisterUser*
  * check deny-listing
  * if user deny-listed send *SendEMail* to then e-mail service (AC) to notify user that the details provided (user name / e-mail address / contact numbers) have been deny-listed.
- * if not deny-listed register user in database and send *SendEMail* to the e-mail server (AC) and publishes *UserRegisteredEvent*.
+ * if not deny-listed register user in database and send *SendEMail* to the e-mail server (AC) and publishes *UserRegistered*.
 
 * E-Mail Service (AC) - handles *SendEMail*
  * sends the requested e-mail via our smtp server; if the server is down the message will simply be retried until it goes through
 
-* CRM User Registration Service (AC) - subscribes to *UserRegisteredEvent*
+* CRM User Registration Service (AC) - subscribes to *UserRegistered*
  * registers the new user in our CRM
 
 In this way each component can be developed, versioned, and deployed in isolation.  Stopping any of the services for deployment would not result in any process breaking since the queues will continue receiving work.  Even if the entire machine is brought down Shuttle.Esb will still store message on the sending machine when using an outbox.

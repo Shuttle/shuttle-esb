@@ -112,7 +112,7 @@ bus.Send(new RegisterMember
 Before publishing an event one would need to register an `ISubscrtiptionService` implementation such as [Shuttle.Esb.Sql.Subscription](/implementations/subscription/sql.md).
 
 ``` c#
-bus.Publish(new MemberRegisteredEvent
+bus.Publish(new MemberRegistered
 {
     UserName = "user-name"
 });
@@ -123,7 +123,7 @@ bus.Publish(new MemberRegisteredEvent
 ``` c#
 services.AddServiceBus(builder =>
 {
-    builder.AddSubscription<MemberRegisteredEvent>();
+    builder.AddSubscription<MemberRegistered>();
 });
 ```
 
@@ -140,7 +140,7 @@ public class RegisterMemberHandler : IMessageHandler<RegisterMember>
 	{
         // perform member registration
 
-		context.Publish(new MemberRegisteredEvent
+		context.Publish(new MemberRegistered
 		{
 			UserName = context.Message.UserName
 		});
@@ -149,9 +149,9 @@ public class RegisterMemberHandler : IMessageHandler<RegisterMember>
 ```
 
 ``` c#
-public class MemberRegisteredHandler : IMessageHandler<MemberRegisteredEvent>
+public class MemberRegisteredHandler : IMessageHandler<MemberRegistered>
 {
-	public void ProcessMessage(IHandlerContext<MemberRegisteredEvent> context)
+	public void ProcessMessage(IHandlerContext<MemberRegistered> context)
 	{
         // processing
 	}

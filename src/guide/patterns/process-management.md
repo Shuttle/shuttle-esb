@@ -68,11 +68,11 @@ Once you add books to your order you can place the order using any of the follow
 - EventSource / Module
 	* This uses the `Shuttle.Esb.Process` module to handle the process state storage for you.
 	
-Once you register an order by clicking on the button the `RegisterOrderProcessCommand` is immeditely sent to the relevant endpoint for processing.  An `AcceptOrderProcessCommand` is then sent locally (to the same endpoint) but it is deferred for 20 seconds.  This allows you time to cancel the order.
+Once you register an order by clicking on the button the `RegisterOrderProcess` is immeditely sent to the relevant endpoint for processing.  An `AcceptOrderProcess` is then sent locally (to the same endpoint) but it is deferred for 20 seconds.  This allows you time to cancel the order.
 
-The handler processing the `AcceptOrderProcessCommand` will simply ignore the message should the process/order have been cancelled in the meantime; else it sends a `CreateOrderCommand` to the order processing endpoint.  Once the order has been created the process manager receives an `OrderCreatedEvent` and it then sends a `CreateInvoiceCommand` command.
+The handler processing the `AcceptOrderProcess` will simply ignore the message should the process/order have been cancelled in the meantime; else it sends a `CreateOrder` to the order processing endpoint.  Once the order has been created the process manager receives an `OrderCreated` and it then sends a `CreateInvoice` command.
 
-When the process manager receives the `InvoiceCreatedEvent` an e-mail needs to be sent to the customer so a `SendEMailCommand` is sent to the e-mail server endpoint.  Once the `EMailSentEvent` is recevied by the process manager a `CompleteOrderProcessCommand` is sent locally that then results in an `OrderProcessCompletedEvent` event.
+When the process manager receives the `InvoiceCreated` an e-mail needs to be sent to the customer so a `SendEMail` is sent to the e-mail server endpoint.  Once the `EMailSent` is recevied by the process manager a `CompleteOrderProcess` is sent locally that then results in an `OrderProcessCompleted` event.
 
 After the process has been completed it is possible to `Archive` the process.  In our sample it simply deletes the order.
 

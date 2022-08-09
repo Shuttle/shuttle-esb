@@ -45,14 +45,14 @@ namespace Shuttle.PublishSubscribe.Messages
 }
 ```
 
-### MemberRegisteredEvent
+### MemberRegistered
 
-> Add a new class called `MemberRegisteredEvent` also with a `UserName` property.
+> Add a new class called `MemberRegistered` also with a `UserName` property.
 
 ``` c#
 namespace Shuttle.PublishSubscribe.Messages
 {
-	public class MemberRegisteredEvent
+	public class MemberRegistered
 	{
 		public string UserName { get; set; }
 	}
