@@ -186,6 +186,10 @@ const implementations = [
         text: 'Queue',
         items: [
             {
+                text: 'Overview',
+                link: '/implementations/queue/overview'
+            },
+            {
                 text: 'Amazon SQS',
                 link: '/implementations/queue/amazonsqs'
             },

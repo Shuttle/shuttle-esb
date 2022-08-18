@@ -4,9 +4,9 @@
 PM> Install-Package Shuttle.Esb.AmazonSqs
 ```
 
-In order to make use of the `AmazonSqsQueue` you will need access to an [Amazon Web Services](https://aws.amazon.com/sqs/) account.  There are some options for local development which are beyond the scope of this documentation.
+In order to make use of the `AmazonSqsQueue` you will need access to an [Amazon Web Services](https://aws.amazon.com/sqs/) account.  There are some options for local development, such as [ElasticMQ](https://github.com/softwaremill/elasticmq), which are beyond the scope of this documentation.
 
-You may want to take a look at [Messaging Using Amazon SQS](https://docs.aws.amazon.com/sdk-for-net/v3/developer-guide/sqs-apis-intro.html).
+You may also want to take a look at [Messaging Using Amazon SQS](https://docs.aws.amazon.com/sdk-for-net/v3/developer-guide/sqs-apis-intro.html).
 
 ## Configuration
 
