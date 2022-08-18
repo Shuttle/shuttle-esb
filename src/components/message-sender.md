@@ -4,46 +4,28 @@ The purpose of the `IMessageSender` is to abstract sending and publishing capabi
 
 ## Methods
 
-### CreateTransportMessage
-
-``` c#
-TransportMessage CreateTransportMessage(object message, Action<TransportMessageConfigurator> configure);
-```
-
-Returns a new instance of a `TransportMessage` using the `TransportMessageConfigurator` provided by the `configure` action by invoking the `TransportMessagePipeline`.
-
 ### Dispatch
 
 ``` c#
-public void Dispatch(TransportMessage transportMessage);
+void Dispatch(TransportMessage transportMessage, TransportMessage transportMessageReceived);
 ```
 
-This method invokes the `DispatchTransportMessagePipeline` to have the given `TransportMessage` eventually enqueued on the target queue as specified by the `RecipientInboxWorkQueueUri` of the `TransportMessage`.
+This method invokes the `DispatchTransportMessagePipeline` to have the given `TransportMessage` eventually enqueued on the target queue as specified by the `RecipientInboxWorkQueueUri` of the `TransportMessage`.  If this `Dispatch` takes place in response to the processing of received `TransportMessage` then the `transportMessageReceived` should be the received message; else it is `null`.
 
 ### Send
 
 ``` c#
-public TransportMessage Send(object message);
+TransportMessage Send(object message, TransportMessage transportMessageReceived, Action<TransportMessageBuilder> builder);
 ```
 
-Creates and then dispatches a `TransportMessage` using the message routing as configured.  The newly instantiated `TransportMessage` is returned.
-
-``` c#
-public TransportMessage Send(object message, Action<TransportMessageConfigurator> configure)
-```
-
-Creates and then dispatches a `TransportMessage` using the `TransportMessageConfigurator` returned by the `configure` action.  The newly instantiated `TransportMessage` is returned.
+Creates and then dispatches a `TransportMessage` using the message routing as configured.  The newly instantiated `TransportMessage` is returned.  The same `transportMessageReceived` processing applies as to the `Dispatch`.  The `builder` allows you to customize the newly created `TransportMessage`.
 
 ### Publish
 
 ``` c#
-public IEnumerable<TransportMessage> Publish(object message)
+IEnumerable<TransportMessage> Publish(object message, TransportMessage transportMessageReceived, Action<TransportMessageBuilder> builder);
 ```
 
-Creates and then dispatches a `TransportMessage` for each uri returned by the registered `ISubscriptionService` instance.  The newly instantiated `TransportMessage` collection returned with one message for each of relevant `RecipientInboxWorkQueueUri` subscription Uris.
+Creates and then dispatches a `TransportMessage` to all URIs returned from the registered `ISubscriptionService`.  The same `transportMessageReceived` processing applies as to the `Dispatch`.  The `builder` allows you to customize the newly created `TransportMessage`.
 
-``` c#
-public IEnumerable<TransportMessage> Publish(object message, Action<TransportMessageConfigurator> configure)
-```
-
-Creates and then dispatches a `TransportMessage` for each uri returned by the registered `ISubscriptionService` instance.  There should be very few instances where this method will be required.  The newly instantiated `TransportMessage` collection returned with one message for each of relevant `RecipientInboxWorkQueueUri` subscription Uris.
+All the instantiated `TransportMessage` instances are returned, with one message for each of relevant `RecipientInboxWorkQueueUri` that was subscribed to.

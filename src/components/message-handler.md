@@ -1,10 +1,10 @@
 # Message Handler
 
-In order to handle a message sent to an endpoint you need to implement the `IMessageHandler<>` interface on a class that is typically called the *message handler.
+In order to handle a message sent to an endpoint you need to implement the `IMessageHandler<>` interface on a class that is typically called the *message handler*.
 
 ## Properties
 
-Although the interface does not have any properties you could implement the `IReusability` interface.  If this interface is *not* implemented in the message handler is regarded as stateless and will be pooled.
+Although the interface does not have any properties you could implement the `IReusability` interface.  If this interface is *not* implemented the message handler is regarded as stateless and will be pooled.
 
 ### Reusability
 
@@ -26,6 +26,4 @@ Return `true` to indicate that the message handler instance can be re-used.  Thi
 void ProcessMessage(IHandlerContext<T> context);
 ```
 
-The `<T>` generic argument should be the type of the POCO message you are interested in.  This method will contain the actuall implementation code that reacts to the message that is passed in.  If handler transport scope is enabled then this method will be wrapped in a `TransactionScope`.
-
-For more information on the configuration of the transaction scope see the [Shuttle.Core.Transactions](https://shuttle.github.io/shuttle-core/infrastructure/shuttle-core-transactions.html) documentation.
+The `<T>` generic argument should be the type of the POCO message you are interested in.  This method will contain the actual implementation code that reacts to the message that is passed in.  If [Shuttle.Core.Transactions](https://shuttle.github.io/shuttle-core/infrastructure/shuttle-core-transactions.html) are enabled then this method will be wrapped in a `TransactionScope`.

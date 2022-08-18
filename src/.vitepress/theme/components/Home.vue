@@ -1,5 +1,4 @@
 <script setup>
-import { VTIconShuttle } from 'shuttle-theme';
 import { VTIconDiscord } from 'shuttle-theme';
 </script>
 <template>
@@ -7,8 +6,7 @@ import { VTIconDiscord } from 'shuttle-theme';
         <p class="upgrade-notice">
             The latest version of the Shuttle.Esb components now make use of <a href="https://docs.microsoft.com/en-us/dotnet/core/extensions/dependency-injection" target="_blank">.NET dependency injection</a> as well as the <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options?view=aspnetcore-6.0" target="_blank">options pattern</a>.  This is a major departure from the component container adapter pattern used to date.  Please take a look at the <a href="/shuttle-core/upgrade-ms-di.html">upgrade guide</a> to see the <strong>breaking changes</strong>.
         </p>
-        <VTIconShuttle class="logo" />
-        <h1 class="tagline">Simple queue and stream processing</h1>
+        <h1 class="tagline">Flexible queue and stream processing</h1>
         <p class="description">
             Configurable service bus that provides you with a mechanism to create
             cross-platform endpoints that are loosely coupled, enabling you to develop
@@ -25,13 +23,6 @@ import { VTIconDiscord } from 'shuttle-theme';
                 </svg>
             </a>
             <a class="upgrade" href="/shuttle-esb/guide/upgrade-12.0.0.html">Upgrade</a>
-        </p>
-        <p>
-            <a href="https://discord.gg/Q2yEsfht6f" target="_blank">
-                <div class="discord-link">
-                    <VTIconDiscord class="discord-logo" />Join our Discord channel
-                </div>
-            </a>
         </p>
     </section>
 
@@ -86,35 +77,6 @@ a:hover {
     height: 15em;
     width: 15em;
     margin: auto;
-}
-
-.discord-link {
-    margin: auto;
-    background-color: rgb(88, 101, 242);
-    color: #fff;
-    width: fit-content;
-    padding: 0.75em;
-    margin-top: 1em;
-    border-radius: 8px;
-    transition: background-color 0.5s;
-}
-
-.discord-link:hover {
-    background-color: rgb(47, 55, 143);
-    transition: background-color 0.5s;
-}
-
-.discord-link:active {
-    background-color: rgb(31, 39, 119);
-    transition: background-color 0.2s;
-}
-
-.discord-logo {
-    height: 2em;
-    width: 2em;
-    fill: #fff;
-    display: inline;
-    margin-right: 1em;
 }
 
 section {

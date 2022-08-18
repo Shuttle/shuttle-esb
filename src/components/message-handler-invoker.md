@@ -14,9 +14,9 @@ MessageHandlerInvokeResult Invoke(PipelineEvent pipelineEvent);
 
 Invoke the message handler using the data contained in the given `PipelineEvent`.
 
-# DefaultMessageHandlerInvoker
+# MessageHandlerInvoker
 
-Type `DefaultMessageHandlerInvoker` implements the `IMessageHandlerInvoker` interface and will attempt to find an implementation of the required `IMessageHandler<>` interface.
+Type `MessageHandlerInvoker` implements the `IMessageHandlerInvoker` interface and will attempt to find an implementation of the required `IMessageHandler<>` interface.
 
 If no handler can be found the `MessageHandlerInvokeResult` return from the `Invoke` method will have an `Invoked` value of `false`.
 

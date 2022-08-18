@@ -1,6 +1,6 @@
-# Message Idempotence
+# Idempotence
 
-This sample makes use of [Shuttle.Esb.AzureMQ](https://github.com/Shuttle/Shuttle.Esb.AzureMQ) for the message queues.  Local Azure Storage Queues should be provided by [Azurite](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite?tabs=visual-studio).
+This sample makes use of [Shuttle.Esb.AzureStorageQueues](https://github.com/Shuttle/Shuttle.Esb.AzureStorageQueues) for the message queues.  Local Azure Storage Queues should be provided by [Azurite](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite?tabs=visual-studio).
 
 Once you have opened the `Shuttle.Idempotence.sln` solution in Visual Studio set the following projects as startup projects:
 
@@ -27,14 +27,14 @@ In this guide we'll create the following projects:
 
 **Note**: remember to change the *Solution name*.
 
-### RegisterMemberCommand
+### RegisterMember
 
-> Rename the `Class1` default file to `RegisterMemberCommand` and add a `UserName` property.
+> Rename the `Class1` default file to `RegisterMember` and add a `UserName` property.
 
 ``` c#
 namespace Shuttle.Idempotence.Messages
 {
-	public class RegisterMemberCommand
+	public class RegisterMember
 	{
 		public string UserName { get; set; }
 	}
@@ -45,13 +45,13 @@ namespace Shuttle.Idempotence.Messages
 
 > Add a new `Console Application` to the solution called `Shuttle.Idempotence.Client`.
 
-> Install the `Shuttle.Esb.AzureMQ` nuget package.
+> Install the `Shuttle.Esb.AzureStorageQueues` nuget package.
 
 This will provide access to the Azure Storage Queues `IQueue` implementation and also include the required dependencies.
 
-> Install the `Shuttle.Core.SimpleInjector` nuget package.
+> Install the `ShuttleMicrosoft.Extensions.Configuration.Json` nuget package.
 
-This will provide access to the SimpleInjector dependency container.
+This will provide the ability to read the `appsettings.json` file.
 
 > Add a reference to the `Shuttle.Idempotence.Messages` project.
 
@@ -61,12 +61,12 @@ This will provide access to the SimpleInjector dependency container.
 
 ``` c#
 using System;
-using Shuttle.Core.Container;
-using Shuttle.Core.SimpleInjector;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Shuttle.Core.Pipelines;
 using Shuttle.Esb;
-using Shuttle.Esb.AzureMQ;
+using Shuttle.Esb.AzureStorageQueues;
 using Shuttle.Idempotence.Messages;
-using SimpleInjector;
 
 namespace Shuttle.Idempotence.Client
 {
@@ -74,33 +74,51 @@ namespace Shuttle.Idempotence.Client
 	{
 		private static void Main(string[] args)
 		{
-            var simpleInjectorContainer = new Container();
+			var services = new ServiceCollection();
 
-            simpleInjectorContainer.Options.EnableAutoVerification = false;
-            
-            var container = new SimpleInjectorComponentContainer(simpleInjectorContainer);
+			var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
-            container.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
-			container.RegisterServiceBus();
+			services.AddSingleton<IConfiguration>(configuration);
 
-			var transportMessageFactory = container.Resolve<ITransportMessageFactory>();
+			services.AddServiceBus(builder =>
+			{
+				configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+			});
 
-			using (var bus = container.Resolve<IServiceBus>().Start())
+			services.AddAzureStorageQueues(builder =>
+			{
+				builder.AddOptions("azure", new AzureStorageQueueOptions
+				{
+					ConnectionString = configuration.GetConnectionString("azure")
+				});
+			});
+
+			Console.WriteLine("Type some characters and then press [enter] to submit; an empty line submission stops execution:");
+			Console.WriteLine();
+
+			var serviceProvider = services.BuildServiceProvider();
+			var pipelineFactory = serviceProvider.GetRequiredService<IPipelineFactory>();
+			var messageSender = serviceProvider.GetRequiredService<IMessageSender>();
+			var transportMessagePipeline = pipelineFactory.GetPipeline<TransportMessagePipeline>();
+
+			using (var bus = serviceProvider.GetRequiredService<IServiceBus>().Start())
 			{
 				string userName;
 
 				while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
 				{
-					var command = new RegisterMemberCommand
+					var command = new RegisterMember
 					{
 						UserName = userName
 					};
 
-					var transportMessage = transportMessageFactory.Create(command, c => { });
+					transportMessagePipeline.Execute(command, null, null);
+
+					var transportMessage = transportMessagePipeline.State.GetTransportMessage();
 
 					for (var i = 0; i < 5; i++)
 					{
-						bus.Dispatch(transportMessage); // will be processed once since message id is the same
+						messageSender.Dispatch(transportMessage, null); // will be processed only once since message id is the same
 					}
 
 					bus.Send(command); // will be processed since it has a new message id
@@ -116,49 +134,50 @@ Keep in mind that the when you `Send` a message a `TransportMessage` envelope is
 
 The next two `Send` operations do not use the `TransportMessage` but rather send individual messages.  These will each have a `TransportMessage` envelope and, therefore, each have its own unique message id.
 
-### App.config
+### Client configuration file
 
-> Create the shuttle configuration as follows:
+> Add an `appsettings.json` file as follows:
 
-``` xml
-<?xml version="1.0" encoding="utf-8"?>
-
-<configuration>
-	<configSections>
-		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb" />
-	</configSections>
-
-	<appSettings>
-		<add key="azure" value="UseDevelopmentStorage=true;" />
-	</appSettings>
-
-	<serviceBus>
-		<messageRoutes>
-			<messageRoute uri="azuremq://azure/shuttle-server-work">
-				<add specification="StartsWith" value="Shuttle.Idempotence.Messages" />
-			</messageRoute>
-		</messageRoutes>
-	</serviceBus>
-</configuration>
+```json
+{
+  "ConnectionStrings": {
+    "azure": "UseDevelopmentStorage=true;"
+  },
+  "Shuttle": {
+    "ServiceBus": {
+      "MessageRoutes": [
+        {
+          "Uri": "azuresq://azure/shuttle-server-work",
+          "Specifications": [
+            {
+              "Name": "StartsWith",
+              "Value": "Shuttle.Idempotence.Messages"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
 ```
 
-This tells the service bus that all messages sent having a type name starting with `Shuttle.Idempotence.Messages` should be sent to endpoint `azuremq://azure/shuttle-server-work`.
+This tells the service bus that all messages sent having a type name starting with `Shuttle.Idempotence.Messages` should be sent to endpoint `azuresq://azure/shuttle-server-work`.
 
 ## Server
 
 > Add a new `Console Application` to the solution called `Shuttle.Idempotence.Server`.
 
-> Install the `Shuttle.Esb.AzureMQ` nuget package.
+> Install the `Shuttle.Esb.AzureStorageQueues` nuget package.
 
 This will provide access to the Azure Storage Queues `IQueue` implementation and also include the required dependencies.
 
-> Install the `Shuttle.Core.WorkerService` nuget package.
+> Install the `Microsoft.Extensions.Hosting` nuget package.
 
-This allows a console application to be hosted as a Windows Service or Systemd Unit while running as a normal console application when debugging.
+This allows a console application to be hosted using the .NET generic host.
 
-> Install the `Shuttle.Core.SimpleInjector` nuget package.
+> Install the `ShuttleMicrosoft.Extensions.Configuration.Json` nuget package.
 
-This will provide access to the SimpleInjector dependency container.
+This will provide the ability to read the `appsettings.json` file.
 
 > Install the `Shuttle.Esb.Sql.Idempotence` package. 
 
@@ -177,7 +196,13 @@ Implement the `Program` class as follows:
 ``` c#
 using System.Data.Common;
 using Microsoft.Data.SqlClient;
-using Shuttle.Core.WorkerService;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Shuttle.Core.Data;
+using Shuttle.Esb;
+using Shuttle.Esb.AzureStorageQueues;
+using Shuttle.Esb.Sql.Idempotence;
 
 namespace Shuttle.Idempotence.Server
 {
@@ -187,49 +212,35 @@ namespace Shuttle.Idempotence.Server
         {
             DbProviderFactories.RegisterFactory("Microsoft.Data.SqlClient", SqlClientFactory.Instance);
 
-            ServiceHost.Run<Host>();
-        }
-    }
-}
-```
+            Host.CreateDefaultBuilder()
+                .ConfigureServices(services =>
+                {
+                    var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
-This will simply run the `Host` implementation.
+                    services.AddSingleton<IConfiguration>(configuration);
 
-### Host
+                    services.AddDataAccess(builder =>
+                    {
+                        builder.AddConnectionString("Idempotence", "Microsoft.Data.SqlClient");
+                    });
 
-> Add a `Host` class and implement the `IServiceHost` interface as follows:
+                    services.AddServiceBus(builder =>
+                    {
+                        configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+                    });
 
-``` c#
-using Shuttle.Core.Container;
-using Shuttle.Core.Data;
-using Shuttle.Core.SimpleInjector;
-using Shuttle.Core.WorkerService;
-using Shuttle.Esb;
-using Shuttle.Esb.AzureMQ;
-using Shuttle.Esb.Sql.Idempotence;
-using SimpleInjector;
+                    services.AddSqlIdempotence();
 
-namespace Shuttle.Idempotence.Server
-{
-    public class Host : IServiceHost
-    {
-        private IServiceBus _bus;
-
-        public void Start()
-        {
-            var container = new SimpleInjectorComponentContainer(new Container());
-
-            container.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
-            container.RegisterDataAccess();
-            container.RegisterIdempotence();
-            container.RegisterServiceBus();
-
-            _bus = container.Resolve<IServiceBus>().Start();
-        }
-
-        public void Stop()
-        {
-            _bus?.Dispose();
+                    services.AddAzureStorageQueues(builder =>
+                    {
+                        builder.AddOptions("azure", new AzureStorageQueueOptions
+                        {
+                            ConnectionString = configuration.GetConnectionString("azure")
+                        });
+                    });
+                })
+                .Build()
+                .Run();
         }
     }
 }
@@ -239,45 +250,37 @@ namespace Shuttle.Idempotence.Server
 
 We need a store for our idempotence tracking.  In this example we will be using **Sql Server**.  If you use the express version remember to change the `data source` value to `.\sqlexpress` from the standard `.`.
 
-When you reference the `Shuttle.Esb.Sql.Idempotence` package a `scripts` folder is included in the relevant package folder.  Click on the Nuget referenced assembly in the `References` or `Dependencies` (depending on your project type) and navigate to the package folder to find the `scripts` folder.
+When you reference the `Shuttle.Esb.Sql.Idempotence` package a `scripts` folder is included in the relevant package folder.  Click on the NuGet referenced assembly in the `Dependencies` and navigate to the package folder (in the `Path` property) to find the `scripts` folder.
 
 The `{version}` bit will be in a `semver` format.
 
 > Create a new database called **Shuttle** and execute the script `{provider}\IdempotenceServiceCreate.sql` in the newly created database.
 
-### App.config
+### Server configuration file
 
-> Add an `Application Configuration File` item to create the `App.config` and populate as follows:
+> Add an `appsettings.json` file as follows:
 
-``` xml
-<?xml version="1.0" encoding="utf-8"?>
-
-<configuration>
-	<configSections>
-		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb" />
-	</configSections>
-
-	<appSettings>
-		<add key="azure" value="UseDevelopmentStorage=true;" />
-	</appSettings>
-
-	<connectionStrings>
-		<add name="Idempotence"
-		     connectionString="server=.;database=shuttle;user id=sa;password=Pass!000;TrustServerCertificate=True"
-		     providerName="Microsoft.Data.SqlClient" />
-	</connectionStrings>
-
-	<serviceBus>
-		<inbox
-			workQueueUri="azuremq://azure/shuttle-server-work"
-			errorQueueUri="azuremq://azure/shuttle-error" />
-	</serviceBus>
-</configuration>
+```json
+{
+  "ConnectionStrings": {
+    "azure": "UseDevelopmentStorage=true;",
+    "Idempotence": "server=.;database=shuttle;user id=sa;password=Pass!000;TrustServerCertificate=True"
+  },
+  "Shuttle": {
+    "ServiceBus": {
+      "Inbox": {
+        "WorkQueueUri": "azuresq://azure/shuttle-server-work",
+        "DeferredQueueUri": "azuresq://azure/shuttle-server-deferre",
+        "ErrorQueueUri": "azuresq://azure/shuttle-error"
+      }
+    }
+  }
+}
 ```
 
 ### RegisterMemberHandler
 
-> Add a new class called `RegisterMemberHandler` that implements the `IMessageHandler<RegisterMemberCommand>` interface as follows:
+> Add a new class called `RegisterMemberHandler` that implements the `IMessageHandler<RegisterMember>` interface as follows:
 
 ``` c#
 using System;
@@ -286,9 +289,9 @@ using Shuttle.Idempotence.Messages;
 
 namespace Shuttle.Idempotence.Server
 {
-	public class RegisterMemberHandler : IMessageHandler<RegisterMemberCommand>
+	public class RegisterMemberHandler : IMessageHandler<RegisterMember>
 	{
-		public void ProcessMessage(IHandlerContext<RegisterMemberCommand> context)
+		public void ProcessMessage(IHandlerContext<RegisterMember> context)
 		{
 			Console.WriteLine();
 			Console.WriteLine("[MEMBER REGISTERED] : user name = '{0}' / message id = '{1}'",

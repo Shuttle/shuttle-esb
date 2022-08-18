@@ -150,24 +150,28 @@ const components = [
                 link: '/components/message-sender'
             },
             {
-                text: 'Queue Manager',
-                link: '/components/queue-manager'
+                text: 'Queue Factory Service',
+                link: '/components/queue-factory-service'
+            },
+            {
+                text: 'Queue Service',
+                link: '/components/queue-service'
             },
             {
                 text: 'Policy',
                 link: '/components/service-bus-policy'
             },
             {
-                text: 'Subscription Manager',
-                link: '/components/subscription-manager'
+                text: 'Subscription Service',
+                link: '/components/subscription-service'
             },
             {
                 text: 'Transport Message',
                 link: '/components/transport-message'
             },
             {
-                text: 'Transport Message Configurator',
-                link: '/components/transport-message-configurator'
+                text: 'Transport Message Builder',
+                link: '/components/transport-message-builder'
             },
             {
                 text: 'Transport Header',
@@ -287,6 +291,10 @@ const options = [
                 text: 'Worker',
                 link: '/options/worker'
             },
+            {
+                text: 'Subscription',
+                link: '/options/subscription'
+            },
         ]
     },
 ];
@@ -329,8 +337,8 @@ module.exports = (async () => {
 
             socialLinks: [
                 { icon: 'github', link: 'https://github.com/Shuttle/shuttle-esb' },
+                { icon: 'discord', link: 'https://discord.gg/Q2yEsfht6f' }
                 // { icon: 'twitter', link: '' },
-                // { icon: 'discord', link: '' }
             ],
 
             footer: {

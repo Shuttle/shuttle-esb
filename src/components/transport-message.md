@@ -1,7 +1,3 @@
----
-title: TransportMessage
-layout: api
----
 # TransportMessage
 
 ## Properties
@@ -139,5 +135,3 @@ public List<Shuttle.Esb.TransportHeader> Headers { get; set; }
 ```
 
 An arbitrary list of [TransportHeader] objects that may be used to carry information not contained in the `Message` property.
-
-[TransportHeader]: {{ "/transport-header" | relative_url }}
