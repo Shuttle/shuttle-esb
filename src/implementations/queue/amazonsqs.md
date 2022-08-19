@@ -10,61 +10,52 @@ You may also want to take a look at [Messaging Using Amazon SQS](https://docs.aw
 
 ## Configuration
 
-The queue configuration is part of the specified uri, e.g.:
+The URI structure is `amazonsqs://configuration-name/queue-name`.
 
-``` xml
-<inbox
-    workQueueUri="amazonsqs://endpoint-name/queue-name?maxMessages=15&amp;waitTimeSeconds=20"
-    .
-    .
-    .
-/>
+```c#
+services.AddAmazonSqs(builder =>
+{
+    var amazonSqsOptions = new AmazonSqsOptions
+    {
+        ServiceUrl = "http://localhost:9324",
+        MaxMessages = 1,
+        WaitTime = TimeSpan.FromSeconds(20)
+    };
+
+    amazonSqsOptions.Configure += (sender, args) =>
+    {
+        Console.WriteLine($"[event] : Configure / Uri = '{((IQueue)sender).Uri}'");
+    };
+
+    builder.AddOptions("local", amazonSqsOptions);
+});
 ```
 
-| Segment / Argument | Default | Description |
+The default JSON settings structure is as follows:
+
+```json
+{
+  "Shuttle": {
+    "ServiceBus": {
+      "AmazonSqs": {
+        "local": {
+          "ServiceUrl": "http://localhost:9324",
+          "MaxMessages": 5,
+          "WaitTime": "00:00:20"
+        },
+        "proper": {
+          "ServiceUrl": "https://sqs.us-east-2.amazonaws.com/123456789012/MyQueue"
+        }
+      }
+    }
+  }
+}
+```
+
+## Options
+
+| Option | Default | Description |
 | --- | --- | --- | 
-| endpoint-name | required | Will be resolved by an `IAmazonSqsConfiguration` implementation (*see below*). |
-| queue-name | required | The name of queue to connect to. |
-| maxMessages | 1 | Specifies the number of messages to fetch from the queue. |
-| waitTimeSeconds | 20 | Specifies the number of seconds to perform the long-polling. |
-
-## IAmazonSqsConfiguration
-
-```c#
-AmazonSQSConfig GetConfiguration(string endpointName);
-```
-
-The `GetConfiguration()` method should return the [Amazon.SQS.AmazonSQSConfig](https://docs.aws.amazon.com/sdkfornet/v3/apidocs/items/SQS/TSQSConfig.html) instance that will be used by the [AmazonSQSClient](https://docs.aws.amazon.com/sdkfornet/v3/apidocs/items/SQS/TSQSClient.html) to interact with the relevant Amazon SQS queue.
-
-The relevant `IAmazonSqsConfiguration` should be registered with the `IComponentRegistry`:
-
-```c#
-IComponentResolver.Register<IAmazonSqsConfiguration, DefaultAmazonSqsConfiguration>;
-```
-
-## DefaultAmazonSqsConfiguration
-
-This implementation will add all the endpoints provided in the application configuration file:
-
-```xml
-<?xml version="1.0" encoding="utf-8" ?>
-<configuration>
-    <configSections>
-        <section name="amazonsqs" type="Shuttle.Esb.AmazonSqs.AmazonSqsSection, Shuttle.Esb.AmazonSqs"/>
-    </configSections>
-
-    <amazonsqs>
-        <endpoints>
-            <endpoint name="endpoint-a" serviceUrl="https://sqs.us-east-1.amazonaws.com/123456789012" />
-            <endpoint name="endpoint-b" serviceUrl="https://sqs.us-east-2.amazonaws.com/123456789012" />
-        </endpoints>
-    </amazonsqs>
-</configuration>
-
-<inbox
-    workQueueUri="amazonsqs://endpoint-a/server-inbox-work-queue"
-    .
-    .
-    .
-/>
-```
+| ServiceUrl |  | The URL to connect to. |
+| MaxMessages | 1 | Specifies the number of messages to fetch from the queue. |
+| WaitTime | 00:00:20 | Specifies the `TimeSpan` duration to perform long-polling. |
