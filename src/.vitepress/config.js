@@ -195,7 +195,7 @@ const implementations = [
             },
             {
                 text: 'Azure Storage Queues',
-                link: '/implementations/queue/azuremq'
+                link: '/implementations/queue/azuresq'
             },
             {
                 text: 'File',
