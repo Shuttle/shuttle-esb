@@ -31,6 +31,7 @@ The configuration section is optional as the defaults will be applied when no se
 	<subscription
 		connectionStringName="Subscription"
 		subscribe="Normal|Ensure|Ignore"
+		cacheTimeout="0.0:5:0"
 	/>
   .
   .
@@ -42,6 +43,7 @@ The configuration section is optional as the defaults will be applied when no se
 | --- | --- | --- |
 | `connectionStringName`	 | Subscription | The name of the `connectionString` to use to connect to the subscription store. |
 | `subscribe`	| Normal | Indicates how calls to the `Subscribe` method are dealt with: <br/>- `Normal` is the ***default*** and will subscribe to the given message type(s) if they have not been subscribed to yet.<br/>- `Ensure` will check to see that the subscription exists and if not will throw an `ApplicationException`.<br/>- `Ignore` will simply ignore the subscription request. |
+| `cacheTimeout`          |  0.0:5:0      | How long event subscribers should be cached for before refetching them from the database. |
 
 Whenever the endpoint is configured as a worker no new subscriptions will be registered against the endpoint since any published events should be subscribed to only by the distributor endpoint.  When using a broker such as RabbitMQ all the endpoints feed off the same work queue uri and any of the endpoints could create the subscription.
 
