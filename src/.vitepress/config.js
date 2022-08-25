@@ -183,12 +183,25 @@ const components = [
 
 const implementations = [
     {
-        text: 'Queue',
         items: [
             {
                 text: 'Overview',
-                link: '/implementations/queue/overview'
+                link: '/implementations/overview'
             },
+        ]
+    },
+    {
+        text: 'Streams',
+        items: [
+            {
+                text: 'Kafka',
+                link: '/implementations/stream/kafka'
+            },
+        ]
+    },
+    {
+        text: 'Queue',
+        items: [
             {
                 text: 'Amazon SQS',
                 link: '/implementations/queue/amazonsqs'
