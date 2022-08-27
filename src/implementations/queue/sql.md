@@ -34,12 +34,10 @@ The default JSON settings structure is as follows:
 ```json
 {
   "Shuttle": {
-    "ServiceBus": {
-        "SqlQueue": {
-          "ConnectionStringName": "connection-string-name"
-        }
-      }
+    "SqlQueue": {
+      "ConnectionStringName": "connection-string-name"
     }
+  }
 }
 ``` 
 
