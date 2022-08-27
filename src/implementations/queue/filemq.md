@@ -31,11 +31,9 @@ The default JSON settings structure is as follows:
 ```json
 {
   "Shuttle": {
-    "ServiceBus": {
-      "FileMQ": {
-        "local": {
-          "Path": "c:\\queues\\",
-        }
+    "FileMQ": {
+      "local": {
+        "Path": "c:\\queues\\",
       }
     }
   }
