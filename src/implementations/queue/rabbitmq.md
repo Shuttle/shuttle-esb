@@ -44,25 +44,22 @@ The default JSON settings structure is as follows:
 ```json
 {
   "Shuttle": {
-    "ServiceBus": {
-      "RabbitMQ": {
-        "local":
-        {
-            "Host": "localhost",
-            "VirtualHost": "/",
-            "Port": -1,
-            "Username": "shuttle",
-            "Password": "shuttle!",
-            "PrefetchCount": 25,
-            "QueueTimeout": "00:00:25",
-            "RequestedHeartbeat": "00:00:30",
-            "ConnectionCloseTimeout": "00:00:01",
-            "OperationRetryCount": 3,
-            "UseBackgroundThreadsForIO": true,
-            "Priority": 0,
-            "Persistent": true,
-            "Durable": true
-        }
+    "RabbitMQ": {
+      "local": {
+        "Host": "localhost",
+        "VirtualHost": "/",
+        "Port": -1,
+        "Username": "shuttle",
+        "Password": "shuttle!",
+        "PrefetchCount": 25,
+        "QueueTimeout": "00:00:25",
+        "RequestedHeartbeat": "00:00:30",
+        "ConnectionCloseTimeout": "00:00:01",
+        "OperationRetryCount": 3,
+        "UseBackgroundThreadsForIO": true,
+        "Priority": 0,
+        "Persistent": true,
+        "Durable": true
       }
     }
   }
