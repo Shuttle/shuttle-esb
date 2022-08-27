@@ -33,6 +33,7 @@ And the JSON configuration structure:
       "Subscription": {
         "SubscribeType": "Normal",
         "ConnectionStringName": "connection-string",
+        "CacheTimeout": "00:05:00",
         "MessageTypes": [
           "message-type-a",
           "message-type-b"
@@ -49,6 +50,7 @@ And the JSON configuration structure:
 | --- | --- | --- |
 | `ConnectionStringName`	 | Subscription | The name of the `ConnectionString` to use to connect to the subscription store. |
 | `SubscribeType`	| Normal | Indicates subscriptions are dealt with: <br/>- `Normal` is the ***default*** and will subscribe to the given message type(s) if they have not been subscribed to yet.<br/>- `Ensure` will check to see that the subscription exists and if not will throw an `ApplicationException`.<br/>- `Ignore` will simply ignore the subscription request. |
+| `CacheTimeout` | `00:05:00` | How long event subscribers should be cached for before refreshing the list. |
 
 Should the endpoint be configured as a worker no new subscriptions will be registered against the endpoint since any published events should be subscribed to only by the distributor endpoint.  When using a broker all the endpoints feed off the same work queue uri and any of the endpoints could create the subscription.
 

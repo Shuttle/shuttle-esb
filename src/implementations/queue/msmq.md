@@ -16,7 +16,7 @@ You need to install / activate MSMQ on your system before using this queuing opt
 
 The URI structure is `msmq://configuration-name/queue-name`.
 
-``` c#
+```c#
 services.AddMsmq(builder =>
 {
     builder.AddOptions("local", new MsmqOptions
@@ -35,12 +35,14 @@ The default JSON settings structure is as follows:
 ```json
 {
   "Shuttle": {
-    "Msmq": {
-      "Timeout": "00:00:02",
-      "UseDeadLetterQueue": false,
-      "Path": "some-path" 
+    "ServiceBus": {
+        "Msmq": {
+          "Timeout": "00:00:02",
+          "UseDeadLetterQueue": false,
+          "Path": "some-path" 
+        }
+      }
     }
-  }
 }
 ``` 
 
@@ -48,5 +50,6 @@ The default JSON settings structure is as follows:
 
 | Option | Default	| Description |
 | --- | --- | --- | 
-| useDeadLetterQueue	 | true | Specifies the value to pass to the 'UseDeadLetterQueue' property of the message sent. | 
-| Timeout | 00:00:00 | Timespan indicating how long to wait for queue operations to complete. |
+| `Path` | | The [MessageQueue.Path](https://docs.microsoft.com/en-us/dotnet/api/system.messaging.messagequeue.path?view=netframework-4.8) to use to connect to the queue. |
+| `UseDeadLetterQueue` | `true` | Specifies the value to pass to the 'UseDeadLetterQueue' property of the message sent. | 
+| `Timeout` | 00:00:00 | Timespan indicating how long to wait for queue operations to complete. |
