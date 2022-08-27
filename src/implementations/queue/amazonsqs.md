@@ -31,21 +31,21 @@ services.AddAmazonSqs(builder =>
 });
 ```
 
+The `Configure` event `args` arugment exposes the `AmazonSQSConfig` directly for any specific options that need to be set.
+
 The default JSON settings structure is as follows:
 
 ```json
 {
   "Shuttle": {
-    "ServiceBus": {
-      "AmazonSqs": {
-        "local": {
-          "ServiceUrl": "http://localhost:9324",
-          "MaxMessages": 5,
-          "WaitTime": "00:00:20"
-        },
-        "proper": {
-          "ServiceUrl": "https://sqs.us-east-2.amazonaws.com/123456789012/MyQueue"
-        }
+    "AmazonSqs": {
+      "local": {
+        "ServiceUrl": "http://localhost:9324",
+        "MaxMessages": 5,
+        "WaitTime": "00:00:20"
+      },
+      "proper": {
+        "ServiceUrl": "https://sqs.us-east-2.amazonaws.com/123456789012/MyQueue"
       }
     }
   }
@@ -57,5 +57,5 @@ The default JSON settings structure is as follows:
 | Option | Default | Description |
 | --- | --- | --- | 
 | ServiceUrl |  | The URL to connect to. |
-| MaxMessages | 1 | Specifies the number of messages to fetch from the queue. |
+| MaxMessages | 10 | Specifies the number of messages to fetch from the queue. |
 | WaitTime | 00:00:20 | Specifies the `TimeSpan` duration to perform long-polling. |
