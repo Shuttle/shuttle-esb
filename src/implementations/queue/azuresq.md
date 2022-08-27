@@ -30,6 +30,7 @@ services.AddAzureStorageQueues(builder =>
     builder.AddOptions("azure", azureStorageQueueOptions);
 });
 ```
+
 The `Configure` event `args` arugment exposes the `QueueClientOptions` directly for any specific options that need to be set.
 
 The default JSON settings structure is as follows:
