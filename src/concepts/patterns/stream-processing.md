@@ -1,4 +1,4 @@
-# Streaming
+# Stream Processing
 
 With message streaming events are produced in a continuous stream that isn't targeted at any consumers.  The streams are typically divided in topics and consumers can read messages from a topic.  Consumers are typically identified as a logical unit using some form of identifier.  Topcis may also be partitioned and one would have at most the number of consumers as there are partitions.
 

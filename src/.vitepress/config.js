@@ -19,8 +19,8 @@ const concepts = [
         text: 'Patterns',
         items: [
             {
-                text: 'Streaming',
-                link: '/concepts/patterns/streaming'
+                text: 'Stream Processing',
+                link: '/concepts/patterns/stream-processing'
             },
             {
                 text: 'Request / Response',
@@ -76,6 +76,10 @@ const guide = [
     {
         text: 'Patterns',
         items: [
+            {
+                text: 'Stream Processing',
+                link: '/guide/patterns/stream-processing'
+            },
             {
                 text: 'Request / Response',
                 link: '/guide/patterns/request-response'
@@ -311,6 +315,10 @@ const options = [
             {
                 text: 'Subscription',
                 link: '/options/subscription'
+            },
+            {
+                text: 'Processor Thread',
+                link: '/options/processor-thread'
             },
         ]
     },
