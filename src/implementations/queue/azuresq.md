@@ -38,13 +38,11 @@ The default JSON settings structure is as follows:
 ```json
 {
   "Shuttle": {
-    "ServiceBus": {
-      "AzureStorageQueues": {
-        "azure": {
-          "ConnectionString": "UseDevelopmentStorage=true",
-          "MaxMessages": 32,
-          "VisibilityTimeout": "00:00:30"
-        }
+    "AzureStorageQueues": {
+      "azure": {
+        "ConnectionString": "UseDevelopmentStorage=true",
+        "MaxMessages": 32,
+        "VisibilityTimeout": "00:00:30"
       }
     }
   }
