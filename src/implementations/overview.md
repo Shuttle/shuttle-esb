@@ -4,7 +4,7 @@ These packages are those implementing the queue interfaces `IQueue` and `IQueueF
 
 ## Queues
 
-The convention for queue URIs is `scheme://configuration-name/queue-name` and the `scheme` represents a unique name for the `IQueue` implementation.
+The convention for queue URIs is `scheme://configuration-name/queue-name` and the `scheme` represents a unique name for the `IQueue` implementation.  The `scheme` and `configuration-name` (represented by the URI's `Host` property) should always be lowercase as creating a `new Uri(uriString)` forces the scheme and host to lowercase.
 
 Each `configuration` is a named set of options and would contain all the values required to communicate with the `queue` as well as any other bits that may be of interest.
 
