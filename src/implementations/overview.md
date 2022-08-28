@@ -13,11 +13,9 @@ The typical JSON settings structure for a queue implementation would follow the 
 ```json
 {
   "Shuttle": {
-    "ServiceBus": {
-      "ImplementationName": {
-        "configuration-name": {
-            "OptionA": "value-a"
-        }
+    "ImplementationName": {
+      "configuration-name": {
+          "OptionA": "value-a"
       }
     }
   }
