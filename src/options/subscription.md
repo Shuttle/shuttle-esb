@@ -1,6 +1,8 @@
 # Subscription Options
 
-Any implementation of the `ISubscriptionService` interface should make use of the `SubscriptionOptions` configured with the `ServiceBusOptions` to register, or ensure, any subscriptions:
+The `SubscriptionOptions` configured as `ServiceBusOptions.Subscription` represent common options related to subscriptions.
+
+Any implementation of the `ISubscriptionService` interface should make use of these options to register, or ensure, any subscriptions:
 
 ```c#
 services.AddServiceBus(builder => {
