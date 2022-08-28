@@ -50,24 +50,22 @@ The default JSON settings structure is as follows:
 ```json
 {
   "Shuttle": {
-    "ServiceBus": {
-      "Kafka": {
-        "local": {
-          "BootstrapServers": "localhost:9092",
-          "ReplicationFactor": 1,
-          "NumPartitions": 1,
-          "MessageSendMaxRetries": 3,
-          "RetryBackoff": "00:00:01",
-          "EnableAutoCommit": false,
-          "EnableAutoOffsetStore": false,
-          "FlushEnqueue": false,
-          "UseCancellationToken": true,
-          "ConsumeTimeout": "00:00:30",
-          "OperationTimeout": "00:00:30",
-          "ConnectionsMaxIdle": "00:00:00",
-          "Acks": "All",
-          "EnableIdempotence": true,
-        }
+    "Kafka": {
+      "local": {
+        "BootstrapServers": "localhost:9092",
+        "ReplicationFactor": 1,
+        "NumPartitions": 1,
+        "MessageSendMaxRetries": 3,
+        "RetryBackoff": "00:00:01",
+        "EnableAutoCommit": false,
+        "EnableAutoOffsetStore": false,
+        "FlushEnqueue": false,
+        "UseCancellationToken": true,
+        "ConsumeTimeout": "00:00:30",
+        "OperationTimeout": "00:00:30",
+        "ConnectionsMaxIdle": "00:00:00",
+        "Acks": "All",
+        "EnableIdempotence": true,
       }
     }
   }
