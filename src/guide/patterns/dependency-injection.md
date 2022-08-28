@@ -50,7 +50,7 @@ namespace Shuttle.DependencyInjection.Messages
 
 This will provide access to the Azure Storage Queues `IQueue` implementation and also include the required dependencies.
 
-> Install the `ShuttleMicrosoft.Extensions.Configuration.Json` nuget package.
+> Install the `Microsoft.Extensions.Configuration.Json` nuget package.
 
 This will provide the ability to read the `appsettings.json` file.
 
@@ -199,7 +199,7 @@ This will provide access to the Azure Storage Queues `IQueue` implementation and
 
 This allows a console application to be hosted using the .NET generic host.
 
-> Install the `ShuttleMicrosoft.Extensions.Configuration.Json` nuget package.
+> Install the `Microsoft.Extensions.Configuration.Json` nuget package.
 
 This will provide the ability to read the `appsettings.json` file.
 
