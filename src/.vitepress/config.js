@@ -277,7 +277,7 @@ const modules = [
                 link: '/modules/purge-queues'
             },
             {
-                text: 'Throttle (Windows)',
+                text: 'Throttle',
                 link: '/modules/throttle'
             },
         ]
