@@ -41,5 +41,5 @@ The default JSON settings structure is as follows:
 
 | Options                            | Default         | Description    |
 | ---                                | ---            | ---            |
-| DistributorControlWorkQueueUri    | n/a            | The control inbox work queue uri of the distributor endpoint that this endpoint can handle messages on behalf of. |
+| DistributorControlWorkQueueUri    |  | The control inbox work queue uri of the distributor endpoint that this endpoint can handle messages on behalf of. |
 | ThreadAvailableNotificationInterval    | 15s    | A `TimeSpan` representing the duration to wait on an idle thread before notifying the distributor of availability *again*. |

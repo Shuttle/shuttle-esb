@@ -47,7 +47,7 @@ The default JSON settings structure is as follows:
 
 ## Options
 
-| Options                        | Default     | Description    | 
+| Option                       | Default     | Description    | 
 | ---                            | ---        | ---            | 
 | AddMessageHandlers                | true        | If `true`, will call the `AddMessageHandlers` method on the `ServiceBusBuilder` implementation for all assemblies in the current domain; else only the handlers in `Shuttle.Esb` are registered. | 
 | CacheIdentity                | true        | Determines whether or not to re-use the identity returned by the `IIdentityProvider`. | 

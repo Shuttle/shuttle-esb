@@ -6,7 +6,7 @@ Start a new **Console Application** project and select a Shuttle.Esb queue imple
 PM> Install-Package Shuttle.Esb.AzureStorageQueues
 ```
 
-We'll also make use of the [.NET genric host](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host):
+We'll also make use of the [.NET generic host](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/generic-host):
 
 ```
 PM> Install-Package Microsoft.Extensions.Hosting

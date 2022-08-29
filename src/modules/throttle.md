@@ -15,7 +15,7 @@ services.AddThrottleModule(builder =>
 {
 	builder.Options.CpuUsagePercentage = 65;
 	builder.Options.AbortCycleCount = 5;
-	builder.Options.DurationToSleepOnAbort =  new List<TimeSpan> { TimeSpan.FromSeconds(1) };
+	builder.Options.DurationToSleepOnAbort = new List<TimeSpan> { TimeSpan.FromSeconds(1) };
 })
 ```
 

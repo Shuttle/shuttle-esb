@@ -2,7 +2,7 @@
 
 An implementation of the `IMessageRouteProvider` interface is used to obtain a list of the uris that a message should be routed to.
 
-The `DefaultMessageRouteProvider` nakes use if the `ServiceBusOptions` to determine the routing.  You could implement this interface for custom routing such as a centrally managed database containing the routing.
+The `DefaultMessageRouteProvider` makes use if the `ServiceBusOptions` to determine the routing.  You could implement this interface for custom routing such as a centrally managed database containing the routing.
 
 ## Methods
 
@@ -26,7 +26,7 @@ The method will add a new `IMessageRoute` instance.
 
 ### DefaultMessageRouteProvider
 
-The `DefaultMessageRouteProvider` obtains its configuration from the [MessageRouteOptions](http://localhost:3000/shuttle-esb/options/message-routes.html) defined on the `ServiceBusOptions`.
+The `MessageRouteProvider` obtains its configuration from the [MessageRouteOptions](/shuttle-esb/options/message-routes.html) defined on the `ServiceBusOptions`.
 
 ### Specifications
 

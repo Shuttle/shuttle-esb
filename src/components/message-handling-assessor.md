@@ -2,7 +2,7 @@
 
 An implementation of the `IMessageHandlerAssessor` interface is used to determine whether a message should be processed.
 
-If you do not specify your own implementation of the `IMessageHandlingAssessor` the `DefaultMessageHandlingAssessor` will be used.
+If you do not specify your own implementation of the `IMessageHandlingAssessor` the `MessageHandlingAssessor` will be used.
 
 ## Methods
 

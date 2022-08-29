@@ -317,6 +317,10 @@ const options = [
                 link: '/options/subscription'
             },
             {
+                text: 'Idempotence',
+                link: '/options/idempotence'
+            },
+            {
                 text: 'Processor Thread',
                 link: '/options/processor-thread'
             },
