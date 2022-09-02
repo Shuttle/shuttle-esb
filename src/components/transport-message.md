@@ -134,4 +134,4 @@ The name of the compression algorithm used to compress the message; else empty.
 public List<Shuttle.Esb.TransportHeader> Headers { get; set; }
 ```
 
-An arbitrary list of [TransportHeader] objects that may be used to carry information not contained in the `Message` property.
+An arbitrary list of `TransportHeader` objects that may be used to carry information not contained in the `Message` property.

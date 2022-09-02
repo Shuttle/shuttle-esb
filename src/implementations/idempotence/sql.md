@@ -22,6 +22,8 @@ services.AddDataAccess(builder =>
 services.AddServiceBus(builder => {
     builder.Options.Idempotence.ConnectionStringName = "shuttle";
 });
+
+services.AddSqlIdempotence();
 ```
 
 And the JSON configuration structure:

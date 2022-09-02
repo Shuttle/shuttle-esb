@@ -1,6 +1,6 @@
 # IIdentityProvider
 
-An implementation of the `IIdentityProvider` interface is used to obtain the `IIdentity` instance to use to return the `PrincipalIdentityName` of the [TransportMessage].
+An implementation of the `IIdentityProvider` interface is used to obtain the `IIdentity` instance to use to return the `PrincipalIdentityName` of the `TransportMessage`.
 
 There is a `DefaultIdentityProvider` that is used if no other instance is provided.
 

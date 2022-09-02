@@ -52,7 +52,7 @@ Sets the correlation id for the message.
 public TransportMessageBuilder Defer(DateTime ignoreTillDate);
 ```
 
-Ignores the [TransportMessage] until the given date/time has been reached.  The [TransportMessage] is sent immediately and it is up to the receiving endpoint to decide how to defer it.  It is recommended that you configure a deferred queue.
+Ignores the `TransportMessage` until the given date/time has been reached.  The `TransportMessage` is sent immediately and it is up to the receiving endpoint to decide how to defer it.  It is recommended that you configure a deferred queue.
 
 Without a dedicated deferred queue the work queue will contain the deferred message.  This may slow down processing as a deferred message is not regarded as work.  If the queue contains too many deferred messages the queue processing will become very slow and unresponsive.
 
