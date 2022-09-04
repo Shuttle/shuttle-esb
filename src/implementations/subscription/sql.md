@@ -4,7 +4,7 @@
 PM> Install-Package Shuttle.Esb.Sql.Subscription
 ```
 
-Contains a sql-based `ISubscriptionManager` implementation.  The subscription manager caches all subscriptions forever so should a new subscriber be added be sure to restart the publisher endpoint service.
+Contains a sql-based `ISubscriptionService` implementation.  The subscription service caches all subscriptions but a timeout for the cache may be set.  If you need to be sure that a new subscriber is picked up by a publisher the safest is to restart the relevant publisher(s).
 
 ## Registration
 
