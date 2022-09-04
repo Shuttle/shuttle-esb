@@ -4,7 +4,7 @@ import { VTIconDiscord } from 'shuttle-theme';
 <template>
     <section id="hero">
         <p class="upgrade-notice">
-            The latest version of the Shuttle.Esb components now make use of <a href="https://docs.microsoft.com/en-us/dotnet/core/extensions/dependency-injection" target="_blank">.NET dependency injection</a> as well as the <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options?view=aspnetcore-6.0" target="_blank">options pattern</a>.  This is a major departure from the component container adapter pattern used to date.  Please take a look at the <a href="/shuttle-core/upgrade-ms-di.html">upgrade guide</a> to see the <strong>breaking changes</strong>.
+            The latest version of the Shuttle.Esb components now make use of <a href="https://docs.microsoft.com/en-us/dotnet/core/extensions/dependency-injection" target="_blank">.NET dependency injection</a> as well as the <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options?view=aspnetcore-6.0" target="_blank">options pattern</a>.  This is a major departure from the component container adapter pattern used to date.  Please take a look at the <a href="/shuttle-esb/upgrade.html">upgrade guide</a> to see the <strong>breaking changes</strong>.
         </p>
         <h1 class="tagline">Flexible .Net queue and stream processing</h1>
         <p class="description">
@@ -22,7 +22,7 @@ import { VTIconDiscord } from 'shuttle-theme';
                         d="M13.025 1l-2.847 2.828 6.176 6.176h-16.354v3.992h16.354l-6.176 6.176 2.847 2.828 10.975-11z" />
                 </svg>
             </a>
-            <a class="upgrade" href="/shuttle-esb/guide/upgrade.html">Upgrade</a>
+            <a class="upgrade" href="/shuttle-esb/upgrade.html">Upgrade</a>
         </p>
     </section>
 
