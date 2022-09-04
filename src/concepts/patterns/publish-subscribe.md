@@ -4,39 +4,32 @@ When you `Send` a *command* shuttle needs to be able to determine the relevant e
 
 ![Publish/Subscribe Image](/images/publish-subscribe.png)
 
-In order to register an endpoint as a subscriber you can either manually configure the subscription store, as recommended for production, or register the subscription using the `ISubscriptionManager` implementation:
+In order to register an endpoint as a subscriber you can either manually configure the subscription store, as recommended for production, or register the subscription using the `ISubscriptionService` implementation:
 
 ``` c#
-var subscriptionManager = resolver.Resolve<ISubscriptionManager>();
+services.AddServiceBus(builder =>
+{
+    // using type
+    builder.AddSubscription(typeof(Event1));
+    builder.AddSubscription(typeof(Event2));
 
-// using type
-subscriptionManager.Subscribe(typeof(Event1));
-subscriptionManager.Subscribe(typeof(Event2));
+    // using a full type name
+    builder.AddSubscription(typeof(Event1).FullName);
+    builder.AddSubscription(typeof(Event2).FullName);
 
-// using a list of types
-subscriptionManager.Subscribe(new[] { typeof(Event1), typeof(Event2) });
-
-// using a full type name
-subscriptionManager.Subscribe(typeof(Event1).FullName);
-subscriptionManager.Subscribe(typeof(Event2).FullName);
-
-// using a list of full type names
-subscriptionManager.Subscribe(new[] { typeof(Event1).FullName, typeof(Event2).FullName });
-
-// using a generic
-subscriptionManager.Subscribe<Event1>();
-subscriptionManager.Subscribe<Event2>();
-
-var bus = IComponentResolver.Resolve<IServiceBus>().Start();
+    // using a generic
+    builder.AddSubscription<Event1>();
+    builder.AddSubscription<Event2>();
+});
 ```
 
-In a production environment it is recommended that the subscription store be maintained manually using an elevated identity.  For the above one could use an identity that has **read-only** permissions.  The `Subscribe` method will fail if the subscription does not exist.  In this way one can ensure that the subscription is not missing from the relevant store.
+In a production environment it is recommended that the subscription store be maintained manually using an elevated identity.  Even though the above configures the required subscriptions it is up to the registered `ISubscriptionService` implementation to perform the required processing and checks.
 
 # Shuttle Configuration
 
 All endpoints that belong to the same physical pub/sub store should connect to the same store.  
 
-You would have a store for your development environment, perhaps even locally on your own machine.  You would have a separate store for your QA, UAT, and production environments.
+You would have a separate store for your development environment, perhaps even locally on your own machine.  You would have a separate store for your QA, UAT, and production environments.
 
 ## Publishing from a web-site
 

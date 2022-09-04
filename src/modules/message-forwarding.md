@@ -6,30 +6,66 @@ PM> Install-Package Shuttle.Esb.Module.MessageForwarding
 
 The MessageForwarding module for Shuttle.Esb will forward any handled messages onto the specified queue(s).
 
-The module will attach the `MessageForwardingObserver` to the `OnAfterHandleMessage` and then send the handled message on to any defined endpoints.
+## Configuration
 
-```xml
-<configuration>
-	<configSections>
-		<section name="messageForwarding" type="Shuttle.Esb.Module.MessageForwarding.MessageForwardingSection, Shuttle.Esb.Module.MessageForwarding"/>
-	</configSections>
-
-	<messageForwarding>
-		<forwardingRoutes>
-			<messageRoute uri="msmq://./inbox">
-				<add specification="StartsWith" value="Shuttle.Messages1" />
-				<add specification="StartsWith" value="Shuttle.Messages2" />
-			</messageRoute>
-			<messageRoute uri="sql://./inbox">
-				<add specification="TypeList" value="DoSomethingCommand" />
-			</messageRoute>
-		</forwardingRoutes>
-	</messageForwarding>
-</configuration>
+```c#
+services.AddMessageForwardingModule(builder => 
+{
+	builder.Options.ForwardingRoutes.Add(new MessageRouteOptions
+	{
+		Uri = "queue://configuration/inbox-work-a",
+        Specifications = new List<MessageRouteOptions.SpecificationOptions>
+        {
+            new()
+            {
+                Name = "StartsWith",
+                Value = "Shuttle.Messages.v1"
+            },
+            new()
+            {
+                Name = "StartsWith",
+                Value = "Shuttle.Messages.v2"
+            }
+        }
+	})
+});
 ```
 
-## Registration / Activation
+The default JSON settings structure is as follows:
 
-The required components may be registered by calling `ComponentRegistryExtensions.RegisterMessageForwarding(IComponentRegistry)`.
+```json
+{
+  "Shuttle": {
+    "Modules": {
+      "MessageForwarding": {
+        "ForwardingRoutes": [
+          {
+            "Uri": "queue://./inbox-work-a",
+            "Specifications": [
+              {
+                "Name": "StartsWith",
+                "Value": "Shuttle.Messages.v1"
+              },
+              {
+                "Name": "StartsWith",
+                "Value": "Shuttle.Messages.v2"
+              }
+            ]
+          },
+          {
+            "Uri": "queue://./inbox-work-b",
+            "Specifications": [
+              {
+                "Name": "TypeList",
+                "Value": "DoSomethingCommand"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
+```
 
-In order for the module to attach to the `IPipelineFactory` you would need to resolve it using `IComponentResolver.Resolve<MessageForwardingModule>()`.
+The `ForwardingRoutes` makes use of the `MessageRouteOptions` as defined in the `Shuttle.Esb` package and the documentation for the `MessageRouteOptions` is applicable to the `ForwardingRoutes` as well.

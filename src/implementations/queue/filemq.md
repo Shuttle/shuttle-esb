@@ -14,13 +14,34 @@ This `IQueue` implementation makes use of a folder as a queue with the messages 
 
 ## Configuration
 
-The queue configuration is part of the specified uri, e.g.:
+The URI structure is `filemq://configuration-name/queue-name`.
 
-``` xml
-    <inbox
-      workQueueUri="filemq://{directory-path}"
-	  .
-	  .
-	  .
-    />
+```c#
+services.AddFileQueue(builder =>
+{
+    builder.AddOptions("local", new FileQueueOptions
+    {
+        Path = $"{Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".."))}\\queues\\"
+    });
+});
 ```
+
+The default JSON settings structure is as follows:
+
+```json
+{
+  "Shuttle": {
+    "FileMQ": {
+      "local": {
+        "Path": "c:\\queues\\",
+      }
+    }
+  }
+}
+```
+
+## Options
+
+| Segment / Argument | Default | Description |
+| --- | --- | --- | 
+| Path | | The root folder that will contain a queue name as a sub-folder. |

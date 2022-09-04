@@ -19,6 +19,10 @@ const concepts = [
         text: 'Patterns',
         items: [
             {
+                text: 'Stream Processing',
+                link: '/concepts/patterns/stream-processing'
+            },
+            {
                 text: 'Request / Response',
                 link: '/concepts/patterns/request-response'
             },
@@ -72,6 +76,10 @@ const guide = [
     {
         text: 'Patterns',
         items: [
+            {
+                text: 'Stream Processing',
+                link: '/guide/patterns/stream-processing'
+            },
             {
                 text: 'Request / Response',
                 link: '/guide/patterns/request-response'
@@ -146,24 +154,28 @@ const components = [
                 link: '/components/message-sender'
             },
             {
-                text: 'Queue Manager',
-                link: '/components/queue-manager'
+                text: 'Queue Factory Service',
+                link: '/components/queue-factory-service'
+            },
+            {
+                text: 'Queue Service',
+                link: '/components/queue-service'
             },
             {
                 text: 'Policy',
                 link: '/components/service-bus-policy'
             },
             {
-                text: 'Subscription Manager',
-                link: '/components/subscription-manager'
+                text: 'Subscription Service',
+                link: '/components/subscription-service'
             },
             {
                 text: 'Transport Message',
                 link: '/components/transport-message'
             },
             {
-                text: 'Transport Message Configurator',
-                link: '/components/transport-message-configurator'
+                text: 'Transport Message Builder',
+                link: '/components/transport-message-builder'
             },
             {
                 text: 'Transport Header',
@@ -175,6 +187,23 @@ const components = [
 
 const implementations = [
     {
+        items: [
+            {
+                text: 'Overview',
+                link: '/implementations/overview'
+            },
+        ]
+    },
+    {
+        text: 'Streams',
+        items: [
+            {
+                text: 'Kafka',
+                link: '/implementations/stream/kafka'
+            },
+        ]
+    },
+    {
         text: 'Queue',
         items: [
             {
@@ -183,7 +212,7 @@ const implementations = [
             },
             {
                 text: 'Azure Storage Queues',
-                link: '/implementations/queue/azuremq'
+                link: '/implementations/queue/azuresq'
             },
             {
                 text: 'File',
@@ -248,8 +277,52 @@ const modules = [
                 link: '/modules/purge-queues'
             },
             {
-                text: 'Throttle (Windows)',
+                text: 'Throttle',
                 link: '/modules/throttle'
+            },
+        ]
+    },
+];
+
+const options = [
+    {
+        text: 'Options',
+        items: [
+            {
+                text: 'Service Bus',
+                link: '/options/servicebus'
+            },
+            {
+                text: 'Inbox',
+                link: '/options/inbox'
+            },
+            {
+                text: 'Message Routes',
+                link: '/options/message-routes'
+            },
+            {
+                text: 'Outbox',
+                link: '/options/outbox'
+            },
+            {
+                text: 'Control Inbox',
+                link: '/options/control-inbox'
+            },
+            {
+                text: 'Worker',
+                link: '/options/worker'
+            },
+            {
+                text: 'Subscription',
+                link: '/options/subscription'
+            },
+            {
+                text: 'Idempotence',
+                link: '/options/idempotence'
+            },
+            {
+                text: 'Processor Thread',
+                link: '/options/processor-thread'
             },
         ]
     },
@@ -293,8 +366,8 @@ module.exports = (async () => {
 
             socialLinks: [
                 { icon: 'github', link: 'https://github.com/Shuttle/shuttle-esb' },
+                { icon: 'discord', link: 'https://discord.gg/Q2yEsfht6f' }
                 // { icon: 'twitter', link: '' },
-                // { icon: 'discord', link: '' }
             ],
 
             footer: {
@@ -313,9 +386,9 @@ module.exports = (async () => {
                     link: '/guide/introduction'
                 },
                 {
-                    text: 'Configuration',
-                    activeMatch: `^/configuration/`,
-                    link: '/configuration/full'
+                    text: 'Options',
+                    activeMatch: `^/options/`,
+                    link: '/options/servicebus'
                 },
                 {
                     text: 'Components',
@@ -332,12 +405,17 @@ module.exports = (async () => {
                     activeMatch: `^/modules/`,
                     link: '/modules/overview'
                 },
+                {
+                    text: 'v-previous',
+                    link: 'https://shuttle.github.io/shuttle-esb-v12/'
+                },
             ],
 
             sidebar: {
                 '/concepts/': concepts,
                 '/guide/': guide,
                 '/components/': components,
+                '/options/': options,
                 '/implementations/': implementations,
                 '/modules/': modules
             }

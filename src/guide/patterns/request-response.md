@@ -4,7 +4,7 @@
 Remember that you can download the samples from the <a href="https://github.com/Shuttle/Shuttle.Esb.Samples" target="_blank">GitHub repository</a>.
 :::
 
-This sample makes use of [Shuttle.Esb.AzureMQ](https://github.com/Shuttle/Shuttle.Esb.AzureMQ) for the message queues.  Local Azure Storage Queues should be provided by [Azurite](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite?tabs=visual-studio).
+This sample makes use of [Shuttle.Esb.AzureStorageQueues](https://github.com/Shuttle/Shuttle.Esb.AzureStorageQueues) for the message queues.  Local Azure Storage Queues should be provided by [Azurite](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite?tabs=visual-studio).
 
 Once you have opened the `Shuttle.RequestResponse.sln` solution in Visual Studio set the following projects as startup projects:
 
@@ -27,28 +27,28 @@ In this guide we'll create the following projects:
 
 **Note**: remember to change the *Solution name*.
 
-### RegisterMemberCommand
+### RegisterMember
 
-> Rename the `Class1` default file to `RegisterMemberCommand` and add a `UserName` property.
+> Rename the `Class1` default file to `RegisterMember` and add a `UserName` property.
 
 ``` c#
 namespace Shuttle.RequestResponse.Messages
 {
-	public class RegisterMemberCommand
+	public class RegisterMember
 	{
 		public string UserName { get; set; }
 	}
 }
 ```
 
-### MemberRegisteredEvent
+### MemberRegistered
 
-> Add a new class called `MemberRegisteredEvent` also with a `UserName` property.
+> Add a new class called `MemberRegistered` also with a `UserName` property.
 
 ``` c#
 namespace Shuttle.RequestResponse.Messages
 {
-	public class MemberRegisteredEvent
+	public class MemberRegistered
 	{
 		public string UserName { get; set; }
 	}
@@ -59,13 +59,13 @@ namespace Shuttle.RequestResponse.Messages
 
 > Add a new `Console Application` to the solution called `Shuttle.RequestResponse.Client`.
 
-> Install the `Shuttle.Esb.AzureMQ` nuget package.
+> Install the `Shuttle.Esb.AzureStorageQueues` nuget package.
 
 This will provide access to the Azure Storage Queues `IQueue` implementation and also include the required dependencies.
 
-> Install the `Shuttle.Core.Castle` nuget package.
+> Install the `Microsoft.Extensions.Configuration.Json` nuget package.
 
-This will provide access to the Castle `WindsorContainer` implementation.
+This will provide the ability to read the `appsettings.json` file.
 
 > Add a reference to the `Shuttle.RequestResponse.Messages` project.
 
@@ -73,13 +73,12 @@ This will provide access to the Castle `WindsorContainer` implementation.
 
 > Implement the main client code as follows:
 
-``` c#
+```c#
 using System;
-using Castle.Windsor;
-using Shuttle.Core.Castle;
-using Shuttle.Core.Container;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Shuttle.Esb;
-using Shuttle.Esb.AzureMQ;
+using Shuttle.Esb.AzureStorageQueues;
 using Shuttle.RequestResponse.Messages;
 
 namespace Shuttle.RequestResponse.Client
@@ -88,19 +87,35 @@ namespace Shuttle.RequestResponse.Client
 	{
 		private static void Main(string[] args)
 		{
-			var container = new WindsorComponentContainer(new WindsorContainer());
+			var services = new ServiceCollection();
 
-			container.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
+			var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
-			container.RegisterServiceBus();
+			services.AddSingleton<IConfiguration>(configuration);
 
-			using (var bus = container.Resolve<IServiceBus>().Start())
+			services.AddServiceBus(builder =>
+			{
+				configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+			});
+
+			services.AddAzureStorageQueues(builder =>
+			{
+				builder.AddOptions("azure", new AzureStorageQueueOptions
+				{
+					ConnectionString = "UseDevelopmentStorage=true;"
+				});
+			});
+
+			Console.WriteLine("Type some characters and then press [enter] to submit; an empty line submission stops execution:");
+			Console.WriteLine();
+
+			using (var bus = services.BuildServiceProvider().GetRequiredService<IServiceBus>().Start())
 			{
 				string userName;
 
 				while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
 				{
-					bus.Send(new RegisterMemberCommand
+					bus.Send(new RegisterMember
 					{
 						UserName = userName
 					}, c => c.WillExpire(DateTime.Now.AddSeconds(5)));
@@ -111,38 +126,40 @@ namespace Shuttle.RequestResponse.Client
 }
 ```
 
-### App.config
+### Client configuration file
 
-> Create the configuration as follows:
+> Add an `appsettings.json` file as follows:
 
-``` xml
-<?xml version="1.0" encoding="utf-8"?>
-<configuration>
-	<configSections>
-		<section name="serviceBus" type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb"/>
-	</configSections>
-
-	<appSettings>
-		<add key="azure" value="UseDevelopmentStorage=true;" />
-	</appSettings>
-
-	<serviceBus>
-		<messageRoutes>
-			<messageRoute uri="azuremq://azure/shuttle-server-work">
-				<add specification="StartsWith" value="Shuttle.RequestResponse.Messages"/>
-			</messageRoute>
-		</messageRoutes>
-
-		<inbox workQueueUri="azuremq://azure/shuttle-client-work" errorQueueUri="azuremq://azure/shuttle-error" threadCount="1"/>
-	</serviceBus>
-</configuration>
+```json
+{
+  "Shuttle": {
+    "ServiceBus": {
+      "Inbox": {
+        "WorkQueueUri": "azuresq://azure/shuttle-client-work",
+        "ErrorQueueUri": "azuresq://azure/shuttle-error",
+        "ThreadCount": 1
+      }, 
+      "MessageRoutes": [
+        {
+          "Uri": "azuresq://azure/shuttle-server-work",
+          "Specifications": [
+            {
+              "Name": "StartsWith",
+              "Value": "Shuttle.RequestResponse.Messages"
+            }
+          ]
+        }
+      ]
+    } 
+  } 
+}
 ```
 
-This tells the service bus that all messages sent having a type name starting with `Shuttle.RequestResponse.Messages` should be routed to endpoint `azuremq://azure/shuttle-server-work`.
+This tells the service bus that all messages sent having a type name starting with `Shuttle.RequestResponse.Messages` should be routed to endpoint `azuresq://azure/shuttle-server-work`.
 
 ### MemberRegisteredHandler
 
-> Create a new class called `MemberRegisteredHandler` that implements the `IMessageHandler<MemberRegisteredEvent>` interface as follows:
+> Create a new class called `MemberRegisteredHandler` that implements the `IMessageHandler<MemberRegistered>` interface as follows:
 
 ``` c#
 using System;
@@ -151,9 +168,9 @@ using Shuttle.RequestResponse.Messages;
 
 namespace Shuttle.RequestResponse.Client
 {
-	public class MemberRegisteredHandler : IMessageHandler<MemberRegisteredEvent>
+	public class MemberRegisteredHandler : IMessageHandler<MemberRegistered>
 	{
-		public void ProcessMessage(IHandlerContext<MemberRegisteredEvent> context)
+		public void ProcessMessage(IHandlerContext<MemberRegistered> context)
 		{
 			Console.WriteLine();
 			Console.WriteLine("[RESPONSE RECEIVED] : user name = '{0}'", context.Message.UserName);
@@ -167,21 +184,17 @@ namespace Shuttle.RequestResponse.Client
 
 > Add a new `Console Application` to the solution called `Shuttle.RequestResponse.Server`.
 
-> Install the `Shuttle.Esb.AzureMQ` nuget package.
+> Install the `Shuttle.Esb.AzureStorageQueues` nuget package.
 
 This will provide access to the Azure Storage Queues `IQueue` implementation and also include the required dependencies.
 
-> Install the `Shuttle.Core.WorkerService` nuget package.
+> Install the `Microsoft.Extensions.Hosting` nuget package.
 
-This allows a console application to be hosted as a Windows Service or Systemd Unit while running as a normal console application when debugging.
+This allows a console application to be hosted using the .NET generic host.
 
-> Install the `Shuttle.Core.Castle` nuget package.
+> Install the `Microsoft.Extensions.Configuration.Json` nuget package.
 
-This will provide access to the Castle `WindsorContainer` implementation.
-
-> Install the `Shuttle.Core.Log4Net` nuget package.
-
-This will provide access to the `Log4Net` implementation.
+This will provide the ability to read the `appsettings.json` file.
 
 > Add a reference to the `Shuttle.RequestResponse.Messages` project.
 
@@ -190,7 +203,11 @@ This will provide access to the `Log4Net` implementation.
 > Implement the `Program` class as follows:
 
 ``` c#
-using Shuttle.Core.WorkerService;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Shuttle.Esb;
+using Shuttle.Esb.AzureStorageQueues;
 
 namespace Shuttle.RequestResponse.Server
 {
@@ -198,99 +215,51 @@ namespace Shuttle.RequestResponse.Server
     {
         private static void Main()
         {
-            ServiceHost.Run<Host>();
+            Host.CreateDefaultBuilder()
+                .ConfigureServices(services =>
+                {
+                    var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+
+                    services.AddSingleton<IConfiguration>(configuration);
+
+                    services.AddServiceBus(builder =>
+                    {
+                        configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+                    });
+
+                    services.AddAzureStorageQueues(builder =>
+                    {
+                        builder.AddOptions("azure", new AzureStorageQueueOptions
+                        {
+                            ConnectionString = configuration.GetConnectionString("azure")
+                        });
+                    });
+                })
+                .Build()
+                .Run();
         }
     }
 }
 ```
 
-This will simply instance the `Host` class and get it running.
+### Server configuration file
 
-### Host
+> Add an `appsettings.json` file as follows:
 
-> Add a `Host` class and implement the `IServiceHost` interface as follows:
-
-``` c#
-using Castle.Windsor;
-using log4net;
-using Shuttle.Core.Castle;
-using Shuttle.Core.Container;
-using Shuttle.Core.Log4Net;
-using Shuttle.Core.Logging;
-using Shuttle.Core.WorkerService;
-using Shuttle.Esb;
-using Shuttle.Esb.AzureMQ;
-
-namespace Shuttle.RequestResponse.Server
+```json
 {
-    public class Host : IServiceHost
-    {
-        private IServiceBus _bus;
-
-        public Host()
-        {
-            Log.Assign(new Log4NetLog(LogManager.GetLogger(typeof(Host))));
-        }
-
-        public void Start()
-        {
-            var container = new WindsorComponentContainer(new WindsorContainer());
-
-            container.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
-
-            container.RegisterServiceBus();
-
-            _bus = container.Resolve<IServiceBus>().Start();
-        }
-
-        public void Stop()
-        {
-            _bus.Dispose();
-        }
+  "ConnectionStrings": {
+    "azure": "UseDevelopmentStorage=true;"
+  },
+  "Shuttle": {
+    "ServiceBus": {
+      "Inbox": {
+        "WorkQueueUri": "azuresq://azure/shuttle-server-work",
+        "ErrorQueueUri": "azuresq://azure/shuttle-error"
+      }
     }
+  }
 }
-```
-
-### App.config
-
-> Add an `Application Configuration File` item to create the `App.config` and populate as follows:
-
-``` xml
-<?xml version="1.0" encoding="utf-8"?>
-
-<configuration>
-	<configSections>
-		<section name="serviceBus" type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb" />
-		<section name="log4net" type="log4net.Config.Log4NetConfigurationSectionHandler, log4net" />
-	</configSections>
-
-	<appSettings>
-		<add key="azure" value="UseDevelopmentStorage=true;" />
-	</appSettings>
-
-	<log4net>
-		<appender name="RollingFileAppender" type="log4net.Appender.RollingFileAppender">
-			<file value="logs\requestresponse-server" />
-			<appendToFile value="true" />
-			<rollingStyle value="Composite" />
-			<maxSizeRollBackups value="10" />
-			<maximumFileSize value="100000KB" />
-			<datePattern value="-yyyyMMdd.'log'" />
-			<param name="StaticLogFileName" value="false" />
-			<layout type="log4net.Layout.PatternLayout">
-				<conversionPattern value="%d [%t] %-5p %c - %m%n" />
-			</layout>
-		</appender>
-		<root>
-			<level value="TRACE" />
-			<appender-ref ref="RollingFileAppender" />
-		</root>
-	</log4net>
-
-	<serviceBus>
-		<inbox workQueueUri="azuremq://azure/shuttle-server-work" errorQueueUri="azuremq://azure/shuttle-error" />
-	</serviceBus>
-</configuration>
 ```
 
 ### RegisterMemberHandler
@@ -304,18 +273,18 @@ using Shuttle.RequestResponse.Messages;
 
 namespace Shuttle.RequestResponse.Server
 {
-	public class RegisterMemberHandler : IMessageHandler<RegisterMemberCommand>
+	public class RegisterMemberHandler : IMessageHandler<RegisterMember>
 	{
-		public void ProcessMessage(IHandlerContext<RegisterMemberCommand> context)
+		public void ProcessMessage(IHandlerContext<RegisterMember> context)
 		{
 			Console.WriteLine();
 			Console.WriteLine("[MEMBER REGISTERED] : user name = '{0}'", context.Message.UserName);
 			Console.WriteLine();
 
-			context.Send(new MemberRegisteredEvent
+			context.Send(new MemberRegistered
 			{
 				UserName = context.Message.UserName
-			}, c => c.Reply());
+			}, builder => builder.Reply());
 		}
 	}
 }

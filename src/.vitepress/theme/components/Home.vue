@@ -1,11 +1,12 @@
 <script setup>
-import { VTIconShuttle } from 'shuttle-theme';
 import { VTIconDiscord } from 'shuttle-theme';
 </script>
 <template>
     <section id="hero">
-        <VTIconShuttle class="logo" />
-        <h1 class="tagline">Autonomous Business Components</h1>
+        <p class="upgrade-notice">
+            The latest version of the Shuttle.Esb components now make use of <a href="https://docs.microsoft.com/en-us/dotnet/core/extensions/dependency-injection" target="_blank">.NET dependency injection</a> as well as the <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options?view=aspnetcore-6.0" target="_blank">options pattern</a>.  This is a major departure from the component container adapter pattern used to date.  Please take a look at the <a href="/shuttle-esb/upgrade.html">upgrade guide</a> to see the <strong>breaking changes</strong>.
+        </p>
+        <h1 class="tagline">Flexible .Net queue and stream processing</h1>
         <p class="description">
             Configurable service bus that provides you with a mechanism to create
             cross-platform endpoints that are loosely coupled, enabling you to develop
@@ -21,14 +22,7 @@ import { VTIconDiscord } from 'shuttle-theme';
                         d="M13.025 1l-2.847 2.828 6.176 6.176h-16.354v3.992h16.354l-6.176 6.176 2.847 2.828 10.975-11z" />
                 </svg>
             </a>
-            <a class="upgrade" href="/shuttle-esb/guide/upgrade-12.0.0.html">Upgrade</a>
-        </p>
-        <p>
-            <a href="https://discord.gg/Q2yEsfht6f" target="_blank">
-                <div class="discord-link">
-                    <VTIconDiscord class="discord-logo" />Join our Discord channel
-                </div>
-            </a>
+            <a class="upgrade" href="/shuttle-esb/upgrade.html">Upgrade</a>
         </p>
     </section>
 
@@ -60,6 +54,17 @@ import { VTIconDiscord } from 'shuttle-theme';
 </template>
 
 <style scoped>
+.upgrade-notice {
+    border-radius: 8px;
+    max-width: 960px;
+    margin: 0px auto;
+    color: var(--vt-c-text-2);
+    font-size: .9rem;
+    border: solid 1px var(--vt-c-divider-dark-1);
+    margin-bottom: 2em;
+    background-color: var(--vt-c-bg-soft);
+}
+
 a {
     color: var(--vt-c-orange-dark);
 }
@@ -72,35 +77,6 @@ a:hover {
     height: 15em;
     width: 15em;
     margin: auto;
-}
-
-.discord-link {
-    margin: auto;
-    background-color: rgb(88, 101, 242);
-    color: #fff;
-    width: fit-content;
-    padding: 0.75em;
-    margin-top: 1em;
-    border-radius: 8px;
-    transition: background-color 0.5s;
-}
-
-.discord-link:hover {
-    background-color: rgb(47, 55, 143);
-    transition: background-color 0.5s;
-}
-
-.discord-link:active {
-    background-color: rgb(31, 39, 119);
-    transition: background-color 0.2s;
-}
-
-.discord-logo {
-    height: 2em;
-    width: 2em;
-    fill: #fff;
-    display: inline;
-    margin-right: 1em;
 }
 
 section {

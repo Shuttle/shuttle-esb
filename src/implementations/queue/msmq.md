@@ -4,53 +4,50 @@
 PM> Install-Package Shuttle.Esb.Msmq
 ```
 
-All MSMQ queues are required to be **transactional**.  In addition to the actual queue a `msmq://host/queue$journal` queue will **always** be used.  If it does not exist it will be created, so if you are creating queues explicitly then remember to create these also.
+All MSMQ queues are required to be **transactional**.  In addition to the actual queue a `msmq://configuration-name/queue-name$journal` queue will **always** be used.  If it does not exist it will be created, so if you are creating queues explicitly then remember to create these also.
 
 MSMQ creates outgoing queues internally so it is not necessary to use an outbox.
 
-## Installation / Activation
+## MSMQ Installation / Activation
 
 You need to install / activate MSMQ on your system before using this queuing option.
 
 ## Configuration
 
-Since an instance of the `IMsmqConfiguration` interface is required remember to register one.  Typically the default implementation will do:
+The URI structure is `msmq://configuration-name/queue-name`.
 
-``` c#
-IComponentRegistry.Register<IMsmqConfiguration, MsmqConfiguration>();
+```c#
+services.AddMsmq(builder =>
+{
+    builder.AddOptions("local", new MsmqOptions
+    {
+        Path = ".\private$", // for local queues
+        Path = "FormatName:DIRECT=TCP:127.0.0.1\private$", // for IP addresses
+        Path = "FormatName:DIRECT=OS:{host-name}\private$",
+        Timeout = Timespan.Zero,
+        UseDeadLetterQueue = false
+    });
+});
 ```
 
-The queue configuration is part of the specified uri, e.g.:
+The default JSON settings structure is as follows:
 
-``` xml
-    <inbox
-      workQueueUri="msmq://host/queue?useDeadLetterQueue=true"
-	  .
-	  .
-	  .
-    />
+```json
+{
+  "Shuttle": {
+    "Msmq": {
+      "Timeout": "00:00:02",
+      "UseDeadLetterQueue": false,
+      "Path": "some-path" 
+    }
+  }
+}
 ``` 
 
-| Segment / Argument | Default	| Description |
+## Options
+
+| Option | Default	| Description |
 | --- | --- | --- | 
-| useDeadLetterQueue	 | true | Specifies the value to pass to the 'UseDeadLetterQueue' property of the message sent. | 
-
-By default the `MsmqQueue` is a transactional queue that utilizes a journal queue when retrieving messages.  Please try not to change the default unless you have carefully considered your choice.  Although there is a slight performance penalty the defaults provide a relatively risk-free consumption of the queue.
-
-In addition to this there is also a Msmq specific section (defaults specified here):
-
-``` xml
-<configuration>
-  <configSections>
-    <section name='msmq' type="Shuttle.Esb.Msmq.MsmqSection, Shuttle.Esb.Msmq"/>
-  </configSections>
-  
-  <msmq
-	localQueueTimeoutMilliseconds="0"
-	remoteQueueTimeoutMilliseconds="2000"
-  />
-  .
-  .
-  .
-<configuration>
-``` 
+| `Path` | | The [MessageQueue.Path](https://docs.microsoft.com/en-us/dotnet/api/system.messaging.messagequeue.path?view=netframework-4.8) to use to connect to the queue. |
+| `UseDeadLetterQueue` | `true` | Specifies the value to pass to the 'UseDeadLetterQueue' property of the message sent. | 
+| `Timeout` | 00:00:00 | Timespan indicating how long to wait for queue operations to complete. |

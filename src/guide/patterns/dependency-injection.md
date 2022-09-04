@@ -4,7 +4,7 @@
 Remember that you can download the samples from the <a href="https://github.com/Shuttle/Shuttle.Esb.Samples" target="_blank">GitHub repository</a>.
 :::
 
-This sample makes use of [Shuttle.Esb.AzureMQ](https://github.com/Shuttle/Shuttle.Esb.AzureMQ) for the message queues.  Local Azure Storage Queues should be provided by [Azurite](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite?tabs=visual-studio).
+This sample makes use of [Shuttle.Esb.AzureStorageQueues](https://github.com/Shuttle/Shuttle.Esb.AzureStorageQueues) for the message queues.  Local Azure Storage Queues should be provided by [Azurite](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite?tabs=visual-studio).
 
 Once you have opened the `Shuttle.DependencyInjection.sln` solution in Visual Studio set the following projects as startup projects:
 
@@ -13,9 +13,7 @@ Once you have opened the `Shuttle.DependencyInjection.sln` solution in Visual St
 
 ## Implementation
 
-By default Shuttle.Esb does not require a dependency injection container.  Shuttle makes use of an `IMessageHandlerFactory` implementation to create message handlers.  If no dependency injection container is required one could stick with the `DefaultMessageHandlerFactory` instantiated by default.
-
-The `DefaultMessageHandlerFactory` requires message handlers that have a default (parameterless) constructor; else the instantiation of the handler will fail.  In this guide we will use the `WindsorContainer` that is part of the [Castle Project](https://github.com/castleproject/Windsor/blob/master/docs/README.md).
+Since .NET provides a production-ready dependency injection framework, this sample will demonstrate a very simple use-case.
 
 In this guide we'll create the following projects:
 
@@ -30,14 +28,14 @@ In this guide we'll create the following projects:
 
 **Note**: remember to change the *Solution name*.
 
-### RegisterMemberCommand
+### RegisterMember
 
-> Rename the `Class1` default file to `RegisterMemberCommand` and add a `UserName` property.
+> Rename the `Class1` default file to `RegisterMember` and add a `UserName` property.
 
 ``` c#
 namespace Shuttle.DependencyInjection.Messages
 {
-	public class RegisterMemberCommand
+	public class RegisterMember
 	{
 		public string UserName { get; set; }
 	}
@@ -48,13 +46,13 @@ namespace Shuttle.DependencyInjection.Messages
 
 > Add a new `Console Application` to the solution called `Shuttle.DependencyInjection.Client`.
 
-> Install the `Shuttle.Esb.AzureMQ` nuget package.
+> Install the `Shuttle.Esb.AzureStorageQueues` nuget package.
 
 This will provide access to the Azure Storage Queues `IQueue` implementation and also include the required dependencies.
 
-> Install the `Shuttle.Core.Ninject` nuget package.
+> Install the `Microsoft.Extensions.Configuration.Json` nuget package.
 
-This will provide access to the Ninject implementation.
+This will provide the ability to read the `appsettings.json` file.
 
 > Add a reference to the `Shuttle.DependencyInjection.Messages` project.
 
@@ -64,12 +62,11 @@ This will provide access to the Ninject implementation.
 
 ``` c#
 using System;
-using Ninject;
-using Shuttle.Core.Container;
-using Shuttle.Core.Ninject;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Shuttle.DependencyInjection.Messages;
 using Shuttle.Esb;
-using Shuttle.Esb.AzureMQ;
+using Shuttle.Esb.AzureStorageQueues;
 
 namespace Shuttle.DependencyInjection.Client
 {
@@ -77,18 +74,35 @@ namespace Shuttle.DependencyInjection.Client
     {
         private static void Main(string[] args)
         {
-            var container = new NinjectComponentContainer(new StandardKernel());
+            var services = new ServiceCollection();
 
-            container.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
-            container.RegisterServiceBus();
+            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
-            using (var bus = container.Resolve<IServiceBus>().Start())
+            services.AddSingleton<IConfiguration>(configuration);
+
+            services.AddServiceBus(builder =>
+            {
+                configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+            });
+
+            services.AddAzureStorageQueues(builder =>
+            {
+                builder.AddOptions("azure", new AzureStorageQueueOptions
+                {
+                    ConnectionString = "UseDevelopmentStorage=true;"
+                });
+            });
+
+			Console.WriteLine("Type some characters and then press [enter] to submit; an empty line submission stops execution:");
+			Console.WriteLine();
+
+            using (var bus = services.BuildServiceProvider().GetRequiredService<IServiceBus>().Start())
             {
                 string userName;
 
                 while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
                 {
-                    bus.Send(new RegisterMemberCommand
+                    bus.Send(new RegisterMember
                     {
                         UserName = userName
                     });
@@ -99,32 +113,31 @@ namespace Shuttle.DependencyInjection.Client
 }
 ```
 
-### App.config
+### Client configuration file
 
-> Create the service bus configuration as follows:
+> Add an `appsettings.json` file as follows:
 
-``` xml
-<?xml version="1.0" encoding="utf-8"?>
+```json
+{
+  "Shuttle": {
+    "ServiceBus": {
+      "MessageRoutes": [
+        {
+          "Uri": "azuresq://azure/shuttle-server-work",
+          "Specifications": [
+            {
+              "Name": "StartsWith",
+              "Value": "Shuttle.DependencyInjection.Messages"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+```
 
-<configuration>
-	<configSections>
-		<section name="serviceBus" type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb" />
-	</configSections>
-
-	<appSettings>
-		<add key="azure" value="UseDevelopmentStorage=true;" />
-	</appSettings>
-
-	<serviceBus>
-		<messageRoutes>
-			<messageRoute uri="azuremq://azure/shuttle-server-work">
-				<add specification="StartsWith" value="Shuttle.DependencyInjection.Messages" />
-			</messageRoute>
-		</messageRoutes>
-	</serviceBus>
-</configuration>```
-
-This tells shuttle that all messages that are sent and have a type name starting with `Shuttle.DependencyInjection.Messages` should be sent to endpoint `azuremq://azure/shuttle-server-work`.
+This tells Shuttle.Esb that all messages that are sent and have a type name starting with `Shuttle.DependencyInjection.Messages` should be sent to endpoint `azuresq://azure/shuttle-server-work`.
 
 ## E-Mail
 
@@ -178,17 +191,17 @@ namespace Shuttle.DependencyInjection.EMail
 
 > Add a new `Console Application` to the solution called `Shuttle.DependencyInjection.Server`.
 
-> Install the `Shuttle.Esb.AzureMQ` nuget package.
+> Install the `Shuttle.Esb.AzureStorageQueues` nuget package.
 
 This will provide access to the Azure Storage Queues `IQueue` implementation and also include the required dependencies.
 
-> Install the `Shuttle.Core.WorkerService` nuget package.
+> Install the `Microsoft.Extensions.Hosting` nuget package.
 
-This allows a console application to be hosted as a Windows Service or Systemd Unit while running as a normal console application when debugging.
+This allows a console application to be hosted using the .NET generic host.
 
-> Install the `Shuttle.Core.Ninject` nuget package.
+> Install the `Microsoft.Extensions.Configuration.Json` nuget package.
 
-This will provide access to the Ninject implementation.
+This will provide the ability to read the `appsettings.json` file.
 
 > Add references to both the `Shuttle.DependencyInjection.Messages` and `Shuttle.DependencyInjection.EMail` projects.
 
@@ -197,7 +210,12 @@ This will provide access to the Ninject implementation.
 > Implement the `Program` class as follows:
 
 ``` c#
-using Shuttle.Core.WorkerService;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Shuttle.DependencyInjection.EMail;
+using Shuttle.Esb;
+using Shuttle.Esb.AzureStorageQueues;
 
 namespace Shuttle.DependencyInjection.Server
 {
@@ -205,82 +223,58 @@ namespace Shuttle.DependencyInjection.Server
     {
         public static void Main()
         {
-            ServiceHost.Run<Host>();
+            Host.CreateDefaultBuilder()
+                .ConfigureServices(services =>
+                {
+                    var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+
+                    services.AddSingleton<IConfiguration>(configuration);
+
+                    services.AddSingleton<IEMailService, EMailService>();
+
+                    services.AddServiceBus(builder =>
+                    {
+                        configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+                    });
+
+                    services.AddAzureStorageQueues(builder =>
+                    {
+                        builder.AddOptions("azure", new AzureStorageQueueOptions
+                        {
+                            ConnectionString = configuration.GetConnectionString("azure")
+                        });
+                    });
+                })
+                .Build()
+                .Run();
         }
     }
 }
 ```
 
-This simply executes the `Host` class implementation.
+### Server configuration file
 
-### Host
+> Add an `appsettings.json` file as follows:
 
-> Add a `Host` class and implement the `IServiceHost` interface as follows:
-
-``` c#
-using Ninject;
-using Shuttle.Core.Container;
-using Shuttle.Core.Ninject;
-using Shuttle.Core.WorkerService;
-using Shuttle.DependencyInjection.EMail;
-using Shuttle.Esb;
-using Shuttle.Esb.AzureMQ;
-
-namespace Shuttle.DependencyInjection.Server
+```json
 {
-    public class Host : IServiceHost
-    {
-        private IServiceBus _bus;
-        private StandardKernel _kernel;
-
-        public void Stop()
-        {
-            _kernel.Dispose();
-            _bus.Dispose();
-        }
-
-        public void Start()
-        {
-            _kernel = new StandardKernel();
-
-            _kernel.Bind<IEMailService>().To<EMailService>();
-
-            var container = new NinjectComponentContainer(_kernel);
-
-            container.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
-            container.RegisterServiceBus();
-
-            _bus = container.Resolve<IServiceBus>().Start();
-        }
+  "ConnectionStrings": {
+    "azure": "UseDevelopmentStorage=true;"
+  },
+  "Shuttle": {
+    "ServiceBus": {
+      "Inbox": {
+        "WorkQueueUri": "azuresq://azure/shuttle-server-work",
+        "ErrorQueueUri": "azuresq://azure/shuttle-error"
+      }
     }
+  }
 }
-```
-
-### App.config
-
-> Add an `Application Configuration File` item to create the `App.config` and populate as follows:
-
-``` xml
-<?xml version="1.0" encoding="utf-8"?>
-
-<configuration>
-	<configSections>
-		<section name="serviceBus" type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb" />
-	</configSections>
-
-	<appSettings>
-		<add key="azure" value="UseDevelopmentStorage=true;" />
-	</appSettings>
-
-	<serviceBus>
-		<inbox workQueueUri="azuremq://azure/shuttle-server-work" errorQueueUri="azuremq://azure/shuttle-error" />
-	</serviceBus>
-</configuration>
 ```
 
 ### RegisterMemberHandler
 
-> Add a new class called `RegisterMemberHandler` that implements the `IMessageHandler<RegisterMemberCommand>` interface as follows:
+> Add a new class called `RegisterMemberHandler` that implements the `IMessageHandler<RegisterMember>` interface as follows:
 
 ``` c#
 using System;
@@ -291,18 +285,18 @@ using Shuttle.DependencyInjection.Messages;
 
 namespace Shuttle.DependencyInjection.Server
 {
-	public class RegisterMemberHandler : IMessageHandler<RegisterMemberCommand>
+	public class RegisterMemberHandler : IMessageHandler<RegisterMember>
 	{
 		private readonly IEMailService _emailService;
 
 		public RegisterMemberHandler(IEMailService emailService)
 		{
-			Guard.AgainstNull(emailService, "emailService");
+			Guard.AgainstNull(emailService, nameof(emailService));
 
 			_emailService = emailService;
 		}
 
-		public void ProcessMessage(IHandlerContext<RegisterMemberCommand> context)
+		public void ProcessMessage(IHandlerContext<RegisterMember> context)
 		{
 			Console.WriteLine();
 			Console.WriteLine("[MEMBER REGISTERED] : user name = '{0}'", context.Message.UserName);

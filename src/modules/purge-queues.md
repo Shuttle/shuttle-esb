@@ -6,25 +6,34 @@ PM> Install-Package Shuttle.Esb.Module.PurgeQueues
 
 The PurgeQueues module for Shuttle.Esb clears the specified queues on startup.
 
-The module will attach the `PurgeQueuesObserver` to the `OnAfterInitializeQueueFactories` event of the `StartupPipeline` and purges the configured queues if the relevant queue implementation has implemented the `IPurgeQueue` interface.  If the relevant queue implementation has *not* implemented the `IPurgeQueue` interface only a warning is logged.
+The module will attach the `PurgeQueuesObserver` to the `OnAfterConfigure` event of the `StartupPipeline` and purges the configured queues if the relevant queue implementation has implemented the `IPurgeQueue` interface.  If the relevant queue implementation has *not* implemented the `IPurgeQueue` interface the purge is ignore.
 
-```xml
-<configuration>
-	<configSections>
-		<section name="purgeQueues" type="Shuttle.Esb.Module.PurgeQueues.PurgeQueuesSection, Shuttle.Esb.Module.PurgeQueues"/>
-	</configSections>
+## Configuration
 
-	<purgeQueues>
-		<queues>
-			<queue uri="msmq://./inbox" />
-			<queue uri="sql://./inbox" />
-		</queues>
-	</purgeQueues>
-</configuration>
+```c#
+services.AddPurgeQueuesModule(builder => 
+{
+	builder.Options.Uris = new List<string>
+	{
+		"scheme-a://configuration-name/queue-a",
+		"scheme-b://configuration-name/queue-b"
+	};
+});
 ```
 
-## Registration / Activation
+The default JSON settings structure is as follows:
 
-The required components may be registered by calling `ComponentRegistryExtensions.RegisterPurgeQueues(IComponentRegistry)`.
-
-In order for the module to attach to the `IPipelineFactory` you would need to resolve it using `IComponentResolver.Resolve<PurgeQueuesModule>()`.
+```json
+{
+  "Shuttle": {
+    "Modules": {
+      "MessageForwarding": {
+        "Uris": [
+          "scheme-a://configuration-name/queue-a",
+          "scheme-b://configuration-name/queue-b"
+		]
+	  }
+	}
+  }
+}
+```

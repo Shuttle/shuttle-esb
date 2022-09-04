@@ -2,7 +2,7 @@
 
 An implementation of the `IMessageHandlerInvoker` interface is used to invoke a mesage handler for the given message in the `PipelineEvent`.
 
-If you do not specify your own implementation of the `IMessageHandlerInvoker` the `DefaultMessageHandlerInvoker` will be used.  This invoker makes use of the `IMessageHandlerFactory` to create the required message handler factory.
+If you do not specify your own implementation of the `IMessageHandlerInvoker` the default `MessageHandlerInvoker` will be used.  This invoker makes use of the `IServiceProvider` to create the required message handler.
 
 ## Methods
 
@@ -14,9 +14,9 @@ MessageHandlerInvokeResult Invoke(PipelineEvent pipelineEvent);
 
 Invoke the message handler using the data contained in the given `PipelineEvent`.
 
-# DefaultMessageHandlerInvoker
+# MessageHandlerInvoker
 
-Type `DefaultMessageHandlerInvoker` implements the `IMessageHandlerInvoker` interface and will attempt to find an implementation of the required `IMessageHandler<>` interface.
+Type `MessageHandlerInvoker` implements the `IMessageHandlerInvoker` interface and will attempt to find an implementation of the required `IMessageHandler<>` interface.
 
 If no handler can be found the `MessageHandlerInvokeResult` return from the `Invoke` method will have an `Invoked` value of `false`.
 

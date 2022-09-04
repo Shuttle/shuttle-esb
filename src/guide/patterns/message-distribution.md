@@ -4,7 +4,7 @@
 Remember that you can download the samples from the <a href="https://github.com/Shuttle/Shuttle.Esb.Samples" target="_blank">GitHub repository</a>.
 :::
 
-This sample makes use of [Shuttle.Esb.AzureMQ](https://github.com/Shuttle/Shuttle.Esb.AzureMQ) for the message queues.  Local Azure Storage Queues should be provided by [Azurite](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite?tabs=visual-studio).
+This sample makes use of [Shuttle.Esb.azuresq](https://github.com/Shuttle/Shuttle.Esb.azuresq) for the message queues.  Local Azure Storage Queues should be provided by [Azurite](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite?tabs=visual-studio).
 
 Once you have opened the `Shuttle.Distribution.sln` solution in Visual Studio set the following projects as startup projects:
 
@@ -14,14 +14,14 @@ Once you have opened the `Shuttle.Distribution.sln` solution in Visual Studio se
 
 ## Implementation
 
-When you find that a single endpoint, even with ample threads, cannot keep up with the required processing and is falling behind you can opt for message distribution.
+When you find that a single endpoint, even with many threads, cannot keep up with the required processing and is falling behind you can opt for message distribution.
 
 ::: info
 When using a broker architecture (such as RabbitMQ, Azure Storage Queues, or Amazon SQS) you do not need to use message distribution as workers can all access the same inbox work queue.  In this case you could simply scale horizontally.
 :::
 
 ::: warning
-Keep in mind that deferred queues are required for each endpoint and cannot be shared.
+Keep in mind that deferred queues are required for each endpoint instance and cannot be shared.
 :::
 
 Plesae note that the project structure here is used as a sample to facilitate the execution of the solution.  In a real-world scenario the endpoint project would not be separated into a distributor and a worker; rather, there would be a single implementation and you would simply install the service multiple times on, possibly, multiple machines and then configure the workers and distributor as such.  When using the distribution mechanism there is always a **1 to *N*** relationship between the distribution endpoint and the worker(s).
@@ -41,14 +41,14 @@ In this guide we'll create the following projects:
 
 **Note**: remember to change the *Solution name*.
 
-### RegisterMemberCommand
+### RegisterMember
 
-> Rename the `Class1` default file to `RegisterMemberCommand` and add a `UserName` property.
+> Rename the `Class1` default file to `RegisterMember` and add a `UserName` property.
 
 ``` c#
 namespace Shuttle.Distribution.Messages
 {
-	public class RegisterMemberCommand
+	public class RegisterMember
 	{
 		public string UserName { get; set; }
 	}
@@ -59,13 +59,13 @@ namespace Shuttle.Distribution.Messages
 
 > Add a new `Console Application` to the solution called `Shuttle.Distribution.Client`.
 
-> Install the `Shuttle.Esb.AzureMQ` nuget package.
+> Install the `Shuttle.Esb.AzureStorageQueues` nuget package.
 
 This will provide access to the Azure Storage Queues `IQueue` implementation and also include the required dependencies.
 
-> Install the `Shuttle.Core.Unity` nuget package.
+> Install the `Microsoft.Extensions.Configuration.Json` nuget package.
 
-This will provide access to the Unity dependency container implementation.
+This will provide the ability to read the `appsettings.json` file.
 
 > Add a reference to the `Shuttle.Distribution.Messages` project.
 
@@ -73,14 +73,13 @@ This will provide access to the Unity dependency container implementation.
 
 > Implement the main client code as follows:
 
-``` c#
+```c#
 using System;
-using Shuttle.Core.Container;
-using Shuttle.Core.Unity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Shuttle.Distribution.Messages;
 using Shuttle.Esb;
-using Shuttle.Esb.AzureMQ;
-using Unity;
+using Shuttle.Esb.AzureStorageQueues;
 
 namespace Shuttle.Distribution.Client
 {
@@ -88,18 +87,35 @@ namespace Shuttle.Distribution.Client
     {
         private static void Main(string[] args)
         {
-            var container = new UnityComponentContainer(new UnityContainer());
+            var services = new ServiceCollection();
 
-            container.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
-            container.RegisterServiceBus();
+            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
-            using (var bus = container.Resolve<IServiceBus>().Start())
+            services.AddSingleton<IConfiguration>(configuration);
+
+            services.AddServiceBus(builder =>
+            {
+                configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+            });
+
+            services.AddAzureStorageQueues(builder =>
+            {
+                builder.AddOptions("azure", new AzureStorageQueueOptions
+                {
+                    ConnectionString = "UseDevelopmentStorage=true;"
+                });
+            });
+
+            Console.WriteLine("Type some characters and then press [enter] to submit; an empty line submission stops execution:");
+            Console.WriteLine();
+
+            using (var bus = services.BuildServiceProvider().GetRequiredService<IServiceBus>().Start())
             {
                 string userName;
 
                 while (!string.IsNullOrEmpty(userName = Console.ReadLine()))
                 {
-                    bus.Send(new RegisterMemberCommand
+                    bus.Send(new RegisterMember
                     {
                         UserName = userName
                     });
@@ -110,56 +126,61 @@ namespace Shuttle.Distribution.Client
 }
 ```
 
-### App.config
+### Client configuration file
 
-> Create the service bus configuration as follows:
+> Add an `appsettings.json` file as follows:
 
-``` xml
-<?xml version="1.0" encoding="utf-8"?>
-
-<configuration>
-	<configSections>
-		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb" />
-	</configSections>
-
-	<appSettings>
-		<add key="azure" value="UseDevelopmentStorage=true;" />
-	</appSettings>
-
-	<serviceBus>
-		<messageRoutes>
-			<messageRoute uri="azuremq://azure/shuttle-server-work">
-				<add specification="StartsWith" value="Shuttle.Distribution.Messages" />
-			</messageRoute>
-		</messageRoutes>
-	</serviceBus>
-</configuration>
+```json
+{
+  "ConnectionStrings": {
+    "azure": "UseDevelopmentStorage=true;"
+  },
+  "Shuttle": {
+    "ServiceBus": {
+      "MessageRoutes": [
+        {
+          "Uri": "azuresq://azure/shuttle-server-work",
+          "Specifications": [
+            {
+              "Name": "StartsWith",
+              "Value": "Shuttle.Distribution.Messages"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
 ```
 
-This tells the service bus that all messages sent having a type name starting with `Shuttle.Distribution.Messages` should be sent to endpoint `azuremq://azure/shuttle-server-work`.
+This tells the service bus that all messages sent having a type name starting with `Shuttle.Distribution.Messages` should be sent to endpoint `azuresq://azure/shuttle-server-work`.
 
 ## Server
 
 > Add a new `Console Application` to the solution called `Shuttle.Distribution.Server`.
 
-> Install the `Shuttle.Esb.AzureMQ` nuget package.
+> Install the `Shuttle.Esb.AzureStorageQueues` nuget package.
 
 This will provide access to the Azure Storage Queues `IQueue` implementation and also include the required dependencies.
 
-> Install the `Shuttle.Core.WorkerService` nuget package.
+> Install the `Microsoft.Extensions.Hosting` nuget package.
 
-This allows a console application to be hosted as a Windows Service or Systemd Unit while running as a normal console application when debugging.
+This allows a console application to be hosted using the .NET generic host.
 
-> Install the `Shuttle.Core.Unity` nuget package.
+> Install the `Microsoft.Extensions.Configuration.Json` nuget package.
 
-This will provide access to the Unity dependency container implementation.
+This will provide the ability to read the `appsettings.json` file.
 
 ### Program
 
 > Implement the `Program` class as follows:
 
-``` c#
-using Shuttle.Core.WorkerService;
+```c#
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Shuttle.Esb;
+using Shuttle.Esb.AzureStorageQueues;
 
 namespace Shuttle.Distribution.Server
 {
@@ -167,75 +188,56 @@ namespace Shuttle.Distribution.Server
     {
         public static void Main()
         {
-            ServiceHost.Run<Host>();
+            Host.CreateDefaultBuilder()
+                .ConfigureServices(services =>
+                {
+                    var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+
+                    services.AddSingleton<IConfiguration>(configuration);
+
+                    services.AddServiceBus(builder =>
+                    {
+                        configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+                    });
+
+                    services.AddAzureStorageQueues(builder =>
+                    {
+                        builder.AddOptions("azure", new AzureStorageQueueOptions
+                        {
+                            ConnectionString = configuration.GetConnectionString("azure")
+                        });
+                    });
+                })
+                .Build()
+                .Run();
         }
     }
 }
 ```
 
-### Host
+### Server configuration file
 
-> Add a `Host` class and implement the `IServiceHost` interface as follows:
+> Add an `appsettings.json` file as follows:
 
-``` c#
-using Shuttle.Core.Container;
-using Shuttle.Core.Unity;
-using Shuttle.Core.WorkerService;
-using Shuttle.Esb;
-using Shuttle.Esb.AzureMQ;
-using Unity;
-
-namespace Shuttle.Distribution.Server
+```json
 {
-    public class Host : IServiceHost
-    {
-        private IServiceBus _bus;
-
-        public void Start()
-        {
-            var container = new UnityComponentContainer(new UnityContainer());
-
-            container.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
-            container.RegisterServiceBus();
-
-            _bus = container.Resolve<IServiceBus>().Start();
-        }
-
-        public void Stop()
-        {
-            _bus.Dispose();
-        }
+  "ConnectionStrings": {
+    "azure": "UseDevelopmentStorage=true;"
+  },
+  "Shuttle": {
+    "ServiceBus": {
+      "ControlInbox": {
+        "WorkQueueUri": "azuresq://azure/shuttle-server-control-inbox-work",
+        "ErrorQueueUri": "azuresq://azure/shuttle-error"
+      },
+      "Inbox": {
+        "Distribute": true,
+        "WorkQueueUri": "azuresq://azure/shuttle-server-work",
+        "ErrorQueueUri": "azuresq://azure/shuttle-error"
+      }
     }
+  }
 }
-```
-
-### App.config
-
-> Add an `Application Configuration File` item to create the `App.config` and populate as follows:
-
-``` xml
-<?xml version="1.0" encoding="utf-8"?>
-
-<configuration>
-	<configSections>
-		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb" />
-	</configSections>
-
-	<appSettings>
-		<add key="azure" value="UseDevelopmentStorage=true;" />
-	</appSettings>
-
-	<serviceBus>
-		<control
-			workQueueUri="azuremq://azure/shuttle-server-control-inbox-work"
-			errorQueueUri="azuremq://azure/shuttle-samples-error" />
-
-		<inbox
-			distribute="true"
-			workQueueUri="azuremq://azure/shuttle-server-work"
-			errorQueueUri="azuremq://azure/shuttle-error" />
-	</serviceBus>
-</configuration>
 ```
 
 This will instruct the endpoint to ***only** distribute messages since the `distribute` attribute is set to `true`.  If it is set to `false` then the endpoint will process incoming messages if a worker thread is not available.
@@ -246,17 +248,17 @@ It also configures the control inbox that the endpoint will use to process admin
 
 > Add a new `Console Application` to the solution called `Shuttle.Distribution.Worker`.
 
-> Install the `Shuttle.Esb.AzureMQ` nuget package.
+> Install the `Shuttle.Esb.AzureStorageQueues` nuget package.
 
 This will provide access to the Azure Storage Queues `IQueue` implementation and also include the required dependencies.
 
-> Install the `Shuttle.Core.WorkerService` nuget package.
+> Install the `Microsoft.Extensions.Hosting` nuget package.
 
-This allows a console application to be hosted as a Windows Service or Systemd Unit while running as a normal console application when debugging.
+This allows a console application to be hosted using the .NET generic host.
 
-> Install the `Shuttle.Core.Unity` nuget package.
+> Install the `Microsoft.Extensions.Configuration.Json` nuget package.
 
-This will provide access to the Unity dependency container implementation.
+This will provide the ability to read the `appsettings.json` file.
 
 > Add a reference to the `Shuttle.Distribution.Messages` project.
 
@@ -265,7 +267,11 @@ This will provide access to the Unity dependency container implementation.
 > Implement the `Program` class as follows:
 
 ``` c#
-using Shuttle.Core.WorkerService;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Shuttle.Esb;
+using Shuttle.Esb.AzureStorageQueues;
 
 namespace Shuttle.Distribution.Worker
 {
@@ -273,80 +279,58 @@ namespace Shuttle.Distribution.Worker
     {
         public static void Main()
         {
-            ServiceHost.Run<Host>();
+            Host.CreateDefaultBuilder()
+                .ConfigureServices(services =>
+                {
+                    var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+
+                    services.AddSingleton<IConfiguration>(configuration);
+
+                    services.AddServiceBus(builder =>
+                    {
+                        configuration.GetSection(ServiceBusOptions.SectionName).Bind(builder.Options);
+                    });
+
+                    services.AddAzureStorageQueues(builder =>
+                    {
+                        builder.AddOptions("azure", new AzureStorageQueueOptions
+                        {
+                            ConnectionString = "UseDevelopmentStorage=true;"
+                        });
+                    });
+                })
+                .Build()
+                .Run();
         }
     }
 }
 ```
 
-### Host
+### Server configuration file
 
-> Add a `Host` class and implement the `IServiceHost` interface as follows:
+> Add an `appsettings.json` file as follows:
 
-``` c#
-using Shuttle.Core.Container;
-using Shuttle.Core.Unity;
-using Shuttle.Core.WorkerService;
-using Shuttle.Esb;
-using Shuttle.Esb.AzureMQ;
-using Unity;
-
-namespace Shuttle.Distribution.Worker
+```json
 {
-    public class Host : IServiceHost
-    {
-        private IServiceBus _bus;
-
-        public void Start()
-        {
-            var container = new UnityComponentContainer(new UnityContainer());
-
-            container.Register<IAzureStorageConfiguration, DefaultAzureStorageConfiguration>();
-            container.RegisterServiceBus();
-
-            _bus = container.Resolve<IServiceBus>().Start();
-        }
-
-        public void Stop()
-        {
-            _bus.Dispose();
-        }
+  "Shuttle": {
+    "ServiceBus": {
+      "Inbox": {
+        "WorkQueueUri": "azuresq://azure/shuttle-worker-work",
+        "ErrorQueueUri": "azuresq://azure/shuttle-error"
+      },
+      "Worker": {
+        "DistributorControlInboxWorkQueueUri": "azuresq://azure/shuttle-server-control-inbox-work"
+      } 
     }
+  }
 }
-```
-
-### App.config
-
-> Add an `Application Configuration File` item to create the `App.config` and populate as follows:
-
-``` xml
-<?xml version="1.0" encoding="utf-8"?>
-
-<configuration>
-	<configSections>
-		<section name='serviceBus' type="Shuttle.Esb.ServiceBusSection, Shuttle.Esb" />
-	</configSections>
-
-	<appSettings>
-		<add key="azure" value="UseDevelopmentStorage=true;" />
-	</appSettings>
-
-	<serviceBus>
-		<worker
-			distributorControlWorkQueueUri="azuremq://azure/shuttle-server-control-inbox-work" />
-
-		<inbox
-			workQueueUri="azuremq://azure/shuttle-worker-work"
-			errorQueueUri="azuremq://azure/shuttle-error" />
-	</serviceBus>
-</configuration>
 ```
 
 This configures the endpoint as a worker and specifies the control inbox of the distributor that will be notified when a thread is available to perform work.
 
 ### RegisterMemberHandler
 
-> Add a new class called `RegisterMemberHandler` that implements the `IMessageHandler<RegisterMemberCommand>` interface as follows:
+> Add a new class called `RegisterMemberHandler` that implements the `IMessageHandler<RegisterMember>` interface as follows:
 
 ``` c#
 using System;
@@ -355,9 +339,9 @@ using Shuttle.Distribution.Messages;
 
 namespace Shuttle.Distribution.Worker
 {
-	public class RegisterMemberHandler : IMessageHandler<RegisterMemberCommand>
+	public class RegisterMemberHandler : IMessageHandler<RegisterMember>
 	{
-		public void ProcessMessage(IHandlerContext<RegisterMemberCommand> context)
+		public void ProcessMessage(IHandlerContext<RegisterMember> context)
 		{
 			Console.WriteLine();
 			Console.WriteLine("[MEMBER REGISTERED --- WORKER] : user name = '{0}'", context.Message.UserName);
