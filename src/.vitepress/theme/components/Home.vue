@@ -1,56 +1,61 @@
-<script setup>
-import { VTIconDiscord } from 'shuttle-theme';
-</script>
 <template>
-    <section id="hero">
-        <p class="upgrade-notice">
-            The latest version of the Shuttle.Esb components now make use of <a href="https://docs.microsoft.com/en-us/dotnet/core/extensions/dependency-injection" target="_blank">.NET dependency injection</a> as well as the <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options?view=aspnetcore-6.0" target="_blank">options pattern</a>.  This is a major departure from the component container adapter pattern used to date.  Please take a look at the <a href="/shuttle-esb/upgrade.html">upgrade guide</a> to see the <strong>breaking changes</strong>.
-        </p>
-        <h1 class="tagline">Flexible .Net queue and stream processing</h1>
-        <p class="description">
-            Configurable service bus that provides you with a mechanism to create
-            cross-platform endpoints that are loosely coupled, enabling you to develop
-            and deploy specific business functionality that can be independently
-            versioned.
-        </p>
-        <p class="actions">
-            <a class="why" href="/shuttle-esb/concepts/why.html">Why?</a>
-            <a class="get-started" href="/shuttle-esb/guide/introduction.html">
-                Get Started
-                <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24">
-                    <path
-                        d="M13.025 1l-2.847 2.828 6.176 6.176h-16.354v3.992h16.354l-6.176 6.176 2.847 2.828 10.975-11z" />
-                </svg>
-            </a>
-            <a class="upgrade" href="/shuttle-esb/upgrade.html">Upgrade</a>
-        </p>
-    </section>
+    <div>
+        <section id="hero">
+            <p class="upgrade-notice">
+                The latest version of the Shuttle.Esb components now make use of <a
+                    href="https://docs.microsoft.com/en-us/dotnet/core/extensions/dependency-injection"
+                    target="_blank">.NET dependency injection</a> as well as the <a
+                    href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options?view=aspnetcore-6.0"
+                    target="_blank">options pattern</a>. This is a major departure from the component container adapter
+                pattern used to date. Please take a look at the <a href="/shuttle-esb/upgrade.html">upgrade guide</a> to
+                see the <strong>breaking changes</strong>.
+            </p>
+            <h1 class="tagline">Flexible .Net queue and stream processing</h1>
+            <p class="description">
+                Configurable service bus that provides you with a mechanism to create
+                cross-platform endpoints that are loosely coupled, enabling you to develop
+                and deploy specific business functionality that can be independently
+                versioned.
+            </p>
+            <p class="actions">
+                <a class="why" href="/shuttle-esb/concepts/why.html">Why?</a>
+                <a class="get-started" href="/shuttle-esb/guide/introduction.html">
+                    Get Started
+                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24">
+                        <path
+                            d="M13.025 1l-2.847 2.828 6.176 6.176h-16.354v3.992h16.354l-6.176 6.176 2.847 2.828 10.975-11z" />
+                    </svg>
+                </a>
+                <a class="upgrade" href="/shuttle-esb/upgrade.html">Upgrade</a>
+            </p>
+        </section>
 
-    <section id="highlights" class="vt-box-container">
-        <div class="vt-box">
-            <h2>Framework Support</h2>
-            <div>
-                Packages currently target <code>netstandard2.0</code> and
-                <code>netstandard2.1</code> which means that they can be used with .NET
-                Core 2.1+, .NET Framework 4.6.1+, and .NET 5.0+
+        <section id="highlights" class="vt-box-container">
+            <div class="vt-box">
+                <h2>Framework Support</h2>
+                <div>
+                    Packages currently target <code>netstandard2.0</code> and
+                    <code>netstandard2.1</code> which means that they can be used with .NET
+                    Core 2.1+, .NET Framework 4.6.1+, and .NET 5.0+
+                </div>
             </div>
-        </div>
-        <div class="vt-box">
-            <h2>Multiple Queues</h2>
-            <div>
-                Many popular queueing technologies are supported out-of-the-box but it
-                is possible to implement any queue.
+            <div class="vt-box">
+                <h2>Multiple Queues</h2>
+                <div>
+                    Many popular queueing technologies are supported out-of-the-box but it
+                    is possible to implement any queue.
+                </div>
             </div>
-        </div>
-        <div class="vt-box">
-            <h2>Open Source</h2>
-            <div>
-                These packages are free open source software licensed under the
-                <a href="https://opensource.org/licenses/BSD-3-Clause">3-Clause BSD License</a>. Pull requests are
-                welcome.
+            <div class="vt-box">
+                <h2>Open Source</h2>
+                <div>
+                    These packages are free open source software licensed under the
+                    <a href="https://opensource.org/licenses/BSD-3-Clause">3-Clause BSD License</a>. Pull requests are
+                    welcome.
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
 </template>
 
 <style scoped>

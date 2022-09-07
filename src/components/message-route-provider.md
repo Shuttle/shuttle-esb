@@ -26,7 +26,7 @@ The method will add a new `IMessageRoute` instance.
 
 ### DefaultMessageRouteProvider
 
-The `MessageRouteProvider` obtains its configuration from the [MessageRouteOptions](/shuttle-esb/options/message-routes.html) defined on the `ServiceBusOptions`.
+The `MessageRouteProvider` obtains its configuration from the [MessageRouteOptions](/options/message-routes.html) defined on the `ServiceBusOptions`.
 
 ### Specifications
 
