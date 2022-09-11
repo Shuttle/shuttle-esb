@@ -26,7 +26,8 @@ services.AddServiceBus(builder =>
         },
         MaximumFailureCount = 2,
         Distribute = false,
-        DistributeSendCount = 5
+        DistributeSendCount = 5,
+        DeferredMessageProcessorResetInterval = TimeSpan.FromMinutes(5)
     };
     
     // or bind from configuration
@@ -58,7 +59,8 @@ The default JSON settings structure is as follows:
         ],
         "MaximumFailureCount": 25,
         "Distribute": false,
-        "DistributeSendCount": 5
+        "DistributeSendCount": 5,
+        "DeferredMessageProcessorResetInterval": "00:05:00" 
       }
     }
   }
@@ -75,3 +77,4 @@ The default JSON settings structure is as follows:
 | MaximumFailureCount            | 5            | The maximum number of failures that are retried before the message is moved to the error queue if there is one and the queue is not a stream; else the message is released.   |
 | Distribute                    | false        | If `true` the endpoint will act as only a distributor.  If `false` the endpoint will distribute messages if a worker is available; else process the message itself. |
 | DistributeSendCount | 5 | The number of messages to send to the worker per available thread message received.  If less than 1 the default will be used.  |
+| DeferredMessageProcessorResetInterval | `00:01:00` | The duration to wait before restarting the `DeferredMessageProcessor` once it has halted. |

@@ -15,10 +15,6 @@ Once you have opened the `Shuttle.Deferred.sln` solution in Visual Studio set th
 
 Deferred messages refer to messages that are not immediately processed when available but are rather set to only process at a given future date.
 
-::: danger
-It is important to note that each endpoint instance must have its own deferred queue.
-:::
-
 In this guide we'll create the following projects:
 
 - `Shuttle.Deferred.Client` (**Console Application**)

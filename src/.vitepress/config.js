@@ -406,8 +406,17 @@ module.exports = (async () => {
                     link: '/modules/overview'
                 },
                 {
-                    text: 'v-previous',
-                    link: 'https://shuttle.github.io/shuttle-esb-v12/'
+                    text: 'v13.1.0',
+                    items: [
+                        {
+                            text: 'changelog',
+                            link: '/v13.1.0',
+                        },
+                        {
+                            text: 'v-previous',
+                            link: 'https://shuttle.github.io/shuttle-esb-v12/',
+                        }
+                    ]
                 },
             ],
 
