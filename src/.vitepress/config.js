@@ -406,11 +406,11 @@ module.exports = (async () => {
                     link: '/modules/overview'
                 },
                 {
-                    text: 'v13.1.0',
+                    text: 'v13.2.0',
                     items: [
                         {
                             text: 'changelog',
-                            link: '/v13.1.0',
+                            link: '/changelog',
                         },
                         {
                             text: 'v-previous',
