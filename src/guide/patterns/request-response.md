@@ -118,7 +118,7 @@ namespace Shuttle.RequestResponse.Client
 					bus.Send(new RegisterMember
 					{
 						UserName = userName
-					}, c => c.WillExpire(DateTime.Now.AddSeconds(5)));
+					}, builder => builder.WillExpire(DateTime.Now.AddSeconds(5)));
 				}
 			}
 		}
